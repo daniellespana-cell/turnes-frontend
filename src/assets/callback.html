@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verificando...</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #0d1117;
+      color: #f5f5f5;
+    }
+    .spinner {
+      width: 3rem;
+      height: 3rem;
+      border: 4px solid #374151;
+      border-top-color: #00bfa6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    p {
+      color: #b0b0b0;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <p>Verificando tu cuenta, por favor espera...</p>
+  <p>(Cerraremos esta ventana automáticamente)</p>
+
+  <script>
+    // 1. Leemos la acción que nos pide la ventana principal
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action'); // 'login' o 'register'
+
+    // 2. Simulación: Espera 2 segundos
+    setTimeout(() => {
+      
+      // Datos simulados que devuelve Google
+      const sim_user = {
+        name: 'Usuario Google',
+        email: 'usuario.google@gmail.com'
+      };
+
+      let response;
+
+      // 3. Lógica bifurcada (la que tú querías)
+      if (action === 'login') {
+        
+        // --- FLUJO DE LOGIN ---
+        // (Simulamos la llamada a la BBDD)
+        
+        // PRUEBA A CAMBIAR ESTO (para el LoginModal):
+        // const sim_role_from_db = 'empresa'; // Caso A
+        // const sim_role_from_db = 'postulante'; // Caso B
+        const sim_role_from_db = null; // Caso C (Nuevo Usuario)
+        
+        if (sim_role_from_db) {
+          // Caso A o B: El usuario SÍ existe
+          response = {
+            success: true,
+            role: sim_role_from_db,
+            user: sim_user,
+            plan: sim_role_from_db === 'empresa' ? 'basico' : null
+          };
+        } else {
+          // Caso C: El usuario NO existe (vino de LoginModal)
+          response = {
+            success: false,
+            isNewUser: true,
+            user: sim_user
+          };
+        }
+
+      } else { // (action === 'register')
+        
+        // --- FLUJO DE REGISTRO ---
+        // (NO validamos, solo devolvemos los datos para auto-rellenar)
+        response = {
+          success: false,     // No es un login exitoso
+          isNewUser: true,    // Es un usuario nuevo
+          user: sim_user      // Le pasamos los datos para rellenar
+        };
+      }
+
+      // 4. Enviamos el mensaje de vuelta a la ventana principal
+      window.opener.postMessage(response, window.location.origin);
+      
+      // 5. Cerramos el pop-up
+      window.close();
+
+    }, 2000); // 2 segundos de simulación
+  </script>
+</body>
+</html>

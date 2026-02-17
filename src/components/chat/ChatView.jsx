@@ -1,0 +1,105 @@
+import React from 'react';
+import { ChatHeader } from './ChatHeader';
+import { MessageList } from './MessageList';
+import { ChatInput } from './ChatInput';
+
+const ChatView = ({
+  chat,
+  candidato,
+  isClosed: isClosedFromPage, // Renombramos para claridad
+  onStartVideo,
+  onEjecutarAcuerdo, // Paso 3 (Lógica)
+  onFinalizeNavigation, // Paso 4 (Navegación)
+  userRole // 🆕
+}) => {
+
+  const {
+    messages = [],
+    enviarMensaje,
+    isPanelOpen = true,
+    setIsPanelOpen = () => { },
+    invitarAVideo,
+    isPaid = false,
+    declinarValidacionVideo,
+    ejecutarAcuerdo,
+    permisos // Extraemos permisos para tener el 'reason' y 'canWrite'
+  } = chat || {};
+
+  /**
+   * ✅ CORRECCIÓN DE LÓGICA DE ESTADO
+   * Un chat está "Cerrado" SOLO si el ciclo terminó (Paso 5).
+   * Si no se ha pagado (Paso 1), NO está cerrado, está "Pendiente".
+   */
+  /**
+   * ✅ CORRECCIÓN DE LÓGICA DE ESTADO
+   * Un chat está "Cerrado" SOLO si el ciclo terminó Y no hay un proceso de recontratación activo.
+   */
+  const isRehireActive = ['AGENDADO', 'VALIDADO', 'EJECUTADO'].includes(candidato?.estadoTurno);
+
+  const realIsClosed = !isRehireActive && Boolean(
+    isClosedFromPage ||
+    candidato?.cicloCerrado ||
+    candidato?.estadoTurno === 'FINALIZADO' ||
+    permisos?.reason === 'FINISHED'
+  );
+
+  return (
+    <div className="flex-1 flex flex-col min-w-0 border-r border-white/5 relative h-full">
+
+      {/* HEADER: Recibe el estado real de clausura */}
+      <ChatHeader
+        candidate={candidato}
+        onToggleSidebar={() => setIsPanelOpen(!isPanelOpen)}
+        onVideoInvite={invitarAVideo}
+        isPaid={isPaid}
+        isClosed={realIsClosed}
+      />
+
+      {/* ÁREA DE MENSAJES */}
+      <div className="flex-1 overflow-hidden min-h-0 flex flex-col bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-zinc-900/20 via-black to-black">
+        <MessageList
+          messages={messages}
+          onStartVideo={onStartVideo}
+          onDeclineVideo={declinarValidacionVideo}
+          // 🧠 LÓGICA SEPARADA
+          onExecute={onEjecutarAcuerdo || ejecutarAcuerdo}
+          onFinalize={onFinalizeNavigation}
+          // 🚀 ULTRA UX: Pasar la función para invitar desde el chat
+          onInviteVideo={invitarAVideo}
+          candidato={candidato}
+          // Pasamos flags para que MessageList sepa qué cartel mostrar
+          isPaid={isPaid}
+          isClosed={realIsClosed}
+          // 🆕 PROPS PARA MOBILE DASHBOARD
+          finanzas={chat?.finanzas}
+          permisos={chat?.permisos}
+          onPay={chat?.abrirModalPago}
+        />
+      </div>
+
+      {/* INPUT: Se bloquea si está cerrado O si no se ha pagado */}
+      <div className="w-full relative z-10">
+        <ChatInput
+          onSend={enviarMensaje}
+          isPaid={isPaid}
+          // Pasamos canWrite para habilitar input aunque no se haya pagado
+          canWrite={permisos?.canWrite}
+          isClosed={realIsClosed}
+          userRole={userRole} // 🆕
+        />
+      </div>
+
+      {/* Indicador visual: Solo si no está cerrado y ya se pagó */}
+      {isPaid && !realIsClosed && (
+        <div className="absolute top-20 right-6 pointer-events-none opacity-20 hidden md:block">
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="text-[8px] font-black uppercase text-emerald-500 tracking-[0.2em]">Enlace Directo Activo</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ChatView;

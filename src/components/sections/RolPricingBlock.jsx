@@ -1,0 +1,53 @@
+import React from 'react';
+import { Briefcase, Percent } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+// === IMPORTACIONES MODULARES ===
+import SectionCard from '../common/SectionCard.jsx'; 
+import PricingCard from '../pricing/PricingCard.jsx';
+// 🛠️ CORRECCIÓN: Se elimina la definición local de companyPlans.
+// La variable companyPlans AHORA DEBE SER IMPORTADA desde su archivo de datos real.
+import { companyPlans } from '../../data/companyPlans'; 
+ 
+
+// Definición de la variante de animación (se mantiene aunque se use en SectionCard)
+const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
+
+/**
+ * Componente RolPricingBlock
+ * Muestra la sección modular de Planes y Ahorro para Empresas.
+ * Usa SectionCard para el estilo base y PricingCard para cada plan.
+ */
+const RolPricingBlock = () => {
+    // Verificar si los datos están disponibles
+    // 💡 NOTA: companyPlans DEBE SER IMPORTADO correctamente de '../data/companyPlans'
+    const plans = Array.isArray(companyPlans) ? companyPlans : [];
+
+    return (
+        <SectionCard 
+            title="Planes de Empresa y Ahorro" 
+            icon={Briefcase} 
+            accent="indigo" 
+            className="col-span-full mt-10"
+        >
+            <p className="text-gray-400 mb-6">Elige el plan que se adapte al ritmo de contratación de tu negocio y optimiza tus costos fijos y por turno.</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {plans.length > 0 ? (
+                    plans.map((plan, index) => (
+                        // Asumimos que PricingCard usa los datos y el Link a /precios
+                        <PricingCard key={index} plan={plan} />
+                    ))
+                ) : (
+                    // Mensaje de error si la importación de datos falla
+                    <p className="text-red-400 col-span-full">Error: Componente PricingCard o datos companyPlans no cargados. Por favor, crea y exporta 'companyPlans' en '../../data/companyPlans'.</p>
+                )}
+            </div>
+        </SectionCard>
+    );
+};
+
+export default RolPricingBlock;

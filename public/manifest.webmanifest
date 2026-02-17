@@ -1,0 +1,29 @@
+{
+  "short_name": "Turnes",
+  "name": "Turnes - Encuentra empleos por turnos y trabajos fijos",
+  "description": "Plataforma rápida para buscar empleos por turnos, trabajos fijos y conectar empresas con talento en segundos.",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/vite.svg",
+      "sizes": "16x16 32x32 48x48",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0f172a",
+  "background_color": "#ffffff",
+  "prefer_related_applications": false
+}

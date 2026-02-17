@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Connection Test</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            background: #111;
+            color: #fff;
+            font-family: monospace;
+            padding: 2rem;
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .success {
+            background: #064e3b;
+            color: #a7f3d0;
+            border: 1px solid #10b981;
+        }
+
+        .error {
+            background: #7f1d1d;
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>⚡ Supabase Connection Test</h1>
+    <p>Testing connectivity outside of the main application...</p>
+    <div id="results">Running...</div>
+
+    <script>
+        // CONFIGURATION (Injected directly to avoid Env issues)
+        const SUPABASE_URL = 'https://vwraxkgasgptcvgfqkir.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3cmF4a2dhc2dwdGN2Z2Zxa2lyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MjY2MDcsImV4cCI6MjA4NTQwMjYwN30.7rFFbWarlRRW-jdc0jqxS6NEX6EhQH7EhA4aHpUht_A';
+
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const resultsDiv = document.getElementById('results');
+
+        async function test() {
+            try {
+                const start = performance.now();
+                const { data, error } = await client.from('perfiles').select('count', { count: 'exact', head: true });
+                const time = (performance.now() - start).toFixed(2);
+
+                if (error) {
+                    throw error;
+                }
+
+                resultsDiv.innerHTML = `
+                    <div class="status success">
+                        <h3>✅ ONLINE</h3>
+                        <p>Connection Successful!</p>
+                        <p>Latency: ${time}ms</p>
+                        <p>Supabase is responding correctly.</p>
+                    </div>
+                `;
+            } catch (err) {
+                console.error(err);
+                resultsDiv.innerHTML = `
+                    <div class="status error">
+                        <h3>❌ OFFLINE / ERROR (${err.code || 'Unknown'})</h3>
+                        <p>${err.message}</p>
+                        <hr style="border-color: #ef4444; opacity: 0.3; margin: 10px 0;">
+                        <p><strong>Diagnosis:</strong> ${err.message.includes('503') || err.code == 503 ? 'PROJECT IS PAUSED' : 'Check Console logs'}</p>
+                    </div>
+                `;
+            }
+        }
+
+        test();
+    </script>
+</body>
+
+</html>
