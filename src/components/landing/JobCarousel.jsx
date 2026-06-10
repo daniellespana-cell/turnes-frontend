@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
-import { useAnimation } from 'framer-motion';
+import { useAnimation, motion } from 'framer-motion';
 
 import repImg from '../../assets/roles/rep.jpg';
 import baristaImg from '../../assets/roles/barista.jpg';

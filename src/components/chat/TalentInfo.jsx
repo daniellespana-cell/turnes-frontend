@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
+import { AssetResolver } from '../../utils/assetHelper';
 
 export const TalentInfo = ({ candidate, config, isPaid, isRehire, isSealed }) => {
     return (
@@ -63,3 +64,5 @@ export const TalentInfo = ({ candidate, config, isPaid, isRehire, isSealed }) =>
         </div>
     );
 };
+
+export default TalentInfo;
