@@ -1,16 +1,26 @@
 import React from 'react';
-import { Clock, Briefcase, Sparkles, ChevronRight } from 'lucide-react';
+import { Sparkles, ChevronRight } from 'lucide-react';
+
+import { Clock, Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const ModalidadSelector = ({ selectedType, onChange }) => {
+const ModalidadSelector = ({ selectedType, onChange, userPlan = 'Plan Básico', userCommission = '6%' }) => {
   const navigate = useNavigate();
+
+  const isMaxPlan = userPlan?.toLowerCase().includes('pro');
+  const isBasicPlan = userPlan?.toLowerCase().includes('básico') || userPlan?.toLowerCase().includes('basic');
+  const nextPlanName = isBasicPlan ? 'Micro' : 'Pro';
+
+  const formattedCommission = typeof userCommission === 'number' 
+    ? `${userCommission * 100}%` 
+    : userCommission; // Fallback in case it's already a string like '6%'
 
   const modalidades = [
     { 
       id: 'temporal', 
       label: 'Turno Temporal', 
       icon: Clock, 
-      info: 'Comisión 6%',
+      info: `Comisión ${formattedCommission}`,
     },
     { 
       id: 'fijo', 
@@ -37,10 +47,10 @@ const ModalidadSelector = ({ selectedType, onChange }) => {
             <button
               key={mode.id}
               onClick={() => onChange(mode.id)}
-              className={`px-4 py-4 rounded-2xl border transition-all duration-500 flex items-center gap-3 text-left relative overflow-hidden group ${
+              className={`px-4 py-4 rounded-2xl transition-all duration-500 flex items-center gap-3 text-left relative overflow-hidden group ${
                 isActive 
-                ? 'bg-white/[0.03] border-white/20 text-white' 
-                : 'bg-transparent border-white/[0.05] text-zinc-500 hover:border-white/10 hover:text-zinc-300'
+                ? 'bg-white/[0.03] text-white' 
+                : 'bg-transparent text-zinc-500 hover:text-zinc-300'
               }`}
             >
               <div className={`p-2 rounded-lg transition-colors duration-500 ${
@@ -54,7 +64,7 @@ const ModalidadSelector = ({ selectedType, onChange }) => {
                   {mode.label}
                 </p>
                 <p className={`text-[10px] mt-1 font-medium ${
-                  isActive ? 'text-blue-400/70' : 'text-zinc-600'
+                  isActive ? ((userCommission === 0 || userCommission === '0%') ? 'text-emerald-400 font-bold' : 'text-blue-400/70') : 'text-zinc-600'
                 }`}>
                   {mode.info}
                 </p>
@@ -70,19 +80,31 @@ const ModalidadSelector = ({ selectedType, onChange }) => {
       </div>
 
       {/* Upgrade: Menos banner, más invitación sutil */}
-      <div 
-        className="flex items-center justify-between px-2 py-1 cursor-pointer group opacity-60 hover:opacity-100 transition-opacity"
-        onClick={() => navigate('/dashboard/upgrade')}
-      >
-        <div className="flex items-center gap-3">
-          <Sparkles size={12} className="text-purple-400" />
-          <p className="text-[10px] font-medium text-zinc-400">
-            Plan Básico <span className="mx-1.5 opacity-20">|</span> 
-            <span className="text-zinc-200 group-hover:text-purple-400 transition-colors italic">Mejorar al Plan Micro</span>
-          </p>
+      {!isMaxPlan ? (
+        <div 
+          className="flex items-center justify-between px-2 py-1 cursor-pointer group opacity-60 hover:opacity-100 transition-opacity"
+          onClick={() => navigate('/dashboard/upgrade')}
+        >
+          <div className="flex items-center gap-3">
+            <Sparkles size={12} className="text-purple-400" />
+            <p className="text-[10px] font-medium text-zinc-400">
+              {userPlan} <span className="mx-1.5 opacity-20">|</span> 
+              <span className="text-zinc-200 group-hover:text-purple-400 transition-colors italic">Mejorar al Plan {nextPlanName}</span>
+            </p>
+          </div>
+          <ChevronRight size={12} className="text-zinc-700 group-hover:text-white transition-all" />
         </div>
-        <ChevronRight size={12} className="text-zinc-700 group-hover:text-white transition-all" />
-      </div>
+      ) : (
+        <div className="flex items-center justify-between px-2 py-1 opacity-60">
+          <div className="flex items-center gap-3">
+            <Sparkles size={12} className="text-emerald-400" />
+            <p className="text-[10px] font-medium text-emerald-400/80">
+              {userPlan} <span className="mx-1.5 opacity-20">|</span> 
+              <span className="italic">Nivel Máximo Desbloqueado</span>
+            </p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

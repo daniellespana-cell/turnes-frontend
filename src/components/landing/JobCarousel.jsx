@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import React from 'react';
 import { Link } from 'react-router-dom';
+
+import { useState, useEffect } from 'react';
+import { useAnimation } from 'framer-motion';
+
+import repImg from '../../assets/roles/rep.jpg';
+import baristaImg from '../../assets/roles/barista.jpg';
+import meseroImg from '../../assets/roles/mesero.jpg';
+import cocineroImg from '../../assets/roles/cocinero.jpg';
+import bartenderImg from '../../assets/roles/bartender.jpg';
+import ayudanteImg from '../../assets/roles/ayudante.jpg';
 
 // Lista de Roles (Mock Data)
 const jobRoles = [
-    { title: "Chef de Repostería", img: "/src/assets/roles/rep.jpg", slug: "reposteria" },
-    { title: "Barista Profesional", img: "/src/assets/roles/barista.jpg", slug: "barista" },
-    { title: "Mesero de Finde", img: "/src/assets/roles/mesero.jpg", slug: "mesero" },
-    { title: "Cocinero Rápido", img: "/src/assets/roles/cocinero.jpg", slug: "cocinero" },
-    { title: "Bartender de Eventos", img: "/src/assets/roles/bartender.jpg", slug: "bartender" },
-    { title: "Ayudante de Cocina", img: "/src/assets/roles/ayudante.jpg", slug: "ayudante" },
+    { title: "Chef de Repostería", img: repImg, slug: "reposteria" },
+    { title: "Barista Profesional", img: baristaImg, slug: "barista" },
+    { title: "Mesero de Finde", img: meseroImg, slug: "mesero" },
+    { title: "Cocinero Rápido", img: cocineroImg, slug: "cocinero" },
+    { title: "Bartender de Eventos", img: bartenderImg, slug: "bartender" },
+    { title: "Ayudante de Cocina", img: ayudanteImg, slug: "ayudante" },
 ];
 
 const carouselItems = [...jobRoles, ...jobRoles, ...jobRoles]; // Triple duplication for smoother infinite loop
@@ -71,7 +80,7 @@ const JobCarousel = () => {
                         <Link
                             key={`${role.slug}-${index}`}
                             to={`/explorar/${role.slug}`}
-                            className="group relative w-64 h-80 flex-shrink-0 rounded-3xl overflow-hidden border border-white/5 bg-zinc-900/50 backdrop-blur-sm cursor-pointer"
+                            className="group relative w-64 h-80 flex-shrink-0 rounded-3xl overflow-hidden border border-transparent bg-zinc-900/50 backdrop-blur-sm cursor-pointer"
                         >
                             {/* Image Background */}
                             <img

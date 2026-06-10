@@ -1,18 +1,22 @@
 import React from 'react';
 import { Sparkles, Lock, Heart } from 'lucide-react';
-
 import SystemActionBubble from './SystemActionBubble';
 import RehireOfferBubble from './RehireOfferBubble';
-import { StandardMessageBubble } from './StandardMessageBubble';
+import StandardMessageBubble from './StandardMessageBubble';
+
+
 
 export const MessageRenderer = ({
     msg,
     index,
     allMessages,
     handlers, // { onRehire, onAcceptVideo, onDeclineVideo, onInviteVideo, onExecute, onFinalize }
-    state     // { isClosed }
+    state,    // { isClosed }
+    currentUser, // 🆕 Required to match UUID identities
+    userRole    // 🆕 Required for dual-sided system message translation
 }) => {
-    const isMe = msg.sender === 'me';
+    // 🧠 Lógica Segura UUID: 'me' era legacy pre-Phase 49.
+    const isMe = msg.sender === currentUser?.id || msg.sender === 'me';
     const { isClosed } = state;
 
     // --- 1. INFO BUBBLES (Match / Details) ---
@@ -35,22 +39,13 @@ export const MessageRenderer = ({
         );
     }
 
-    // --- 2. REHIRE OFFER ---
-    if (msg.type === 'rehire_offer') {
-        return (
-            <RehireOfferBubble
-                message={msg}
-                onUpdateMessage={(id, val) => { /* Managed by hook */ }}
-                onAction={(actionType) => handlers.onRehire(actionType, msg)}
-            />
-        );
-    }
+    // El tipo 'rehire_offer' ahora es manejado nativamente por SystemActionBubble
 
     // --- 3. SYSTEM ACTION BUBBLES ---
     const isSystemAction = [
         'action_request', 'system_info', 'contract_signed',
         'biometric_closure', 'video_invitation', 'payment_success',
-        'prompt_video_invite', 'prompt_contract'
+        'prompt_video_invite', 'prompt_contract', 'rehire_offer', 'system'
     ].includes(msg.type);
 
     if (isSystemAction) {
@@ -58,10 +53,8 @@ export const MessageRenderer = ({
             <div className="my-4">
                 <SystemActionBubble
                     message={msg}
-                    onAccept={!isClosed ? handlers.onAcceptVideo : undefined}
-                    onDecline={!isClosed ? handlers.onDeclineVideo : undefined}
-                    onInviteAction={!isClosed ? handlers.onInviteVideo : undefined}
-                    onContractAction={!isClosed ? (handlers.onFinalize || handlers.onExecute) : undefined}
+                    userRole={userRole}
+                    isClosed={isClosed}
                 />
                 {isClosed && msg.type === 'video_invitation' && (
                     <div className="text-center pt-1 text-[9px] text-zinc-700 font-mono flex items-center justify-center gap-1">
@@ -72,30 +65,8 @@ export const MessageRenderer = ({
         );
     }
 
-    // --- 4. LEGACY BUBBLES (Backward Compat) ---
-    if (msg.type === 'RECONTRATACION_OFFER' || msg.type === 'rehire_alert') {
-        return (
-            <div className="flex justify-center my-8 animate-in zoom-in-95 duration-700">
-                <div className="relative w-full max-w-[300px]">
-                    <div className="absolute inset-0 bg-purple-600/20 blur-3xl rounded-[3rem] animate-pulse" />
-                    <div className="relative bg-[#0a0a0a] border border-purple-500/30 rounded-[2.5rem] p-6 shadow-2xl overflow-hidden text-center">
-                        <div className="flex flex-col items-center space-y-4">
-                            <div className="p-3 bg-purple-500/10 rounded-2xl text-purple-500">
-                                <Heart size={28} fill="currentColor" />
-                            </div>
-                            <div className="space-y-1">
-                                <h4 className="text-[11px] font-black uppercase tracking-[0.25em] text-white">Propuesta Directa</h4>
-                                <p className="text-[9px] text-zinc-500 font-bold leading-relaxed uppercase px-2">
-                                    {msg.text || "El jefe desea recontratarte."}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    // --- 5. STANDARD MESSAGE ---
+    // --- 4. STANDARD MESSAGE ---
     return <StandardMessageBubble message={msg} isMe={isMe} isClosed={isClosed} />;
 };
+
+export default MessageRenderer;

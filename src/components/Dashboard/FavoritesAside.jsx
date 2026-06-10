@@ -1,5 +1,6 @@
 import React from 'react';
 import { Heart } from 'lucide-react';
+
 import { useNavigate } from 'react-router-dom';
 
 export const FavoritesAside = () => {
@@ -7,7 +8,7 @@ export const FavoritesAside = () => {
   const avatars = [1, 2, 3, 4];
 
   return (
-    <section className="bg-zinc-900/10 border border-white/5 p-5 rounded-2xl relative overflow-hidden transition-all duration-500 hover:bg-zinc-900/20 group">
+    <section className="bg-zinc-900/10 border border-transparent p-5 rounded-2xl relative overflow-hidden transition-all duration-500 hover:bg-zinc-900/20 group">
 
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest flex items-center gap-1.5 antialiased">
@@ -39,10 +40,11 @@ export const FavoritesAside = () => {
 
       <button
         onClick={() => navigate('/dashboard/favoritos')}
-        className="w-full py-3 bg-zinc-900 border border-white/5 hover:border-purple-500/30 hover:bg-zinc-800 text-zinc-400 hover:text-purple-300 rounded-xl text-[9px] font-bold uppercase tracking-widest active:scale-95 transition-all relative overflow-hidden"
+        className="w-full py-3 bg-zinc-900 border border-transparent hover:border-purple-500/30 hover:bg-zinc-800 text-zinc-400 hover:text-purple-300 rounded-xl text-[9px] font-bold uppercase tracking-widest active:scale-95 transition-all relative overflow-hidden"
       >
         <span className="relative z-10">Recontratar</span>
       </button>
     </section>
   );
 };
+export default FavoritesAside;

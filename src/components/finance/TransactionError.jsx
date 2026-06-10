@@ -1,6 +1,7 @@
 import React from 'react';
 import { XCircle, RefreshCw, ArrowLeft } from 'lucide-react';
 
+
 const TransactionError = ({ onRetry, onCancel, errorMessage = "Hubo un problema procesando tu solicitud." }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 space-y-8 animate-in fade-in zoom-in duration-500 font-manrope">
@@ -8,7 +9,7 @@ const TransactionError = ({ onRetry, onCancel, errorMessage = "Hubo un problema 
       {/* ICONO MINIMALISTA */}
       <div className="relative">
         <div className="absolute inset-0 bg-red-500/20 blur-2xl rounded-full" />
-        <div className="relative bg-[#0f0f10] border border-white/5 p-4 rounded-2xl shadow-xl">
+        <div className="relative bg-[#0f0f10] border border-transparent p-4 rounded-2xl ">
           <XCircle size={40} className="text-red-500" />
         </div>
       </div>
@@ -35,7 +36,7 @@ const TransactionError = ({ onRetry, onCancel, errorMessage = "Hubo un problema 
 
         <button
           onClick={onCancel}
-          className="w-full bg-transparent text-zinc-500 hover:text-white py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all border border-transparent hover:border-white/10 flex items-center justify-center gap-2"
+          className="w-full bg-transparent text-zinc-500 hover:text-white py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all border border-transparent  flex items-center justify-center gap-2"
         >
           <ArrowLeft size={14} />
           Cancelar y Volver

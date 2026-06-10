@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft, Plus } from 'lucide-react';
+
 // Importamos tu sistema de tipografía
 import { typography } from '../../styles/typography';
 

@@ -1,10 +1,12 @@
 import React from 'react';
-import { Briefcase, Percent } from 'lucide-react';
+import { Percent } from 'lucide-react';
 import { motion } from 'framer-motion';
+import SectionCard from '../profile/shared/SectionCard';
+import PricingCard from '../pricing/PricingCard';
+
+import { Briefcase } from 'lucide-react';
 
 // === IMPORTACIONES MODULARES ===
-import SectionCard from '../common/SectionCard.jsx'; 
-import PricingCard from '../pricing/PricingCard.jsx';
 // 🛠️ CORRECCIÓN: Se elimina la definición local de companyPlans.
 // La variable companyPlans AHORA DEBE SER IMPORTADA desde su archivo de datos real.
 import { companyPlans } from '../../data/companyPlans'; 

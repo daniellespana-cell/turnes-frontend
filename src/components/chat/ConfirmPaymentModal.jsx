@@ -1,5 +1,8 @@
-import React, { useMemo, useState } from 'react';
-import { Zap, X, ChevronRight, Loader2 } from 'lucide-react';
+import React from 'react';
+import { Zap, X, ChevronRight } from 'lucide-react';
+import Spinner from '../ui/Spinner';
+
+import { useMemo, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
 export const ConfirmPaymentModal = ({ isOpen, onClose, finanzas, onConfirm, candidateName, candidato }) => {
@@ -31,7 +34,7 @@ export const ConfirmPaymentModal = ({ isOpen, onClose, finanzas, onConfirm, cand
 
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/40 backdrop-blur-md px-6 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-[260px] bg-zinc-950 border border-white/5 rounded-[2.2rem] p-6 space-y-6 shadow-2xl">
+      <div className="relative w-full max-w-[260px] bg-zinc-950 border border-transparent rounded-[2.2rem] p-6 space-y-6 ">
 
         {/* Botón Cerrar */}
         <button
@@ -85,7 +88,7 @@ export const ConfirmPaymentModal = ({ isOpen, onClose, finanzas, onConfirm, cand
             >
               {isProcessing ? (
                 <>
-                  <Loader2 size={10} className="animate-spin" />
+                  <Spinner size={8} variant="white" />
                   Procesando...
                 </>
               ) : (
@@ -110,3 +113,4 @@ export const ConfirmPaymentModal = ({ isOpen, onClose, finanzas, onConfirm, cand
     </div>
   );
 };
+export default ConfirmPaymentModal;

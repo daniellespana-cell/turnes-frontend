@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 
+
 const FormContainer = ({ children, onBack, title, subtitle }) => (
     <div className="animate-fade-in w-full max-w-[340px] mx-auto relative pt-4">
         {/* Navigation Header */}

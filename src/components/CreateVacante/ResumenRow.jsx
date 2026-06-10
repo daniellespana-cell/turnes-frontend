@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const ResumenRow = ({ label, value, isHighlight, subLabel }) => (
   <div className="flex justify-between items-center py-1.5 animate-in fade-in duration-500">
     <div className="flex flex-col">

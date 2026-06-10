@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { ConfirmPaymentModal } from './ConfirmPaymentModal';
-import { VideoCallOverlay } from './VideoCallOverlay';
+import React from 'react';
+import VideoCallOverlay from './VideoCallOverlay';
 import { CheckCircle2, X } from 'lucide-react';
+
+import { useState, useEffect } from 'react';
 
 const ChatOverlays = ({
   chat,
@@ -9,12 +10,13 @@ const ChatOverlays = ({
   fromVacante,
   isInVideoCall,
   setIsInVideoCall,
-  isClosed
+  roomUrl, // 🆕
+  isClosed,
+  isConfirmModalOpen,
+  setIsConfirmModalOpen,
+  onExecutePayment
 }) => {
   const {
-    isConfirmModalOpen = false,
-    setIsConfirmModalOpen = () => { },
-    ejecutarPagoComision,
     finanzas = {},
     registrarValidacionVideo
   } = chat || {};
@@ -33,10 +35,10 @@ const ChatOverlays = ({
 
 
   const handleConfirmPayment = async () => {
-    if (!ejecutarPagoComision) return;
+    if (!onExecutePayment) return;
 
     // Ejecutamos la lógica del Hook
-    const resultado = await ejecutarPagoComision();
+    const resultado = await onExecutePayment();
 
     if (resultado?.success) {
       setIsConfirmModalOpen(false);
@@ -57,7 +59,7 @@ const ChatOverlays = ({
       {/* --- TOAST FLOTANTE DE ÉXITO --- */}
       {showSuccessToast && (
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[9999] animate-in slide-in-from-bottom-5 fade-in duration-300 pointer-events-none">
-          <div className="bg-[#0a0a0a] border border-emerald-500/30 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 backdrop-blur-md pointer-events-auto">
+          <div className="bg-[#0a0a0a] border border-emerald-500/30 text-white px-6 py-4 rounded-2xl  flex items-center gap-4 backdrop-blur-md pointer-events-auto">
             <div className="bg-emerald-500/10 p-2 rounded-full text-emerald-500">
               <CheckCircle2 size={20} />
             </div>
@@ -72,23 +74,12 @@ const ChatOverlays = ({
         </div>
       )}
 
-      {/* PASO 1: PAGO */}
-      {isConfirmModalOpen && (
-        <ConfirmPaymentModal
-          isOpen={isConfirmModalOpen}
-          onClose={() => setIsConfirmModalOpen(false)}
-          onConfirm={handleConfirmPayment}
-          finanzas={finanzas}
-          candidato={candidato}
-          candidateName={candidato?.name}
-        />
-      )}
-
       {/* PASO 2: VIDEO */}
       {isInVideoCall && !isClosed && (
         <VideoCallOverlay
           candidate={candidato}
           fromVacante={fromVacante}
+          roomUrl={roomUrl}
           onClose={handleCloseVideo}
         />
       )}

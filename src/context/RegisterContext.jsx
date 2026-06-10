@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+import { createContext, useContext, useState, useCallback } from 'react';
 
 /**
  * Contexto para manejar el estado del flujo de registro en Turnes.
@@ -7,28 +10,21 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
  */
 const RegisterContext = createContext(null);
 
-import { useSearchParams } from 'react-router-dom';
 
 export const RegisterProvider = ({ children }) => {
-    // Principal Level: URL-Driven State (Single Source of Truth)
-    const [searchParams, setSearchParams] = useSearchParams();
+    // 🚀 ULTRA-PERFORMANCE: Usamos estado local en lugar de URL SearchParams.
+    // Esto evita que React Router vuelva a ejecutar el 'rootLoader' (y su timeout de 2s)
+    // cada vez que el usuario elige un perfil.
+    const [role, setRoleState] = useState(null);
 
-    // Obtener rol de la URL (safely)
-    const roleParam = searchParams.get('role');
-    const role = (roleParam === 'jobseeker' || roleParam === 'company') ? roleParam : null;
-
-    // Función setter que actualiza la URL
+    // Función setter que actualiza el estado local (instantáneo)
     const setRole = useCallback((newRole) => {
-        if (newRole) {
-            setSearchParams({ role: newRole });
-        } else {
-            setSearchParams({}); // Limpiar params para volver al inicio
-        }
-    }, [setSearchParams]);
+        setRoleState(newRole);
+    }, []);
 
     const resetRegistration = useCallback(() => {
-        setSearchParams({});
-    }, [setSearchParams]);
+        setRoleState(null);
+    }, []);
 
     const value = {
         role,

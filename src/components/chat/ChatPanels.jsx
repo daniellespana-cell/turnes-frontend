@@ -1,6 +1,7 @@
 import React from 'react';
+import ContractSidebar from './ContractSidebar';
+
 import { createPortal } from 'react-dom';
-import { ContractSidebar } from './ContractSidebar';
 
 const ChatPanels = ({
   chat,
@@ -10,38 +11,36 @@ const ChatPanels = ({
   stats,
   onPay,
   onExecute,
-  onFinalize, // Agregado: Paso 4
-  onVideoInvite
+  onFinalize,
+  onVideoInvite,
+  isPanelOpen,
+  setIsPanelOpen
 }) => {
-  // 1. DESESTRUCTURACIÓN SEGURA: Fallbacks inmediatos para evitar el "nada"
+  // 1. DESESTRUCTURACIÓN SEGURA
   const {
-    isPanelOpen = true,
-    setIsPanelOpen = () => { },
     finanzas = {},
-    isPaid = false,
     permisos = {}
   } = chat || {};
 
-  // 2. SINCRONIZACIÓN DE PERMISOS: Si no hay permisos del hook, 
-  // construimos un objeto de emergencia para que el Sidebar NO se rompa.
+  // 2. SINCRONIZACIÓN DE PERMISOS (Fuente Única de Verdad = Backend ContractSOT)
   const effectivePermisos = {
-    isPaid: isPaid || permisos?.isPaid || candidato?.isPaid,
-    puedeVideo: permisos?.puedeVideo || isPaid,
-    promise: permisos?.confirmado || candidato?.estadoTurno === 'EJECUTADO', // Removed AGENDADO to prevent skip to Step 4
-    isClosed: isClosed || permisos?.isClosed || candidato?.cicloCerrado,
-    ...permisos
+    ...permisos, // useChatPermissions ya tiene la verdad blindada
+    isPaid: permisos?.isPaid,
+    isClosed: isClosed || permisos?.isClosed
   };
 
   const sidebarProps = {
     candidate: candidato,
     fromVacante,
-    finanzas: finanzas || candidato?.billingConfig || {},
+    finanzas: { ...finanzas, isPaying: chat?.isPaying },
     permisos: effectivePermisos,
-    onPay: onPay || chat?.abrirModalPago,
+    activeStep: chat?.activeStep, // 🔥 SOT: El motor de pasos
+    onPay: onPay,
     onExecute: onExecute || chat?.ejecutarAcuerdo, // Paso 3
     onFinalize: onFinalize,                         // Paso 4
     onVideoInvite: onVideoInvite || chat?.invitarAVideo,
     onClose: () => setIsPanelOpen(false),
+    isFinalizing: chat?.isFinalizing,
     stats
   };
 
@@ -63,14 +62,15 @@ const ChatPanels = ({
             onClick={() => setIsPanelOpen(false)}
           />
 
-          <div className="absolute bottom-0 left-0 right-0 bg-[#0a0a0a] rounded-t-[3rem] border-t border-white/10 z-[110] max-h-[85vh] flex flex-col animate-in slide-in-from-bottom duration-500 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
-            <div className="sticky top-0 z-[120] py-4 border-b border-white/5 flex items-center justify-between px-6 bg-zinc-900/80 backdrop-blur-xl rounded-t-[3rem]">
-              <div className="w-12 h-1 bg-white/20 rounded-full mx-auto absolute left-0 right-0 md:hidden" />
+          <div className="absolute top-0 bottom-0 right-0 w-[85vw] max-w-sm bg-[#0a0a0a] border-l border-white/10 z-[110] flex flex-col animate-in slide-in-from-right duration-300 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
+            <div className="py-4 border-b border-white/5 flex items-center justify-between px-6 bg-zinc-900/80 backdrop-blur-xl shrink-0">
+              <span className="text-white font-bold tracking-wider text-sm">Resumen Contrato</span>
               <button
                 onClick={() => setIsPanelOpen(false)}
-                className="w-full py-3 bg-white/5 border border-white/10 rounded-xl text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/10 flex items-center justify-center gap-2"
+                className="w-8 h-8 flex items-center justify-center bg-white/5 border border-transparent rounded-full text-white hover:bg-white/10 transition-colors"
+                title="Cerrar Panel"
               >
-                Volver al Chat
+                ✕
               </button>
             </div>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertCircle, ChevronRight } from 'lucide-react';
 
+
 /**
  * ActiveProcessCard Nano-Scale: Sutileza en gestión de procesos críticos.
  */
@@ -8,7 +9,7 @@ export const ActiveProcessCard = ({ process }) => {
   if (!process) return null;
 
   return (
-    <div className="bg-zinc-900/10 border border-white/5 rounded-[1.5rem] overflow-hidden transition-all duration-300 hover:border-white/10 group">
+    <div className="bg-zinc-900/10 border border-transparent rounded-[1.5rem] overflow-hidden transition-all duration-300  group">
       <div className="flex flex-col md:flex-row items-center justify-between p-5 md:p-6 gap-4">
         
         {/* Lado Izquierdo: Identificación Micro */}
@@ -35,7 +36,7 @@ export const ActiveProcessCard = ({ process }) => {
             Elegir Candidato
           </button>
           
-          <div className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg border border-white/5 text-zinc-800 group-hover:text-zinc-500 group-hover:border-white/10 transition-all">
+          <div className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-zinc-800 group-hover:text-zinc-500 group- transition-all">
             <ChevronRight size={14} />
           </div>
         </div>
@@ -55,3 +56,4 @@ export const ActiveProcessCard = ({ process }) => {
     </div>
   );
 };
+export default ActiveProcessCard;

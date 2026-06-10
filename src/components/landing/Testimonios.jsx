@@ -1,6 +1,7 @@
 import React from 'react';
 import { Quote } from 'lucide-react';
 
+
 const testimonios = [
   {
     quote: "Turnes me salvó en una noche pico. Encontré meseros en minutos.",
@@ -45,7 +46,7 @@ const Testimonios = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonios.map((t, i) => (
-            <div key={i} className="group p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:bg-zinc-800/50 transition-colors relative">
+            <div key={i} className="group p-8 rounded-3xl bg-zinc-900/50 border border-transparent hover:bg-zinc-800/50 transition-colors relative">
               <Quote className="absolute top-8 right-8 text-white/5 w-12 h-12 rotate-180" />
 
               <StarRating />

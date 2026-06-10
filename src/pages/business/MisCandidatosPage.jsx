@@ -1,10 +1,11 @@
 import React from 'react';
+import HeaderStats from '../../components/talent/HeaderStats';
+import TabSelector from '../../components/talent/TabSelector';
+import CandidatosContent from '../../components/talent/CandidatosContent';
+
 import { useCandidatosLogic } from "../../hooks/useCandidatosLogic";
 
 // Importaciones de dominio
-import HeaderStats from '../../components/candidatos/HeaderStats';
-import TabSelector from '../../components/candidatos/TabSelector';
-import CandidatosContent from '../../components/candidatos/CandidatosContent';
 
 const MisCandidatosPage = () => {
   // ✅ FIX: Desestructuración con valores de respaldo (Fallbacks)
@@ -12,18 +13,19 @@ const MisCandidatosPage = () => {
   const {
     activeTab = 'pendientes',
     setActiveTab = () => { },
-    stats = { score: "5.0", totalPendientes: 0, totalHistorial: 0 },
+    stats,
     pendientes = [],
     historial = [],
     updateCandidato,
-    sellarTurno
+    sellarTurno,
+    dismissFromHistory
   } = useCandidatosLogic() || {};
 
   return (
     <div className="p-4 md:p-10 min-h-screen font-manrope">
 
-      {/* Ahora stats.score siempre tendrá al menos "5.0" como fallback */}
-      <HeaderStats score={stats.score} />
+      {/* Score calculado o null */}
+      <HeaderStats score={stats?.score} />
 
       <div className="max-w-7xl mx-auto mb-12 flex justify-end">
         <TabSelector
@@ -38,6 +40,7 @@ const MisCandidatosPage = () => {
         pendientes={pendientes}
         historial={historial}
         onUpdate={updateCandidato}
+        onDismiss={dismissFromHistory}
         // Conexión Cerebral: Aseguramos el paso de (id, vacanteId)
         onSellar={(id, vId) => sellarTurno && sellarTurno(id, vId)}
       />

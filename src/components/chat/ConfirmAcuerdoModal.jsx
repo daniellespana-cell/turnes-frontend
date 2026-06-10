@@ -1,6 +1,7 @@
 import React from 'react';
 import { Lock, AlertTriangle, ShieldCheck } from 'lucide-react';
 
+
 export const ConfirmAcuerdoModal = ({ isOpen, onClose, onConfirm, finanzas, loading }) => {
   if (!isOpen) return null;
 
@@ -9,7 +10,7 @@ export const ConfirmAcuerdoModal = ({ isOpen, onClose, onConfirm, finanzas, load
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-[#0d0d0d] border border-white/10 w-full max-w-sm rounded-[2.5rem] p-8 space-y-6 shadow-2xl relative overflow-hidden">
+      <div className="bg-[#0d0d0d] border border-transparent w-full max-w-sm rounded-[2.5rem] p-8 space-y-6  relative overflow-hidden">
         
         {/* Decoración de fondo para denotar seguridad */}
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl" />
@@ -38,7 +39,7 @@ export const ConfirmAcuerdoModal = ({ isOpen, onClose, onConfirm, finanzas, load
 
         {/* Desglose Financiero - Solo se muestra si hay data válida */}
         {!isDataInvalid && (
-          <div className="bg-white/5 border border-white/5 p-5 rounded-2xl space-y-3">
+          <div className="bg-white/5 border border-transparent p-5 rounded-2xl space-y-3">
             <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest">
               <span className="text-zinc-500">Pago al Talento</span>
               <span className="text-white">${finanzas.pagoPersonal.toLocaleString()}</span>
@@ -84,3 +85,4 @@ export const ConfirmAcuerdoModal = ({ isOpen, onClose, onConfirm, finanzas, load
     </div>
   );
 };
+export default ConfirmAcuerdoModal;

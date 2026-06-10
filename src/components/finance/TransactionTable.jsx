@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ArrowUpRight, ArrowDownLeft, Download } from 'lucide-react';
+
+import { useState } from 'react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { formatCurrency } from '../../services/financeService';
 
-const TransactionTable = ({ transactions, businessName = "Empresa Turnes" }) => {
+const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoading }) => {
   const [filter, setFilter] = useState('all');
 
   const filteredTransactions = transactions.filter(tx =>
@@ -42,7 +44,7 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes" }) => 
   };
 
   return (
-    <div className="bg-[#0f0f10] border border-white/5 rounded-2xl overflow-hidden font-sans">
+    <div className="bg-[#0f0f10] border border-transparent rounded-2xl overflow-hidden font-sans">
       <div className="px-5 py-4 border-b border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-zinc-400 text-xs font-bold uppercase tracking-widest">Movimientos</h2>
 
@@ -53,7 +55,7 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes" }) => 
             className="bg-transparent text-zinc-500 text-[10px] font-bold px-2 py-1 outline-none hover:text-zinc-300 transition-colors cursor-pointer uppercase tracking-wider"
           >
             <option value="all" className="bg-[#0f0f10]">Todos</option>
-            <option value="recharge" className="bg-[#0f0f10]">Recargas</option>
+            <option value="deposit" className="bg-[#0f0f10]">Recargas</option>
             <option value="payment" className="bg-[#0f0f10]">Pagos</option>
           </select>
 
@@ -77,27 +79,43 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes" }) => 
             </tr>
           </thead>
           <tbody className="divide-y divide-white/[0.02]">
-            {filteredTransactions.map((tx) => (
-              <tr key={tx.id} className="group hover:bg-white/[0.01] transition-colors">
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-6 h-6 rounded-md flex items-center justify-center bg-zinc-900 border border-white/5 transition-colors ${tx.type === 'recharge' ? 'text-emerald-500' : 'text-zinc-500 group-hover:text-zinc-300'
-                      }`}>
-                      {tx.type === 'recharge' ? <ArrowDownLeft size={12} /> : <ArrowUpRight size={12} />}
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-zinc-300">{tx.title}</p>
-                      <p className="text-[9px] text-zinc-600 font-mono mt-0.5">#{tx.id.slice(0, 8)}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-5 py-3.5 text-[11px] text-zinc-500 font-medium">{tx.date}</td>
-                <td className={`px-5 py-3.5 text-right font-medium tracking-tight text-xs ${tx.type === 'recharge' ? 'text-emerald-400' : 'text-zinc-400'
-                  }`}>
-                  {tx.type === 'recharge' ? '+' : '-'} {formatCurrency(tx.amount)}
-                </td>
-              </tr>
-            ))}
+            {isLoading ? (
+              // SKELETON ROWS
+              [1, 2, 3, 4, 5].map((i) => (
+                <tr key={i} className="animate-pulse">
+                  <td className="px-5 py-3.5"><div className="h-4 w-32 bg-zinc-800 rounded"></div></td>
+                  <td className="px-5 py-3.5"><div className="h-4 w-20 bg-zinc-800 rounded"></div></td>
+                  <td className="px-5 py-3.5 text-right"><div className="h-4 w-16 bg-zinc-800 rounded ml-auto"></div></td>
+                </tr>
+              ))
+            ) : (
+              filteredTransactions.map((tx) => {
+                const isIncome = tx.type === 'deposit';
+                return (
+                  <tr key={tx.id} className="group hover:bg-white/[0.01] transition-colors">
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-6 h-6 rounded-md flex items-center justify-center bg-zinc-900 border border-transparent transition-colors ${
+                          isIncome ? 'text-emerald-500' : 'text-amber-500'
+                        }`}>
+                          {isIncome ? <ArrowUpRight size={12} /> : <ArrowDownLeft size={12} />}
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-zinc-300">{tx.business}</p>
+                          <p className="text-[9px] text-zinc-600 font-mono mt-0.5">#{tx.id.slice(0, 8)}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-5 py-3.5 text-[11px] text-zinc-500 font-medium">{tx.date}</td>
+                    <td className={`px-5 py-3.5 text-right font-black tracking-tight text-xs ${
+                      isIncome ? 'text-emerald-400' : 'text-amber-400'
+                    }`}>
+                      {isIncome ? '+' : '-'} {formatCurrency(tx.amount)}
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>

@@ -1,6 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, UserPlus, Zap, DollarSign } from 'lucide-react';
+import { X } from 'lucide-react';
+
+import { useEffect } from 'react';
+import { UserPlus, Zap, DollarSign } from 'lucide-react';
 
 const steps = [
     {
@@ -22,7 +25,7 @@ const steps = [
     {
         icon: DollarSign,
         title: "3. Trabaja y Cobra",
-        desc: "Completa el turno. El pago se libera automáticamente o según el acuerdo. Sin papeleos extra.",
+        desc: "Completa el turno. El pago lo realiza directamente el empleador, ya sea por transferencia o en efectivo. Sin papeleos extra.",
         color: "text-emerald-400",
         bg: "bg-emerald-400/10",
         border: "border-emerald-400/20"
@@ -73,9 +76,9 @@ const HowItWorksModal = ({ isOpen, onClose }) => {
                         transition={{ type: "spring", damping: 25, stiffness: 300 }}
                         className="
                 relative w-full max-w-5xl 
-                bg-zinc-900 border border-white/10 
+                bg-zinc-900 border border-transparent 
                 rounded-t-3xl sm:rounded-3xl 
-                shadow-2xl overflow-hidden 
+                 overflow-hidden 
                 max-h-[90vh] flex flex-col
             "
                         onClick={(e) => e.stopPropagation()} // Evita cerrar al clickear dentro
@@ -100,7 +103,7 @@ const HowItWorksModal = ({ isOpen, onClose }) => {
                             <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none"></div>
 
                             <div className="text-center mb-8 relative z-10">
-                                <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-[10px] sm:text-xs font-semibold tracking-widest text-zinc-400 uppercase mb-4">
+                                <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-transparent text-[10px] sm:text-xs font-semibold tracking-widest text-zinc-400 uppercase mb-4">
                                     El Proceso
                                 </span>
                                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">

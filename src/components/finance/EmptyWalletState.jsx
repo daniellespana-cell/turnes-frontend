@@ -1,7 +1,9 @@
 import React from 'react';
+import EmptyState from '../common/EmptyState';
+
 import { useNavigate } from 'react-router-dom';
 import { Wallet } from 'lucide-react';
-import EmptyState from '../common/EmptyState'; // Importamos la base
+// Importamos la base
 
 const EmptyWalletState = () => {
   const navigate = useNavigate();

@@ -1,8 +1,9 @@
 import React from 'react';
-import { typography } from '../../styles/typography';
+import typography from '../../styles/typography';
+
 
 const VacantesTabs = ({ activeTab, setActiveTab, counts }) => {
-  const tabs = ['Activa', 'Completada', 'Cancelada'];
+  const tabs = ['Activa', 'Completada'];
 
   return (
     <div className="flex items-center gap-6 md:gap-8 pb-4 border-b border-white/5 overflow-x-auto no-scrollbar font-manrope">

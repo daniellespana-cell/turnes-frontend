@@ -1,9 +1,12 @@
+import { PROTOCOL_STEPS } from '../services/contractService';
+
 import { useCallback } from 'react';
+import { supabase } from '../services/supabaseClient';
 
 /**
  * useChatActions
  * Encapsulates the business logic for interactive chat bubbles.
- * - Handles Rehire Acceptance/Decline (localStorage + Events).
+ * - Handles Rehire Acceptance/Decline securely in DB.
  * - Manages message metadata updates (Optimistic UI).
  */
 export const useChatActions = ({
@@ -13,77 +16,48 @@ export const useChatActions = ({
     setMessages // Optional: if we want to mutate local state directly
 }) => {
 
-    const handleRehireAction = useCallback((actionType, message) => {
+    const handleRehireAction = useCallback(async (actionType, message) => {
         if (!candidato?.id) return;
 
-        // 1. UPDATE GLOBAL STATE (LocalStorage as DB for Alpha)
-        if (actionType === 'ACCEPT_REHIRE') {
-            try {
-                const red = JSON.parse(localStorage.getItem('turnes_validados') || '[]');
-                const nuevaRed = red.map(c =>
-                    String(c.id) === String(candidato.id)
-                        ? { ...c, videoHabilitado: true, isPaid: false } // Force isPaid: false for safety
-                        : c
-                );
-                localStorage.setItem('turnes_validados', JSON.stringify(nuevaRed));
-                // Notify Sidebar to unlock payment step
-                window.dispatchEvent(new Event('storage'));
-            } catch (e) {
-                console.error("Error updating rehire state:", e);
-            }
-        }
-
-        if (actionType === 'DECLINE_REHIRE') {
-            try {
-                const red = JSON.parse(localStorage.getItem('turnes_validados') || '[]');
-                const nuevaRed = red.map(c =>
-                    String(c.id) === String(candidato.id)
-                        ? { ...c, cicloCerrado: true, estadoTurno: 'CANCELADO' }
-                        : c
-                );
-                localStorage.setItem('turnes_validados', JSON.stringify(nuevaRed));
-                window.dispatchEvent(new Event('storage'));
-
-                // Exit flow
-                if (onFinalize) onFinalize();
-            } catch (e) {
-                console.error("Error declining rehire:", e);
-            }
-        }
-
-        // 2. UPDATE LOCAL MESSAGE STATE (Visual Feedback)
-        // We update the specific message in localStorage to persist the "Accepted/Declined" UI
+        // 1. ATOMIC BUSINESS LOGIC (Server Side via RPC)
         try {
-            const historyKey = `chat_history_${candidato.id}`;
-            // Note: We need the *latest* messages here. 
-            // If 'messages' prop is stale, we might fetch from storage or use a callback updater if provided.
-            const currentHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
-
-            const updatedHistory = currentHistory.map(m => {
-                if (m.id === message.id) {
-                    return {
-                        ...m,
-                        metadata: {
-                            ...m.metadata,
-                            status: actionType === 'ACCEPT_REHIRE' ? 'accepted' : 'declined'
-                        }
-                    };
-                }
-                return m;
+            const rpcAction = actionType === 'ACCEPT_REHIRE' ? 'ACCEPT' : 'DECLINE';
+            const { error } = await supabase.rpc('rpc_manage_rehire_actions', {
+                p_application_id: candidato.id,
+                p_action: rpcAction
             });
 
-            localStorage.setItem(historyKey, JSON.stringify(updatedHistory));
-
-            // If we have a setter, update the view immediately
-            if (setMessages) {
-                setMessages(updatedHistory);
-            }
-
+            if (error) throw error;
+            
+            // Refrescar estado global
+            window.dispatchEvent(new CustomEvent('turnes_contract_update'));
+            if (actionType === 'DECLINE_REHIRE' && onFinalize) onFinalize();
         } catch (e) {
-            console.error("Error updating chat history:", e);
+            console.error("Critical Rehire Action Error (RPC):", e);
+            return; // Detenemos el feedback visual si la transacción falló
         }
 
-    }, [candidato?.id, onFinalize, setMessages]); // messages dep removed to avoid stale closures if looking at storage
+        // 2. UPDATE LOCAL MESSAGE STATE (Optimistic Visual Feedback - React State Only)
+        try {
+            if (setMessages) {
+                setMessages(prev => prev.map(m => {
+                    if (m.id === message.id) {
+                        return {
+                            ...m,
+                            metadata: {
+                                ...m.metadata,
+                                status: actionType === 'ACCEPT_REHIRE' ? 'accepted' : 'declined'
+                            }
+                        };
+                    }
+                    return m;
+                }));
+            }
+        } catch (e) {
+            console.error("Error updating chat history visual state:", e);
+        }
+
+    }, [candidato?.id, onFinalize, setMessages]);
 
     return {
         handleRehireAction

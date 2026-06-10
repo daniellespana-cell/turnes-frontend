@@ -1,91 +1,137 @@
 import React from 'react';
-import { MapPin, Clock, DollarSign, Calendar, Search, ChevronDown } from 'lucide-react';
+import { Search, ChevronDown } from 'lucide-react';
 import FormField from './FormField';
 import QuantitySelector from './QuantitySelector';
-import { TURNOS_PREDEFINIDOS } from "../../domain/vacantes.taxonomy";
 import SmartPredictiveSearch from './SmartPredictiveSearch';
+import CargoTagSelector from './CargoTagSelector';
 
-const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentChange }) => {
+import { MapPin, Clock, DollarSign, Calendar } from 'lucide-react';
+import { TURNOS_PREDEFINIDOS } from "../../domain/vacantes.taxonomy";
+
+const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentChange, onOpenMap }) => {
   const inputReset = "bg-transparent border-none outline-none text-[13px] text-zinc-200 w-full placeholder:text-zinc-700 font-medium font-manrope";
 
   const handleTextChange = (e) => {
     const { name, value } = e.target;
     if (name === 'description' && value.length > 150) return;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    setFormData(prev => {
+      const newState = { ...prev, [name]: value };
+      // Si cambia la ubicación, reseteamos la confirmación quirúrgica
+      if (name === 'location') {
+        newState.isLocationConfirmed = false;
+      }
+      return newState;
+    });
   };
 
   return (
-    <section className="bg-zinc-900/20 border border-white/[0.03] rounded-[2rem] p-6 md:p-8 space-y-5 font-manrope backdrop-blur-md">
+    <section className="bg-zinc-900/20 rounded-[2rem] p-6 md:p-8 space-y-5 font-manrope backdrop-blur-md">
       <header className="flex items-center gap-2 mb-2 opacity-40 text-zinc-400">
         <label className="text-[9px] font-black uppercase tracking-[0.2em]">Configuración del Turno</label>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* CARGO: Predictivo Inteligente */}
-        <SmartPredictiveSearch
-          icon={Search}
-          placeholder="Cargo / Puesto"
-          value={formData.title}
-          onChange={handleTextChange}
-          mode="cargo"
-          name="title" // Needed for standard event handling if my component mimics it
+        {/* ETIQUETAS DEL CARGO: Max 2 */}
+        <CargoTagSelector
+          selectedTags={formData.tags || []}
+          onChange={(newTags) => setFormData(prev => ({ ...prev, tags: newTags }))}
+          maxTags={2}
         />
 
-        {/* CIUDAD: Predictivo Inteligente */}
-        <SmartPredictiveSearch
-          icon={MapPin}
-          placeholder="Ciudad / Municipio"
-          value={formData.location}
-          onChange={handleTextChange}
-          mode="location"
-          name="location"
-        />
+        {/* CIUDAD + CONFIRMACIÓN (Progressive Disclosure 2026) */}
+        <div className="space-y-1.5">
+          {/* Paso 1: Input de ciudad — full width, sin ruido */}
+          <SmartPredictiveSearch
+            icon={MapPin}
+            placeholder="Ciudad / Municipio"
+            value={formData.location}
+            onChange={handleTextChange}
+            mode="location"
+            name="location"
+          />
 
-        {/* DIRECCIÓN EXACTA (Geocoding) */}
-        <div className="relative group">
-          <div className={`flex items-center gap-3 bg-zinc-900/50 border border-zinc-800 rounded-xl px-4 py-3 focus-within:border-emerald-500/50 focus-within:bg-zinc-900 transition-all ${!formData.location ? 'opacity-50 pointer-events-none' : ''}`}>
-            <MapPin size={18} className="text-zinc-500 shrink-0" />
-            <input
-              type="text"
-              name="address"
-              placeholder="Dirección exacta (Ej: Calle 100 #15-20)"
-              value={formData.address || ""}
-              onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-              onBlur={async (e) => {
-                const addr = e.target.value;
-                if (addr.length > 5 && formData.location) {
-                  try {
-                    const query = `${addr}, ${formData.location}, Colombia`;
-                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
-                    const data = await response.json();
-                    if (data && data[0]) {
-                      setFormData(prev => ({
-                        ...prev,
-                        lat: parseFloat(data[0].lat),
-                        lng: parseFloat(data[0].lon)
-                      }));
-                      console.log("📍 Geocoded:", data[0].lat, data[0].lon);
-                    }
-                  } catch (err) {
-                    console.error("Geocoding failed", err);
-                  }
+          {/* Paso 2: Strip contextual — solo aparece cuando hay ciudad */}
+          {formData.location && (
+            <button
+              type="button"
+              onClick={onOpenMap}
+              className={`
+                w-full flex items-center gap-3 px-4 py-2.5 rounded-xl
+                transition-all duration-300 group text-left
+                ${formData.isLocationConfirmed
+                  ? 'bg-emerald-500/5 border border-emerald-500/15 hover:bg-emerald-500/10'
+                  : 'bg-zinc-900/50 border border-transparent  hover:bg-zinc-800/40'
                 }
-              }}
-              className={inputReset}
-            />
-          </div>
-          {!formData.location && <span className="absolute -bottom-4 left-2 text-[9px] text-zinc-600 font-medium">Selecciona ciudad primero</span>}
+              `}
+            >
+              {/* Indicador de estado */}
+              <div className={`
+                shrink-0 w-6 h-6 rounded-lg flex items-center justify-center transition-colors
+                ${formData.isLocationConfirmed
+                  ? 'bg-emerald-500/15 text-emerald-400'
+                  : 'bg-zinc-800 text-zinc-500 group-hover:text-zinc-300'
+                }
+              `}>
+                <MapPin size={11} />
+              </div>
+
+              {/* Texto */}
+              <div className="flex-1 min-w-0">
+                {formData.isLocationConfirmed ? (
+                  <>
+                    <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest leading-none">
+                      Ubicación precisa ✓
+                    </p>
+                    <p className="text-[11px] text-zinc-400 mt-0.5 truncate">
+                      {formData.location}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-[11px] font-semibold text-zinc-300 leading-none group-hover:text-white transition-colors">
+                      Afinar ubicación exacta
+                    </p>
+                    <p className="text-[9px] text-zinc-600 mt-0.5 group-hover:text-zinc-500 transition-colors">
+                      Opcional · Mejora el match con candidatos cercanos
+                    </p>
+                  </>
+                )}
+              </div>
+
+              {/* Arrow / indicator derecho */}
+              <div className={`
+                shrink-0 text-[9px] font-black uppercase tracking-widest transition-colors
+                ${formData.isLocationConfirmed ? 'text-emerald-500/40' : 'text-zinc-700 group-hover:text-zinc-400'}
+              `}>
+                {formData.isLocationConfirmed ? '●' : '›'}
+              </div>
+            </button>
+          )}
         </div>
 
+
+
+
         {/* FECHA: Validación Estricta (No pasadas) */}
-        <SmartPredictiveSearch
-          icon={Calendar}
-          placeholder="Fecha del Turno"
-          value={formData.date}
-          onChange={handleTextChange}
-          type="date"
-          name="date"
-        />
+        <FormField icon={Calendar} className={!formData.date ? "text-zinc-600" : "text-brand-primary"}>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleTextChange}
+            min={new Date().toLocaleDateString('en-CA')} // yyyy-mm-dd local (Canada locale ISO format)
+            className={`bg-transparent border-none outline-none text-[13px] w-full font-bold font-manrope [color-scheme:dark]
+              ${formData.date ? 'text-white' : 'text-zinc-600 uppercase tracking-wider text-[11px]'}
+            `}
+            // Oculta placeholder en WebKit cuando no hay fecha
+            style={{ 
+              WebkitAppearance: 'none', 
+              minHeight: '1.5rem',
+              backgroundImage: 'none'
+            }}
+          />
+        </FormField>
 
         {/* HORARIO */}
         <FormField icon={Clock}>
@@ -113,8 +159,8 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
         {/* DESCRIPCIÓN */}
         <div className="md:col-span-2 space-y-2">
           <div className={`relative rounded-xl p-4 transition-all duration-500 ${ui.isDescriptionInvalid
-            ? 'bg-red-500/5 border border-red-500/30 ring-1 ring-red-500/10'
-            : 'bg-zinc-900/30 border border-white/5 focus-within:bg-zinc-900/50 focus-within:border-purple-500/20 focus-within:shadow-[0_0_15px_-5px_rgba(168,85,247,0.1)]'
+            ? 'bg-red-500/5 border border-red-500/30'
+            : 'bg-zinc-900/30 border border-transparent focus-within:bg-zinc-900/50'
             }`}>
             <textarea
               name="description"

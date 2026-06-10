@@ -1,4 +1,5 @@
-import { Search, MapPin, Briefcase } from "lucide-react";
+import { Search, MapPin, Briefcase } from 'lucide-react';
+
 
 const MobileSearchBar = ({
   searchTerm,
@@ -66,7 +67,7 @@ const MobileSearchBar = ({
       {/* DROPDOWNS (Adapted for Mobile Width) */}
       <div className="relative mt-2">
         {showSuggestions && suggestions.length > 0 && (
-          <div className="absolute z-50 top-0 left-0 right-0 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl max-h-48 overflow-y-auto">
+          <div className="absolute z-50 top-0 left-0 right-0 bg-zinc-900 border border-zinc-700 rounded-xl  max-h-48 overflow-y-auto">
             {suggestions.map((job, i) => (
               <div key={i} onClick={() => selectJob(job)} className="px-4 py-3 text-zinc-300 text-sm border-b border-zinc-800 last:border-0 active:bg-zinc-800 flex items-center gap-3">
                 <Briefcase size={14} className="text-zinc-500" />
@@ -77,7 +78,7 @@ const MobileSearchBar = ({
         )}
 
         {showCitySuggestions && citySuggestions.length > 0 && (
-          <div className="absolute z-50 top-0 left-0 right-0 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl max-h-48 overflow-y-auto">
+          <div className="absolute z-50 top-0 left-0 right-0 bg-zinc-900 border border-zinc-700 rounded-xl  max-h-48 overflow-y-auto">
             {citySuggestions.map((city, i) => (
               <div key={i} onClick={() => selectCity(city)} className="px-4 py-3 text-zinc-300 text-sm border-b border-zinc-800 last:border-0 active:bg-zinc-800 flex items-center gap-3">
                 <MapPin size={14} className="text-zinc-500" />

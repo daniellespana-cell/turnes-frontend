@@ -1,5 +1,6 @@
-import { Search, MapPin, Briefcase } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Search, MapPin, Briefcase } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+
 
 const DesktopSearchBar = ({
     wrapperRef,
@@ -74,7 +75,7 @@ const DesktopSearchBar = ({
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 5 }}
-                        className="absolute top-full left-0 mt-1.5 w-60 bg-zinc-800 border border-zinc-700 rounded-xl shadow-xl z-[60] overflow-hidden"
+                        className="absolute top-full left-0 mt-1.5 w-60 bg-zinc-800 border border-zinc-700 rounded-xl  z-[60] overflow-hidden"
                     >
                         <ul className="py-1">
                             {suggestions.map((job, index) => (
@@ -94,7 +95,7 @@ const DesktopSearchBar = ({
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 5 }}
-                        className="absolute top-full right-10 mt-1.5 w-56 bg-zinc-800 border border-zinc-700 rounded-xl shadow-xl z-[60] overflow-hidden"
+                        className="absolute top-full right-10 mt-1.5 w-56 bg-zinc-800 border border-zinc-700 rounded-xl  z-[60] overflow-hidden"
                     >
                         <ul className="py-1">
                             {citySuggestions.map((city, index) => (

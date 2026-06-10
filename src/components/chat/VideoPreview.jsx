@@ -1,9 +1,10 @@
 import React from 'react';
 import { VideoOff, MicOff } from 'lucide-react';
 
+
 export const VideoPreview = ({ videoRef, isVideoOff, isFlickering, isMuted }) => {
   return (
-    <div className="absolute right-4 bottom-36 md:right-10 md:bottom-44 w-24 h-36 md:w-28 md:h-40 bg-zinc-950 rounded-[1.5rem] md:rounded-[2rem] border border-white/20 overflow-hidden shadow-2xl z-20 transition-all">
+    <div className="absolute right-4 bottom-36 md:right-10 md:bottom-44 w-24 h-36 md:w-28 md:h-40 bg-zinc-950 rounded-[1.5rem] md:rounded-[2rem] border border-white/20 overflow-hidden  z-20 transition-all">
       <video 
         ref={videoRef} 
         autoPlay playsInline muted 
@@ -23,9 +24,10 @@ export const VideoPreview = ({ videoRef, isVideoOff, isFlickering, isMuted }) =>
         </div>
       )}
 
-      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center p-1 bg-black/60 backdrop-blur-md rounded-lg border border-white/5 z-30">
+      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center p-1 bg-black/60 backdrop-blur-md rounded-lg border border-transparent z-30">
         <span className="text-[6px] md:text-[7px] font-black text-white uppercase tracking-tighter truncate">Local Feed</span>
       </div>
     </div>
   );
 };
+export default VideoPreview;

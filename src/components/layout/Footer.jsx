@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+
 
 import logoFromAssets from '../../assets/logo-turnes.png';
 
@@ -39,16 +40,16 @@ const LandingFooter = () => {
 
             <div className="flex space-x-4">
               <a href="#" aria-label="Facebook" className="text-secondary hover:text-brand-success transition text-xl">
-                <i className="fab fa-facebook"></i>
+                <Facebook size={20} />
               </a>
-              <a href="#" className="text-secondary hover:text-brand-success transition text-xl">
-                <i className="fab fa-twitter"></i>
+              <a href="#" aria-label="Twitter" className="text-secondary hover:text-brand-success transition text-xl">
+                <Twitter size={20} />
               </a>
-              <a href="#" className="text-secondary hover:text-brand-success transition text-xl">
-                <i className="fab fa-instagram"></i>
+              <a href="#" aria-label="Instagram" className="text-secondary hover:text-brand-success transition text-xl">
+                <Instagram size={20} />
               </a>
-              <a href="#" className="text-secondary hover:text-brand-success transition text-xl">
-                <i className="fab fa-linkedin"></i>
+              <a href="#" aria-label="LinkedIn" className="text-secondary hover:text-brand-success transition text-xl">
+                <Linkedin size={20} />
               </a>
             </div>
           </div>
@@ -84,15 +85,6 @@ const LandingFooter = () => {
                 <Mail size={18} className="text-brand-success mr-3" />
                 soporte@turnes.com
               </li>
-              <li className="flex items-center text-secondary">
-                <Phone size={18} className="text-brand-success mr-3" />
-                +1 (555) 123-4567
-              </li>
-              <li className="flex items-center text-secondary">
-                <MapPin size={18} className="text-brand-success mr-3" />
-                123 Main St, Ciudad
-              </li>
-              <FooterLink to="/ayuda" label="Centro de Ayuda / FAQ" />
             </ul>
           </div>
         </div>

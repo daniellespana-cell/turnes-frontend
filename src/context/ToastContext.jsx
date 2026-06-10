@@ -1,5 +1,8 @@
-import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
+import React from 'react';
 import Toast from '../components/common/Toast';
+
+import { createContext, useContext, useState, useCallback, useRef } from 'react';
+import { logger } from '../utils/logger';
 
 const ToastContext = createContext(null);
 
@@ -15,9 +18,9 @@ export const ToastProvider = ({ children }) => {
     // 1. Limpiamos cualquier toast y timer previo
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setToast(null);
-    
+
     // 2. Log de auditoría para debug (puedes borrarlo luego)
-    console.log(`[Toast] Desplegando: ${message} (${type})`);
+    logger.info(`[Toast] Desplegando: ${message} (${type})`);
 
     /**
      * 3. Aumentamos ligeramente el delay a 50ms. 
@@ -25,23 +28,26 @@ export const ToastProvider = ({ children }) => {
      * antes de intentar renderizar el Toast en una nueva capa.
      */
     timeoutRef.current = setTimeout(() => {
-      setToast({ message, type });
-    }, 50); 
+      // ✅ Cross-env ID: crypto.randomUUID() solo funciona en HTTPS.
+      // Date.now() + random string funciona en HTTP local (móvil LAN) y producción.
+      const id = `toast-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+      setToast({ id, message, type });
+    }, 50);
   }, []);
 
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      
+
       {/* ESTRATEGIA DE RENDER:
           Asegúrate de que este bloque no esté envuelto en ningún div 
           con overflow-hidden en el árbol de componentes superior.
       */}
       {toast && (
-        <Toast 
-          key={Date.now()} // Forzamos un montaje limpio con una key única
-          data={toast} 
-          onClose={hideToast} 
+        <Toast
+          key={toast.id} // Forzamos un montaje limpio y estable usando UUID
+          data={toast}
+          onClose={hideToast}
         />
       )}
     </ToastContext.Provider>

@@ -1,10 +1,13 @@
-import React, { useState, useMemo } from 'react';
-import { Send, ShieldCheck, ShieldAlert, Lock, Zap, X, Lightbulb, Info } from 'lucide-react';
+import React from 'react';
+import { Send, ShieldCheck, ShieldAlert, Lock, X, Lightbulb, Info } from 'lucide-react';
+import ChatSuggestions from './ChatSuggestions';
 
-// Hooks
+import { useState } from 'react';
+
+// Components & Hooks
 import { useChatSecurity } from '../../hooks/chat/useChatSecurity';
 
-export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole }) => {
+export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isContracted, isRehire }) => {
   const [text, setText] = useState('');
   const [isWarning, setIsWarning] = useState(false);
   const [showTips, setShowTips] = useState(true);
@@ -34,11 +37,6 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole }) => {
     }
   };
 
-  const suggestions = useMemo(() => isClosed
-    ? ["Hagamos una validación visual rápida", "Confirma asistencia puntual", "¿Sabes cómo llegar?"]
-    : ["Te pago en efectivo al finalizar", "¿Estás disponible hoy?", "Vi tu perfil y me interesó"],
-    [isClosed]);
-
   // CASO: CICLO SELLADO (PASO 5)
   if (showClosedBanner) {
     return (
@@ -58,34 +56,34 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole }) => {
     );
   }
 
+  const isInputDisabled = !canWrite;
+
+  const getPlaceholderText = () => {
+    if (!canWrite) return userRole === 'empresa' ? "Paga para desbloquear" : "Esperando empresa";
+    return "Mensaje";
+  };
+
   // INTERFAZ ACTIVA (PASOS 1, 2, 3 y 4)
   return (
-    <div className="px-4 py-3 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5 relative">
+    <div className="px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5 relative">
 
-      {/* SUGERENCIAS */}
-      <div className={`max-w-4xl mx-auto flex items-center gap-3 transition-all duration-700 overflow-hidden ${(!text && showTips) ? 'max-h-20 mb-4 opacity-100' : 'max-h-0 mb-0 opacity-0'}`}>
-        <div className="flex flex-wrap gap-2 flex-1">
-          {suggestions.map((s, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => { onSend(s); setText(''); }}
-              className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900/20 border border-indigo-500/20 rounded-xl hover:border-emerald-500/50 hover:bg-gradient-to-r hover:from-indigo-600/10 hover:to-emerald-500/10 transition-all duration-500 group"
-            >
-              <Zap size={8} className="text-indigo-500/50 group-hover:text-emerald-400 transition-colors" fill="currentColor" />
-              <span className="text-[8px] font-black text-zinc-600 group-hover:text-zinc-200 uppercase tracking-[0.1em]">
-                {s}
-              </span>
-            </button>
-          ))}
+      {/* SUGERENCIAS (SCROLL HORIZONTAL 2026 UX) */}
+      <div className={`max-w-4xl mx-auto flex items-center gap-2 transition-all duration-700 overflow-hidden ${(!text && showTips && !isContracted) ? 'max-h-20 mb-3 opacity-100' : 'max-h-0 mb-0 opacity-0'}`}>
+        <div className="flex overflow-x-auto gap-2 flex-1 pb-2 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <ChatSuggestions
+            onSend={(s) => { onSend(s); setText(''); }}
+            isContracted={isContracted}
+            isRehire={isRehire}
+            userRole={userRole}
+          />
         </div>
-        <button type="button" onClick={() => setShowTips(false)} className="p-1 text-zinc-900 hover:text-zinc-700 transition-colors">
-          <X size={10} />
+        <button type="button" onClick={() => setShowTips(false)} className="shrink-0 p-1.5 text-zinc-600 hover:text-white transition-colors bg-white/5 rounded-full hidden md:block">
+          <X size={12} />
         </button>
       </div>
 
       {isWarning && (
-        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[8px] font-black uppercase px-6 py-2 rounded-full flex items-center gap-2 shadow-2xl z-50 tracking-widest">
+        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[8px] font-black uppercase px-6 py-2 rounded-full flex items-center gap-2  z-50 tracking-widest">
           <ShieldAlert size={12} /> Protocolo Anti-Fuga
         </div>
       )}
@@ -93,41 +91,39 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole }) => {
       <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex items-center gap-2">
         <button
           type="button"
+          disabled={isInputDisabled}
           onClick={() => setShowTips(!showTips)}
-          className={`p-2 transition-all duration-500 ${showTips ? 'text-indigo-500/60' : 'text-zinc-900 hover:text-zinc-700'}`}
+          className={`p-1.5 transition-all duration-300 rounded-full ${showTips ? 'bg-zinc-800/80' : 'hover:bg-zinc-800/40'} ${isInputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          title="Sugerencias rápidas"
         >
-          <Lightbulb size={14} strokeWidth={showTips ? 2.5 : 1.5} />
+          <Lightbulb size={14} className={showTips ? 'fill-yellow-500/20 text-yellow-500' : 'text-zinc-500'} strokeWidth={2} />
         </button>
 
-        <div className="flex-1 flex items-center gap-4 bg-zinc-900/10 border border-white/5 rounded-[1.5rem] p-1.5 pl-4 focus-within:border-white/10 transition-all">
-          <div className={`transition-colors duration-500 ${isPaid ? 'text-emerald-500/70' : 'text-zinc-800'}`}>
-            {isPaid ? <ShieldCheck size={16} /> : <Lock size={16} />}
+        <div className="flex-1 flex items-center gap-3 bg-zinc-900/60 border border-transparent rounded-3xl py-1 px-4 focus-within:border-white/20 focus-within:bg-zinc-900 transition-all shadow-sm">
+          <div className={`transition-colors duration-500 ${isPaid ? 'text-emerald-500/70' : 'text-zinc-600'}`}>
+            {isPaid ? <ShieldCheck size={14} strokeWidth={2} /> : <Lock size={14} strokeWidth={2} />}
           </div>
 
           <input
-            disabled={!canWrite}
+            disabled={isInputDisabled}
             onChange={(e) => setText(e.target.value)}
-            value={text} // ✅ Controlled Input
-            placeholder={
-              canWrite
-                ? "Escribe un mensaje seguro..."
-                : (userRole === 'empresa' ? "Realiza el pago para desbloquear el chat..." : "Esperando confirmación de la empresa...")
-            }
-            className={`flex-1 bg-transparent text-[13px] text-white outline-none placeholder:text-zinc-600 font-medium py-2 ${!canWrite && 'cursor-not-allowed text-zinc-500'}`}
+            value={text}
+            placeholder={getPlaceholderText()}
+            className={`flex-1 bg-transparent text-[13px] text-zinc-100 outline-none placeholder:text-zinc-600 font-medium py-2 ${isInputDisabled ? 'cursor-not-allowed text-zinc-500' : ''}`}
           />
 
           <button
             type="submit"
             disabled={!text.trim() || isWarning || !canWrite}
             className={`
-              p-2.5 rounded-xl transition-all duration-500 shadow-lg
+              p-1.5 rounded-full transition-all duration-300 mt-0.5 mb-0.5
               ${text.trim() && !isWarning && !isClosed
-                ? 'bg-gradient-to-br from-indigo-600 to-emerald-500 text-white opacity-100 scale-100'
-                : 'bg-zinc-900 text-zinc-800 opacity-20 scale-95'
+                ? 'bg-blue-600 text-white opacity-100 scale-100 shadow-sm'
+                : 'bg-transparent text-zinc-700 opacity-50 scale-95'
               }
             `}
           >
-            <Send size={14} strokeWidth={3} />
+            <Send size={14} strokeWidth={text.trim() ? 2.5 : 2} className={text.trim() && !isWarning && !isClosed ? '-ml-0.5' : ''} />
           </button>
         </div>
       </form>

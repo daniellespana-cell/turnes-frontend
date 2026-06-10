@@ -1,5 +1,6 @@
-import React from 'react';
 import { motion } from 'framer-motion';
+
+import React from 'react';
 
 // Definición de la variante de animación (debe coincidir con la usada en DetalleRolPage)
 const fadeInUp = {
@@ -21,7 +22,7 @@ const fadeInUp = {
 const SectionCard = ({ title, children, icon: Icon, accent, className = "" }) => (
     <motion.div
         variants={fadeInUp}
-        className={`bg-zinc-900/40 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl hover:border-indigo-500/30 transition-all duration-500 ${className}`}
+        className={`bg-zinc-900/30 p-8 rounded-3xl transition-all duration-500 ${className}`}
     >
         {/* Encabezado con ícono y color de acento */}
         <h3 className={`text-xl font-bold mb-4 flex items-center gap-3 text-white`}>

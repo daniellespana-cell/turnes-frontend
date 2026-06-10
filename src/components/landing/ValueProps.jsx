@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+
 import { Zap, ShieldCheck, Globe, Trophy } from 'lucide-react';
 
 const valueProps = [
@@ -71,13 +72,13 @@ const ValueProps = () => {
             <motion.div
               key={index}
               variants={cardVariants}
-              className="group relative p-8 rounded-3xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-colors duration-300"
+              className="group relative p-8 rounded-3xl border border-transparent bg-white/[0.02] hover:bg-white/[0.05] transition-colors duration-300"
             >
               {/* Internal Glow on Hover */}
               <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-3xl`}></div>
 
               <div className="relative z-10">
-                <div className={`w-12 h-12 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-12 h-12 rounded-2xl bg-zinc-900 border border-transparent flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                   <card.icon className={`w-6 h-6 ${card.iconColor}`} />
                 </div>
 

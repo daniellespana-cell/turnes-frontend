@@ -1,4 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
+
+import { useMemo } from 'react';
 
 // Configuration for particle density and movement
 const PARTICLE_COUNT = 20;

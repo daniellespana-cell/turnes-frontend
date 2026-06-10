@@ -15,7 +15,7 @@ export const TalentInfo = ({ candidate, config, isPaid, isRehire, isSealed }) =>
                 <div className="flex items-center gap-3 relative z-10">
                     <div className="relative">
                         <img
-                            src={candidate?.avatar || 'https://via.placeholder.com/150'}
+                            src={AssetResolver.getAvatar(candidate?.avatar, candidate?.name || 'Talento')}
                             className="w-10 h-10 rounded-full object-cover border border-white/10"
                             alt="Talento"
                         />

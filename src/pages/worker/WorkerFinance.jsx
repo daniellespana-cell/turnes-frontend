@@ -1,130 +1,100 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import {
-    TrendingUp, DollarSign, Calendar,
-    ArrowUpRight, ArrowDownLeft, Clock, CheckCircle2
-} from 'lucide-react';
+import { AlertCircle, Info } from 'lucide-react';
+import Spinner from '../../components/ui/Spinner';
+import PageHeader from '../../components/common/PageHeader';
+import FinanceHero from '../../components/finance/FinanceHero';
+import TransactionList from '../../components/finance/TransactionList';
+
+import { Wallet } from 'lucide-react';
 import { useWorkerFinance } from '../../hooks/useWorkerFinance';
+import { useAuth } from '../../context/AuthContext';
+
+// Modular Architecture
 
 const WorkerFinance = () => {
+    const { user } = useAuth();
+    const isBusiness = user?.role === 'empresa';
+
     const {
-        balance,
-        monthlyMetrics,
         history,
-        stats
+        stats,
+        loading,
+        hasMore,
+        loadMore,
+        isLoadingMore,
+        error,
+        refetch
     } = useWorkerFinance();
 
-    return (
-        <div className="font-manrope pb-24 animate-fade-in space-y-8">
-
-            {/* HEADER */}
-            <div>
-                <h1 className="text-2xl font-bold text-white tracking-tight">Mis Finanzas</h1>
-                <p className="text-zinc-500 text-sm">Gestiona tus ganancias y retiros</p>
+    if (loading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+                <Spinner size="xl" variant="emerald" text="Calculando estimaciones..." />
             </div>
+        );
+    }
 
-            {/* BALANCE CARDS */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Total Disponible */}
-                <div className="bg-zinc-900/50 border border-emerald-500/20 rounded-3xl p-6 relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-50" />
-                    <div className="relative z-10 space-y-1">
-                        <span className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-widest">
-                            <CheckCircle2 size={12} /> Disponible para Retiro
-                        </span>
-                        <div className="text-4xl font-black text-white tracking-tight">
-                            ${balance.available.toLocaleString()}
-                        </div>
-                        <p className="text-zinc-500 text-xs mt-2">
-                            Se procesa en tu cuenta en 1-2 horas.
-                        </p>
-                    </div>
-                    <button className="mt-6 w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-bold uppercase text-xs tracking-widest rounded-xl transition-colors shadow-lg shadow-emerald-500/20">
-                        Solicitar Retiro
-                    </button>
+    if (error && history.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-6 px-6 text-center">
+                <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+                    <AlertCircle className="w-8 h-8 text-red-500" />
                 </div>
-
-                {/* Pendiente / En Proceso */}
-                <div className="bg-zinc-900/50 border border-white/5 rounded-3xl p-6 relative overflow-hidden">
-                    <div className="relative z-10 space-y-1">
-                        <span className="flex items-center gap-2 text-zinc-400 text-xs font-bold uppercase tracking-widest">
-                            <Clock size={12} /> Saldo Pendiente
-                        </span>
-                        <div className="text-3xl font-bold text-zinc-300 tracking-tight opacity-70">
-                            ${balance.pending.toLocaleString()}
-                        </div>
-                        <p className="text-zinc-500 text-xs mt-2">
-                            Turnos finalizados en validación (24h).
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            {/* METRICS (CHART SIMULATION) */}
-            <section className="space-y-4">
-                <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <TrendingUp size={18} className="text-indigo-400" /> Rendimiento Semestral
-                </h2>
-
-                <div className="bg-zinc-900/50 border border-white/5 rounded-[1.5rem] p-6">
-                    <div className="flex items-end justify-between h-32 gap-2">
-                        {monthlyMetrics.map((item, index) => {
-                            const maxVal = Math.max(...monthlyMetrics.map(m => m.value));
-                            const heightPct = (item.value / maxVal) * 100;
-                            const isCurrent = index === monthlyMetrics.length - 1;
-
-                            return (
-                                <div key={item.month} className="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                                    {/* Tooltip Value */}
-                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -mt-8 text-[10px] font-bold bg-zinc-800 text-white px-2 py-1 rounded">
-                                        ${(item.value / 1000).toFixed(0)}k
-                                    </div>
-
-                                    {/* Bar */}
-                                    <div className="w-full h-full flex items-end">
-                                        <motion.div
-                                            initial={{ height: 0 }}
-                                            animate={{ height: `${heightPct}%` }}
-                                            transition={{ duration: 1, delay: index * 0.1 }}
-                                            className={`w-full rounded-t-lg transition-colors ${isCurrent ? 'bg-gradient-to-t from-indigo-500 to-cyan-500' : 'bg-zinc-800 group-hover:bg-zinc-700'}`}
-                                        />
-                                    </div>
-                                    {/* Label */}
-                                    <span className={`text-[10px] font-bold uppercase tracking-wide ${isCurrent ? 'text-white' : 'text-zinc-500'}`}>
-                                        {item.month}
-                                    </span>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </section>
-
-            {/* RECENT TRANSACTIONS */}
-            <section className="space-y-4">
-                <h2 className="text-lg font-bold text-white">Historial Reciente</h2>
                 <div className="space-y-2">
-                    {history.map((tx) => (
-                        <div key={tx.id} className="flex items-center justify-between p-4 bg-zinc-900/30 border border-white/5 rounded-2xl hover:bg-zinc-900/50 transition-colors">
-                            <div className="flex items-center gap-4">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tx.type === 'withdrawal' ? 'bg-zinc-800 text-zinc-400' : 'bg-emerald-500/10 text-emerald-400'}`}>
-                                    {tx.type === 'withdrawal' ? <ArrowUpRight size={18} /> : <ArrowDownLeft size={18} />}
-                                </div>
-                                <div>
-                                    <h4 className="text-white font-bold text-sm">{tx.business}</h4>
-                                    <p className="text-zinc-500 text-xs font-medium flex items-center gap-1.5">
-                                        {tx.date} • <span className={`capitalize ${tx.status === 'completed' ? 'text-zinc-500' : 'text-amber-500'}`}>{tx.status === 'completed' ? 'Completado' : 'Validando'}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <span className={`font-bold text-sm ${tx.type === 'withdrawal' ? 'text-white' : 'text-emerald-400'}`}>
-                                {tx.type === 'withdrawal' ? '-' : '+'}${Math.abs(tx.amount).toLocaleString()}
-                            </span>
-                        </div>
-                    ))}
+                    <h3 className="text-white font-bold text-lg">Huston, tenemos un problema</h3>
+                    <p className="text-zinc-500 text-sm max-w-[250px] mx-auto">No pudimos conectar con los registros de turnos. Revisa tu conexión.</p>
                 </div>
-            </section>
+                <button 
+                    onClick={() => refetch()}
+                    className="px-8 py-3 bg-white text-black font-bold rounded-2xl hover:bg-zinc-200 transition-colors flex items-center gap-2"
+                >
+                    Reintentar Conexión
+                </button>
+            </div>
+        );
+    }
 
+    return (
+        <div className="font-manrope pb-24 animate-fade-in space-y-6 max-w-lg mx-auto md:max-w-4xl px-0 md:px-0">
+            {/* Standard Global Page Header */}
+            <PageHeader 
+                icon={Wallet} 
+                title={isBusiness ? 'Mi' : 'Mi'} 
+                highlight={isBusiness ? 'Historial de Pagos' : 'Historial de Ingresos'} 
+                subtitle={isBusiness ? 'Registro de comisiones e inversiones en talento' : 'Estimación basada en tus turnos finalizados'} 
+            />
+
+            <div className="px-4 space-y-6">
+                
+                {/* 🛡️ Banner Aclaratorio Premium (Zero-Trust) */}
+                {!isBusiness && (
+                    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-5 flex items-start gap-4">
+                        <div className="mt-0.5 shrink-0 w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                            <Info size={16} strokeWidth={2.5} />
+                        </div>
+                        <div>
+                            <h4 className="text-sm font-bold text-emerald-400 mb-1">Transparencia Financiera</h4>
+                            <p className="text-xs font-medium text-emerald-400/80 leading-relaxed">
+                                Turnes no retiene tu dinero. Los pagos los recibes directamente de la empresa al finalizar tu turno. Este panel es puramente estadístico.
+                            </p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Hero Metric */}
+                <FinanceHero 
+                    totalEarned={stats?.totalEarned} 
+                    label={isBusiness ? 'Total Invertido en Talento' : 'Ganancias Estimadas Totales'}
+                />
+
+                {/* History List */}
+                <TransactionList 
+                    history={history} 
+                    hasMore={hasMore} 
+                    loadMore={loadMore} 
+                    isLoadingMore={isLoadingMore} 
+                />
+            </div>
         </div>
     );
 };

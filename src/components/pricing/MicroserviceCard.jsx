@@ -1,67 +1,42 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ArrowRight, Check } from 'lucide-react';
 
-// Importamos el mapa de íconos y la animación
-// 🟢 NOTA: Asumimos que esta ruta es correcta (src/data/IconMap.js)
-import { IconMap } from '../../data/IconMap'; 
+import { formatCurrency } from '../../services/financeService';
+import { useAuth } from '../../context/AuthContext';
 
-// Variantes de animación
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-};
-
-/**
- * Componente Tarjeta para Microservicios a la Carta (Pago Único, Perfil Destacado, etc.)
- * Muestra el servicio y lo diferencia visualmente por target (Empresas vs. Trabajadores).
- * @param {object} service - Objeto del microservicio (datos de microservicesData.js).
- */
-const MicroserviceCard = ({ service }) => {
-    // Obtenemos el componente Icono de Lucide React usando el nombre del string
-    const IconComponent = IconMap[service.icon];
-    const isWorkerTarget = service.target === 'Trabajadores';
-
-    // 🟢 ESTILOS DE TEMA OSCURO: Usamos colores de la marca para diferenciar el target
-    const colorClass = isWorkerTarget 
-        ? 'bg-app border-brand-primary/50' // Trabajadores: Azul (Primario)
-        : 'bg-surface border-brand-success/50'; // Empresas: Verde (Éxito)
-
-    const iconColor = isWorkerTarget ? 'text-brand-primary' : 'text-brand-success';
-
+const MicroserviceCard = ({ service, handleUpgrade }) => {
+    const { user } = useAuth();
+    const isAcquired = service.id === 'verify' && user?.verificado;
     return (
-        <motion.div 
-            variants={fadeInUp} // Aplica la animación de aparición
-            className={`p-6 rounded-xl shadow-lg border h-full flex flex-col justify-between ${colorClass} transition-all duration-300 hover:shadow-xl`}
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-zinc-900/30 border border-transparent rounded-2xl p-6 hover:bg-zinc-900/60 transition-all group"
         >
-            <div className="flex-grow">
-                <div className="flex items-center space-x-4">
-                    {/* Contenedor del Ícono (Fondo oscuro) */}
-                    <div className="p-3 rounded-full bg-zinc-800 shadow-md">
-                        {IconComponent && <IconComponent className={`w-6 h-6 ${iconColor}`} />}
-                    </div>
-                    <div>
-                        <h4 className="text-xl font-bold text-white">{service.title}</h4>
-                        {/* Etiqueta Target */}
-                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isWorkerTarget ? 'bg-brand-primary/20 text-brand-primary' : 'bg-brand-success/20 text-brand-success'}`}>
-                            Para {service.target}
-                        </span>
-                    </div>
-                </div>
-                
-                <p className="mt-4 text-sm text-zinc-400">{service.description}</p>
+            <div className="flex justify-between items-start mb-4">
+                <h4 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">{service.title}</h4>
+                <span className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-transparent uppercase tracking-wider">{service.target_audience}</span>
             </div>
-            
-            {/* Pie de la Tarjeta (Precio) */}
-            <div className="mt-4 flex items-baseline border-t border-zinc-700 pt-3">
-                <span className="text-2xl font-extrabold text-white">{service.price}</span>
-                <span className="ml-1 text-sm font-medium text-zinc-500">{service.priceUnit}</span>
-            </div>
+            <p className="text-xs text-zinc-400 mb-6 h-10 line-clamp-2">{service.description}</p>
 
-            {/* Botón CTA */}
-            <button className={`mt-4 w-full text-sm font-medium py-2 rounded-lg transition-colors duration-200 
-              ${isWorkerTarget ? 'bg-brand-primary text-white hover:bg-blue-700' : 'bg-brand-success text-black hover:bg-emerald-600'}`}>
-                Comprar Ahora
-            </button>
+            <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                <span className="text-lg font-black text-white">{service.price == 0 ? "Variable" : formatCurrency(service.price).replace(',00', '')}</span>
+
+                {isAcquired ? (
+                    <button disabled className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20 text-[10px] uppercase tracking-wider flex items-center gap-1.5 opacity-80 cursor-not-allowed">
+                        <Check size={14} /> Adquirido
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => handleUpgrade(service.id)}
+                        className="p-2 rounded-lg bg-white/5 hover:bg-emerald-500 hover:text-white text-zinc-400 transition-all shadow-[0_4px_14px_0_rgba(16,185,129,0.2)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.23)]"
+                    >
+                        <ArrowRight size={16} />
+                    </button>
+                )}
+            </div>
         </motion.div>
     );
 };

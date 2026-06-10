@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Wallet, CreditCard } from 'lucide-react';
 
+
 const WalletCard = ({ saldo, onRecharge }) => {
     return (
         <motion.div
@@ -15,7 +16,7 @@ const WalletCard = ({ saldo, onRecharge }) => {
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-emerald-500/10 blur-[50px] rounded-full pointer-events-none" />
 
             <div className="flex items-center gap-2 mb-3 relative z-10">
-                <div className="p-1.5 bg-gradient-to-br from-purple-500/20 to-emerald-500/20 rounded-lg text-white border border-white/5">
+                <div className="p-1.5 bg-gradient-to-br from-purple-500/20 to-emerald-500/20 rounded-lg text-white border border-transparent">
                     <Wallet size={14} className="text-purple-400" />
                 </div>
                 <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Saldo Disponible</span>

@@ -1,17 +1,24 @@
 import React from 'react';
 import VacanteRow from './VacanteRow';
-import { Info } from 'lucide-react';
 import EmptyState from '../common/EmptyState';
 
-const VacantesTable = ({ data, activeTab, onAction }) => {
+import { useNavigate } from 'react-router-dom';
+import { Info } from 'lucide-react';
+
+const VacantesTable = ({ data, activeTab, onAction, isLoading }) => {
+  const navigate = useNavigate();
+
+  // Carga Eliminada: Permitimos renderizado inmediato o EmptyState
+  // El Skeleton estaba bloqueando la vista de "Mis Vacantes" creando percepción de congelamiento
+
   if (data.length === 0) {
     return (
       <EmptyState
         icon={Info}
         title={`No hay vacantes en ${activeTab}`}
         description="Publica una nueva vacante para comenzar a recibir candidatos calificados."
-        actionLabel={activeTab === 'activas' ? "Publicar Vacante" : null}
-        onAction={activeTab === 'activas' ? () => window.location.href = '/dashboard/publicar' : undefined}
+        actionLabel={activeTab === 'Activa' ? "Publicar Vacante" : null}
+        onAction={activeTab === 'Activa' ? () => navigate('/publicar') : undefined}
       />
     );
   }

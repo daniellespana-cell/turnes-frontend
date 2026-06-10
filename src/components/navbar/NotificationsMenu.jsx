@@ -1,80 +1,57 @@
-import React, { useState, useMemo, useRef } from 'react';
-import { Bell, CheckCircle, Clock } from 'lucide-react';
+import React from 'react';
+import { Bell, CheckCircle, Clock, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { useNotifications } from '../../hooks/useNotifications';
-import { useClickOutside } from '../../hooks/useClickOutside';
+
+import { useNotificationsMenu } from '../../hooks/useNotificationsMenu';
 
 const NotificationsMenu = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const navigate = useNavigate();
-    const menuRef = useRef(null);
-    const buttonRef = useRef(null);
-
-    // Cerebro: Lógica de negocio y persistencia
     const {
-        notifications,
+        isOpen,
+        toggleMenu,
+        menuRef,
+        buttonRef,
+        handleKeyDown,
         unreadCount,
-        readIds,
-        markAsRead,
-        markAllAsRead
-    } = useNotifications();
-
-    // 1. Cierre al hacer click fuera (Hook Real)
-    useClickOutside(menuRef, (e) => {
-        // Evitar cierre si el click fue en el botón trigger
-        if (buttonRef.current && buttonRef.current.contains(e.target)) return;
-        setIsOpen(false);
-    });
-
-    // 2. Performance: Memorizar agrupación para evitar re-calculos en cada render
-    const groupedNotifications = useMemo(() => {
-        return {
-            new: notifications.filter(n => n.category === 'new'),
-            today: notifications.filter(n => n.category === 'today'),
-            earlier: notifications.filter(n => n.category === 'earlier')
-        };
-    }, [notifications]);
-
-    // OPTIMIZACIÓN: Set para lookup O(1) de leídos
-    const readIdsSet = useMemo(() => new Set(readIds), [readIds]);
-    const isUnread = (id) => !readIdsSet.has(id);
-
-    // 3. Manejo de Navegación Inteligente
-    const handleNotificationClick = (note) => {
-        markAsRead(note.id);
-        setIsOpen(false);
-
-        // Lógica de Negocio: Inyección de parámetros según tipo
-        let path = note.link;
-        if (note.type === 'rating_pending' && note.metadata?.action === 'rate') {
-            // Ejemplo: /dashboard/candidatos?action=rate&candidateId=123
-            path = `${note.link}?action=rate&candidateId=${note.metadata.candidateId}`;
-        }
-
-        navigate(path);
-    };
-
-    // 4. Accesibilidad: Teclado ESC (Solo si está abierto)
-    const handleKeyDown = (e) => {
-        if (!isOpen) return;
-        if (e.key === 'Escape') setIsOpen(false);
-    };
+        groupedNotifications,
+        notificationsCount,
+        isUnread,
+        handleNotificationClick,
+        handleMarkAll,
+        handleViewAll,
+        deleteNotification
+    } = useNotificationsMenu();
 
     return (
         <div className="relative" onKeyDown={handleKeyDown}>
-            {/* Trigger Button */}
+            {/* Trigger Button (Hardened & Unified Style) */}
             <button
                 ref={buttonRef}
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={toggleMenu}
                 aria-expanded={isOpen}
                 aria-haspopup="true"
                 aria-label={`Notificaciones ${unreadCount > 0 ? `(${unreadCount} nuevas)` : ''}`}
-                className={`relative z-50 p-2 rounded-full transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-purple-500/50 ${isOpen ? 'text-white bg-zinc-800/50' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'}`}
+                className="relative flex items-center justify-center transition-all duration-500 group active:scale-[0.85] focus:outline-none p-2 z-50"
             >
-                <Bell size={20} className={`transition-transform duration-300 ${isOpen ? 'rotate-12' : 'group-hover:rotate-12'}`} />
+                {/* Bell Icon — Alto Relieve (Embossed) */}
+                <Bell 
+                    className={`w-6 h-6 transition-all duration-500 transform group-hover:-translate-y-0.5 relative z-10 ${
+                        isOpen 
+                            ? 'text-white rotate-12' 
+                            : 'text-zinc-300 group-hover:text-white group-hover:rotate-12'
+                    }`} 
+                    strokeWidth={2.5}
+                    style={{
+                        filter: isOpen
+                            ? 'drop-shadow(0 0 10px rgba(255,255,255,0.5)) drop-shadow(0 4px 6px rgba(0,0,0,0.8))'
+                            : 'drop-shadow(0 2px 1px rgba(0,0,0,0.9)) drop-shadow(0 -1px 1px rgba(255,255,255,0.08))'
+                    }}
+                />
+
+                {/* Badge Numérico (Reemplaza punto rojo) */}
                 {unreadCount > 0 && (
-                    <span className="absolute top-2 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.6)] animate-pulse" />
+                    <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center bg-gradient-to-br from-red-500 to-red-600 text-white text-[10px] font-black rounded-full shadow-[0_0_12px_rgba(239,68,68,0.6),0_2px_4px_rgba(0,0,0,0.5)] z-20 pointer-events-none ring-2 ring-[#0a0a0a] px-1 leading-none">
+                        {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
                 )}
             </button>
 
@@ -87,22 +64,19 @@ const NotificationsMenu = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-10 right-0 w-64 max-w-[calc(100vw-20px)] bg-[#0a0a0a] border border-white/10 rounded-xl shadow-2xl shadow-black overflow-hidden ring-1 ring-white/5 z-50 max-h-[80vh] flex flex-col origin-top-right"
+                        className="absolute top-10 right-0 w-64 max-w-[calc(100vw-20px)] bg-[#0a0a0a] border border-transparent rounded-xl  shadow-black overflow-hidden ring-1 ring-white/5 z-50 max-h-[80vh] flex flex-col origin-top-right"
                         role="dialog"
                         aria-label="Lista de notificaciones"
                     >
                         {/* Header */}
-                        <div className="px-3 py-2.5 border-b border-white/5 flex justify-between items-center bg-zinc-900/20 shrink-0">
-                            <h3 className="text-[10px] font-bold text-white tracking-wide uppercase">Notificaciones</h3>
+                        <div className="px-4 py-3 border-b border-white/5 flex justify-between items-center bg-zinc-900/20 shrink-0">
+                            <h3 className="text-sm font-bold text-white tracking-wide uppercase">Notificaciones</h3>
                             <button
-                                onClick={() => {
-                                    markAllAsRead();
-                                    setIsOpen(false);
-                                }}
-                                className="text-[9px] text-zinc-500 hover:text-emerald-400 transition-colors flex items-center gap-1 font-medium hover:bg-white/5 px-1.5 py-0.5 rounded focus:outline-none focus:bg-white/10"
+                                onClick={handleMarkAll}
+                                className="text-xs text-zinc-500 hover:text-emerald-400 transition-colors flex items-center gap-1.5 font-medium hover:bg-white/5 px-2 py-1 rounded focus:outline-none focus:bg-white/10"
                                 aria-label="Marcar todas como leídas"
                             >
-                                <CheckCircle size={9} />
+                                <CheckCircle size={14} />
                                 Leídas
                             </button>
                         </div>
@@ -110,67 +84,47 @@ const NotificationsMenu = () => {
                         {/* Contenido Scrollable */}
                         <div className="overflow-y-auto custom-scrollbar flex-1">
 
-                            {/* SECCIÓN: NUEVAS */}
-                            {groupedNotifications.new.length > 0 && (
-                                <>
-                                    <SectionHeader title="Nuevas" />
-                                    {groupedNotifications.new.map((note) => (
-                                        <NotificationItem
-                                            key={note.id}
-                                            note={note}
-                                            onClick={() => handleNotificationClick(note)}
-                                            isUnread={isUnread(note.id)} // Usar ID para check O(1)
-                                        />
-                                    ))}
-                                </>
-                            )}
+                            {/* SECCIONES DINÁMICAS (KISS) */}
+                            {[
+                                { id: 'new', title: 'Nuevas' },
+                                { id: 'today', title: 'Hoy' },
+                                { id: 'earlier', title: 'Anteriores' }
+                            ].map(section => {
+                                const items = groupedNotifications[section.id];
+                                if (!items || items.length === 0) return null;
 
-                            {/* SECCIÓN: HOY */}
-                            {groupedNotifications.today.length > 0 && (
-                                <>
-                                    <SectionHeader title="Hoy" />
-                                    {groupedNotifications.today.map((note) => (
-                                        <NotificationItem
-                                            key={note.id}
-                                            note={note}
-                                            onClick={() => handleNotificationClick(note)}
-                                            isUnread={isUnread(note.id)}
-                                        />
-                                    ))}
-                                </>
-                            )}
-
-                            {/* SECCIÓN: ANTERIORES */}
-                            {groupedNotifications.earlier.length > 0 && (
-                                <>
-                                    <SectionHeader title="Anteriores" />
-                                    {groupedNotifications.earlier.map((note) => (
-                                        <NotificationItem
-                                            key={note.id}
-                                            note={note}
-                                            onClick={() => handleNotificationClick(note)}
-                                            isUnread={isUnread(note.id)}
-                                        />
-                                    ))}
-                                </>
-                            )}
+                                return (
+                                    <React.Fragment key={section.id}>
+                                        <SectionHeader title={section.title} />
+                                        {items.map(note => (
+                                            <NotificationItem
+                                                key={note.id}
+                                                note={note}
+                                                onClick={() => handleNotificationClick(note)}
+                                                onDelete={() => deleteNotification(note.id)}
+                                                isUnread={!note.leida}
+                                            />
+                                        ))}
+                                    </React.Fragment>
+                                );
+                            })}
 
                             {/* EMPTY STATE */}
-                            {notifications.length === 0 && (
-                                <div className="p-6 text-center text-zinc-600">
-                                    <Bell size={24} className="mx-auto mb-2 opacity-20" />
-                                    <p className="text-[10px]">Sin novedades</p>
+                            {notificationsCount === 0 && (
+                                <div className="p-8 text-center text-zinc-600">
+                                    <Bell size={28} className="mx-auto mb-3 opacity-20" />
+                                    <p className="text-xs font-medium">Sin novedades</p>
                                 </div>
                             )}
                         </div>
 
                         {/* Footer Link */}
                         <button
-                            onClick={() => { setIsOpen(false); navigate('/dashboard/notifications'); }}
-                            className="border-t border-white/5 px-3 py-2 bg-zinc-900/30 text-center hover:bg-zinc-900/50 cursor-pointer transition-colors shrink-0 w-full focus:outline-none focus:bg-zinc-800"
+                            onClick={handleViewAll}
+                            className="border-t border-white/5 px-4 py-3 bg-zinc-900/30 text-center hover:bg-zinc-900/50 cursor-pointer transition-colors shrink-0 w-full focus:outline-none focus:bg-zinc-800"
                         >
-                            <span className="text-[9px] font-bold text-zinc-500 tracking-wider hover:text-white uppercase transition-colors">
-                                Ver todas
+                            <span className="text-xs font-bold text-zinc-400 hover:text-white transition-colors">
+                                Ver todas las notificaciones
                             </span>
                         </button>
                     </motion.div>
@@ -182,40 +136,68 @@ const NotificationsMenu = () => {
 
 // Subcomponentes (Optimizados)
 const SectionHeader = ({ title }) => (
-    <div className="px-3 py-1 bg-[#0a0a0a]/95 border-y border-white/5 backdrop-blur-sm sticky top-0 z-10 flex items-center">
-        <h4 className="text-[8px] font-bold text-zinc-600 uppercase tracking-widest">{title}</h4>
+    <div className="px-4 py-1.5 bg-[#0a0a0a]/95 border-y border-white/5 backdrop-blur-sm sticky top-0 z-10 flex items-center">
+        <h4 className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{title}</h4>
     </div>
 );
 
-const NotificationItem = ({ note, onClick, isUnread }) => (
-    <button
-        onClick={onClick}
-        className={`w-full text-left px-3 py-2 border-b border-white/[0.02] hover:bg-white/5 transition-colors group flex gap-2.5 items-start focus:outline-none focus:bg-white/10 ${isUnread ? 'bg-purple-500/[0.05]' : ''}`}
-        role="menuitem"
-    >
-        {/* Indicador de Tipo */}
-        <div className={`mt-1 w-1.5 h-1.5 rounded-full shrink-0 ${note.type === 'success' ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]' :
-            note.type === 'warning' ? 'bg-amber-500' :
-                note.type === 'rating_pending' ? 'bg-pink-500 shadow-[0_0_6px_rgba(236,72,153,0.4)]' : // Nuevo estilo para rating
-                    'bg-blue-500'
-            }`} />
+// Configuración de Estilos por Tipo (Patrón Limpio)
+const TYPE_STYLES = {
+    success: 'bg-emerald-500 shadow-[0_2px_4px_rgba(0,0,0,0.5),0_0_6px_rgba(16,185,129,0.4),inset_0_1px_1px_rgba(255,255,255,0.3)]',
+    warning: 'bg-amber-500 shadow-[0_2px_4px_rgba(0,0,0,0.5),0_0_6px_rgba(245,158,11,0.3),inset_0_1px_1px_rgba(255,255,255,0.3)]',
+    rating_pending: 'bg-pink-500 shadow-[0_2px_4px_rgba(0,0,0,0.5),0_0_6px_rgba(236,72,153,0.4),inset_0_1px_1px_rgba(255,255,255,0.3)]',
+    default: 'bg-blue-500 shadow-[0_2px_4px_rgba(0,0,0,0.5),0_0_6px_rgba(59,130,246,0.3),inset_0_1px_1px_rgba(255,255,255,0.3)]'
+};
 
-        <div className="flex-1 min-w-0">
-            <div className="flex justify-between items-start gap-2">
-                <p className={`text-[10px] font-semibold leading-tight truncate ${isUnread ? 'text-zinc-100' : 'text-zinc-400 group-hover:text-zinc-200'}`}>
-                    {note.title}
-                </p>
-                {isUnread && <span className="w-1 h-1 rounded-full bg-purple-500 shrink-0 shadow-[0_0_4px_rgba(168,85,247,0.5)]" />}
+const NotificationItem = ({ note, onClick, onDelete, isUnread }) => {
+    const typeStyle = TYPE_STYLES[note.type] || TYPE_STYLES.default;
+
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, height: 0, padding: 0, margin: 0, overflow: 'hidden' }}
+            className={`w-full text-left px-4 py-3 border-b border-white/[0.02] hover:bg-white/5 transition-colors group flex gap-3 items-start relative ${isUnread ? 'bg-purple-500/[0.04]' : ''}`}
+            role="menuitem"
+        >
+            <div 
+                className="flex-1 min-w-0 flex gap-3 items-start cursor-pointer focus:outline-none focus:bg-white/10"
+                onClick={onClick}
+                tabIndex={0}
+            >
+                {/* Indicador de Tipo */}
+                <div className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${typeStyle}`} />
+
+                <div className="flex-1 min-w-0 pr-6">
+                    <div className="flex justify-between items-start gap-2">
+                        <p className={`text-sm font-semibold leading-tight truncate ${isUnread ? 'text-zinc-100' : 'text-zinc-300 group-hover:text-zinc-100'}`}>
+                            {note.title}
+                        </p>
+                        {isUnread && <span className="mt-1 w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0 shadow-[0_0_4px_rgba(168,85,247,0.5)]" />}
+                    </div>
+
+                    <p className={`text-xs mt-1 font-normal line-clamp-2 leading-snug ${isUnread ? 'text-zinc-300' : 'text-zinc-500 group-hover:text-zinc-400'}`}>
+                        {note.body}
+                    </p>
+                    <span className="text-[10px] text-zinc-600 mt-2 flex items-center gap-1 font-mono opacity-80">
+                        <Clock size={10} /> {note.timeLabel}
+                    </span>
+                </div>
             </div>
 
-            <p className={`text-[9px] mt-0.5 font-light line-clamp-1 leading-snug ${isUnread ? 'text-zinc-400' : 'text-zinc-500'}`}>
-                {note.desc}
-            </p>
-            <span className="text-[8px] text-zinc-700 mt-1 flex items-center gap-1 font-mono opacity-60">
-                <Clock size={7} /> {note.time}
-            </span>
-        </div>
-    </button>
-);
+            {/* Acciones Rápidas Ocultas (Delete) */}
+            <button
+                onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                className="absolute top-1/2 -translate-y-1/2 right-3 p-1.5 bg-zinc-900 border border-transparent text-zinc-500 hover:text-red-400 hover:border-red-500/30 rounded-lg  opacity-70 md:opacity-0 scale-90 md:scale-75 group-hover:opacity-100 group-hover:scale-100 focus:opacity-100 focus:scale-100 transition-all z-10"
+                title="Eliminar"
+            >
+                <Trash2 size={13} />
+            </button>
+        </motion.div>
+    );
+};
+
+
 
 export default NotificationsMenu;

@@ -1,4 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
+
+import { useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 // CORRECCIÓN: Apuntamos al archivo que acabamos de restaurar
 import { useCandidatosLogic } from './useCandidatosLogic';
@@ -8,46 +10,51 @@ export const useDashboard = () => {
   const { user } = useAuth();
   // Extraemos 'pendientes' para detectar el proceso más urgente
   const { stats, pendientes } = useCandidatosLogic();
-  const [loading, setLoading] = useState(true);
+
+  // ELIMINADO: const [loading, setLoading] = useState(true);
 
   const dashboardData = useMemo(() => {
-    if (!user || !stats) return {
-      balance: "$0",
-      unreadChats: 0,
-      priorities: [],
-      activeProcess: null,
-      performance: { growth: '0%', percentile: 'Top --' }
+    // Return Safe Defaults immediately if data is missing
+    const safeBalance = user ? formatCurrency(user.saldo || 0) : "$0";
+    const safeUnread = 0; // TODO: chats count
+
+    // Default Empty Stats
+    const defaultStats = {
+      totalPendientes: 0,
+      hayGanador: false,
+      score: '5.0'
     };
+    const currentStats = stats || defaultStats;
 
     /**
-     * LÓGICA SENIOR DE PROCESO ACTIVO:
+     * LÓGICA DE PROCESO ACTIVO:
      * Buscamos si hay alguien en estado 'AGENDADO' (Recontratación) 
      * o simplemente el primer pendiente de la lista.
      */
     const prioritizedCandidate = pendientes?.find(c => c.estadoTurno === 'AGENDADO') || pendientes?.[0];
 
     return {
-      balance: formatCurrency(user.saldo || 0),
-      unreadChats: 2, // En el futuro esto vendrá de un useChatNotifications
-      
+      balance: safeBalance,
+      unreadChats: safeUnread,
+
       priorities: [
-        { 
-          id: 1, 
-          type: 'postulation', 
-          title: `${stats.totalPendientes || 0} postulantes esperando respuesta`, 
-          color: 'emerald' 
+        {
+          id: 1,
+          type: 'postulation',
+          title: `${currentStats.totalPendientes || 0} postulantes esperando respuesta`,
+          color: 'emerald'
         },
-        { 
-          id: 2, 
-          type: 'critical', 
-          title: stats.hayGanador ? `Cierre de Turno en progreso` : `Sistema de Blindaje Activo`, 
-          color: stats.hayGanador ? 'indigo' : 'orange' 
+        {
+          id: 2,
+          type: 'critical',
+          title: currentStats.hayGanador ? `Cierre de Turno en progreso` : `Sistema de Blindaje Activo`,
+          color: currentStats.hayGanador ? 'indigo' : 'orange'
         }
       ],
 
       activeProcess: prioritizedCandidate ? {
-        title: prioritizedCandidate.estadoTurno === 'AGENDADO' 
-          ? `Finalizar Recontratación Directa` 
+        title: prioritizedCandidate.estadoTurno === 'AGENDADO'
+          ? `Finalizar Recontratación Directa`
           : `Elegir candidato para: ${prioritizedCandidate.title || 'Turno Activo'}`,
         meta: `Candidato: ${prioritizedCandidate.name} • Radicado #TRN-${prioritizedCandidate.id?.toString().slice(-4)}`,
         id: prioritizedCandidate.id
@@ -58,23 +65,17 @@ export const useDashboard = () => {
       },
 
       performance: {
-        growth: `${stats.score || '5.0'}`,
-        percentile: stats.score >= 4.5 ? 'Top 12%' : 'Top 25%'
+        growth: `${currentStats.score || '5.0'}`,
+        percentile: parseFloat(currentStats.score) >= 4.5 ? 'Top 12%' : 'Top 25%'
       }
     };
   }, [user, stats, pendientes]);
 
-  useEffect(() => {
-    // Reducimos el lag visual: si ya tenemos la data, cortamos el loading
-    if (user && stats) {
-      const timer = setTimeout(() => setLoading(false), 400);
-      return () => clearTimeout(timer);
-    }
-  }, [user, stats]);
+  // ELIMINADO: useEffect para el loading artificial
 
-  return { 
-    user, 
-    ...dashboardData, 
-    loading: loading || !user 
+  return {
+    user,
+    ...dashboardData,
+    loading: false // Siempre falso para mostrar la UI de inmediato
   };
 };

@@ -1,128 +1,186 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import React from 'react';
+
+import { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { supabase } from '../services/supabaseClient';
 import { authService } from '../services/authService';
+import { profileMapper } from '../utils/profileMapper';
+import { clearSessionCache, setSessionCache } from '../utils/sessionCache';
+import { logger } from '../utils/logger';
 
 const AuthContext = createContext(null);
 
-// CONFIGURACIÓN DE PLANES (Mantenemos la lógica de negocio frontend)
-const PLANS_CONFIG = {
-  'Básico': { name: 'Básico', price: 0, commission: 0.06, fixedJobCost: 19900, includedFixed: 0, features: ['Publicaciones ilimitadas', 'Soporte estándar'] },
-  'Micro': { name: 'Micro', price: 29900, commission: 0.04, fixedJobCost: 0, includedFixed: 7, features: ['Comisión reducida (4%)', '7 Vacantes fijas gratis'] },
-  'Pro': { name: 'Pro', price: 79900, commission: 0, fixedJobCost: 0, includedFixed: null, features: ['Sin comisiones (0%)', 'Vacantes fijas ilimitadas'] }
-};
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [authReady, setAuthReady] = useState(false);
+  
+  // 🛡️ HYDRATION CONTROL: Singleton ref inside React tree (Zero Global State)
+  const activeProfilePromise = useRef(null);
 
-  // NORMALIZADOR DE DATOS (Adapta DB -> UI)
-  const normalizeUser = useCallback((profileData) => {
-    if (!profileData) return null;
+  // Background Hydration
+  const loadUserProfile = useCallback(async (session) => {
+    if (!session?.user) return null;
 
-    const role = profileData.rol || 'postulante';
-    const planKey = 'Básico'; // Por defecto todos empiezan en Básico
-    const planData = PLANS_CONFIG[planKey];
+    // STEP 1: Optimistic JWT Shell (Instant)
+    const shell = profileMapper.normalize(null, session.user);
+    setUser(prev => prev?.is_hydrated ? prev : shell);
 
-    return {
-      ...profileData, // id, email, nombre_display, avatar_url
-      role,
-      // Si es empresa, mezclamos datos del plan
-      ...(role === 'empresa' && {
-        plan: planData.name,
-        commission: planData.commission,
-        fixedJobCost: planData.fixedJobCost,
-        planFeatures: planData.features,
-        saldo: 0, // El saldo real vendrá de FinanceService, aquí iniciamos en 0 para UI safe
-      })
-    };
+    // STEP 2: Background Fetch (Concurrency safe)
+    if (activeProfilePromise.current) return await activeProfilePromise.current;
+
+    activeProfilePromise.current = (async () => {
+      try {
+        const bootData = await authService.getProfile(session.user.id);
+        const profile = bootData?.profile;
+        if (profile) {
+          const fullUser = profileMapper.normalize(profile, session.user);
+          fullUser.saldo = bootData.wallet?.saldo || 0;
+          setUser(fullUser);
+          return fullUser;
+        }
+      } catch (err) {
+        console.warn("Hydration failed, using JWT shell.", err);
+      } finally {
+        activeProfilePromise.current = null;
+      }
+      return shell;
+    })();
+
+    return await activeProfilePromise.current;
   }, []);
 
-  // 1. ESCUCHA DE SESIÓN REAL (SUPABASE)
-  useEffect(() => {
-    let mounted = true;
-
-    async function getSession() {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          // Si hay sesión, traemos el perfil rico de la DB
-          const profile = await authService.getProfile(session.user.id);
-          if (mounted && profile) {
-            // Mezclamos auth.users (email) + public.perfiles (datos)
-            setUser(normalizeUser({ ...profile, email: session.user.email }));
-          }
-        }
-      } catch (error) {
-        console.error("Session Check Failed", error);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    }
-
-    getSession();
-
-    // Listener de cambios (Login/Logout en otras pestañas o ventanas)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        const profile = await authService.getProfile(session.user.id);
-        if (profile) setUser(normalizeUser({ ...profile, email: session.user.email }));
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
-
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
-  }, [normalizeUser]);
-
-  // WRAPPERS PARA UI (Mantienen compatibilidad con componentes viejos)
-  const login = async (email, password) => {
-    await authService.login(email, password);
-    // El listener de 'onAuthStateChange' actualizará el estado automáticamente
-  };
-
-  const loginWithGoogle = async () => {
-    await authService.loginWithGoogle();
-  };
-
-  const logout = async () => {
-    await authService.logout();
-    setUser(null);
-  };
-
-  // ACTUALIZACIÓN DE SALDO (Solo UI state locales, la DB la maneja FinanceService)
+  // UI Support Actions
   const actualizarSaldo = useCallback((nuevoSaldo) => {
     setUser(prev => prev ? { ...prev, saldo: nuevoSaldo } : null);
   }, []);
 
-  // ACTUALIZACIÓN PERFIL (UI State)
-  const actualizarPerfil = useCallback((nuevosDatos) => {
-    setUser(prev => prev ? { ...prev, ...nuevosDatos } : null);
+  const actualizarPerfil = useCallback(async (nuevosDatos) => {
+    // 🔄 Mapeo Delegado (Senior SSOT)
+    const dbPayload = profileMapper.mapUIToDB(nuevosDatos);
+
+    // 🔥 Parche de Estado Inmediato (Optimista)
+    setUser(prev => {
+      if (!prev) return null;
+      return profileMapper.normalize({ ...prev, ...dbPayload }, null);
+    });
+
+    if (user?.id) {
+      await authService.updateProfile(user.id, nuevosDatos);
+    }
+  }, [user]);
+
+  const refreshSession = useCallback(async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data?.session) return await loadUserProfile(data.session);
+    return null;
+  }, [loadUserProfile]);
+
+  // 🔥 REAL-TIME SYNC: Profiles & Wallet
+  useEffect(() => {
+    let mounted = true;
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!mounted) return;
+
+      if (session) {
+        setSessionCache(session);
+        loadUserProfile(session);
+      } else {
+        clearSessionCache();
+        setUser(null);
+      }
+
+      if (!authReady) setAuthReady(true);
+    });
+
+    let profileSubscription = null;
+    let walletSubscription = null;
+
+    if (user?.id) {
+      // 1. Sync Perfil
+      profileSubscription = supabase
+        .channel(`profile-updates-${user.id}`)
+        .on('postgres_changes', {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'perfiles',
+          filter: `id=eq.${user.id}`
+        }, (payload) => {
+          setUser(prev => prev ? profileMapper.normalize({ ...prev, ...payload.new }, null) : null);
+        })
+        .subscribe();
+
+      // 2. Sync Billetera (Reactividad Financiera)
+      walletSubscription = supabase
+        .channel(`wallet-updates-${user.id}`)
+        .on('postgres_changes', {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'billeteras',
+          filter: `id=eq.${user.id}`
+        }, (payload) => {
+          logger.info("💰 [AuthContext] Balance Update:", payload.new.saldo);
+          actualizarSaldo(payload.new.saldo);
+        })
+        .subscribe();
+    }
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+      if (profileSubscription) profileSubscription.unsubscribe();
+      if (walletSubscription) walletSubscription.unsubscribe();
+    };
+  }, [loadUserProfile, authReady, user?.id, actualizarSaldo]);
+
+  // Providers Events (Wallet etc)
+  useEffect(() => {
+    const onWalletUpdate = (e) => {
+      if (e.detail && typeof e.detail.balance !== 'undefined') {
+        actualizarSaldo(e.detail.balance);
+      }
+    };
+    window.addEventListener('turnes_wallet_update', onWalletUpdate);
+    return () => window.removeEventListener('turnes_wallet_update', onWalletUpdate);
+  }, [actualizarSaldo]);
+
+  // 🔥 SENIOR FIX: Wrappers Seguros para Login/Logout
+  const handleLogin = async (email, password) => {
+    const response = await authService.login(email, password);
+    if (response.error) throw response.error;
+
+    // Forzamos la hidratación ANTES de liberar la promesa al componente UI
+    if (response.data?.session) {
+      setSessionCache(response.data.session);
+      await loadUserProfile(response.data.session);
+    }
+    return response;
+  };
+
+  const handleLogout = useCallback(() => {
+    setUser(null);
+    clearSessionCache();
+    localStorage.removeItem('sb-turnes-auth-token');
+    authService.logout().catch(err => console.error("Error silencioso en logout:", err));
   }, []);
 
   const value = useMemo(() => ({
     user,
-    login,
-    loginWithGoogle,
-    logout,
-    loading,
+    setUser,
+    isAuthenticated: !!user,
+    loading: !authReady,
+    login: handleLogin,
+    loginWithGoogle: (role, isLogin) => authService.loginWithGoogle(role, isLogin),
+    logout: handleLogout,
     actualizarSaldo,
     actualizarPerfil,
-    isAuthenticated: !!user
-  }), [user, loading, login, loginWithGoogle, logout, actualizarSaldo, actualizarPerfil]);
+    refreshSession,
+  }), [user, authReady, actualizarSaldo, actualizarPerfil, refreshSession, handleLogout]);
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth debe usarse dentro de un AuthProvider');
+  if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 };

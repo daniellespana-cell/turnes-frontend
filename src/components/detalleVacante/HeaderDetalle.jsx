@@ -1,6 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+
+import { useNavigate } from 'react-router-dom';
 import { typography } from '../../styles/typography';
 
 export const HeaderDetalle = ({ id }) => {
@@ -20,13 +21,10 @@ export const HeaderDetalle = ({ id }) => {
         />
       </button>
 
-      <div className="flex-1 min-w-0 space-y-0.5">
+      <div className="flex-1 min-w-0">
         <h1 className={typography.pageTitle}>
           Mesa de <span className={typography.gradient}>Contratación</span>
         </h1>
-        <p className={typography.sectionTitle}>
-          Ref: V-{id?.slice(0, 8)}
-        </p>
       </div>
     </header>
   );

@@ -1,11 +1,12 @@
 import React from 'react';
 import { TrendingUp } from 'lucide-react';
 
+
 /**
  * PerformanceCard Nano-Scale: Sutileza en métricas de reputación.
  */
 export const PerformanceCard = ({ metrics }) => (
-  <section className="p-6 bg-zinc-900/10 border border-white/5 rounded-[2rem] space-y-6 transition-all duration-500 hover:border-emerald-500/10">
+  <section className="p-6 bg-zinc-900/10 border border-transparent rounded-[2rem] space-y-6 transition-all duration-500 hover:border-emerald-500/10">
     <div className="space-y-4">
       {/* TÍTULO NANO-TEXT: Máxima finura arquitectónica */}
       <p className="text-[7px] font-black text-zinc-700 uppercase tracking-[0.6em] px-1 antialiased">
@@ -38,3 +39,4 @@ export const PerformanceCard = ({ metrics }) => (
     </div>
   </section>
 );
+export default PerformanceCard;

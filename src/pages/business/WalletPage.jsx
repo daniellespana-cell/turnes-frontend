@@ -1,80 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useOutletContext, useNavigate } from 'react-router-dom';
-import { Wallet, TrendingUp, CreditCard, PlusCircle, AlertCircle, RefreshCcw } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { typography } from '../../styles/typography';
-
-// Componentes Core
-import StatCard from '../../components/finance/StatCard';
+import React from 'react';
+import { PlusCircle, AlertCircle, RefreshCcw } from 'lucide-react';
+import StatCard from '../../components/profile/shared/StatCard';
 import TransactionTable from '../../components/finance/TransactionTable';
 import PremiumBanner from '../../components/finance/PremiumBanner';
 import EmptyWalletState from '../../components/finance/EmptyWalletState';
-import SkeletonWallet from '../../components/finance/SkeletonWallet';
+import RechargeButton from '../../components/finance/RechargeButton';
+
+import { Wallet, TrendingUp, CreditCard } from 'lucide-react';
+import { typography } from '../../styles/typography';
+
+// Componentes Core
 
 // Servicios
-import { formatCurrency, getWalletData } from '../../services/financeService';
+import { formatCurrency } from '../../services/financeService';
+
+// Lógica
+import { useWalletPageLogic } from '../../hooks/useWalletPageLogic';
 
 const WalletPage = () => {
-  const navigate = useNavigate();
-
-  /**
-   * 1. GESTIÓN DE IDENTIDAD REFORZADA
-   */
-  const context = useOutletContext();
-  const { user: authUser, loading: authLoading } = useAuth();
-
-  // Priorizamos authUser para asegurar que el saldo sea el del contexto global actualizado
-  const user = authUser || context?.user;
-  const userId = user?.id || user?.uid || user?._id;
-
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  /**
-   * 2. ORQUESTADOR DE CARGA (Con Refetch Manual)
-   */
-  const fetchData = useCallback(async (isSilent = false) => {
-    if (authLoading || !userId) return;
-
-    if (!isSilent) setIsLoading(true);
-    setError(null);
-
-    try {
-      const result = await getWalletData(userId);
-      // Sincronización: Si el balance de la API es diferente al del Auth, 
-      // podrías disparar un actualizarSaldo aquí, pero por ahora lo mantenemos local.
-      setData(result);
-    } catch (err) {
-      console.error("❌ Fallo en Finance Service:", err);
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [userId, authLoading]);
-
-  // Efecto de carga inicial
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  // Escuchar eventos de storage para actualizar si hubo cambios en otras pestañas
-  useEffect(() => {
-    const handleSincronizacion = () => fetchData(true);
-    window.addEventListener('storage', handleSincronizacion);
-    window.addEventListener('focus', handleSincronizacion); // Actualiza al volver a la pestaña
-    return () => {
-      window.removeEventListener('storage', handleSincronizacion);
-      window.removeEventListener('focus', handleSincronizacion);
-    };
-  }, [fetchData]);
-
-  /**
-   * 3. RENDERIZADO CONDICIONAL
-   */
-  if ((isLoading || authLoading || !userId) && !error) {
-    return <SkeletonWallet />;
-  }
+  const { user, data, isLoading, error, fetchData, navigate } = useWalletPageLogic();
 
   if (error) {
     return (
@@ -115,14 +59,7 @@ const WalletPage = () => {
           </p>
         </div>
 
-        <button
-          onClick={() => navigate('/dashboard/finanzas/recargar')}
-          className="h-10 text-white border border-brand-success hover:border-white/70 bg-brand-primary/90 hover:bg-brand-primary shadow-md shadow-brand-primary/30 px-5 rounded-xl font-bold uppercase text-[9px] tracking-[0.2em] active:scale-95 transition-all flex items-center gap-2 relative overflow-hidden group"
-        >
-          <PlusCircle size={18} className="relative z-10" />
-          <span className="relative z-10">Recargar Saldo</span>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1s_infinite] z-0" />
-        </button>
+        <RechargeButton />
       </div>
 
       {/* MÉTRICAS FINANCIERAS */}
@@ -151,8 +88,8 @@ const WalletPage = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-8">
-          {hasTransactions ? (
-            <TransactionTable transactions={data.transactions} />
+          {hasTransactions || isLoading ? (
+            <TransactionTable transactions={data?.transactions || []} isLoading={isLoading} />
           ) : (
             <EmptyWalletState />
           )}

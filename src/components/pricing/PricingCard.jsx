@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Check, Star, ArrowRight } from 'lucide-react';
 
+
 // Variantes de animación (Asumimos que están definidas en un lugar central o aquí)
 const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
@@ -34,8 +35,8 @@ const PricingCard = ({ plan }) => {
         <motion.div
             variants={fadeInUp}
             className={`
-              flex flex-col rounded-3xl shadow-2xl transition-all duration-300 transform backdrop-blur-xl
-              ${isMicro ? 'ring-2 ring-emerald-400 bg-zinc-900/80 scale-[1.02]' : 'bg-zinc-900/40 border border-white/10 hover:border-white/20 hover:scale-[1.02]'}
+              flex flex-col rounded-3xl transition-all duration-300 transform
+              ${isMicro ? 'bg-zinc-900/80 scale-[1.02]' : 'bg-zinc-900/40 hover:scale-[1.02]'}
             `}
             whileHover={{ y: -5 }}
         >
@@ -43,14 +44,14 @@ const PricingCard = ({ plan }) => {
             {/* Etiqueta Popular */}
             {plan.isPopular && (
                 <div className="absolute top-0 right-0 -mt-4 -mr-4 z-10">
-                    <div className="bg-emerald-400 text-black text-xs font-bold uppercase py-1 px-3 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.5)] transform rotate-6 flex items-center gap-1 border border-emerald-300">
+                    <div className="bg-emerald-400 text-black text-xs font-bold uppercase py-1 px-3 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.5)] transform rotate-6 flex items-center gap-1">
                         <Star size={12} fill="black" className="text-black" /> POPULAR
                     </div>
                 </div>
             )}
 
             {/* Header del Plan */}
-            <div className={`p-8 rounded-t-3xl ${isMicro ? 'bg-emerald-500/10 border-b border-emerald-500/20' : 'bg-white/5 border-b border-white/5'} ${isMicro ? 'shadow-none' : 'shadow-none'}`}>
+            <div className={`p-8 rounded-t-3xl ${isMicro ? 'bg-emerald-500/10' : 'bg-white/5'}`}>
                 <h2 className={`text-xl font-bold mb-2 ${isMicro ? 'text-emerald-400' : 'text-white'}`}>{plan.name}</h2>
                 <p className="mt-2 text-sm text-zinc-400 min-h-[40px]">{plan.description}</p>
                 <div className="mt-6 flex items-baseline">

@@ -1,11 +1,12 @@
 import React from 'react';
 
+
 const StatCard = ({ title, value, icon: Icon, colorClass }) => {
   return (
-    <div className="bg-[#0f0f10] border border-white/5 p-5 rounded-2xl transition-all duration-300 hover:bg-[#0f0f10]/80 group">
+    <div className="bg-[#0f0f10] border border-transparent p-5 rounded-2xl transition-all duration-300 hover:bg-[#0f0f10]/80 group">
       <div className="flex justify-between items-start mb-3">
         {/* Contenedor del Icono Minimal */}
-        <div className={`p-2 bg-zinc-900 rounded-lg border border-white/5 text-zinc-400 group-hover:text-white transition-colors ${colorClass.replace('text-', 'group-hover:text-')}`}>
+        <div className={`p-2 bg-zinc-900 rounded-lg border border-transparent text-zinc-400 group-hover:text-white transition-colors ${colorClass.replace('text-', 'group-hover:text-')}`}>
           <Icon size={16} strokeWidth={2} />
         </div>
       </div>

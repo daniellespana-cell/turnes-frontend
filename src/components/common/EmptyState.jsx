@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+
 const EmptyState = ({
   icon: Icon,
   title,
@@ -12,7 +13,7 @@ const EmptyState = ({
   if (compact) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 space-y-3 opacity-60">
-        <div className="p-3 rounded-full bg-zinc-800/50 border border-white/5">
+        <div className="p-3 rounded-full bg-zinc-800/50 border border-transparent">
           <Icon size={20} className="text-zinc-500" />
         </div>
         <div className="text-center">
@@ -40,7 +41,7 @@ const EmptyState = ({
     >
       <div className="relative mb-6 group">
         <div className="absolute inset-0 bg-purple-500/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-        <div className="relative p-5 rounded-2xl bg-zinc-900/50 border border-white/5 shadow-2xl">
+        <div className="relative p-5 rounded-2xl bg-zinc-900/50 border border-transparent ">
           <Icon size={40} className="text-zinc-500 group-hover:text-purple-400 transition-colors duration-500" />
         </div>
       </div>

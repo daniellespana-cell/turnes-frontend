@@ -1,12 +1,13 @@
 import React from 'react';
-import { useAuth } from '../../context/AuthContext';
 import { Archive } from 'lucide-react';
+import ContractHeader from './ContractHeader';
+import TalentInfo from './TalentInfo';
+import ActionSteps from './ActionSteps';
+
+import { useAuth } from '../../context/AuthContext';
 
 // Hooks & Subcomponents
 import { useContractSidebar } from '../../hooks/useContractSidebar';
-import { ContractHeader } from './ContractHeader';
-import { TalentInfo } from './TalentInfo';
-import { ActionSteps } from './ActionSteps';
 
 export const ContractSidebar = (props) => {
   const { user } = useAuth();
@@ -47,12 +48,13 @@ export const ContractSidebar = (props) => {
         isPaid={status.isPaid}
         isRehire={status.isRehire}
         isSealed={status.isSealed}
+        isEmpresa={isEmpresa}
       />
 
       {/* ACTIONS (Steps 1-4) - Valid only for Business */}
       <div className="space-y-4 pb-2 relative z-[60]">
 
-        {status.isSealed ? (
+        {status.isSealed || props.permisos?.isClosed ? (
           <div className="w-full py-4 bg-blue-500/5 border border-blue-500/20 rounded-xl flex flex-col items-center justify-center gap-1">
             <Archive size={16} className="text-blue-400 mb-1" />
             <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest">
@@ -61,6 +63,7 @@ export const ContractSidebar = (props) => {
           </div>
         ) : isEmpresa ? (
           <ActionSteps
+            activeStep={props.activeStep}
             isPaid={status.isPaid}
             status={status}
             permisos={props.permisos}
@@ -71,7 +74,7 @@ export const ContractSidebar = (props) => {
             onVideoInvite={props.onVideoInvite}
           />
         ) : (
-          <div className="text-center py-4 border border-white/5 rounded-xl bg-zinc-900/10">
+          <div className="text-center py-4 border border-transparent rounded-xl bg-zinc-900/10">
             <span className="text-[8px] text-zinc-500 uppercase font-black tracking-widest">
               Esperando acción de la empresa
             </span>
