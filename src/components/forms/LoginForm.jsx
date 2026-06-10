@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { GoogleButton } from '../ui/SocialButtons';
+import MessageBox from '../ui/MessageBox';
+import TurnesButton from '../ui/TurnesButton';
+
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom'; // 🛡️ Importamos useLocation
 import { useAuth } from '../../context/AuthContext';
 
 // IMPORTACIONES UI
-import GoogleButton from '../ui/GoogleButton';
-import MessageBox from '../ui/MessageBox';
-import TurnesButton from '../ui/TurnesButton';
 
 const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -14,10 +17,17 @@ const LoginForm = () => {
     const [message, setMessage] = useState(null);
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // 🛡️ SENIOR FIX: Ya no necesitamos importar 'user' para observar el estado
     const { login, loginWithGoogle } = useAuth();
+
+    // Recuperamos a dónde intentaba ir el usuario antes de ser expulsado al Login
+    const from = new URLSearchParams(location.search).get('from') || '/dashboard';
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isLoading) return; // Prevent double execution
         setIsLoading(true);
         setMessage(null);
 
@@ -26,13 +36,19 @@ const LoginForm = () => {
         const password = formData.get('password');
 
         try {
+            // 1. Ejecutamos el login (que ahora es atómico gracias a nuestro AuthContext)
             await login(email, password);
-            // ⚡ INSTANT REDIRECT (Speed > Feedback)
-            navigate('/dashboard');
+
+            // 2. Navegación Imperativa: Redirigimos EXACTAMENTE cuando la promesa se resuelve.
+            navigate(from, { replace: true });
+
         } catch (error) {
-            console.error("Login Error:", error);
-            setMessage({ text: "Credenciales inválidas.", type: "error" });
+            console.error('Login Error:', error);
+            // Capturamos el mensaje exacto de Supabase o nuestro Contexto
+            setMessage({ text: error?.message || 'Credenciales inválidas.', type: 'error' });
         } finally {
+            // 3. LA RED DE SEGURIDAD: Pase lo que pase (éxito, error, o fallo de red), 
+            // liberamos el botón. React 18 ignora este paso de forma segura si el componente ya se desmontó.
             setIsLoading(false);
         }
     };
@@ -40,7 +56,7 @@ const LoginForm = () => {
     const handleGoogleLogin = async () => {
         try {
             setIsLoading(true);
-            await loginWithGoogle();
+            await loginWithGoogle(null, true); 
         } catch (error) {
             console.error("Error Google:", error);
             setMessage({ text: "Error de conexión.", type: "error" });
@@ -50,10 +66,9 @@ const LoginForm = () => {
 
     return (
         <div className="w-full flex flex-col gap-4">
-
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
 
-                {/* EMAIL INPUT (Subtle) */}
+                {/* EMAIL INPUT */}
                 <div className="space-y-0.5">
                     <label htmlFor="email" className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider ml-0.5">
                         Email
@@ -62,14 +77,15 @@ const LoginForm = () => {
                         type="email"
                         id="email"
                         name="email"
-                        defaultValue="empresa@turnes.app"
+                        defaultValue=""
                         required
-                        className="w-full px-3 py-2 bg-zinc-900/50 border border-white/5 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm hover:border-white/10"
+                        autoComplete="email"
+                        className="w-full px-3 py-2 bg-zinc-900/50 border border-transparent rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm "
                         placeholder="tu@email.com"
                     />
                 </div>
 
-                {/* PASSWORD INPUT (Subtle) */}
+                {/* PASSWORD INPUT */}
                 <div className="space-y-0.5">
                     <div className="flex justify-between items-center px-0.5">
                         <label htmlFor="password" className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider">
@@ -87,9 +103,10 @@ const LoginForm = () => {
                             type={showPassword ? "text" : "password"}
                             id="password"
                             name="password"
-                            defaultValue="123456"
+                            defaultValue=""
                             required
-                            className="w-full px-3 py-2 bg-zinc-900/50 border border-white/5 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm hover:border-white/10 pr-10"
+                            autoComplete="current-password"
+                            className="w-full px-3 py-2 bg-zinc-900/50 border border-transparent rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm  pr-10"
                             placeholder="••••••••"
                         />
                         <button

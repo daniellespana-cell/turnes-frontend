@@ -1,8 +1,9 @@
 import React from 'react';
 
+
 const VacancySkeleton = () => {
     return (
-        <div className="relative overflow-hidden bg-[#09090b] border border-white/5 rounded-2xl p-4 space-y-4">
+        <div className="relative overflow-hidden bg-[#09090b] border border-transparent rounded-2xl p-4 space-y-4">
             {/* Shimmer Effect Global */}
             <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent z-10" />
 

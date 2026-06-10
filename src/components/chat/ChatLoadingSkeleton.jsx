@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 export const ChatLoadingSkeleton = () => {
   return (
     <div className="flex h-full overflow-hidden animate-pulse">
@@ -44,12 +45,12 @@ export const ChatLoadingSkeleton = () => {
       <aside className="hidden lg:block w-80 xl:w-96 p-6 space-y-8 bg-[#050505]">
         <div className="space-y-4">
           <div className="w-24 h-2 bg-zinc-800 rounded" />
-          <div className="w-full h-16 bg-zinc-900/50 rounded-xl border border-white/5" />
+          <div className="w-full h-16 bg-zinc-900/50 rounded-xl border border-transparent" />
         </div>
 
         <div className="space-y-4">
           <div className="w-32 h-2 bg-zinc-800 rounded" />
-          <div className="w-full h-64 bg-zinc-900/20 rounded-[2rem] border border-white/5 relative overflow-hidden">
+          <div className="w-full h-64 bg-zinc-900/20 rounded-[2rem] border border-transparent relative overflow-hidden">
             {/* Efecto de barrido de escaneo */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-scan" />
           </div>
@@ -57,9 +58,10 @@ export const ChatLoadingSkeleton = () => {
 
         <div className="space-y-3">
           <div className="w-full h-14 bg-zinc-800 rounded-2xl" />
-          <div className="w-full h-14 bg-zinc-900 rounded-2xl border border-white/5" />
+          <div className="w-full h-14 bg-zinc-900 rounded-2xl border border-transparent" />
         </div>
       </aside>
     </div>
   );
 };
+export default ChatLoadingSkeleton;

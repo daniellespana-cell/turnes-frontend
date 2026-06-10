@@ -22,7 +22,7 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
 
         <div className="relative shrink-0 ml-1">
           <img
-            src={candidate?.avatar}
+            src={AssetResolver.getAvatar(candidate?.avatar, candidate?.name || 'Usuario')}
             className={`w-10 h-10 rounded-full border border-white/10 bg-zinc-900 object-cover ${isClosed ? 'grayscale opacity-50' : 'grayscale-[0.5]'}`}
             alt="Avatar"
           />

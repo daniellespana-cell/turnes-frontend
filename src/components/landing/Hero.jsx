@@ -2,10 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Briefcase, User } from 'lucide-react';
-import HeroSearch from './HeroSearch'; // Imported
+import HeroSearch from './HeroSearch';
 
-// 🟢 Importamos la imagen desde la ruta relativa correcta
-import heroBackgroundImage from '../../assets/mi-foto-hero.png';
+// Imported
+
+// 🟢 Importamos la imagen desde la ruta relativa correcta (WebP Optimizado)
+import heroBackgroundImage from '../../assets/mi-foto-hero.webp';
 
 // Variantes de animación
 const fadeInUp = {
@@ -68,13 +70,13 @@ const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8 hover:bg-white/10 transition-colors cursor-default"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-transparent bg-white/5 backdrop-blur-md mb-8 hover:bg-white/10 transition-colors cursor-default"
           >
             <span className="flex h-2 w-2 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="text-sm font-medium text-zinc-300 tracking-wide uppercase text-[10px]">La nueva era del trabajo</span>
+            <span className="font-bold text-zinc-300 tracking-widest uppercase text-[10px]">La nueva era del trabajo</span>
           </motion.div>
 
           <motion.h1
@@ -97,6 +99,27 @@ const Hero = () => {
 
           {/* 3. HERO SEARCH (Platzi-Style) */}
           <HeroSearch />
+
+          {/* 4. SOCIAL PROOF (Trust Badge) */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-12 pt-8 border-t border-white/5 flex flex-col items-center gap-4"
+          >
+            <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">
+              Confiado por +50 empresas en la ciudad
+            </p>
+            <div className="flex -space-x-3 opacity-80 hover:opacity-100 transition-opacity">
+              <img className="w-10 h-10 rounded-full border-2 border-zinc-950 bg-zinc-800" src="https://ui-avatars.com/api/?name=H&background=0D8ABC&color=fff" alt="Company 1" />
+              <img className="w-10 h-10 rounded-full border-2 border-zinc-950 bg-zinc-800" src="https://ui-avatars.com/api/?name=R&background=FFB347&color=fff" alt="Company 2" />
+              <img className="w-10 h-10 rounded-full border-2 border-zinc-950 bg-zinc-800" src="https://ui-avatars.com/api/?name=C&background=FF69B4&color=fff" alt="Company 3" />
+              <img className="w-10 h-10 rounded-full border-2 border-zinc-950 bg-zinc-800" src="https://ui-avatars.com/api/?name=T&background=10b981&color=fff" alt="Company 4" />
+              <div className="w-10 h-10 rounded-full border-2 border-zinc-950 bg-zinc-900 flex items-center justify-center text-[10px] font-bold text-white">
+                +46
+              </div>
+            </div>
+          </motion.div>
 
         </div>
       </div>

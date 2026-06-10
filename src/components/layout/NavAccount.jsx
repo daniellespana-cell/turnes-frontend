@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { AssetResolver } from "../../utils/assetHelper";
 
 const NavAccount = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +42,7 @@ const NavAccount = () => {
           </p>
         </div>
         <img
-          src={user.avatar || user.avatarUrl}
+          src={AssetResolver.getAvatar(user?.avatar || user?.avatarUrl, user?.name || user?.email || 'User')}
           alt="Profile"
           className="h-9 w-9 rounded-full border-2 border-brand-success object-cover"
         />

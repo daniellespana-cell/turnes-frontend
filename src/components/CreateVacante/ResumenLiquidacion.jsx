@@ -2,10 +2,12 @@ import React from 'react';
 import { CheckCircle2, ShieldCheck, Users, ShieldAlert } from 'lucide-react';
 import ResumenRow from './ResumenRow';
 import WalletStatus from './WalletStatus';
+import Spinner from '../ui/Spinner';
+
 
 const ResumenLiquidacion = ({ data, ui, walletBalance, onPublish, formatCurrency, isSubmitting, userPlan }) => {
   return (
-    <div className="md:bg-zinc-900/40 md:border md:border-white/5 md:rounded-[2.5rem] md:p-6 sticky top-8 md:backdrop-blur-xl md:shadow-2xl font-manrope">
+    <div className="md:bg-zinc-900/40 md:rounded-[2.5rem] md:p-6 sticky top-8 font-manrope">
 
       {/* HEADER: MEMBRESÍA - Ajustado para evitar desborde */}
       <div className="flex justify-between items-center mb-8 gap-4">
@@ -25,12 +27,24 @@ const ResumenLiquidacion = ({ data, ui, walletBalance, onPublish, formatCurrency
 
       <div className="space-y-4 mb-8">
         {/* INDICADOR DE VOLUMEN */}
-        <div className="flex justify-between items-center p-3 bg-white/5 rounded-2xl border border-white/5">
+        <div className="flex justify-between items-center p-3 bg-white/5 rounded-2xl border border-transparent">
           <span className="text-[10px] font-black uppercase text-zinc-500 flex items-center gap-2">
             <Users size={14} /> Cupos Solicitados
           </span>
           <span className="text-white font-black text-sm">{ui.quantity}</span>
         </div>
+
+        {/* CONTADOR DE BENEFICIO (SSOT) */}
+        {data.totalLimit > 0 && ui.labelContratacion.includes('Fija') && (
+          <div className="flex justify-between items-center p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl mb-2">
+             <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">
+               Beneficio del Plan
+             </span>
+             <span className="text-emerald-400 text-xs font-black">
+               {data.remainingFree} de {data.totalLimit} libres
+             </span>
+          </div>
+        )}
 
         {/* DESGLOSE DINÁMICO */}
         <ResumenRow
@@ -58,9 +72,15 @@ const ResumenLiquidacion = ({ data, ui, walletBalance, onPublish, formatCurrency
         <div className="flex justify-between items-end">
           <div className="min-w-0">
             <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-1">Inversión Total</p>
-            <p className="text-3xl font-black text-white tracking-tighter truncate">
-              {formatCurrency(data.total)}
-            </p>
+            {ui.isLoadingQuote ? (
+              <p className="text-3xl font-black text-zinc-500 tracking-tighter truncate animate-pulse">
+                Calculando...
+              </p>
+            ) : (
+              <p className="text-3xl font-black text-white tracking-tighter truncate">
+                {formatCurrency(data.total)}
+              </p>
+            )}
           </div>
           <div className="text-right opacity-40 text-[9px] font-bold uppercase shrink-0">COP</div>
         </div>
@@ -84,16 +104,28 @@ const ResumenLiquidacion = ({ data, ui, walletBalance, onPublish, formatCurrency
       />
 
       {/* BOTÓN DE ACCIÓN FINAL */}
+      {/* 🚀 SENIOR FIX: Cero 'Fake Disabled States'.
+          Si el botón arroja Toasts explicativos de error al ser tocado, 
+          debe parecer siempre "vivo" para invitar al tap. */}
       <button
+        type="button"
         onClick={onPublish}
-        disabled={!ui.canPublish || isSubmitting}
-        className={`w-full py-4.5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-3
-          ${ui.canPublish && !isSubmitting
-            ? 'bg-white text-black hover:bg-blue-500 hover:text-white shadow-xl shadow-blue-500/10 active:scale-95'
-            : 'bg-zinc-800 text-zinc-600 cursor-not-allowed opacity-40'}
+        disabled={isSubmitting || ui.isLoadingQuote}
+        className={`w-full py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-3 relative overflow-hidden
+          ${(isSubmitting || ui.isLoadingQuote)
+            ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed opacity-60'
+            : 'bg-white text-black hover:bg-blue-500 hover:text-white  shadow-blue-500/10 active:scale-95'
+          }
         `}
       >
-        {isSubmitting ? <div className="w-4 h-4 border-2 border-t-transparent animate-spin rounded-full" /> : "Publicar Ahora"}
+        {isSubmitting && (
+          <div className="absolute inset-0 bg-zinc-800/80 backdrop-blur-sm z-10 flex items-center justify-center pointer-events-none">
+            <Spinner size="sm" variant="white" />
+          </div>
+        )}
+        <span className={isSubmitting ? 'opacity-20' : 'opacity-100'}>
+          {isSubmitting ? "Procesando..." : "Publicar Ahora"}
+        </span>
       </button>
     </div>
   );

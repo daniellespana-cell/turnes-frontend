@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const SkeletonWallet = () => {
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-10 animate-pulse">
@@ -17,7 +18,7 @@ const SkeletonWallet = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Card de Balance Principal (Simula la WalletCard) */}
-        <div className="lg:col-span-8 h-[280px] bg-[#0f0f10] border border-white/5 rounded-[2.5rem] relative overflow-hidden">
+        <div className="lg:col-span-8 h-[280px] bg-[#0f0f10] border border-transparent rounded-[2.5rem] relative overflow-hidden">
           {/* Efecto Shimmer */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
           
@@ -36,11 +37,11 @@ const SkeletonWallet = () => {
 
         {/* Stats Laterales (Simula Ingresos/Comisiones) */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="h-[128px] bg-[#0f0f10] border border-white/5 rounded-[2rem] p-8 flex flex-col justify-center gap-3">
+          <div className="h-[128px] bg-[#0f0f10] border border-transparent rounded-[2rem] p-8 flex flex-col justify-center gap-3">
             <div className="h-3 w-20 bg-zinc-800 rounded-full" />
             <div className="h-7 w-32 bg-zinc-800 rounded-lg" />
           </div>
-          <div className="h-[128px] bg-[#0f0f10] border border-white/5 rounded-[2rem] p-8 flex flex-col justify-center gap-3">
+          <div className="h-[128px] bg-[#0f0f10] border border-transparent rounded-[2rem] p-8 flex flex-col justify-center gap-3">
             <div className="h-3 w-20 bg-zinc-800 rounded-full" />
             <div className="h-7 w-32 bg-zinc-800 rounded-lg" />
           </div>
@@ -58,7 +59,7 @@ const SkeletonWallet = () => {
           {[1, 2, 3].map((i) => (
             <div 
               key={i} 
-              className="flex items-center justify-between p-6 bg-[#0f0f10]/50 border border-white/5 rounded-[1.8rem]"
+              className="flex items-center justify-between p-6 bg-[#0f0f10]/50 border border-transparent rounded-[1.8rem]"
             >
               <div className="flex items-center gap-5">
                 <div className="w-14 h-14 bg-zinc-800 rounded-2xl" />

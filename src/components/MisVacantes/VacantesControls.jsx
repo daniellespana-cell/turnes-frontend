@@ -1,7 +1,8 @@
-// src/components/MisVacantes/VacantesControls.jsx
 import React from 'react';
 import VacantesTabs from './VacantesTabs';
 import VacantesSearch from './VacantesSearch';
+
+// src/components/MisVacantes/VacantesControls.jsx
 
 const VacantesControls = ({ activeTab, setActiveTab, counts, query, setQuery }) => (
   <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4">

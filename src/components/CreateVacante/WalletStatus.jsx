@@ -1,6 +1,7 @@
 import React from 'react';
 import { Wallet, AlertCircle } from 'lucide-react';
 
+
 const WalletStatus = ({ balance, hasFunds, formatCurrency }) => (
   <div className={`p-4 rounded-[1.5rem] mb-6 flex items-center gap-4 border transition-all duration-500 ${
     hasFunds ? 'bg-zinc-800/20 border-white/[0.04]' : 'bg-red-500/5 border-red-500/20 ring-1 ring-red-500/10'

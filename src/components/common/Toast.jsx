@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { CheckCircle, XCircle, Info, AlertTriangle } from 'lucide-react';
+
+import { useEffect } from 'react';
 
 const Toast = ({ data, onClose }) => {
   // Guard clause para evitar renders nulos
   if (!data) return null;
-  
+
   const { type, message } = data;
 
   useEffect(() => {
@@ -28,8 +30,11 @@ const Toast = ({ data, onClose }) => {
   };
 
   return (
-    /* Contenedor fijo con el z-index más alto posible */
-    <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[9999] pointer-events-none px-6">
+    /* z-[9999] + env(safe-area-inset-bottom): garantiza visibilidad en iPhone con home bar */
+    <div
+      className="fixed left-1/2 -translate-x-1/2 z-[9999] pointer-events-none px-4 w-full max-w-sm"
+      style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}
+    >
       <div className={`
         flex items-center gap-3 px-6 py-4 
         rounded-[1.5rem] border backdrop-blur-2xl 
@@ -42,8 +47,8 @@ const Toast = ({ data, onClose }) => {
           {icons[type]}
         </div>
 
-        {/* Texto con espaciado Manrope Senior */}
-        <span className="text-[10.5px] font-black uppercase tracking-[0.2em] leading-none whitespace-nowrap">
+        {/* Texto */}
+        <span className="text-[10.5px] font-black uppercase tracking-[0.15em] leading-tight break-words min-w-0">
           {message}
         </span>
       </div>

@@ -1,14 +1,14 @@
+import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import DesktopSearchBar from '../navbar/DesktopSearchBar';
+import MobileSearchBar from '../navbar/MobileSearchBar';
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
 
 import turnesLogo from "../../assets/logo-turnes.png";
 
 import { useAuth } from "@/context/AuthContext"; // Importante para la seguridad
 import { useSearchBar } from "@/hooks/useSearchBar";
-import DesktopSearchBar from "../navbar/DesktopSearchBar";
-import MobileSearchBar from "../navbar/MobileSearchBar";
 
 const PublicNavbar = () => {
   const { user, loading } = useAuth(); // Obtenemos el estado global
@@ -59,31 +59,21 @@ const PublicNavbar = () => {
       </div>
 
       {/* MENÚ MÓVIL */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-zinc-900 border-t border-zinc-800 overflow-hidden"
-          >
-            <div className="px-4 py-6 space-y-6">
-
-              {/* BUSCADOR (Mobile) */}
-              <MobileSearchBar {...search} />
-
-              {/* ENLACES (Mobile) */}
-              <div className="flex flex-col space-y-4">
-                <Link onClick={toggleMenu} to="/" className="text-white text-lg">Inicio</Link>
-                <Link onClick={toggleMenu} to="/explorar" className="text-white text-lg">Explorar Categorías</Link>
-                <Link onClick={toggleMenu} to="/precios" className="text-white text-lg">Planes</Link>
-                <Link onClick={toggleMenu} to="/contacto" className="text-white text-lg">Contacto</Link>
-              </div>
-
+      {mobileOpen && (
+        <div className="md:hidden bg-zinc-900 border-t border-zinc-800 overflow-hidden">
+          <div className="px-4 py-6 space-y-6">
+            {/* BUSCADOR (Mobile) */}
+            <MobileSearchBar {...search} />
+            {/* ENLACES (Mobile) */}
+            <div className="flex flex-col space-y-4">
+              <Link onClick={toggleMenu} to="/" className="text-white text-lg">Inicio</Link>
+              <Link onClick={toggleMenu} to="/explorar" className="text-white text-lg">Explorar Categorías</Link>
+              <Link onClick={toggleMenu} to="/precios" className="text-white text-lg">Planes</Link>
+              <Link onClick={toggleMenu} to="/contacto" className="text-white text-lg">Contacto</Link>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

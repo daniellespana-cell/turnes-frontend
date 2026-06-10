@@ -1,6 +1,7 @@
 import React from 'react';
 import { Rocket } from 'lucide-react';
 
+
 const BrandingSidebar = () => {
     return (
         <div className="hidden lg:flex lg:col-span-5 relative p-12 text-white flex-col justify-between overflow-hidden bg-indigo-600">
@@ -26,7 +27,7 @@ const BrandingSidebar = () => {
                         La Nueva Era
                     </span>
 
-                    <h2 className="text-6xl xl:text-8xl font-black text-white leading-[0.85] tracking-tighter drop-shadow-2xl">
+                    <h2 className="text-6xl xl:text-8xl font-black text-white leading-[0.85] tracking-tighter drop-">
                         DE LA REVOLU<br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-300">
                             CIÓN
@@ -44,7 +45,7 @@ const BrandingSidebar = () => {
                 </div>
             </div>
 
-            <div className="relative z-10 mt-12 bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+            <div className="relative z-10 mt-12 bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-transparent">
                 <div className="flex items-center gap-3">
                     <div className="flex -space-x-3">
                         <div className="w-8 h-8 rounded-full bg-red-400 border-2 border-indigo-600"></div>

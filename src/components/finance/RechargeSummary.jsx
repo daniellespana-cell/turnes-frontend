@@ -1,12 +1,17 @@
 import React from 'react';
-import { ShieldCheck, Loader2 } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
+import Spinner from '../ui/Spinner';
+
+import { useState } from 'react';
 
 const RechargeSummary = ({ amount, isProcessing, onPay }) => {
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
   // Calculamos si el botón debe estar deshabilitado
-  const isDisabled = amount <= 0 || isProcessing;
+  const isDisabled = amount <= 0 || isProcessing || !termsAccepted;
 
   return (
-    <div className="bg-[#0f0f10] border border-white/5 rounded-2xl p-5 space-y-6 lg:sticky lg:top-24 h-fit">
+    <div className="bg-[#0f0f10] border border-transparent rounded-2xl p-5 space-y-6 lg:sticky lg:top-24 h-fit">
       <h2 className="text-zinc-400 text-xs font-bold uppercase tracking-widest">Resumen</h2>
 
       <div className="space-y-3">
@@ -29,19 +34,33 @@ const RechargeSummary = ({ amount, isProcessing, onPay }) => {
         </span>
       </div>
 
+      {/* TÉRMINOS Y CONDICIONES (Check Obligatorio) */}
+      <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-transparent">
+        <input
+          type="checkbox"
+          id="terms"
+          checked={termsAccepted}
+          onChange={(e) => setTermsAccepted(e.target.checked)}
+          className="mt-1 w-4 h-4 rounded border-zinc-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-zinc-900 bg-zinc-800 cursor-pointer"
+        />
+        <label htmlFor="terms" className="text-[10px] text-zinc-400 leading-tight cursor-pointer select-none">
+          Acepto que esta recarga es para <span className="text-white font-bold">consumo digital</span> y <span className="text-red-400 font-bold">no tiene reembolso</span>.
+        </label>
+      </div>
+
       {/* BOTÓN CON ESTADO DE CARGA */}
       <button
         onClick={onPay}
         disabled={isDisabled}
         className={`w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all border flex items-center justify-center gap-2
           ${isDisabled
-            ? 'bg-zinc-900 border-white/5 text-zinc-600 cursor-not-allowed'
+            ? 'bg-zinc-900 border-white/5 text-zinc-600 cursor-not-allowed opacity-50'
             : 'bg-white text-black border-white hover:bg-zinc-200 active:scale-[0.98]'
           }`}
       >
         {isProcessing ? (
           <>
-            <Loader2 className="animate-spin" size={14} />
+            <Spinner size="sm" variant="white" />
             <span>Procesando...</span>
           </>
         ) : (

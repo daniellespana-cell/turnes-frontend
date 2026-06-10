@@ -1,8 +1,13 @@
 import React from 'react';
-// MOCK para evitar errores de compilación
+import Spinner from '../ui/Spinner';
+
+
+/**
+ * LoadingSpinner (Wrapper de compatibilidad)
+ * Delega al sistema unificado de carga para eliminar duplicación.
+ */
 const LoadingSpinner = () => (
-  <div className="flex justify-center items-center h-48 py-12">
-    <div className="animate-spin h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full" />
-  </div>
+    <Spinner size="lg" variant="emerald" center text="Cargando..." />
 );
+
 export default LoadingSpinner;

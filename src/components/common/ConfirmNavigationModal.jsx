@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 
+
 const ConfirmNavigationModal = ({ isOpen, onConfirm, onCancel }) => {
   // CRÍTICO: El modal debe desmontarse físicamente si no está abierto
   // para liberar cualquier referencia al blocker del router.
@@ -8,7 +9,7 @@ const ConfirmNavigationModal = ({ isOpen, onConfirm, onCancel }) => {
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-[#0f0f10] border border-white/10 p-8 rounded-[2.5rem] max-w-sm w-full text-center space-y-6 shadow-2xl animate-in zoom-in-95 duration-300">
+      <div className="bg-[#0f0f10] border border-transparent p-8 rounded-[2.5rem] max-w-sm w-full text-center space-y-6  animate-in zoom-in-95 duration-300">
         
         {/* ICONO DE ADVERTENCIA */}
         <div className="mx-auto w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center">

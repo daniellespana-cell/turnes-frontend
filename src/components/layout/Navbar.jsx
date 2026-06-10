@@ -1,22 +1,26 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import HowItWorksModal from '../landing/HowItWorksModal';
+
+import { useState } from "react";
 
 // ✅ ÚNICA CORRECCIÓN: Ruta ajustada para subir dos niveles
 import turnesLogo from "../../assets/logo-turnes.png";
-import HowItWorksModal from "../landing/HowItWorksModal";
 
 // --------------------- Nav Item ---------------------
 const NavItem = ({ to, label, isMobile = false, onClick, isButton = false }) => {
+  const baseClasses = `
+    font-medium text-secondary text-sm px-3 py-2 hover:text-brand-success transition-colors relative group
+    ${isMobile ? "block text-lg text-white" : "inline-block"}
+  `;
+
   if (isButton) {
     return (
       <button
         onClick={onClick}
-        className={`
-            font-medium text-secondary text-sm px-3 py-2 hover:text-brand-success transition-colors relative group text-left
-            ${isMobile ? "block text-lg text-white w-full" : "inline-block"}
-          `}
+        style={{ fontFamily: 'inherit' }}
+        className={`${baseClasses} text-left border-none bg-transparent cursor-pointer p-0 md:px-3 md:py-2 ${isMobile ? "w-full" : ""}`}
       >
         {label}
         {!isMobile && (
@@ -30,10 +34,7 @@ const NavItem = ({ to, label, isMobile = false, onClick, isButton = false }) => 
     <Link
       to={to}
       onClick={onClick}
-      className={`
-        font-medium text-secondary text-sm px-3 py-2 hover:text-brand-success transition-colors relative group
-        ${isMobile ? "block text-lg text-white" : "inline-block"}
-      `}
+      className={baseClasses}
     >
       {label}
       <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-brand-success transition-all duration-300 transform -translate-x-1/2 group-hover:w-full"></span>
@@ -42,21 +43,26 @@ const NavItem = ({ to, label, isMobile = false, onClick, isButton = false }) => 
 };
 
 // --------------------- Buttons ---------------------
-const AnimatedButton = ({ to, label, isMobile = false, isHeaderMobile = false, onClick }) => (
-  <Link
-    to={to}
-    onClick={onClick}
-    className={`
-      btn relative rounded-lg font-semibold overflow-hidden group transition-all duration-300
-      text-white border border-brand-success hover:border-white/70 bg-brand-primary hover:bg-brand-primary/90 shadow-md shadow-brand-primary/30
-      ${isMobile ? "w-full text-center px-4 py-2 ml-2" : ""}
-      ${isHeaderMobile ? "px-3 py-1.5 text-xs ml-1" : ""}
-      ${!isMobile && !isHeaderMobile ? "px-4 py-2 ml-2" : ""}
-    `}
-  >
-    <span className="relative z-10">{label}</span>
-  </Link>
-);
+const AnimatedButton = ({ to, label, isMobile = false, isHeaderMobile = false, onClick, variant = 'primary' }) => {
+  const primaryStyles = "text-zinc-950 bg-emerald-400 hover:bg-emerald-300 border border-transparent shadow-[0_0_15px_rgba(52,211,153,0.3)] font-bold";
+  const ghostStyles = "text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-600 bg-zinc-900/50 hover:bg-zinc-800";
+
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className={`
+        relative rounded-xl overflow-hidden transition-all duration-300 flex items-center justify-center
+        ${variant === 'primary' ? primaryStyles : ghostStyles}
+        ${isMobile ? "w-full text-center px-4 py-2.5 mt-2" : ""}
+        ${isHeaderMobile ? "px-3 py-1.5 text-xs ml-1" : ""}
+        ${!isMobile && !isHeaderMobile ? "px-5 py-2" : ""}
+      `}
+    >
+      <span className="relative z-10">{label}</span>
+    </Link>
+  );
+};
 
 // --------------------- NAVBAR ---------------------
 const Navbar = () => {
@@ -66,20 +72,20 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navbarClasses =
-    "fixed top-0 left-0 w-full z-50 bg-[#0a0a0a]/90 backdrop-blur-md shadow-xl border-b border-zinc-800 transition-all duration-300";
+    "fixed top-0 left-0 w-full z-50 bg-[#0a0a0a]/90 backdrop-blur-md  border-b border-zinc-800 transition-all duration-300";
 
   return (
     <>
       <nav className={navbarClasses}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center h-16">
 
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
               <img
                 src={turnesLogo}
                 alt="Turnes Logo"
-                className="h-8 md:h-9 w-auto object-contain logo-animated"
+                className="h-7 md:h-8 w-auto object-contain logo-animated"
               />
             </Link>
 
@@ -100,15 +106,15 @@ const Navbar = () => {
             {/* Buttons (Desktop & Mobile Visible) */}
             <div className="flex items-center space-x-2 md:space-x-4">
               {/* Mobile: Compact Buttons */}
-              <div className="flex md:hidden items-center mr-1">
-                <AnimatedButton to="/login" label="Ingresar" isHeaderMobile={true} />
-                <AnimatedButton to="/register" label="Regístrate" isHeaderMobile={true} />
+              <div className="flex md:hidden items-center mr-1 gap-1">
+                <AnimatedButton to="/login" label="Ingresar" variant="ghost" isHeaderMobile={true} />
+                <AnimatedButton to="/register" label="Regístrate" variant="primary" isHeaderMobile={true} />
               </div>
 
               {/* Desktop: Full Buttons (Hidden on Mobile to use custom layout above) */}
               <div className="hidden md:flex items-center space-x-3">
-                <AnimatedButton to="/login" label="Ingresar" />
-                <AnimatedButton to="/register" label="Regístrate" />
+                <AnimatedButton to="/login" label="Ingresar" variant="ghost" />
+                <AnimatedButton to="/register" label="Regístrate" variant="primary" />
               </div>
 
               {/* Mobile Menu Button */}
@@ -123,31 +129,23 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Dropdown */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden bg-[#0a0a0a] border-t border-zinc-800 overflow-hidden"
-            >
-              <div className="flex flex-col space-y-1 px-4 py-6">
-                <NavItem to="/" label="Inicio" isMobile={true} onClick={toggleMenu} />
-                <NavItem
-                  to="#"
-                  label="Cómo funciona"
-                  isMobile={true}
-                  isButton={true}
-                  onClick={() => { setIsHowItWorksOpen(true); toggleMenu(); }}
-                />
-                <NavItem to="/explorar" label="Características" isMobile={true} onClick={toggleMenu} />
-                <NavItem to="/precios" label="Precios" isMobile={true} onClick={toggleMenu} />
-                <NavItem to="/contacto" label="Contacto" isMobile={true} onClick={toggleMenu} />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isOpen && (
+          <div className="md:hidden bg-[#0a0a0a] border-t border-zinc-800 overflow-hidden">
+            <div className="flex flex-col space-y-1 px-4 py-6">
+              <NavItem to="/" label="Inicio" isMobile={true} onClick={toggleMenu} />
+              <NavItem
+                to="#"
+                label="Cómo funciona"
+                isMobile={true}
+                isButton={true}
+                onClick={() => { setIsHowItWorksOpen(true); toggleMenu(); }}
+              />
+              <NavItem to="/explorar" label="Características" isMobile={true} onClick={toggleMenu} />
+              <NavItem to="/precios" label="Precios" isMobile={true} onClick={toggleMenu} />
+              <NavItem to="/contacto" label="Contacto" isMobile={true} onClick={toggleMenu} />
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* MODAL "CÓMO FUNCIONA" */}

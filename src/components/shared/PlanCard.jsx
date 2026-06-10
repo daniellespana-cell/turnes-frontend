@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const PlanCard = ({ plan, isPrivate = false, onAction, currentPlanId }) => {
   // Verificamos si este plan es el que el usuario ya tiene activo
   const isCurrent = currentPlanId === plan.id;

@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Zap, Video, Handshake, CheckCircle2 } from 'lucide-react';
+import FinalizeActionBtn from './FinalizeActionBtn';
+
+import { useEffect, useState } from 'react';
 
 const MobileActionDashboard = ({
     finanzas,
@@ -8,13 +11,22 @@ const MobileActionDashboard = ({
     onExecute,
     onFinalize,
     isPaying,
+    isFinalizing,
     activeStep // 🆕 Received from useChatLogic -> useChatProtocol
 }) => {
     const [isHidden, setIsHidden] = useState(false);
 
-    const handleAction = (callback) => {
-        setIsHidden(true);
-        if (callback) callback();
+    const handleAction = async (callback) => {
+        if (!callback) {
+            setIsHidden(true);
+            return;
+        }
+
+        try {
+            await callback();
+        } finally {
+            setIsHidden(true);
+        }
     };
 
     // Reset visibility when step changes
@@ -28,7 +40,7 @@ const MobileActionDashboard = ({
         <>
             {/* ESTADO A: FALTA PAGO (Paso 1) */}
             {activeStep === 'PAYMENT' && (
-                <div className="mt-2 mb-1 p-3 bg-zinc-950/80 border border-white/10 rounded-xl backdrop-blur-xl shadow-lg ring-1 ring-black/5 animate-in slide-in-from-bottom-2 duration-300 block md:hidden">
+                <div className="mt-2 mb-1 p-3 bg-zinc-950/80 border border-transparent rounded-xl backdrop-blur-xl shadow-lg ring-1 ring-black/5 animate-in slide-in-from-bottom-2 duration-300 block md:hidden">
                     <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                             <div className="p-1 bg-emerald-500/10 rounded-md text-emerald-400">
@@ -57,7 +69,7 @@ const MobileActionDashboard = ({
 
             {/* ESTADO B: VIDEO (Paso 2) */}
             {activeStep === 'VIDEO' && (
-                <div className="mt-2 mb-1 p-3 bg-zinc-950/80 border border-white/10 rounded-xl backdrop-blur-xl shadow-lg ring-1 ring-black/5 animate-in slide-in-from-bottom-2 duration-300 block md:hidden">
+                <div className="mt-2 mb-1 p-3 bg-zinc-950/80 border border-transparent rounded-xl backdrop-blur-xl shadow-lg ring-1 ring-black/5 animate-in slide-in-from-bottom-2 duration-300 block md:hidden">
                     <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                             <div className="p-1 bg-blue-500/10 rounded-md text-blue-400 relative">
@@ -86,7 +98,7 @@ const MobileActionDashboard = ({
 
             {/* ESTADO C: ACUERDO (Paso 3) */}
             {activeStep === 'AGREEMENT' && (
-                <div className="mt-2 mb-1 p-3 bg-zinc-950/80 border border-white/10 rounded-xl backdrop-blur-xl shadow-lg ring-1 ring-black/5 animate-in slide-in-from-bottom-2 duration-300 block md:hidden">
+                <div className="mt-2 mb-1 p-3 bg-zinc-950/80 border border-transparent rounded-xl backdrop-blur-xl shadow-lg ring-1 ring-black/5 animate-in slide-in-from-bottom-2 duration-300 block md:hidden">
                     <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                             <div className="p-1 bg-purple-500/10 rounded-md text-purple-400">
@@ -114,7 +126,7 @@ const MobileActionDashboard = ({
 
             {/* ESTADO D: FINALIZAR (Paso 4) */}
             {activeStep === 'FINALIZE' && (
-                <div className="mt-2 mb-1 p-3 bg-zinc-950/80 border border-white/10 rounded-xl backdrop-blur-xl shadow-lg ring-1 ring-black/5 animate-in slide-in-from-bottom-2 duration-300 block md:hidden">
+                <div className="mt-2 mb-1 p-3 bg-zinc-950/80 border border-transparent rounded-xl backdrop-blur-xl shadow-lg ring-1 ring-black/5 animate-in slide-in-from-bottom-2 duration-300 block md:hidden">
                     <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                             <div className="p-1 bg-indigo-500/10 rounded-md text-indigo-400">
@@ -131,12 +143,11 @@ const MobileActionDashboard = ({
                         Servicio completado. Cierra el turno.
                     </p>
 
-                    <button
-                        onClick={() => handleAction(onFinalize)}
-                        className="w-full py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 rounded-lg text-[10px] font-semibold uppercase tracking-wide transition-all active:scale-95 flex items-center justify-center gap-2"
-                    >
-                        <CheckCircle2 size={12} /> Cerrar Turno
-                    </button>
+                    <FinalizeActionBtn
+                        onFinalize={() => handleAction(onFinalize)}
+                        isFinalizing={isFinalizing}
+                        className="w-full py-2 rounded-lg text-[10px]"
+                    />
                 </div>
             )}
         </>

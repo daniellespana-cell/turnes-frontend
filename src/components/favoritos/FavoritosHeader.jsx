@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
+
 import { typography } from '../../styles/typography';
 
 const FavoritosHeader = ({ onBack, count }) => {
@@ -24,7 +25,7 @@ const FavoritosHeader = ({ onBack, count }) => {
             Recontrata a tus elegidos, <span className="text-zinc-400 font-normal normal-case tracking-normal">más rápido</span>
           </p>
           {count > 0 && (
-            <span className="bg-zinc-800 text-zinc-400 text-[10px] font-medium px-1.5 py-0.5 rounded-md border border-white/5">
+            <span className="bg-zinc-800 text-zinc-400 text-[10px] font-medium px-1.5 py-0.5 rounded-md border border-transparent">
               {count}
             </span>
           )}

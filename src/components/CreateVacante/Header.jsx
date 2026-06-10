@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
+
 import { typography } from '../../styles/typography';
 
 const Header = ({ onBack }) => {

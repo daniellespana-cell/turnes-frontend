@@ -1,4 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
+import MisVacantesHeader from '../../components/MisVacantes/MisVacantesHeader';
+import VacantesControls from '../../components/MisVacantes/VacantesControls';
+import VacantesTableContainer from '../../components/MisVacantes/VacantesTableContainer';
+import VacantesTable from '../../components/MisVacantes/VacantesTable';
+import ConfirmationModal from '../../components/common/ConfirmationModal';
+
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Hooks de lógica
@@ -7,11 +14,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 
 // Componentes Orquestados (Todos desde la misma ruta)
-import MisVacantesHeader from '../../components/MisVacantes/MisVacantesHeader';
-import VacantesControls from '../../components/MisVacantes/VacantesControls';
-import VacantesTableContainer from '../../components/MisVacantes/VacantesTableContainer';
-import VacantesTable from '../../components/MisVacantes/VacantesTable';
-import ConfirmationModal from '../../components/common/ConfirmationModal';
 
 const MisVacantesPage = () => {
   const navigate = useNavigate();
@@ -30,13 +32,8 @@ const MisVacantesPage = () => {
     isLoading
   } = useVacantesLogic();
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-[calc(100vh-100px)]">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-emerald-500"></div>
-      </div>
-    );
-  }
+  // ELIMINADO: Bloqueo de carga para permitir "Immediate Rendering"
+  // if (isLoading) { return <Spinner ... /> }
 
   const filteredData = vacantes.filter(v =>
     (v.title || '').toLowerCase().includes(query.toLowerCase())
@@ -66,7 +63,7 @@ const MisVacantesPage = () => {
         userPlan={user?.plan || 'Básico'}
         filteredCount={filteredData.length}
         onBack={() => navigate(-1)}
-        onCreate={() => navigate('/dashboard/publicar')}
+        onCreate={() => navigate('/publicar')}
       />
 
       <div className="space-y-10">
@@ -83,6 +80,7 @@ const MisVacantesPage = () => {
             data={filteredData}
             activeTab={activeTab}
             onAction={onActionTrigger}
+            isLoading={isLoading} // Nueva Prop para Skeleton interno
           />
         </VacantesTableContainer>
       </div>
@@ -93,7 +91,7 @@ const MisVacantesPage = () => {
         onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
         onConfirm={handleConfirmAction}
         title="¿Eliminar Vacante?"
-        message="Esta acción no se puede deshacer. Perderás el historial de candidatos asociados."
+        message="La vacante será removida de tu panel. El historial de candidatos y calificaciones se preservará."
         confirmText="Sí, Eliminar"
         type="delete"
       />

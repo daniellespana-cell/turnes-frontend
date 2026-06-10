@@ -1,20 +1,26 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Camera, Check, Edit2, Loader2 } from 'lucide-react';
+import { Camera, Check, Edit2 } from 'lucide-react';
+import Spinner from '../ui/Spinner';
+
+import { useRef, useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { typography } from '../../styles/typography';
+import { compressImageToBlob } from '../../utils/imageUtils';
+import { storageService } from '../../services/storageService';
+import { AssetResolver } from '../../utils/assetHelper';
 
 const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEditing, handleSave, loading }) => {
     const fileInputRef = useRef(null);
-    const [avatarPreview, setAvatarPreview] = useState(user?.avatar);
+    const [avatarPreview, setAvatarPreview] = useState(user?.avatar_url);
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Sincronizar preview si cambia la data externa (Re-hidratación)
     useEffect(() => {
         if (formData.avatar) {
             setAvatarPreview(formData.avatar);
-        } else if (user?.avatar) {
-            setAvatarPreview(user.avatar);
+        } else if (user?.avatar_url) {
+            setAvatarPreview(user.avatar_url);
         }
     }, [formData.avatar, user]);
 
@@ -28,21 +34,25 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
 
         // Validar tipo
         if (!file.type.startsWith('image/')) {
-            alert('Por favor selecciona una imagen válida');
-            return;
+            return; // El input ya filtra por accept="image/*"
         }
 
         setIsProcessing(true);
 
         try {
-            const compressedBase64 = await compressImage(file);
-            setAvatarPreview(compressedBase64);
+            // 1. Single Source of Truth para compresión a Blob
+            const compressedBlob = await compressImageToBlob(file);
+            
+            // Preview visual instantáneo (Memoria local)
+            const objectUrl = URL.createObjectURL(compressedBlob);
+            setAvatarPreview(objectUrl);
+            handleInputChange('avatar', objectUrl);
 
-            // 1. Actualizar form visualmente
-            handleInputChange('avatar', compressedBase64);
+            // 2. Subida a Supabase Storage (Bucket 'avatars')
+            const storagePath = await storageService.uploadAvatar(compressedBlob, user.id);
 
-            // 2. PERSISTENCIA INMEDIATA (Auto-Save)
-            await actualizarPerfil({ avatar: compressedBase64 });
+            // 3. Guardar solo la ruta en la Base de Datos Postgres
+            await actualizarPerfil({ avatar: storagePath });
 
         } catch (error) {
             console.error("Error optimizando imagen:", error);
@@ -51,46 +61,7 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
         }
     };
 
-    // Función de Utilidad: Compresión con Canvas
-    const compressImage = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 500; // Estándar "Red Social" para avatars
-                    const MAX_HEIGHT = 500;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    // Exportar a WebP o JPEG de alta calidad optimizada (0.7 ~ Facebook Standard)
-                    resolve(canvas.toDataURL('image/jpeg', 0.8)); // 0.8 es buen balance
-                };
-                img.onerror = error => reject(error);
-            };
-            reader.onerror = error => reject(error);
-        });
-    };
+    // La función compressImage local fue eliminada (Se usa imageUtils.js como SSOT)
 
     return (
         <motion.div
@@ -99,7 +70,7 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
             className="relative mb-12 w-full max-w-full"
         >
             {/* Banner de fondo abstracto (Más bajo y sutil) */}
-            <div className="h-24 w-full bg-gradient-to-r from-zinc-900 via-[#0a0a0a] to-zinc-900 rounded-[1.5rem] border border-white/5 overflow-hidden relative shadow-lg z-0">
+            <div className="h-24 w-full bg-gradient-to-r from-zinc-900 via-[#0a0a0a] to-zinc-900 rounded-[1.5rem] border border-transparent overflow-hidden relative shadow-lg z-0">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
             </div>
 
@@ -108,15 +79,15 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
 
                 {/* Avatar Compacto */}
                 <div className="relative group shrink-0 z-20">
-                    <div className="w-20 h-20 rounded-2xl bg-zinc-950 border-[3px] border-[#050505] p-0.5 shadow-xl relative overflow-hidden box-content">
+                    <div className="w-20 h-20 rounded-2xl bg-zinc-950 border-[3px] border-[#050505] p-0.5  relative overflow-hidden box-content">
                         {isProcessing && (
                             <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-30">
-                                <Loader2 className="animate-spin text-white" size={16} />
+                                <Spinner size="sm" variant="white" />
                             </div>
                         )}
 
                         <img
-                            src={avatarPreview || user?.avatar || user?.avatarUrl}
+                            src={avatarPreview?.startsWith('blob') ? avatarPreview : AssetResolver.getAvatar(avatarPreview || user?.avatar_url || user?.avatar) || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre_display || 'T')}&background=21c99a&color=fff&bold=true&size=80`}
                             alt="Profile"
                             className="w-full h-full rounded-[0.9rem] object-cover"
                         />
@@ -145,9 +116,16 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
                 <div className="flex-1 pb-1 min-w-0 w-full max-w-full z-10">
                     <h1 className={typography.entityName + " flex items-center gap-2 flex-wrap"}>
                         <span className="truncate max-w-full">{formData.name}</span>
-                        <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-md p-0.5 shrink-0" title="Cuenta Verificada">
-                            <Check size={12} className="text-emerald-500" strokeWidth={2.5} />
-                        </div>
+                        {user?.verificado && (
+                            <motion.div 
+                                initial={{ scale: 0, rotate: -45 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                className="flex items-center justify-center bg-[#050505] border border-emerald-500/40 rounded-[6px] p-0.5 shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]" 
+                                title="Cuenta Verificada"
+                            >
+                                <Check size={11} className="text-emerald-400" strokeWidth={4} />
+                            </motion.div>
+                        )}
                     </h1>
                     <p className={typography.body + " truncate max-w-full block"}>
                         {formData.email}

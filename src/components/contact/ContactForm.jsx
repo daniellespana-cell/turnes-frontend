@@ -1,13 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
+import Spinner from '../ui/Spinner';
+
 
 const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }) => {
 
     // Vista de Éxito
     if (status === 'success') {
         return (
-            <div className="lg:col-span-2 p-8 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl relative overflow-hidden h-full flex flex-col justify-center">
+            <div className="lg:col-span-2 p-8 bg-white/5 backdrop-blur-md border border-transparent rounded-2xl  relative overflow-hidden h-full flex flex-col justify-center">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -22,7 +24,7 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
                     </p>
                     <button
                         onClick={resetForm}
-                        className="mt-8 px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-lg text-white text-sm font-medium transition-all duration-300"
+                        className="mt-8 px-6 py-2 bg-white/5 hover:bg-white/10 border border-transparent  rounded-lg text-white text-sm font-medium transition-all duration-300"
                     >
                         Enviar otro mensaje
                     </button>
@@ -33,7 +35,7 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
 
     // Vista del Formulario
     return (
-        <div className="lg:col-span-2 p-8 md:p-10 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl relative overflow-hidden">
+        <div className="lg:col-span-2 p-8 md:p-10 bg-white/5 backdrop-blur-md border border-transparent rounded-2xl  relative overflow-hidden">
             <h2 className="text-3xl font-black text-white mb-8 tracking-tight">Envíanos un Mensaje</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -50,7 +52,7 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
                             onChange={handleChange}
                             required
                             disabled={status === 'loading'}
-                            className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl text-white placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50"
+                            className="w-full px-4 py-3 bg-black/40 border border-transparent rounded-xl text-white placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50"
                             placeholder="Ej: Juan Pérez"
                         />
                     </div>
@@ -66,7 +68,7 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
                             onChange={handleChange}
                             required
                             disabled={status === 'loading'}
-                            className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl text-white placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50"
+                            className="w-full px-4 py-3 bg-black/40 border border-transparent rounded-xl text-white placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50"
                             placeholder="tu.correo@empresa.com"
                         />
                     </div>
@@ -83,7 +85,7 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
                         onChange={handleChange}
                         required
                         disabled={status === 'loading'}
-                        className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl text-white placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50 resize-none"
+                        className="w-full px-4 py-3 bg-black/40 border border-transparent rounded-xl text-white placeholder-zinc-600 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50 resize-none"
                         placeholder="Describe tu consulta o necesidad de soporte..."
                     ></textarea>
                 </div>
@@ -102,8 +104,8 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
                 />
 
                 {/* Privacy Checkbox */}
-                <div className="flex items-start p-4 bg-white/5 rounded-lg border border-white/5">
-                    <div className="flex items-center h-5">
+                <div className="flex bg-white/5 rounded-xl border border-transparent p-4 md:p-5 transition-colors hover:bg-white/10 ">
+                    <div className="flex h-6 items-center">
                         <input
                             id="acceptedTerms"
                             name="acceptedTerms"
@@ -112,12 +114,12 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
                             onChange={handleChange}
                             required
                             disabled={status === 'loading'}
-                            className="w-5 h-5 rounded border-zinc-600 bg-zinc-900 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-zinc-900 cursor-pointer"
+                            className="h-5 w-5 rounded border-zinc-600 bg-zinc-900/50 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-zinc-900 cursor-pointer transition-all"
                         />
                     </div>
-                    <div className="ml-3 text-sm">
+                    <div className="ml-4 flex flex-col justify-center text-sm leading-relaxed">
                         <label htmlFor="acceptedTerms" className="font-medium text-zinc-300 cursor-pointer select-none">
-                            Acepto la <a href="/privacidad" className="text-emerald-400 hover:text-emerald-300 font-semibold underline decoration-emerald-500/30 hover:decoration-emerald-400 transition-colors">Política de Privacidad</a> y el tratamiento de mis datos.
+                            Acepto la <a href="/privacidad" className="text-emerald-400 hover:text-emerald-300 font-semibold underline decoration-emerald-500/30 hover:decoration-emerald-400 transition-colors">Política de Privacidad</a> y el tratamiento de mis datos personales.
                         </label>
                     </div>
                 </div>
@@ -139,7 +141,7 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
                     >
                         {status === 'loading' ? (
                             <>
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                <Spinner size="sm" variant="white" />
                                 <span className="tracking-wide">ENVIANDO...</span>
                             </>
                         ) : (

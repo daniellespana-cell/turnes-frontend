@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, CheckCircle2, XCircle, DollarSign, Clock } from 'lucide-react';
 
+
 const RehireOfferBubble = ({ message, onUpdateMessage, onAction }) => {
     const { price, date, status } = message.metadata || {};
     const isPending = status === 'pending';
@@ -37,7 +38,7 @@ const RehireOfferBubble = ({ message, onUpdateMessage, onAction }) => {
                 relative w-full max-w-[280px] md:max-w-[320px] 
                 bg-[#09090b]/90 backdrop-blur-md 
                 border rounded-xl 
-                p-3 overflow-hidden shadow-2xl
+                p-3 overflow-hidden 
                 ${isPending ? 'border-indigo-500/30' : ''}
                 ${isAccepted ? 'border-emerald-500/30' : ''}
                 ${isDeclined ? 'border-purple-500/30' : ''}

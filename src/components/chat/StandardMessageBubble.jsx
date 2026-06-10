@@ -1,5 +1,6 @@
 import React from 'react';
-import { CheckCheck } from 'lucide-react';
+import { CheckCheck, Clock } from 'lucide-react';
+
 
 export const StandardMessageBubble = ({ message, isMe, isClosed }) => {
     return (
@@ -12,7 +13,22 @@ export const StandardMessageBubble = ({ message, isMe, isClosed }) => {
                     </p>
                 </div>
                 <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-zinc-700 px-1">
-                    {isMe && <CheckCheck size={10} className={isClosed ? 'text-zinc-800' : 'text-blue-500'} />}
+                    {isMe && message.status === 'sending' && (
+                        <Clock size={10} className="text-zinc-500 animate-pulse" />
+                    )}
+                    {isMe && message.status === 'error' && (
+                        <span className="text-red-500 flex items-center gap-1 font-bold">Falló ✗</span>
+                    )}
+                    {isMe && message.status === 'sent' && (
+                        <CheckCheck
+                            size={10}
+                            className={
+                                isClosed ? 'text-zinc-800'
+                                    : message.isRead ? 'text-blue-500'
+                                        : 'text-zinc-500'
+                            }
+                        />
+                    )}
                     <span>
                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
@@ -21,3 +37,5 @@ export const StandardMessageBubble = ({ message, isMe, isClosed }) => {
         </div>
     );
 };
+
+export default StandardMessageBubble;

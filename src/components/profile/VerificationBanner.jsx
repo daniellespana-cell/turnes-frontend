@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BadgeCheck, Sparkles, ChevronRight } from 'lucide-react';
+
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
@@ -8,24 +9,27 @@ const VerificationBanner = ({ variant = 'business' }) => { // 'business' | 'work
     const navigate = useNavigate();
     const { user } = useAuth();
 
-    // 🧠 SMART LOGIC: Auto-hide if already verified
-    if (user?.isVerified) return null;
+    // 🧹 CLEANUP: Hide for workers (logic removed)
+    if (variant === 'worker') return null;
 
-    // Configuración por Rol
+    // 🧠 SMART LOGIC: Auto-hide if already verified
+    if (user?.verificado) return null;
+
+    // Configuración por Rol (Precios Fijos - No Inventados)
     const config = variant === 'worker' ? {
         title: "Verificación Profesional",
         badge: "Talento",
         desc: "Destaca tu perfil y accede a vacantes VIP.",
         stat: "prioridad de contratación",
-        price: "$15.000", // Precio ajustado para trabajador (ejemplo)
-        route: '/dashboard/verification-checkout-worker' // Ruta hipotética o la misma
+        price: "$15.000",
+        route: `/plan-action/verify` 
     } : {
         title: "Verificación Elite",
         badge: "Premium",
         desc: "Atrae más postulantes con el sello de confianza.",
         stat: "más postulantes",
-        price: "$20.000",
-        route: '/dashboard/verification-checkout'
+        price: "$25.000",
+        route: `/plan-action/verify`
     };
 
     return (
@@ -47,7 +51,7 @@ const VerificationBanner = ({ variant = 'business' }) => { // 'business' | 'work
 
                 {/* Contenido Izquierda */}
                 <div className="flex items-center gap-4 relative z-10 w-full sm:w-auto">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-emerald-500/20 border border-white/10 flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-emerald-500/20 border border-transparent flex items-center justify-center shrink-0">
                         <BadgeCheck size={28} className="text-emerald-400" fill="currentColor" fillOpacity={0.2} />
                     </div>
 
@@ -81,7 +85,9 @@ const VerificationBanner = ({ variant = 'business' }) => { // 'business' | 'work
 
                     {/* Precio Móvil */}
                     <div className="text-right sm:hidden">
-                        <p className="text-lg font-black text-white">{config.price.replace('.000', 'k')}</p>
+                        <p className="text-lg font-black text-white">
+                            {config.price.replace('.000', 'k')}
+                        </p>
                     </div>
                 </div>
             </div>

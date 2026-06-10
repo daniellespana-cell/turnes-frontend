@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 /**
  * Botón de Google Estandarizado.
  * @param {function} onClick - Función a ejecutar al hacer click.

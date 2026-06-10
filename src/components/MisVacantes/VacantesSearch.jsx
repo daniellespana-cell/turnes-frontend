@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search } from 'lucide-react';
 
+
 const VacantesSearch = ({ query, setQuery }) => {
   return (
     <div className="relative group w-full md:w-64">

@@ -1,7 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { CheckCircle, Briefcase, Zap, Star, ShieldCheck, Clock } from 'lucide-react';
+import { CheckCircle, Briefcase } from 'lucide-react';
+
+import { Zap, Star, ShieldCheck, Clock } from 'lucide-react';
 
 const Beneficios = () => {
   return (
@@ -27,7 +29,7 @@ const Beneficios = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
 
           {/* CARD 1: EMPRESAS (Indigo) */}
-          <div className="relative group rounded-[2.5rem] p-8 md:p-12 border border-white/5 bg-gradient-to-br from-indigo-900/10 to-zinc-900/40 backdrop-blur-md overflow-hidden hover:border-indigo-500/30 transition-all duration-500">
+          <div className="relative group rounded-[2.5rem] p-8 md:p-12 border border-transparent bg-gradient-to-br from-indigo-900/10 to-zinc-900/40 backdrop-blur-md overflow-hidden  transition-all duration-500">
             {/* Glow Effect */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] group-hover:bg-indigo-500/20 transition-all duration-500"></div>
 
@@ -61,7 +63,7 @@ const Beneficios = () => {
           </div>
 
           {/* CARD 2: TRABAJADORES (Emerald) */}
-          <div className="relative group rounded-[2.5rem] p-8 md:p-12 border border-white/5 bg-gradient-to-br from-emerald-900/10 to-zinc-900/40 backdrop-blur-md overflow-hidden hover:border-emerald-500/30 transition-all duration-500">
+          <div className="relative group rounded-[2.5rem] p-8 md:p-12 border border-transparent bg-gradient-to-br from-emerald-900/10 to-zinc-900/40 backdrop-blur-md overflow-hidden  transition-all duration-500">
             {/* Glow Effect */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] group-hover:bg-emerald-500/20 transition-all duration-500"></div>
 

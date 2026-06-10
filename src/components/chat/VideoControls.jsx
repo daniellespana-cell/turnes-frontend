@@ -1,9 +1,10 @@
 import React from 'react';
-import { Mic, MicOff, Video as VideoIcon, VideoOff, X } from 'lucide-react';
+import { Mic, MicOff, VideoIcon, VideoOff, X } from 'lucide-react';
+
 
 export const VideoControls = ({ isMuted, isVideoOff, onToggleAudio, onToggleVideo, onClose }) => {
   return (
-    <div className="flex items-center gap-6 md:gap-10 px-6 md:px-8 py-2 bg-black/40 backdrop-blur-3xl border border-white/5 rounded-[2.5rem]">
+    <div className="flex items-center gap-6 md:gap-10 px-6 md:px-8 py-2 bg-black/40 backdrop-blur-3xl border border-transparent rounded-[2.5rem]">
       <button 
         onClick={onToggleAudio} 
         className={`flex items-center justify-center transition-all active:scale-90 ${isMuted ? 'text-red-500' : 'text-zinc-500 hover:text-white'}`}
@@ -28,3 +29,4 @@ export const VideoControls = ({ isMuted, isVideoOff, onToggleAudio, onToggleVide
     </div>
   );
 };
+export default VideoControls;

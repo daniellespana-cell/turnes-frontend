@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
+
 /**
  * Componente de Llamada a la Acción (CTA) Final.
  * Utilizado para fomentar la inscripción en la red Turnes.

@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Allow: /explorar
+Allow: /acerca-de
+Allow: /contacto
+Allow: /privacidad
+Allow: /terminos
+Allow: /politicas
+Allow: /politica-pagos
+
+Disallow: /dashboard/
+Disallow: /auth/
+Disallow: /onboarding/
+Disallow: /checkout/
+Disallow: /admin/
+Disallow: /verification/
+
+Sitemap: https://turnes.co/sitemap.xml

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+
 const TurnesButton = ({
     children,
     onClick,
@@ -15,8 +16,8 @@ const TurnesButton = ({
     // VARIANTES (Estilos Base)
     // VARIANTES (Estilos Base)
     const variants = {
-        primary: "bg-[#21c99a] hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 border border-white/10",
-        secondary: "bg-white/5 hover:bg-white/10 text-white border border-white/10 shadow-lg shadow-black/20",
+        primary: "bg-[#21c99a] hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 border border-transparent",
+        secondary: "bg-white/5 hover:bg-white/10 text-white border border-transparent shadow-lg shadow-black/20",
         danger: "bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20",
         ghost: "bg-transparent hover:bg-white/5 text-zinc-400 hover:text-white"
     };

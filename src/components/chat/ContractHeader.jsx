@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Lock, History } from 'lucide-react';
 
+
 export const ContractHeader = ({ isSealed, isConfirmed, transactionId }) => {
 
     // Style Logic
@@ -43,3 +44,5 @@ export const ContractHeader = ({ isSealed, isConfirmed, transactionId }) => {
         </div>
     );
 };
+
+export default ContractHeader;

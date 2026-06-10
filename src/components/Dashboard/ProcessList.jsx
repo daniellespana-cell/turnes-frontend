@@ -1,6 +1,7 @@
 import React from 'react';
 import { Zap, ArrowUpRight, AlertCircle } from 'lucide-react';
 
+
 /**
  * ProcessList Nano-Scale: Botón con transición cromática garantizada.
  */
@@ -14,7 +15,7 @@ export const ProcessList = ({ activeProcess }) => {
         </h2>
       </div>
 
-      <div className="bg-zinc-900/10 border border-white/5 rounded-xl overflow-hidden transition-all duration-500">
+      <div className="bg-zinc-900/10 border border-transparent rounded-xl overflow-hidden transition-all duration-500">
 
         {/* Item de Decisión Crítica */}
         <div className="group flex flex-col md:flex-row items-center justify-between p-4 bg-black/20 hover:bg-white/[0.02] transition-all gap-4 border-b border-white/5 last:border-0 rounded-t-xl">
@@ -34,7 +35,7 @@ export const ProcessList = ({ activeProcess }) => {
           </div>
 
           {/* BOTÓN DARK GLASS */}
-          <button className="w-full md:w-auto px-5 py-2 bg-zinc-900 border border-white/10 text-zinc-300 rounded-lg text-[9px] font-bold uppercase tracking-widest shadow-sm hover:bg-zinc-800 hover:text-white hover:border-white/20 transition-all duration-200 active:scale-95 relative overflow-hidden group/btn">
+          <button className="w-full md:w-auto px-5 py-2 bg-zinc-900 border border-transparent text-zinc-300 rounded-lg text-[9px] font-bold uppercase tracking-widest shadow-sm hover:bg-zinc-800 hover:text-white  transition-all duration-200 active:scale-95 relative overflow-hidden group/btn">
             <span className="relative z-10 text-[8px]">Elegir Candidato</span>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1s_infinite] z-0" />
           </button>
@@ -54,3 +55,4 @@ export const ProcessList = ({ activeProcess }) => {
     </section>
   );
 };
+export default ProcessList;

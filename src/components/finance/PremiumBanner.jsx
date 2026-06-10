@@ -1,33 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { ArrowRight, Crown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, ArrowRight } from 'lucide-react';
 
 const PremiumBanner = ({ currentPlan = 'Basic' }) => {
   const navigate = useNavigate();
   const [highlight, setHighlight] = useState(false);
 
-  // Normalizar plan para evitar errores de case
   const plan = (currentPlan || 'Basic').toLowerCase();
-
-  // 1. Lógica Smart: Si es PRO o Enterprise, no molestamos al usuario (Dashboard Limpio)
   const isPaidPlan = ['pro', 'enterprise'].some(p => plan.startsWith(p));
   if (isPaidPlan) return null;
 
-  // 2. Configuración Dinámica del Mensaje (Upselling Inteligente)
   const config = {
-    // Caso: Usuario Gratuito o Básico -> Objetivo: Micro o Pro
     basic: {
       savings: "$24.500",
       text: "Tu plan Básico es bueno, pero Pro desbloquea más.",
       target: "Pro"
     },
-    // Caso: Usuario Micro -> Objetivo: Pro
     micro: {
       savings: "$45.000",
       text: "Estás creciendo. Pásate a Pro para eliminar límites.",
       target: "Pro"
     },
-    // Fallback
     default: {
       savings: "$24.500",
       text: "Mejora tu plan para desbloquear funciones premium.",
@@ -40,47 +36,72 @@ const PremiumBanner = ({ currentPlan = 'Basic' }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setHighlight(true);
-      setTimeout(() => setHighlight(false), 1800);
-    }, 5000);
+      setTimeout(() => setHighlight(false), 2000);
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className={`relative border rounded-2xl p-5 space-y-4 overflow-hidden transition-all duration-700 group ${highlight
-      ? 'bg-gradient-to-br from-blue-900/30 to-emerald-900/30 border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.15)]'
-      : 'bg-gradient-to-br from-blue-900/10 to-emerald-900/10 border-blue-500/10'
-      }`}>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className={`relative border rounded-[2rem] p-6 space-y-5 overflow-hidden transition-all duration-1000 group ${highlight
+        ? 'bg-amber-500/[0.03] border-amber-500/30 shadow-[0_0_40px_rgba(245,158,11,0.1)]'
+        : 'bg-[#0a0a0a] border-white/5'
+        }`}
+    >
+      {/* Premium Gradient Shimmer */}
+      <AnimatePresence>
+        {highlight && (
+          <motion.div
+            initial={{ x: '-100%' }}
+            animate={{ x: '200%' }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500/10 to-transparent z-0"
+          />
+        )}
+      </AnimatePresence>
 
-      {/* Efecto de brillo pasante */}
-      <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full transition-transform duration-1000 ${highlight ? 'translate-x-[200%]' : ''
-        }`} />
-
-      <div className="flex items-center gap-2 text-blue-400/80">
-        <Sparkles size={14} className={highlight ? "animate-pulse text-blue-300" : ""} />
-        <span className="text-[9px] font-bold uppercase tracking-widest">Sugerencia Inteligente</span>
+      <div className="flex items-center justify-between relative z-10">
+        <div className="flex items-center gap-2.5">
+          <div className={`p-2 rounded-xl transition-all duration-700 ${highlight ? 'bg-amber-500 text-black' : 'bg-amber-500/10 text-amber-500'}`}>
+            <Crown size={14} strokeWidth={2.5} />
+          </div>
+          <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors duration-700 ${highlight ? 'text-amber-400' : 'text-zinc-500'}`}>
+            Sugerencia Inteligente
+          </span>
+        </div>
+        <div className="flex gap-1">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className={`w-1 h-1 rounded-full ${highlight ? 'bg-amber-500' : 'bg-zinc-800'}`} />
+          ))}
+        </div>
       </div>
 
-      <div className="space-y-1">
-        <h3 className="text-white text-base font-bold leading-tight relative z-10">
-          Ahorros potenciales: {activeConfig.savings}
+      <div className="space-y-2 relative z-10">
+        <h3 className="text-white text-lg font-black leading-tight tracking-tight">
+          Ahorros potenciales: <span className="text-amber-500">{activeConfig.savings}</span>
         </h3>
-        <p className="text-zinc-500 text-[11px] font-medium leading-relaxed">
+        <p className="text-zinc-500 text-xs font-medium leading-relaxed max-w-[280px]">
           {activeConfig.text}
         </p>
       </div>
 
       <button
         onClick={() => navigate("/dashboard/upgrade")}
-        className="w-full relative z-10 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white border border-white/5 hover:border-white/10 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95 overflow-hidden group/btn"
+        className={`w-full relative z-10 flex items-center justify-center gap-3 py-3 rounded-full text-[11px] font-bold tracking-wide transition-all duration-500 active:scale-[0.98] overflow-hidden group/btn ${highlight
+          ? 'bg-amber-500 text-black shadow-[0_0_30px_rgba(245,158,11,0.5)]'
+          : 'bg-zinc-900 text-zinc-400 hover:text-white border border-transparent hover:border-amber-500/30 font-manrope'
+          }`}
       >
-        {/* Estela Esmeralda en el Botón */}
-        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent -translate-x-full transition-transform duration-1000 ${highlight ? 'translate-x-[200%]' : ''
-          }`} />
-
-        <span className="relative z-10">Ver Planes {activeConfig.target}</span>
-        <ArrowRight size={12} className="opacity-60 relative z-10" />
+        <span className="relative z-10">Actualizar a {activeConfig.target}</span>
+        <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
       </button>
-    </div>
+
+      {/* Decorative Orbs */}
+      <div className={`absolute -bottom-12 -right-12 w-32 h-32 bg-amber-500/10 blur-[60px] rounded-full transition-opacity duration-1000 ${highlight ? 'opacity-100' : 'opacity-0'}`} />
+    </motion.div>
   );
 };
 

@@ -1,12 +1,13 @@
 import React from 'react';
 
+
 // Google Icon Button - Ultra Modern (Flat/Clean)
 export const GoogleButton = ({ onClick }) => (
     <div className="flex justify-center w-full">
         <button
             type="button"
             onClick={onClick}
-            className="group relative flex items-center justify-center w-10 h-10 bg-white/5 hover:bg-white/10 border border-white/5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95"
+            className="group relative flex items-center justify-center w-10 h-10 bg-white/5 hover:bg-white/10 border border-transparent rounded-full transition-all duration-300 hover:scale-105 active:scale-95"
             aria-label="Continuar con Google"
         >
             <svg className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity duration-300" viewBox="0 0 24 24">

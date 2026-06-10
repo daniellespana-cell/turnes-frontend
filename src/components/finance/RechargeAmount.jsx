@@ -1,6 +1,7 @@
 import React from 'react';
 import { CreditCard, AlertCircle } from 'lucide-react';
 
+
 const RechargeAmount = ({ amount, setAmount, onAmountChange }) => {
   const MIN_AMOUNT = 20000;
   const QUICK_AMOUNTS = [20000, 50000, 100000, 200000, 500000];
@@ -31,10 +32,10 @@ const RechargeAmount = ({ amount, setAmount, onAmountChange }) => {
   };
 
   return (
-    <div className="bg-[#0f0f10] border border-white/5 rounded-2xl p-5 space-y-4 transition-all hover:bg-[#0f0f10]/80">
+    <div className="bg-[#0f0f10] border border-transparent rounded-2xl p-5 space-y-4 transition-all hover:bg-[#0f0f10]/80">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 bg-zinc-900 rounded-md text-emerald-400 border border-white/5">
+          <div className="p-1.5 bg-zinc-900 rounded-md text-emerald-400 border border-transparent">
             <CreditCard size={14} />
           </div>
           <h2 className="text-zinc-400 text-xs font-bold uppercase tracking-widest">Monto de Recarga</h2>
@@ -76,7 +77,7 @@ const RechargeAmount = ({ amount, setAmount, onAmountChange }) => {
             onClick={() => handleQuickAmount(val)}
             className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border active:scale-95 ${amount === val
               ? 'bg-white text-black border-white shadow-lg shadow-white/10'
-              : 'bg-transparent text-zinc-500 border-white/5 hover:border-white/20 hover:text-zinc-300'
+              : 'bg-transparent text-zinc-500 border-white/5  hover:text-zinc-300'
               }`}
           >
             ${(val / 1000)}k

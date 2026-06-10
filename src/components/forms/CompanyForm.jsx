@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
+import MessageBox from '../ui/MessageBox';
+import { Divider, GoogleButton } from '../ui/SocialButtons';
+
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService'; // Conexión Real
-import MessageBox from '../ui/MessageBox';
-import { Divider } from '../ui/SocialButtons';
-import GoogleButton from '../ui/GoogleButton';
+import { validatePasswordStrength } from '../../utils/validationUtils';
 
 const FormClasses = {
     inputGroup: "space-y-0.5", // Tighter label spacing
-    input: "w-full px-3 py-2 bg-zinc-900/50 border border-white/5 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm hover:border-white/10",
+    input: "w-full px-3 py-2 bg-zinc-900/50 border border-transparent rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm ",
     label: "text-[10px] font-medium text-zinc-400 uppercase tracking-wider ml-0.5" // More subtle label
 };
 
@@ -35,9 +37,10 @@ const CompanyForm = () => {
             return;
         }
 
-        // 2. Validation: Password Strength (Basic)
-        if (password.length < 6) {
-            setStatus({ message: "La contraseña debe tener al menos 6 caracteres.", type: "error" });
+        // 2. Validation: Password Strength (Strict)
+        const passwordValidation = validatePasswordStrength(password);
+        if (!passwordValidation.isValid) {
+            setStatus({ message: passwordValidation.error, type: "error" });
             setIsLoading(false);
             return;
         }
@@ -73,7 +76,7 @@ const CompanyForm = () => {
 
     const handleGoogleLogin = async () => {
         try {
-            await authService.loginWithGoogle();
+            await authService.loginWithGoogle('empresa');
         } catch (error) {
             console.error("Google Login Error:", error);
             setStatus({ message: "Error iniciando con Google.", type: "error" });
@@ -126,6 +129,7 @@ const CompanyForm = () => {
                             className={FormClasses.input}
                             placeholder="••••••••"
                         />
+                        <p className="text-[9px] text-zinc-500 mt-1 ml-1 leading-tight">Mín. 8 caracteres, 1 mayúscula, 1 número y 1 símbolo.</p>
                     </div>
                     <div className={FormClasses.inputGroup}>
                         <label htmlFor="confirmPassword" className={FormClasses.label}>Confirmar</label>

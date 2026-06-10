@@ -1,15 +1,16 @@
 import React from 'react';
 import { Zap } from 'lucide-react';
 
-const ImpulsoSwitch = ({ isUrgent, onChange }) => {
+
+const ImpulsoSwitch = ({ isUrgent, onChange, precio = 7000 }) => {
   return (
-    <div className="bg-zinc-900/60 border border-white/10 rounded-[2rem] p-6 shadow-2xl relative overflow-hidden group transition-all hover:border-orange-500/30 font-manrope">
+    <div className="bg-zinc-900/60 rounded-[2rem] p-6 relative overflow-hidden group transition-all font-manrope">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div
             className={`p-2.5 rounded-xl transition-all duration-500 ${
               isUrgent
-                ? 'bg-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.5)]'
+                ? 'bg-orange-500 text-white'
                 : 'bg-zinc-800 text-zinc-500'
             }`}
           >
@@ -49,7 +50,7 @@ const ImpulsoSwitch = ({ isUrgent, onChange }) => {
               isUrgent ? 'text-orange-500 animate-pulse' : 'text-zinc-600'
             }`}
           >
-            + $7.000
+            + ${new Intl.NumberFormat('es-CO').format(precio)}
           </span>
           <span className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">
             COP

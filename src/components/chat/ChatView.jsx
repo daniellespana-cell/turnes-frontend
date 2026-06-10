@@ -1,7 +1,8 @@
 import React from 'react';
-import { ChatHeader } from './ChatHeader';
-import { MessageList } from './MessageList';
-import { ChatInput } from './ChatInput';
+import ChatHeader from './ChatHeader';
+import MessageList from './MessageList';
+import ChatInput from './ChatInput';
+
 
 const ChatView = ({
   chat,
@@ -9,19 +10,24 @@ const ChatView = ({
   isClosed: isClosedFromPage, // Renombramos para claridad
   onStartVideo,
   onEjecutarAcuerdo, // Paso 3 (Lógica)
+  onSealChat, // Paso 4 (Red Confianza)
   onFinalizeNavigation, // Paso 4 (Navegación)
-  userRole // 🆕
+  userRole, // 🆕
+  videoStats, // 🆕
+  isPanelOpen,
+  setIsPanelOpen
 }) => {
 
   const {
     messages = [],
     enviarMensaje,
-    isPanelOpen = true,
-    setIsPanelOpen = () => { },
     invitarAVideo,
+    aceptarInvitacionVideo, // 🆕
     isPaid = false,
     declinarValidacionVideo,
     ejecutarAcuerdo,
+    onAcceptRehire,
+    onDeclineRehire,
     permisos // Extraemos permisos para tener el 'reason' y 'canWrite'
   } = chat || {};
 
@@ -44,7 +50,7 @@ const ChatView = ({
   );
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 border-r border-white/5 relative h-full">
+    <div className="flex-1 flex flex-col min-w-0 relative h-full">
 
       {/* HEADER: Recibe el estado real de clausura */}
       <ChatHeader
@@ -53,6 +59,8 @@ const ChatView = ({
         onVideoInvite={invitarAVideo}
         isPaid={isPaid}
         isClosed={realIsClosed}
+        userRole={userRole}
+        videoStats={videoStats}
       />
 
       {/* ÁREA DE MENSAJES */}
@@ -64,16 +72,23 @@ const ChatView = ({
           // 🧠 LÓGICA SEPARADA
           onExecute={onEjecutarAcuerdo || ejecutarAcuerdo}
           onFinalize={onFinalizeNavigation}
+          onSealChat={onSealChat}
           // 🚀 ULTRA UX: Pasar la función para invitar desde el chat
           onInviteVideo={invitarAVideo}
+          aceptarInvitacionVideo={aceptarInvitacionVideo}
+          onAcceptRehire={onAcceptRehire}
+          onDeclineRehire={onDeclineRehire}
           candidato={candidato}
+          activeStep={chat?.activeStep}
           // Pasamos flags para que MessageList sepa qué cartel mostrar
           isPaid={isPaid}
           isClosed={realIsClosed}
           // 🆕 PROPS PARA MOBILE DASHBOARD
           finanzas={chat?.finanzas}
           permisos={chat?.permisos}
-          onPay={chat?.abrirModalPago}
+          onPay={chat?.ejecutarPagoComision}
+          isFinalizing={chat?.isFinalizing}
+          userRole={userRole}
         />
       </div>
 
@@ -86,6 +101,8 @@ const ChatView = ({
           canWrite={permisos?.canWrite}
           isClosed={realIsClosed}
           userRole={userRole} // 🆕
+          isContracted={candidato?.status === 'contratado'}
+          isRehire={isRehireActive} // 🆕 FAST-TRACK Context
         />
       </div>
 

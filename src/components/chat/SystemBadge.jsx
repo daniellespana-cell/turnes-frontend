@@ -1,5 +1,7 @@
 import React from 'react';
-import { ShieldCheck, AlertTriangle, Clock, Sparkles, Zap, Heart, Handshake } from 'lucide-react';
+import { Clock, Sparkles } from 'lucide-react';
+
+import { ShieldCheck, AlertTriangle, Zap, Heart, Handshake } from 'lucide-react';
 
 export const SystemBadge = ({ msg }) => {
   // 1. Detección de Temas por Contenido o Tipo de Mensaje
@@ -35,11 +37,11 @@ export const SystemBadge = ({ msg }) => {
         {/* Glow dinámico de fondo */}
         <div className={`absolute inset-0 ${theme.glow} blur-[25px] rounded-full opacity-40`} />
         
-        <div className={`relative bg-[#0A0A0A] border ${theme.border} rounded-2xl p-4 shadow-2xl overflow-hidden`}>
+        <div className={`relative bg-[#0A0A0A] border ${theme.border} rounded-2xl p-4  overflow-hidden`}>
           
           {/* Cabecera institucional */}
           <div className="flex items-center gap-2.5 mb-2.5">
-            <div className={`p-1.5 rounded-lg bg-white/[0.03] border border-white/5 shadow-inner ${theme.iconColor}`}>
+            <div className={`p-1.5 rounded-lg bg-white/[0.03] border border-transparent shadow-inner ${theme.iconColor}`}>
               <theme.Icon size={12} />
             </div>
             <div className="flex flex-col">

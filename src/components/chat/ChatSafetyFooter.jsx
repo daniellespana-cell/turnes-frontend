@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Archive } from 'lucide-react';
 
+
 export const ChatSafetyFooter = ({ isPaid, isClosed }) => {
     if (!isPaid && !isClosed) {
         return (
@@ -40,3 +41,5 @@ export const ChatSafetyFooter = ({ isPaid, isClosed }) => {
 
     return null;
 };
+
+export default ChatSafetyFooter;

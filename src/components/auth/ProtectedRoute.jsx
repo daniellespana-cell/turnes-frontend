@@ -1,6 +1,9 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { logger } from '../../utils/logger';
 
 /**
  * PROTECTED ROUTE (Senior Hardening)
@@ -29,16 +32,15 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  // 3. Profile Gate (The "Complete Profile" Check)
-  // Logic: If user is authenticated but has no name, force them to complete it.
-  // Exception: Don't redirect if we are ALREADY at the profile/onboarding page to avoid loops.
-  const isProfileIncomplete = !user.nombre_display || user.nombre_display === 'Usuario Nuevo';
-  const isOnboardingPage = location.pathname.includes('/perfil') || location.pathname.includes('/onboarding');
-
-  if (isProfileIncomplete && !isOnboardingPage) {
-    console.log("⚠️ Profile Incomplete -> Redirecting to Profile Settings");
-    return <Navigate to="/dashboard/perfil" replace />;
+  // 3. Identity Wall (Onboarding Gate)
+  // Logic: Si el rol en BD es 'pendiente', están atrapados en el registro.
+  const isAtOnboarding = location.pathname.includes('/register');
+  if (user.needs_onboarding && !isAtOnboarding) {
+    logger.info("🧱 Identity Wall -> Redirecting to Role Selection");
+    return <Navigate to="/register" replace />;
   }
+
+  // 4. Access Granted
 
   // 4. Access Granted
   return children;
