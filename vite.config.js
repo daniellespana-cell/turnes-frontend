@@ -81,16 +81,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'supabase-vendor': ['@supabase/supabase-js'],
-          'ui-vendor': ['framer-motion', 'lucide-react', 'sonner'],
-          'map-vendor': ['leaflet', 'react-leaflet']
-        }
-      },
-    },
   },
   
   // 🔧 Configuración de preview (para producción local)
