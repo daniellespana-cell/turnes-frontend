@@ -1,5 +1,4 @@
 import React from 'react';
-import { Globe, Moon, Sun } from 'lucide-react';
 import ToggleItem from '../ToggleItem';
 
 import { Eye, UserCheck } from 'lucide-react';

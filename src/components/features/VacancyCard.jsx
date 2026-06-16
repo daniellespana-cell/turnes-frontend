@@ -40,10 +40,10 @@ const VacancyCard = ({
             whileHover={{ y: -4 }}
             onClick={handleCardActivate}
             onKeyDown={handleCardKey}
-            className={`group relative bg-zinc-900/30 backdrop-blur-xl rounded-3xl p-4 md:p-5 pb-5 md:pb-6 hover:bg-zinc-900/60 transition-all duration-500 flex flex-col justify-between h-full min-w-[280px] md:min-w-0 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 border
+            className={`group relative bg-zinc-900/30 backdrop-blur-xl rounded-3xl p-5 md:p-6 pb-5 md:pb-6 hover:bg-zinc-900/60 transition-all duration-500 flex flex-col justify-between h-full min-w-[340px] md:min-w-0 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 border
                 ${vacancy.esUrgente && (!vacancy.urgenteExpiracion || new Date(vacancy.urgenteExpiracion) > new Date())
                     ? 'border-orange-500/30 shadow-[0_0_20px_rgba(234,88,12,0.1)]'
-                    : 'border-transparent'
+                    : 'border-zinc-800/60'
                 }`}
         >
             {/* 1. STATUS BADGES */}
@@ -78,21 +78,29 @@ const VacancyCard = ({
             <div>
                 <CardHeader vacancy={vacancy} />
 
-                <div className="mb-3 md:mb-4">
-                    <h4 className="text-[13px] md:text-sm font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors leading-tight mb-2 line-clamp-1">
+                <div className="mb-4">
+                    {/* Título */}
+                    <h4 className="text-sm md:text-[15px] font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors leading-snug mb-3 line-clamp-1">
                         {vacancy.title}
                     </h4>
-                    <div className="flex items-baseline gap-1 bg-white/5 w-fit px-2.5 py-1 rounded-xl border border-transparent">
-                        <span className="text-sm md:text-lg font-black text-white tracking-tighter tabular-nums">
-                            {vacancy.priceLabel}
-                        </span>
-                        {vacancy.price > 0 && <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider">/ turno</span>}
-                    </div>
-                </div>
 
-                <p className="text-[10px] md:text-xs text-zinc-400 leading-relaxed line-clamp-2 mb-3 md:mb-4 border-l-2 border-white/5 pl-2.5">
-                    {vacancy.description || 'Toca para ver más información.'}
-                </p>
+                    {/* Precio + descripción en fila */}
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="flex items-baseline gap-1 bg-white/5 px-3 py-1.5 rounded-xl border border-white/5 shrink-0">
+                            <span className="text-base md:text-xl font-black text-white tracking-tighter tabular-nums">
+                                {vacancy.priceLabel}
+                            </span>
+                            {vacancy.price > 0 && (
+                                <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider">/ turno</span>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Descripción */}
+                    <p className="text-[11px] md:text-xs text-zinc-400 leading-relaxed line-clamp-2 border-l-2 border-emerald-500/20 pl-3">
+                        {vacancy.description || 'Toca para ver más información.'}
+                    </p>
+                </div>
             </div>
 
             {/* 3. ACTIONS FOOTER */}

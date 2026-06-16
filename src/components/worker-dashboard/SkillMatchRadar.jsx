@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Building2, ChevronRight, Sparkles } from 'lucide-react';
+import { AssetResolver } from '../../utils/assetHelper';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -75,7 +76,7 @@ const SkillMatchRadar = ({ companies, loading }) => {
                         <div className="relative shrink-0">
                             <div className="w-11 h-11 rounded-xl overflow-hidden bg-zinc-800 ring-1 ring-white/5">
                                 <img
-                                    src={company.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(company.name)}&background=27272a&color=a1a1aa&size=44`}
+                                    src={AssetResolver.getLogo(company.logo, company.name)}
                                     alt={company.name}
                                     className="w-full h-full object-cover"
                                 />

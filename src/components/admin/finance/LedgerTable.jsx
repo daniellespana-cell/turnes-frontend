@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import Spinner from '../../ui/Spinner';
 import AdminEmptyState from '../shared/AdminEmptyState';
-import { resolveUserName } from '../../../domain/admin.config';
 
 import { Database } from 'lucide-react';
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import TalentCard from '../../components/business/TalentCard';
 import TalentProfileModal from '../../components/business/TalentProfileModal';

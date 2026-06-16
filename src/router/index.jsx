@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { PageLoadingBar, GlobalAuthListener } from './RouterComponents';
 
-/* eslint-disable react-refresh/only-export-components */
+ 
 import React from 'react';
 import { 
     createBrowserRouter, 
@@ -31,10 +31,10 @@ import NotFound from '../pages/common/NotFound';
 
 // Layout components
 import ProtectedRoute from '../components/auth/ProtectedRoute';
+import GuestRoute from '../components/auth/GuestRoute';
 import CookieBanner from '../components/common/cookies/CookieBanner';
 import CookieSentinel from '../components/common/cookies/CookieSentinel';
 import CookieTrigger from '../components/common/cookies/CookieTrigger';
-import { useParams } from 'react-router-dom';
 
 /* =========================================================================
    PAGES (LAZY)
@@ -233,17 +233,26 @@ export const router = createBrowserRouter([
             {
                 element: <GlobalAuthListener />,
                 children: [
-                    // 1. PUBLIC LANDING & AUTH
-                    { index: true, element: <LandingPage /> },
-                    { path: PATHS.PUBLIC.LOGIN, element: <LoginPage /> },
-                    { path: PATHS.PUBLIC.REGISTER, element: <RegisterPage /> },
-                    { path: PATHS.PUBLIC.FORGOT_PASSWORD, element: <ForgotPasswordPage /> },
+                    // 1. PUBLIC LANDING & AUTH (Guest Only)
+                    {
+                        element: <GuestRoute><Outlet /></GuestRoute>,
+                        children: [
+                            { index: true, element: <LandingPage /> },
+                            { path: PATHS.PUBLIC.LOGIN, element: <LoginPage /> },
+                            { path: PATHS.PUBLIC.REGISTER, element: <RegisterPage /> },
+                            { path: PATHS.PUBLIC.FORGOT_PASSWORD, element: <ForgotPasswordPage /> },
+                        ]
+                    },
                     { path: PATHS.PUBLIC.UPDATE_PASSWORD, element: <UpdatePasswordPage /> },
                     { path: '/auth/callback', element: <AuthCallback /> },
 
-                    // 2. PUBLIC SHELL (Navbar + Footer)
+                    // 2. PUBLIC SHELL (Navbar + Footer) - Guest Only
                     {
-                        element: <LayoutDispatcher forceType="main" />,
+                        element: (
+                            <GuestRoute>
+                                <LayoutDispatcher forceType="main" />
+                            </GuestRoute>
+                        ),
                         children: [
                             { path: PATHS.PUBLIC.SEARCH, element: <SearchPage /> },
                             { path: PATHS.PUBLIC.EXPLORE, element: <ExplorePage /> },

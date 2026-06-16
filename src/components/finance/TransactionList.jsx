@@ -1,4 +1,4 @@
-import { CheckCircle2, Download, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import { Download, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import Spinner from '../ui/Spinner';
 
 import { formatCurrency } from '../../services/financeService';

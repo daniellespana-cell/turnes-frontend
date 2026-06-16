@@ -1,0 +1,164 @@
+\components\CreateVacante\CargoTagSelector.jsx: motion
+\components\CreateVacante\LocationPickerModal.jsx: motion
+\components\CreateVacante\SmartPredictiveSearch.jsx: motion, Icon
+\components\Dashboard\BoostFlowModal.jsx: motion
+\components\Dashboard\CommandCenterWidget.jsx: motion
+\components\Dashboard\DashboardHeader.jsx: motion, typography, unread
+\components\Dashboard\EliteBanner.jsx: motion, Icon
+\components\Dashboard\ProfileBanner.jsx: motion
+\components\Dashboard\QuickStart.jsx: motion
+\components\Dashboard\SolutionCard.jsx: motion
+\components\Dashboard\TalentRadar.jsx: motion
+\components\MisVacantes\VacantesTable.jsx: isLoading
+\components\MisVacantes\VacantesTabs.jsx: typography
+\components\admin\finance\LedgerTable.jsx: motion, resolveUserName
+\components\admin\finance\WompiGateway.jsx: motion, Icon
+\components\admin\shared\AdminEmptyState.jsx: Icon
+\components\admin\shared\AdminStatCard.jsx: motion, Icon
+\components\applications\WorkerApplicationCard.jsx: motion
+\components\business\InviteToVacancyModal.jsx: motion
+\components\business\TalentCard.jsx: motion
+\components\business\TalentProfileModal.jsx: motion
+\components\chat\ActionSteps.jsx: isPaid, permisos, config, confirmingPay, setConfirmingPay
+\components\chat\ChatListItem.jsx: typography
+\components\chat\ChatOverlays.jsx: isConfirmModalOpen, finanzas, handleConfirmPayment
+\components\chat\ConfirmPaymentModal.jsx: candidato
+\components\chat\MessageList.jsx: finanzas, permisos, onPay, activeStep
+\components\chat\MessageRenderer.jsx: handlers
+\components\chat\VideoInvitationCard.jsx: invitarAVideo
+\components\checkout\CardPaymentMethod.jsx: handleSuccess
+\components\common\CtaSection.jsx: motion
+\components\common\EmptyState.jsx: motion, Icon
+\components\common\ErrorView.jsx: motion
+\components\common\SectionCard.jsx: motion
+\components\common\cookies\CookieBanner.jsx: motion
+\components\common\cookies\CookieSentinel.jsx: loadExternalScript
+\components\common\cookies\CookieSettingsModal.jsx: motion
+\components\common\cookies\CookieTrigger.jsx: motion
+\components\configuracion\Configuracion.jsx: motion, navigate
+\components\configuracion\ToggleItem.jsx: Icon
+\components\configuracion\tabs\PreferencesTab.jsx: setLanguage, setTheme
+\components\configuracion\tabs\SecurityTab.jsx: Icon
+\components\contact\ContactForm.jsx: motion
+\components\detallePerfil\ReviewItem.jsx: typography
+\components\detalleVacante\HeaderDetalle.jsx: id
+\components\detalleVacante\PostulanteCard.jsx: motion
+\components\detalleVacante\VacancyGroupSection.jsx: motion
+\components\error\GlobalErrorBoundary.jsx: error
+\components\features\CompanyProfileModal.jsx: motion
+\components\features\ExploreContent.jsx: motion
+\components\features\ExploreHeader.jsx: Icon
+\components\features\FeatureCard.jsx: motion
+\components\features\RateEmployerModal.jsx: motion
+\components\features\VacancyCard.jsx: motion
+\components\features\VacancyDetailSheet.jsx: motion
+\components\features\VacancyFilterModal.jsx: motion
+\components\features\explore\ExploreCarouselSkeleton.jsx: motion
+\components\features\explore\ExploreGridList.jsx: motion
+\components\features\explore\ExploreMapView.jsx: motion
+\components\features\explore\ExploreSectionedList.jsx: motion
+\components\features\rate-employer\RatingStars.jsx: motion
+\components\features\reputation\ReceivedReviewsList.jsx: motion, typography
+\components\features\reputation\ReputationHero.jsx: motion, pendingCount
+\components\features\vacancy-detail\VacancyDetailInfoGrid.jsx: Icon
+\components\finance\PremiumBanner.jsx: motion
+\components\finance\StatCard.jsx: Icon
+\components\forms\JobSeekerForm.jsx: setRole
+\components\landing\Beneficios.jsx: motion
+\components\landing\FAQ.jsx: motion
+\components\landing\Hero.jsx: motion, wordAnimation, pulseAnimation, words
+\components\landing\HowItWorksModal.jsx: motion
+\components\landing\JobCarousel.jsx: motion
+\components\landing\ValueProps.jsx: motion
+\components\layout\AdminLayout.jsx: motion
+\components\layout\AppNavbar.jsx: motion, isSidebarExpanded, isMobileMenuOpen, setIsMobileMenuOpen
+\components\layout\BusinessLayout.jsx: isDashboard, isMobileMenuOpen, setIsMobileMenuOpen
+\components\layout\UserDropdown.jsx: Icon
+\components\modals\ChangePasswordModal.jsx: motion
+\components\navbar\DesktopSearchBar.jsx: motion
+\components\navbar\NotificationsMenu.jsx: motion, isUnread
+\components\notifications\NotificationItem.jsx: motion, Icon
+\components\pricing\FlashHireCard.jsx: motion
+\components\pricing\MicroserviceCard.jsx: motion
+\components\pricing\PagePricingCard.jsx: motion
+\components\pricing\PricingCard.jsx: motion, headerClass
+\components\pricing\SubscriptionPlanCard.jsx: motion
+\components\profile\ChangePasswordModal.jsx: motion
+\components\profile\ProfileForm.jsx: motion
+\components\profile\ProfileForm\IndustrialProfileSection.jsx: motion
+\components\profile\ProfileForm\ProfileActionIsland.jsx: motion
+\components\profile\ProfileForm\index.jsx: motion
+\components\profile\ProfileHeader.jsx: motion
+\components\profile\ProfileView.jsx: formattedRating
+\components\profile\VerificationBanner.jsx: motion
+\components\profile\WalletCard.jsx: motion
+\components\profile\shared\CustomSelect.jsx: motion
+\components\profile\shared\LocationSelector.jsx: motion
+\components\sections\RolPricingBlock.jsx: motion, fadeInUp
+\components\talent\CandidatoCard.jsx: motion, navigate
+\components\talent\CandidatosContent.jsx: motion
+\components\talent\ReputationBanner.jsx: motion
+\components\talent\WorkerProfile\IndustrialProfileSection.jsx: motion
+\components\talent\WorkerProfile\WorkerActionIsland.jsx: motion
+\components\talent\WorkerProfile\index.jsx: motion
+\components\ui\TurnesButton.jsx: motion
+\components\verification\VerificationDocUpload.jsx: motion
+\components\worker-dashboard\ActivityFeed.jsx: motion
+\components\worker-dashboard\DailyTip.jsx: motion
+\components\worker-dashboard\HeroStatsRing.jsx: motion
+\components\worker-dashboard\QuickStatsStrip.jsx: motion
+\components\worker-dashboard\SkillMatchRadar.jsx: motion
+\context\RegisterContext.jsx: useSearchParams
+\hooks\admin\useAdminUsers.js: name
+\hooks\chat\useChatLogic.js: user, contractStatus, declinarValidacionVideo
+\hooks\chat\useChatMessaging.js: permisos, config, initialized, sender
+\hooks\chat\useChatPayments.js: notificationObserver, companyName
+\hooks\chat\useChatVideo.js: cerrarVideo, res
+\hooks\useChatActions.js: messages
+\hooks\useContactForm.js: honeypot
+\hooks\useDashboard.js: useState, useEffect
+\hooks\useExploreVacancies.js: applicationService
+\hooks\useRechargePageLogic.js: showToast
+\hooks\useSettings.js: useState
+\hooks\useVacancyFetch.js: getSectorByTag, supabase, page
+\hooks\useWalletPageLogic.js: useMemo
+\hooks\useWorkerApplications.js: page
+\hooks\vacancy\useVacancyBilling.js: useMemo
+\pages\admin\AdminUsersPage.jsx: motion
+\pages\admin\VerificationDetailPage.jsx: motion
+\pages\admin\VerificationQueuePage.jsx: motion
+\pages\auth\AuthCallback.jsx: action
+\pages\auth\ForgotPasswordPage.jsx: motion
+\pages\auth\RegisterPage.jsx: useNavigate, useAuth
+\pages\auth\UpdatePasswordPage.jsx: motion
+\pages\business\BusinessRatings.jsx: motion
+\pages\business\MisVacantesPage.jsx: moverACompletada
+\pages\business\PlanActionPage.jsx: useEffect, isSummaryExpanded, setIsSummaryExpanded
+\pages\business\TalentSearchPage.jsx: useEffect
+\pages\business\TransactionStatusPage.jsx: setRef
+\pages\business\WalletPage.jsx: navigate
+\pages\common\InternalSearch.jsx: motion
+\pages\common\NotificationsPage.jsx: motion
+\pages\common\PlanesPage.jsx: motion
+\pages\common\UpgradePlanPage.jsx: motion
+\pages\legal\CookiePolicyPage.jsx: motion, brandPrimary
+\pages\legal\Pagos.jsx: motion
+\pages\legal\PoliticaPagos.jsx: motion
+\pages\legal\PoliticaPrivacidad.jsx: motion
+\pages\legal\Privacidad.jsx: motion
+\pages\legal\Terminos.jsx: motion
+\pages\legal\Usuarios.jsx: motion
+\pages\public\ContactPage.jsx: motion
+\pages\public\DetalleRolPage.jsx: useEffect, motion, accentColor
+\pages\public\ExplorePage.jsx: motion
+\pages\verification\VerificationFlowPage.jsx: motion
+\pages\worker\ExploreVacancies.jsx: motion, Icon
+\pages\worker\WorkerApplications.jsx: motion
+\pages\worker\WorkerRatings.jsx: motion
+\pages\worker\components\PendingRatingsList.jsx: motion
+\router\index.jsx: useParams
+\services\chat\chatNetwork.js: _userId
+\services\chat\chatRealtime.js: newRow, oldRow
+\services\matchService.js: allowedRoleIds
+\services\notificationObserver.js: onChange, err
+\utils\imageUtils.js: error, error

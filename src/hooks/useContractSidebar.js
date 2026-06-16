@@ -28,7 +28,7 @@ export const useContractSidebar = ({
 
     // 3. FINANCIAL CONFIG DERIVATION
     const { user } = useAuth();
-    const isEmpresa = user?.rol === 'empresa';
+    const isEmpresa = user?.role === 'empresa' || user?.role === 'BUSINESS_ROLE';
 
     const config = useMemo(() => {
         const cargo = finanzas?.cargoServicio ?? candidate?.billingConfig?.cargoServicio ?? 0;

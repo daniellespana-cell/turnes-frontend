@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, HelpCircle, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { useState } from 'react';

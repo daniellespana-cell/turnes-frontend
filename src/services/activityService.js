@@ -1,4 +1,3 @@
-import BaseService from './base/BaseService';
 
 import { supabase } from './supabaseClient';
 

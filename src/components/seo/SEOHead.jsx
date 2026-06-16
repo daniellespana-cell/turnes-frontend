@@ -15,12 +15,12 @@ import { useLocation } from 'react-router-dom';
 const SEOHead = ({
     title = "Turnes | Conecta Talento Verificado al Instante",
     description = "La plataforma #1 para encontrar turnos flexibles y contratar personal verificado en tiempo récord. Sin papeleo, pagos inmediatos.",
-    image = "https://turnes.app/og-image-default.jpg", // TODO: Reemplazar con URL real de producción
+    image = import.meta.env.VITE_DEFAULT_OG_IMAGE || "https://turnes.app/og-image-default.jpg",
     type = "website",
     jsonLd = null
 }) => {
     const { pathname } = useLocation();
-    const siteUrl = "https://turnes.app"; // TODO: Configurar variable de entorno
+    const siteUrl = import.meta.env.VITE_SITE_URL || "https://turnes.app";
     const currentUrl = `${siteUrl}${pathname}`;
     const fullTitle = title.includes("Turnes") ? title : `${title} | Turnes`;
 

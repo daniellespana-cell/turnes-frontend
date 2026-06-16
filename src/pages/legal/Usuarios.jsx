@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Info, Users, Clock, Zap, MessageSquare } from 'lucide-react';
+import { Zap, MessageSquare } from 'lucide-react';
 
 
 // === IMPORTACIONES REALES ===

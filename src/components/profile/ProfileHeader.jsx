@@ -61,8 +61,6 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
         }
     };
 
-    // La función compressImage local fue eliminada (Se usa imageUtils.js como SSOT)
-
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}

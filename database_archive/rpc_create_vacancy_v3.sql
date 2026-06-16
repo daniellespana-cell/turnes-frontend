@@ -17,7 +17,8 @@ CREATE OR REPLACE FUNCTION public.rpc_create_vacancy_v3(
     p_tipo_turno TEXT, -- 'temporal' o 'fijo'
     p_status TEXT,
     p_es_urgente BOOLEAN,
-    p_etiquetas TEXT[]
+    p_etiquetas TEXT[],
+    p_tipo_turno_id TEXT DEFAULT NULL
 ) RETURNS jsonb
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -67,6 +68,7 @@ BEGIN
         pago_monto,
         fecha_turno,
         tipo_turno,
+        tipo_turno_id,
         status,
         es_urgente,
         etiquetas
@@ -81,6 +83,7 @@ BEGIN
         p_pago_monto,
         NULLIF(p_fecha_turno, '')::timestamptz,
         p_tipo_turno,
+        p_tipo_turno_id,
         p_status::estado_vacante_enum,
         p_es_urgente,
         COALESCE(p_etiquetas, '{}'::text[])

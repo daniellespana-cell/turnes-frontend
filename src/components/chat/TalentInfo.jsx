@@ -2,7 +2,7 @@ import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { AssetResolver } from '../../utils/assetHelper';
 
-export const TalentInfo = ({ candidate, config, isPaid, isRehire, isSealed }) => {
+export const TalentInfo = ({ candidate, config, isPaid, isRehire, isSealed, isEmpresa }) => {
     return (
         <div className="flex-1 space-y-4">
             <h4 className="text-[8px] font-black uppercase tracking-[0.3em] text-zinc-700 px-1">
@@ -16,7 +16,7 @@ export const TalentInfo = ({ candidate, config, isPaid, isRehire, isSealed }) =>
                 <div className="flex items-center gap-3 relative z-10">
                     <div className="relative">
                         <img
-                            src={AssetResolver.getAvatar(candidate?.avatar, candidate?.name || 'Talento')}
+                            src={AssetResolver.getAvatar(candidate?.avatar_url || candidate?.perfil?.avatar_url || candidate?.avatar, candidate?.name || 'Talento')}
                             className="w-10 h-10 rounded-full object-cover border border-white/10"
                             alt="Talento"
                         />
@@ -38,20 +38,22 @@ export const TalentInfo = ({ candidate, config, isPaid, isRehire, isSealed }) =>
 
                 {/* Details: Plan & Pricing */}
                 <div className="space-y-5 pt-4 border-t border-white/5 relative z-10">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                            <span className="text-[7px] font-black text-zinc-700 uppercase tracking-widest">Plan Activo</span>
-                            <p className="text-[10px] font-bold uppercase text-emerald-600">
-                                {config.plan}
-                            </p>
+                    {isEmpresa && (
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <span className="text-[7px] font-black text-zinc-700 uppercase tracking-widest">Plan Activo</span>
+                                <p className="text-[10px] font-bold uppercase text-emerald-600">
+                                    {config.plan}
+                                </p>
+                            </div>
+                            <div className="space-y-0.5 text-right">
+                                <span className="text-[7px] font-black text-zinc-700 uppercase tracking-widest">{config.labelCobro || 'Cobro'}</span>
+                                <p className="text-[14px] font-black text-white">
+                                    ${config.cargo.toLocaleString()}
+                                </p>
+                            </div>
                         </div>
-                        <div className="space-y-0.5 text-right">
-                            <span className="text-[7px] font-black text-zinc-700 uppercase tracking-widest">Comisión</span>
-                            <p className="text-[14px] font-black text-white">
-                                ${config.cargo.toLocaleString()}
-                            </p>
-                        </div>
-                    </div>
+                    )}
                     <div className="pt-2 text-right">
                         <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Sueldo del Turno</span>
                         <p className="text-2xl font-light text-white tracking-tighter">

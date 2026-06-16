@@ -54,11 +54,12 @@ const PremiumBanner = ({ currentPlan = 'Basic' }) => {
       <AnimatePresence>
         {highlight && (
           <motion.div
+            key="premium-shimmer"
             initial={{ x: '-100%' }}
             animate={{ x: '200%' }}
             exit={{ opacity: 0 }}
             transition={{ duration: 2, ease: "easeInOut" }}
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500/10 to-transparent z-0"
+            className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-amber-500/10 to-transparent skew-x-12"
           />
         )}
       </AnimatePresence>

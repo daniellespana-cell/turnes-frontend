@@ -56,19 +56,16 @@ export const useWorkerDashboard = () => {
             }
 
             try {
-                // 🚀 Standardized Fetch via VacancyService
-                const { data, error } = await VacancyService.getFeed();
+                // 🚀 Optimized Fetch via PostGIS RPC (Bypasses RLS issues and filters by distance on DB)
+                const { data, error } = await GeoService.fetchNearby(lat, lng, 30, user.id);
 
                 if (!error && data) {
-                    // 1. Calculate distances and sort by proximity (client-side)
-                    const nearby = GeoService.filterNearby(data, { lat, lng }, 30);
-
                     // 2. Normalize and inject distance for UI
-                    const normalized = nearby.map(v => {
+                    const normalized = data.map(v => {
                         const norm = normalizeVacancy(v, new Map(), false);
                         return {
                             ...norm,
-                            distance: v.distanceLabel // From GeoService.filterNearby
+                            distance: v.distancia_mts ? `${(v.distancia_mts / 1000).toFixed(1)} km` : '1.0 km'
                         };
                     });
 

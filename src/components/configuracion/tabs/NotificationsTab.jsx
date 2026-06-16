@@ -1,5 +1,4 @@
 import React from 'react';
-import { Smartphone } from 'lucide-react';
 import ToggleItem from '../ToggleItem';
 
 import { Mail, Globe } from 'lucide-react';

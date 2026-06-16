@@ -42,7 +42,7 @@ const NavAccount = () => {
           </p>
         </div>
         <img
-          src={AssetResolver.getAvatar(user?.avatar || user?.avatarUrl, user?.name || user?.email || 'User')}
+          src={AssetResolver.getAvatar(user?.avatar_url || user?.avatar || user?.avatarUrl, user?.name || user?.email || 'User')}
           alt="Profile"
           className="h-9 w-9 rounded-full border-2 border-brand-success object-cover"
         />
@@ -51,12 +51,14 @@ const NavAccount = () => {
       {/* Dropdown Menu */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-52 bg-[#121212] border border-white/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200">
-          <div className="px-4 py-3 border-b border-white/5 bg-white/[0.02]">
-            <p className="text-[10px] uppercase tracking-wider text-white/40 font-bold">Estado de Cuenta</p>
-            <p className="text-sm font-bold text-brand-success mt-0.5">
-              {planNames[user.planId] || 'Plan Básico'}
-            </p>
-          </div>
+          {user.role === 'empresa' && (
+            <div className="px-4 py-3 border-b border-white/5 bg-white/[0.02]">
+              <p className="text-[10px] uppercase tracking-wider text-white/40 font-bold">Estado de Cuenta</p>
+              <p className="text-sm font-bold text-brand-success mt-0.5">
+                {planNames[user.planId] || 'Plan Básico'}
+              </p>
+            </div>
+          )}
 
           <div className="py-1">
             <Link

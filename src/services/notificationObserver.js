@@ -60,9 +60,10 @@ class NotificationObserver {
             .subscribe((status, err) => {
                 if (status === 'SUBSCRIBED') {
                     logger.info('✅ [Observer] Realtime conectado:', userId);
-                } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
-                    console.error(`❌ [Observer] Problema Realtime (${status}):`, err || 'Conexión perdida o rechazada por RLS/DB.');
+                } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+                    console.warn(`[Observer] Aviso Realtime (${status}): La conexión podría estar inestable.`);
                 }
+                // Silenciamos explícitamente el 'CLOSED' porque es el comportamiento normal al hacer logout
             });
     }
 
@@ -100,9 +101,19 @@ class NotificationObserver {
     }
 
     async deleteNotification(notificationId) {
-        const { error } = await supabase.from('notificaciones').delete().eq('id', notificationId);
-        if (error) console.error('[Observer] deleteNotification error:', error);
-        return !error;
+        const { data, error } = await supabase.rpc('rpc_delete_notification', {
+            p_notification_id: notificationId
+        });
+        if (error) {
+            console.error('[Observer] deleteNotification RPC error:', error);
+            throw error;
+        }
+        // data = false significa que no era suya (no debería pasar en uso normal)
+        if (data === false) {
+            console.warn('[Observer] deleteNotification: notificación no encontrada o no autorizada');
+            throw new Error('NOT_OWNER');
+        }
+        return true;
     }
 
     /**

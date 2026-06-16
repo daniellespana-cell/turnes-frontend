@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
 
 import { useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
-// CORRECCIÓN: Apuntamos al archivo que acabamos de restaurar
 import { useCandidatosLogic } from './useCandidatosLogic';
 import { formatCurrency } from '../services/financeService';
+import { useSyncExternalStore } from 'react';
+import { ChatStorage } from '../services/chat';
 
 export const useDashboard = () => {
   const { user } = useAuth();
@@ -13,10 +13,16 @@ export const useDashboard = () => {
 
   // ELIMINADO: const [loading, setLoading] = useState(true);
 
+  // Integración Global de Notificaciones de Chat en Tiempo Real
+  const chatSnapshot = useSyncExternalStore(ChatStorage.subscribe, ChatStorage.getSnapshot);
+  const safeUnread = useMemo(() => {
+    if (!chatSnapshot?.unreadCounts) return 0;
+    return Object.values(chatSnapshot.unreadCounts).reduce((acc, count) => acc + count, 0);
+  }, [chatSnapshot?.unreadCounts]);
+
   const dashboardData = useMemo(() => {
     // Return Safe Defaults immediately if data is missing
     const safeBalance = user ? formatCurrency(user.saldo || 0) : "$0";
-    const safeUnread = 0; // TODO: chats count
 
     // Default Empty Stats
     const defaultStats = {

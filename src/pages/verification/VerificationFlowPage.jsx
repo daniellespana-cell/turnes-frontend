@@ -1,11 +1,10 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import VerificationDocUpload from '../../components/verification/VerificationDocUpload';
 
 import React, { useState } from 'react';
 import { Shield, CheckCircle, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../services/supabaseClient';
 import { VerificationService } from '../../services/verificationService';
 import { logger } from '../../utils/logger';
 
@@ -61,22 +60,14 @@ const VerificationFlowPage = () => {
         // Initial check
         checkStatus();
 
-        // 🛡️ REAL-TIME SUBSCRIPTION (Senior Pattern)
-        const channel = supabase
-            .channel(`verification_sync_${user.id}`)
-            .on('postgres_changes', { 
-                event: '*', 
-                schema: 'public', 
-                table: 'verification_requests',
-                filter: `user_id=eq.${user.id}`
-            }, () => {
-                logger.info('⚡ Verification state updated in real-time');
-                checkStatus();
-            })
-            .subscribe();
+        // 🛡️ REAL-TIME SUBSCRIPTION (Senior Pattern - Clean Architecture)
+        const channel = VerificationService.subscribeToRequestStatus(user.id, () => {
+            logger.info('⚡ Verification state updated in real-time');
+            checkStatus();
+        });
 
         return () => {
-            supabase.removeChannel(channel);
+            VerificationService.unsubscribe(channel);
         };
     }, [user?.id, navigate]);
 

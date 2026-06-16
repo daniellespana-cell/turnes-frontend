@@ -1,4 +1,3 @@
-import { PROTOCOL_STEPS } from './contractService';
 
 import { supabase } from './supabaseClient';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { DollarSign, Percent, Shield, Zap, RefreshCw, Clock } from 'lucide-react';
+import { Percent, Shield, Zap } from 'lucide-react';
 import Footer from '../../components/layout/Footer';
 
 // 🛠️ CORRECCIÓN: Se agrega Clock a la lista de importaciones de lucide-react.

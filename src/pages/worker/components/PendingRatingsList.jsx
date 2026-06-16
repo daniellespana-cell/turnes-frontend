@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Building2, X } from 'lucide-react';
+import { Building2, X } from 'lucide-react';
 
 
 const PendingRatingsList = ({ pendingRatings = [], onRate, onDismiss }) => {

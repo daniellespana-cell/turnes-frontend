@@ -27,6 +27,7 @@ export const useProfileLogic = () => {
         company: '',
         nit: '',
         address: '',
+        location: '',  // alias de address — usado por el LocationSelector del form
         lat: null,
         lng: null,
         bio: '',
@@ -37,19 +38,21 @@ export const useProfileLogic = () => {
 
     useEffect(() => {
         if (user) {
+            const addr = user.direccion || user.location || '';
             setFormData({
-                name: user.nombre_display || user.name || '',
-                email: user.email || '',
-                phone: user.telefono || '',
+                name:    user.nombre_display || user.name || '',
+                email:   user.email || '',
+                phone:   user.telefono || '',
                 company: user.nombre_empresa || user.empresas?.nombre_comercial || '',
-                nit: user.nit_rut || user.nit || '',
-                address: user.direccion || user.location || '',
-                lat: user.lat || null,
-                lng: user.lng || null,
-                bio: user.bio || '',
-                avatar: user.avatar_url || '',
-                sector: user.sector || user.empresas?.sector_industrial || '',
-                skills: user.skills || []
+                nit:     user.nit_rut || user.nit || '',
+                address: addr,
+                location: addr,   // sincronizado con address
+                lat:     user.lat  ?? user.empresas?.lat  ?? null,
+                lng:     user.lng  ?? user.empresas?.lng  ?? null,
+                bio:     user.bio || '',
+                avatar:  user.avatar_url || '',
+                sector:  user.sector || user.empresas?.sector_industrial || '',
+                skills:  user.skills || []
             });
         }
     }, [user]);
@@ -80,7 +83,12 @@ export const useProfileLogic = () => {
 
     // 3. MANEJADORES DE ACCIÓN
     const handleInputChange = (field, value) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+        setFormData(prev => {
+            // Mantener address y location siempre en sync
+            if (field === 'address') return { ...prev, address: value, location: value };
+            if (field === 'location') return { ...prev, location: value, address: value };
+            return { ...prev, [field]: value };
+        });
     };
 
     const handleSave = async () => {
@@ -101,17 +109,21 @@ export const useProfileLogic = () => {
 
     const handleCancel = () => {
         if (user) {
+            const addr = user.direccion || user.location || '';
             setFormData({
-                name: user.nombre_display || user.name || '',
-                email: user.email || '',
-                phone: user.telefono || '',
+                name:    user.nombre_display || user.name || '',
+                email:   user.email || '',
+                phone:   user.telefono || '',
                 company: user.nombre_empresa || user.empresas?.nombre_comercial || '',
-                nit: user.nit_rut || user.nit || '',
-                address: user.direccion || '',
-                bio: user.bio || '',
-                avatar: user.avatar_url || '',
-                sector: user.sector || user.empresas?.sector_industrial || '',
-                skills: user.skills || []
+                nit:     user.nit_rut || user.nit || '',
+                address: addr,
+                location: addr,
+                lat:     user.lat  ?? user.empresas?.lat  ?? null,
+                lng:     user.lng  ?? user.empresas?.lng  ?? null,
+                bio:     user.bio || '',
+                avatar:  user.avatar_url || '',
+                sector:  user.sector || user.empresas?.sector_industrial || '',
+                skills:  user.skills || []
             });
         }
         setIsEditing(false);

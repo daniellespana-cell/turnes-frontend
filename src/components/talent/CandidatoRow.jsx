@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { typography } from '../../styles/typography';
 import { logger } from '../../utils/logger';
+import { AssetResolver } from '../../utils/assetHelper';
 
 const CandidatoRow = ({ can, onDismiss }) => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const CandidatoRow = ({ can, onDismiss }) => {
         {/* AVATAR + CORAZÓN INTEGRADO */}
         <div className="relative shrink-0 group/avatar">
           <img 
-            src={can.avatar || '/default-avatar.png'} 
+            src={AssetResolver.getAvatar(can.avatar, can.name || 'Candidato')} 
             className="w-10 h-10 md:w-12 md:h-12 rounded-xl object-cover transition-all border border-white/5" 
             alt="" 
           />

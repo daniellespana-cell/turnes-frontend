@@ -12,15 +12,29 @@
 class AnalyticsService {
     constructor() {
         this.isInitialized = false;
-        // Aquí podrías leer del .env si usas un ID de PostHog/Google
-        // this.providerId = import.meta.env.VITE_ANALYTICS_ID;
+        this.gaId = import.meta.env.VITE_GA_ID;
     }
 
     init() {
         if (this.isInitialized) return;
         
-        // 🚀 Inicialización de SDKs futuros (Ej: PostHog.init())
-        // console.log('[Analytics] Sistema Inicializado');
+        // Inicialización de Google Analytics (gtag.js) si está configurado en .env
+        if (this.gaId) {
+            const script = document.createElement('script');
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${this.gaId}`;
+            script.async = true;
+            document.head.appendChild(script);
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', this.gaId, { send_page_view: false });
+            
+            console.info(`[Analytics] GA Inicializado con ID: ${this.gaId}`);
+        } else {
+            console.warn('[Analytics] Modo Mock: VITE_GA_ID no configurado en variables de entorno.');
+        }
         
         this.isInitialized = true;
     }
@@ -32,10 +46,9 @@ class AnalyticsService {
     trackPageView(path) {
         if (!this.isInitialized) this.init();
         
-        // 🌐 Implementación futura:
-        // window.posthog?.capture('$pageview');
-        // window.gtag?.('event', 'page_view', { page_path: path });
-        
+        if (this.gaId && window.gtag) {
+            window.gtag('event', 'page_view', { page_path: path });
+        }
         console.info(`[Analytics] PageView: ${path}`);
     }
 
@@ -47,9 +60,9 @@ class AnalyticsService {
     trackEvent(eventName, properties = {}) {
         if (!this.isInitialized) this.init();
         
-        // 🎯 Implementación futura:
-        // window.posthog?.capture(eventName, properties);
-        
+        if (this.gaId && window.gtag) {
+            window.gtag('event', eventName, properties);
+        }
         console.info(`[Analytics] Event: ${eventName}`, properties);
     }
 
@@ -61,9 +74,15 @@ class AnalyticsService {
     identifyUser(userId, traits = {}) {
         if (!this.isInitialized) this.init();
         
-        // 👤 Implementación futura:
-        // window.posthog?.identify(userId, traits);
-        
+        if (this.gaId && window.gtag) {
+            // En Google Analytics 4, se envía el user_id configurando la propiedad a nivel global
+            window.gtag('config', this.gaId, { user_id: userId });
+            
+            // Y se envían los user properties (traits) 
+            if (Object.keys(traits).length > 0) {
+                window.gtag('set', 'user_properties', traits);
+            }
+        }
         console.info(`[Analytics] User Identified: ${userId}`, traits);
     }
 }

@@ -133,6 +133,7 @@ export const VacancyService = {
             p_pago_monto: payload.pago_monto,
             p_fecha_turno: payload.fecha_turno,
             p_tipo_turno: payload.tipo_turno || 'temporal',
+            p_tipo_turno_id: payload.tipo_turno_id || null,
             p_status: payload.status,
             p_es_urgente: payload.es_urgente || false,
             p_etiquetas: payload.etiquetas || []

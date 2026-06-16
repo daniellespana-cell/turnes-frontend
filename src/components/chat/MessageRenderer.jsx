@@ -1,7 +1,6 @@
 import React from 'react';
-import { Sparkles, Lock, Heart } from 'lucide-react';
+import { Sparkles, Lock } from 'lucide-react';
 import SystemActionBubble from './SystemActionBubble';
-import RehireOfferBubble from './RehireOfferBubble';
 import StandardMessageBubble from './StandardMessageBubble';
 
 

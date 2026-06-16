@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, AlertTriangle, Check, Trash2, Copy } from 'lucide-react';
+import { AlertTriangle, Trash2, Copy } from 'lucide-react';
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';

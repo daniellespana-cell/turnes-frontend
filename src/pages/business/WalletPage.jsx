@@ -1,6 +1,6 @@
 import React from 'react';
-import { PlusCircle, AlertCircle, RefreshCcw } from 'lucide-react';
-import StatCard from '../../components/profile/shared/StatCard';
+import { AlertCircle, RefreshCcw } from 'lucide-react';
+import StatCard from '../../components/finance/StatCard';
 import TransactionTable from '../../components/finance/TransactionTable';
 import PremiumBanner from '../../components/finance/PremiumBanner';
 import EmptyWalletState from '../../components/finance/EmptyWalletState';

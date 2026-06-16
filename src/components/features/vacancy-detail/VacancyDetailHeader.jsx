@@ -1,4 +1,5 @@
 import { X, ShieldCheck, ArrowUpRight, Clock } from 'lucide-react';
+import { AssetResolver } from '../../../utils/assetHelper';
 
 
 export const VacancyDetailHeader = ({ vacancy, closeBtnRef, onClose, onCompanyClick }) => {
@@ -9,7 +10,7 @@ export const VacancyDetailHeader = ({ vacancy, closeBtnRef, onClose, onCompanyCl
                 <div className="relative shrink-0">
                     <div className="w-10 h-10 rounded-xl bg-zinc-800 p-[1px] border border-transparent overflow-hidden">
                         <img
-                            src={vacancy.businessLogo || `https://ui-avatars.com/api/?name=${encodeURIComponent(vacancy.business)}&background=27272a&color=a1a1aa`}
+                            src={AssetResolver.getLogo(vacancy.businessLogo, vacancy.business)}
                             alt={`Logo de ${vacancy.business}`}
                             className="w-full h-full object-cover rounded-[10px]"
                         />

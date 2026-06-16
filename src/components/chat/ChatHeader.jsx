@@ -1,8 +1,9 @@
 import React from 'react';
 import { ShieldCheck, MoreHorizontal, LayoutDashboard, Video, ChevronLeft, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { AssetResolver } from '../../utils/assetHelper';
 
-export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed }) => {
+export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed, isPaid }) => {
   const navigate = useNavigate();
 
   return (
@@ -50,8 +51,8 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
       {/* ACCIONES MINIMALISTAS (SIN QUITAR NADA) */}
       <div className="flex items-center gap-1 md:gap-2">
 
-        {/* Cámara: Solo se muestra si el ciclo NO está cerrado */}
-        {!isClosed ? (
+        {/* Cámara: Solo se muestra si NO está cerrado Y ya se pagó la comisión */}
+        {!isClosed && isPaid ? (
           <button
             onClick={onVideoInvite}
             className="p-2 text-zinc-600 hover:text-emerald-500 transition-all group active:scale-90"
@@ -60,8 +61,8 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
             <Video size={16} className="group-hover:scale-110 transition-transform" />
           </button>
         ) : (
-          <div className="p-2 text-zinc-800" title="Canal Protegido">
-            <Lock size={14} />
+          <div className="p-2 text-zinc-800" title={isClosed ? "Canal Protegido" : "Requiere Pago de Comisión"}>
+            <Lock size={14} className={!isClosed && !isPaid ? "text-amber-500/50" : ""} />
           </div>
         )}
 

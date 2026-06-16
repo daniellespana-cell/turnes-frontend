@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Star, Building2, MapPin, CheckCircle2, ShieldCheck, Users } from 'lucide-react';
+import { X, Building2, ShieldCheck } from 'lucide-react';
 import Spinner from '../ui/Spinner';
 import ProfileView from '../profile/ProfileView';
 
@@ -35,6 +35,10 @@ const CompanyProfileModal = ({ isOpen, onClose, companyId }) => {
     // Carga de datos con resolución de ID polimórfica
     useEffect(() => {
         if (!isOpen || !companyId) return;
+        if (companyId === 'undefined' || companyId === 'null') {
+            setError("Identidad de empresa no localizada (ID corrupto).");
+            return;
+        }
 
         const loadData = async () => {
             setIsLoading(true);
@@ -156,13 +160,7 @@ const CompanyProfileModal = ({ isOpen, onClose, companyId }) => {
                             )}
                         </div>
 
-                        {/* Footer de Seguridad */}
-                        <div className="p-6 border-t border-white/5 bg-zinc-900/30 flex items-center justify-center gap-4">
-                            <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase">
-                                <ShieldCheck size={14} className="text-emerald-500" />
-                                Datos protegidos por Turnes Identity
-                            </div>
-                        </div>
+
                     </motion.div>
                 </div>
             )}

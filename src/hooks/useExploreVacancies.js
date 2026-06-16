@@ -6,7 +6,6 @@ import { useGeolocation } from './useGeolocation';
 import { useVacancyFetch } from './useVacancyFetch';
 import { useVacancyScoring } from './useVacancyScoring';
 import { VacancyService } from '../services/vacancyService';
-import { applicationService } from '../services/applicationService';
 import { CIUDADES_COORDS } from '../domain/geography.config';
 
 const GIRON = { lat: 7.0682, lng: -73.1698 };
@@ -83,31 +82,9 @@ export const useExploreVacancies = () => {
     const {
         vacancies, loading, isRefreshing, error,
         isFallbackMode, hasMore, loadMore, subscribeToRealTime
-    } = useVacancyFetch(explorationCenter, radius);
+    } = useVacancyFetch(explorationCenter, radius, user?.id);
 
-    // ── Real-time Sync for Applied Status (SSOT via Service) ─────────────────
-    const fetchAppliedIds = useCallback(async () => {
-        if (!isAuthenticated || !user?.id) {
-            setAppliedIds(new Set());
-            return;
-        }
-        const { data, error } = await applicationService.getAppliedVacancyIds(user.id);
-        if (!error) setAppliedIds(new Set(data));
-    }, [isAuthenticated, user?.id]);
 
-    useEffect(() => {
-        fetchAppliedIds();
-        if (!isAuthenticated || !user?.id) return;
-
-        // 🛡️ Suscripción Delegada
-        const channel = applicationService.subscribeToUserApplications(user.id, () => {
-            fetchAppliedIds();
-        });
-
-        return () => { 
-            import('../services/supabaseClient').then(m => m.supabase.removeChannel(channel));
-        };
-    }, [fetchAppliedIds, isAuthenticated, user?.id]);
 
     // Real-time subscription for VACANCIES (external feed)
     useEffect(() => subscribeToRealTime(isAuthenticated), [isAuthenticated, subscribeToRealTime]);

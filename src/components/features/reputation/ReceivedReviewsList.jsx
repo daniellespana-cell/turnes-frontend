@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Star, Building2 } from 'lucide-react';
-import typography from '../../../styles/typography';
 
 import { AssetResolver } from '../../../utils/assetHelper';
 

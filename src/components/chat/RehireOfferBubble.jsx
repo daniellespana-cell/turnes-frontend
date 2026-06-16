@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, CheckCircle2, XCircle, DollarSign, Clock } from 'lucide-react';
+import { Calendar, CheckCircle2, XCircle, Clock } from 'lucide-react';
 
 
 const RehireOfferBubble = ({ message, onUpdateMessage, onAction }) => {

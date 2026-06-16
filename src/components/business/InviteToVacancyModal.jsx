@@ -8,7 +8,6 @@ import VacancySelector from './invite-to-vacancy/VacancySelector';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { VacancyService } from '../../services/vacancyService';
-import { ContractService } from '../../services/contractService';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 
@@ -59,7 +58,7 @@ const InviteToVacancyModal = ({ isOpen, onClose, candidate }) => {
         
         setIsInviting(true);
         try {
-            const { error } = await ContractService.inviteCandidate(
+            const { error } = await VacancyService.inviteCandidate(
                 selectedVacancyId, 
                 candidate.id
             );

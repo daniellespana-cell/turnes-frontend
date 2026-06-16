@@ -132,6 +132,27 @@ export const VerificationService = {
         return await BaseService.handle(query);
     },
 
+    /**
+     * Suscribirse a cambios en la solicitud de verificación (Zero-F5)
+     * @param {string} requestId 
+     * @param {function} callback 
+     */
+    subscribeToRequestStatus(requestId, callback) {
+        if (!requestId) return;
+        return supabase
+            .channel(`public:verification_requests:${requestId}`)
+            .on('postgres_changes', {
+                event: 'UPDATE',
+                schema: 'public',
+                table: 'verification_requests',
+                filter: `id=eq.${requestId}`
+            }, callback)
+            .subscribe();
+    },
+
+    unsubscribe(channel) {
+        if (channel) supabase.removeChannel(channel);
+    }
 
 };
 

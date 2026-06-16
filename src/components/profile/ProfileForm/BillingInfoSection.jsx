@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, CreditCard, MapPin } from 'lucide-react';
+import { Building2, CreditCard } from 'lucide-react';
 import SectionCard from '../shared/SectionCard';
 import InputField from '../shared/InputField';
 import LocationSelector from '../shared/LocationSelector';

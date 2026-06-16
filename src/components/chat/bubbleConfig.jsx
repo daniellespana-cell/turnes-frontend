@@ -1,5 +1,5 @@
 import React from 'react';
-import { Video, Clock, FileSignature, ShieldCheck, AlertCircle, Banknote, Check } from 'lucide-react';
+import { Video, Clock, FileSignature, AlertCircle, Banknote, Check } from 'lucide-react';
 
 
 /**

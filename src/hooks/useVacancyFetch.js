@@ -1,5 +1,3 @@
-import { SECTOR_MAP, getSectorByTag } from '../domain/vacantes.taxonomy';
-import { supabase } from '../services/supabaseClient';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { VacancyService } from '../services/vacancyService';
@@ -12,7 +10,7 @@ const UNCATEGORIZED_IDS = new Set([null, undefined, '', 'VARIOS', 'otros', 'OTRO
 const GEO_THRESHOLD_KM = 0.5;
 const RPC_BUFFER_KM = 3;
 
-export const useVacancyFetch = (explorationCenter, radius) => {
+export const useVacancyFetch = (explorationCenter, radius, userId = null) => {
     const [vacancies, setVacancies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -29,10 +27,12 @@ export const useVacancyFetch = (explorationCenter, radius) => {
     const centerRef = useRef(explorationCenter);
     const pageRef = useRef(0);
     const fetchIdRef = useRef(0);
+    const userIdRef = useRef(userId);
 
     // Keep refs in sync
     useEffect(() => { radiusRef.current = radius; }, [radius]);
     useEffect(() => { centerRef.current = explorationCenter; }, [explorationCenter]);
+    useEffect(() => { userIdRef.current = userId; }, [userId]);
 
     const fetch = useCallback(async (force = false, isLoadMore = false, isBackgroundRefresh = false) => {
         const myFetchId = ++fetchIdRef.current;
@@ -57,11 +57,12 @@ export const useVacancyFetch = (explorationCenter, radius) => {
 
         try {
             // 🚀 Senior Fix: Restaurado el uso de la RPC PostGIS para evitar descargas masivas (OOM Vulnerability)
-            // La RPC 'buscar_vacantes_cercanas' ahora incluye 'fecha_turno' y 'empresa_id'
+            // La RPC 'buscar_vacantes_cercanas' ahora incluye 'fecha_turno' y 'empresa_id' y userId
             const { data: rawData, error: fetchError } = await GeoService.fetchNearby(
                 center.lat, 
                 center.lng, 
-                currentRadius + RPC_BUFFER_KM
+                currentRadius + RPC_BUFFER_KM,
+                userIdRef.current
             );
 
             if (myFetchId !== fetchIdRef.current) return;

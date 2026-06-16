@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, X, ChevronRight, UserCircle2 } from 'lucide-react';
+import { Sparkles, X, ChevronRight } from 'lucide-react';
 
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';

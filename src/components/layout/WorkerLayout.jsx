@@ -16,7 +16,7 @@ const WorkerLayout = ({ user }) => {
 
     // Mismo patrón "Clean Layout" que BusinessLayout
     return (
-        <div className="flex min-h-screen bg-[#0a0a0a] relative">
+        <div className="flex min-h-[100dvh] bg-[#0a0a0a] relative">
             <BaseSidebar
                 menuItems={WORKER_MENU}
                 isExpanded={isExpanded}

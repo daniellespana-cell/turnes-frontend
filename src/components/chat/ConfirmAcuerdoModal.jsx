@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lock, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, ShieldCheck } from 'lucide-react';
 
 
 export const ConfirmAcuerdoModal = ({ isOpen, onClose, onConfirm, finanzas, loading }) => {

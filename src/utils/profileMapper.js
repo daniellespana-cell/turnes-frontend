@@ -76,19 +76,19 @@ export const profileMapper = {
         const dbPayload = {};
 
         const mapping = {
-            name: 'nombre_display',
-            phone: 'telefono',
-            company: 'nombre_empresa',
-            address: 'direccion',
-            location: 'direccion',
-            avatar: 'avatar_url',
-            nit: 'nit_rut',
-            bio: 'bio',
-            skills: 'skills',
-            sector: 'sector',
-            availability: 'disponibilidad',
+            name:            'nombre_display',
+            phone:           'telefono',
+            company:         'nombre_empresa',   // columna en perfiles
+            address:         'direccion',
+            location:        'direccion',         // alias — no genera duplicado porque JS sobrescribe la key
+            avatar:          'avatar_url',
+            nit:             'nit',               // perfiles.nit (no confundir con empresas.nit_rut)
+            bio:             'bio',
+            skills:          'skills',
+            sector:          'sector',
+            availability:    'disponibilidad',
             experienceYears: 'experiencia_anios',
-            plan: 'plan',
+            plan:            'plan',
             configuraciones: 'configuraciones'
         };
 

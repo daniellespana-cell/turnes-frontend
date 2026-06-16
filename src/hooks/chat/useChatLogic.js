@@ -121,7 +121,8 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
     addMessage,
     triggerDomainSync,
     onStartVideo,
-    onCerrarVideo
+    onCerrarVideo,
+    isPaid: permissions.isPaid
   });
 
   const { onAcceptRehire, onDeclineRehire } = useChatRehire({ resolveAppId, triggerDomainSync });

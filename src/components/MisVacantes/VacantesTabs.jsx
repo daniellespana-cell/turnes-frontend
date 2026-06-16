@@ -1,5 +1,4 @@
 import React from 'react';
-import typography from '../../styles/typography';
 
 
 const VacantesTabs = ({ activeTab, setActiveTab, counts }) => {

@@ -1,4 +1,4 @@
-import { MessageCircle, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import EmptyState from '../../components/common/EmptyState';
 import RateEmployerModal from '../../components/features/RateEmployerModal';
@@ -19,7 +19,7 @@ const WorkerApplications = () => {
     const [ratingApp, setRatingApp] = React.useState(null);
 
     return (
-        <div className="min-h-screen pb-20 bg-black text-zinc-100 flex flex-col font-manrope selection:bg-brand-primary/30">
+        <div className="min-h-screen pb-20 text-zinc-100 flex flex-col font-manrope selection:bg-brand-primary/30">
             {/* ─── Universal Page Header ─────────────────────────────────────────────────── */}
             <PageHeader
                 icon={Briefcase}

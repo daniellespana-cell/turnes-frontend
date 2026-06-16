@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, Sparkles } from 'lucide-react';
+import { Clock } from 'lucide-react';
 
 import { ShieldCheck, AlertTriangle, Zap, Heart, Handshake } from 'lucide-react';
 

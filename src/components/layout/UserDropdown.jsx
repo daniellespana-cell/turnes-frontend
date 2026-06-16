@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { LogOut, Settings, Camera } from 'lucide-react';
+import { LogOut, Camera } from 'lucide-react';
 
 import {
     User,

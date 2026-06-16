@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, X, ChevronRight } from 'lucide-react';
+import { X, ChevronRight } from 'lucide-react';
 
 import { ShieldCheck, Search, TrendingUp, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
