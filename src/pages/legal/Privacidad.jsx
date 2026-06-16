@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Info, Shield, Clock, ArrowRight } from 'lucide-react';
+import { Info, Shield, Clock } from 'lucide-react';
 import CtaSection from '../../components/common/CtaSection';
 
 

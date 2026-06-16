@@ -171,15 +171,35 @@ export const authService = {
     async updateProfile(userId, updates) {
         // 🔄 Mapeo Delegado (Senior Separation of Concerns)
         const { profileMapper } = await import('../utils/profileMapper');
-        const dbPayload = profileMapper.mapUIToDB(updates);
+        const rawPayload = profileMapper.mapUIToDB(updates);
 
-        // 🛡️ PROTECCIÓN: Eliminar campos que NO deben ser modificados por el cliente
+        // ✅ WHITELIST: Solo columnas que existen en public.perfiles
+        // Cualquier campo fuera de esta lista es ignorado — previene error 42703 de Postgres
+        const PERFILES_COLUMNS = new Set([
+            'nombre_display', 'telefono', 'bio', 'avatar_url',
+            'direccion', 'lat', 'lng',
+            'nombre_empresa', 'nit', 'sector',
+            'skills', 'disponibilidad', 'experiencia_anios',
+            'plan', 'configuraciones', 'on_vacation'
+        ]);
+
+        const dbPayload = Object.fromEntries(
+            Object.entries(rawPayload).filter(([key]) => PERFILES_COLUMNS.has(key))
+        );
+
+        // 🛡️ PROTECCIÓN EXTRA: Nunca permitir modificar campos de seguridad
         delete dbPayload.verificado;
         delete dbPayload.saldo;
         delete dbPayload.rating;
         delete dbPayload.completed_shifts;
         delete dbPayload.reputation_score;
         delete dbPayload.reputation_count;
+        delete dbPayload.rol;
+
+        if (Object.keys(dbPayload).length === 0) {
+            logger.warn('[authService.updateProfile] No hay campos válidos para actualizar en perfiles.');
+            return null;
+        }
 
         const { data, error } = await supabase
             .from('perfiles')
@@ -190,19 +210,21 @@ export const authService = {
 
         if (error) throw error;
 
-        // 🏢 Sincronización con tabla empresas (si aplica)
-        if (updates.company !== undefined || updates.nit !== undefined || updates.sector !== undefined || updates.avatar !== undefined || updates.lat !== undefined) {
-            const empresaPayload = {};
-            if (updates.company !== undefined) empresaPayload.nombre_comercial = updates.company;
-            if (updates.nit !== undefined) empresaPayload.nit_rut = updates.nit;
-            if (updates.sector !== undefined) empresaPayload.sector_industrial = updates.sector;
-            if (updates.avatar !== undefined) empresaPayload.logo_url = updates.avatar;
-            if (updates.lat !== undefined) empresaPayload.lat = updates.lat;
-            if (updates.lng !== undefined) empresaPayload.lng = updates.lng;
+        // 🏢 Sincronización con tabla empresas (columnas distintas)
+        const empresaPayload = {};
+        if (updates.company  !== undefined) empresaPayload.nombre_comercial  = updates.company;
+        if (updates.nit      !== undefined) empresaPayload.nit_rut           = updates.nit;
+        if (updates.sector   !== undefined) empresaPayload.sector_industrial  = updates.sector;
+        if (updates.avatar   !== undefined) empresaPayload.logo_url           = updates.avatar;
+        if (updates.lat      !== undefined) empresaPayload.lat                = updates.lat;
+        if (updates.lng      !== undefined) empresaPayload.lng                = updates.lng;
 
-            if (Object.keys(empresaPayload).length > 0) {
-                await supabase.from('empresas').update(empresaPayload).eq('id', userId);
-            }
+        if (Object.keys(empresaPayload).length > 0) {
+            const { error: empError } = await supabase
+                .from('empresas')
+                .update(empresaPayload)
+                .eq('id', userId);
+            if (empError) logger.warn('[authService.updateProfile] Error sync empresas:', empError.message);
         }
 
         return data;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Target, Navigation } from 'lucide-react';
+import { Navigation } from 'lucide-react';
 
 
 /**

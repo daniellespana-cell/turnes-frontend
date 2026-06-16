@@ -1,5 +1,5 @@
 import React from 'react';
-import { Briefcase, Calendar, MapPin, DollarSign, PlusCircle, CheckCircle2 } from 'lucide-react';
+import { Briefcase, Calendar, DollarSign, PlusCircle, CheckCircle2 } from 'lucide-react';
 
 import { formatCurrency } from '../../../services/financeService';
 

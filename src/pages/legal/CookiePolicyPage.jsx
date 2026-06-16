@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Info, Shield, Cookie, ShieldCheck, BarChart3, Target } from 'lucide-react';
+import { Shield, Cookie, ShieldCheck, BarChart3, Target } from 'lucide-react';
 import CtaSection from '../../components/common/CtaSection';
 
 

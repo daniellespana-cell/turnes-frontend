@@ -1,5 +1,5 @@
 import React from 'react';
-import { Video, Clock, FileSignature, ShieldCheck, AlertCircle, Banknote, Check, X } from 'lucide-react';
+import { Video, FileSignature, Check, X } from 'lucide-react';
 import FinalizeActionBtn from './FinalizeActionBtn';
 
 import { useChatActionsContext } from '../../context/ChatActionContext';
@@ -135,8 +135,8 @@ const SystemActionBubble = ({ message, userRole, isClosed }) => {
                             </div>
                         )}
 
-                        {/* --- BOTONES PROACTIVOS (Employer: Ultra UX) --- */}
-                        {isEmployerPrompt && (
+                        {/* --- BOTONES PROACTIVOS (Solo Empresa) --- */}
+                        {isEmployerPrompt && userRole === 'empresa' && (
                             <div className="flex items-center gap-3 pt-3">
                                 {message.type === 'prompt_video_invite' && onInviteAction && (
                                     <button

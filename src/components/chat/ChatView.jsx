@@ -46,8 +46,11 @@ const ChatView = ({
     isClosedFromPage ||
     candidato?.cicloCerrado ||
     candidato?.estadoTurno === 'FINALIZADO' ||
-    permisos?.reason === 'FINISHED'
+    permisos?.reason === 'FINISHED' ||
+    permisos?.reason === 'CANCELED'
   );
+
+  const isCanceled = permisos?.reason === 'CANCELED';
 
   return (
     <div className="flex-1 flex flex-col min-w-0 relative h-full">
@@ -62,6 +65,14 @@ const ChatView = ({
         userRole={userRole}
         videoStats={videoStats}
       />
+
+      {isCanceled && (
+          <div className="bg-red-500/10 border-y border-red-500/20 px-4 py-3 flex items-center justify-center">
+              <p className="text-red-400 text-xs font-bold text-center leading-relaxed">
+                  La empresa ha retirado la vacante. Este chat ha sido archivado y no admite nuevos mensajes.
+              </p>
+          </div>
+      )}
 
       {/* ÁREA DE MENSAJES */}
       <div className="flex-1 overflow-hidden min-h-0 flex flex-col bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-zinc-900/20 via-black to-black">

@@ -9,7 +9,8 @@ export const useChatVideo = ({
     addMessage, 
     triggerDomainSync,
     onStartVideo,
-    cerrarVideo // 🆕 Necesitamos cerrar el overlay localmente
+    cerrarVideo, // 🆕 Necesitamos cerrar el overlay localmente
+    isPaid
 }) => {
     const [isInviting, setIsInviting] = useState(false);
     const [videoStats, setVideoStats] = useState({
@@ -37,6 +38,12 @@ export const useChatVideo = ({
     // --- STEP 2: VIDEO VALIDATION ---
     const invitarAVideoWrapper = useCallback(async () => {
         if (userRole !== 'empresa' || isInviting) return;
+
+        // 🛡️ SECURITY SHIELD: Bloqueo Estricto si no se ha pagado
+        if (!isPaid) {
+            addMessage("🚫 Operación denegada: Debes pagar la comisión (Paso 1) antes de solicitar una validación visual.", 'system', 'error_alert');
+            return;
+        }
 
         // 🛡️ IDEMPOTENCIA SENIOR: Si ya se alcanzó el límite o ya validó, no permitir.
         if (videoStats.remaining <= 0) {
@@ -75,15 +82,16 @@ export const useChatVideo = ({
         } finally {
             setIsInviting(false);
         }
-    }, [userRole, isInviting, videoStats, resolveAppId, triggerDomainSync, workflowActions, onStartVideo, addMessage]);
+    }, [userRole, isInviting, isPaid, videoStats, resolveAppId, triggerDomainSync, workflowActions, onStartVideo, addMessage]);
 
     const registrarValidacionVideo = useCallback(async (duracion) => {
         try {
             const appId = resolveAppId();
-            await ContractService.step2_confirmVideo(appId);
+            const res = await ContractService.step2_confirmVideo(appId);
             
             // 🎥 SIGNALING: Notificar fin de llamada para que ambos cierren el overlay
-            addMessage("Validación Visual Finalizada", 'system', 'video_ended', { duracion });
+            // 🚀 SENIOR FIX: Eliminada inyección de BD desde UI. El backend lo hace ahora, 
+            // el socket lo distribuirá para cerrar el video de todos.
             
             if (workflowActions?.finalizarValidacion) {
                 workflowActions.finalizarValidacion(duracion);

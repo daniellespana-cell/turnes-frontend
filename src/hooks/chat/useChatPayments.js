@@ -1,4 +1,3 @@
-import notificationObserver from '../../services/notificationObserver';
 
 import { useCallback, useState } from 'react';
 import { ContractService, PROTOCOL_STEPS } from '../../services/contractService';
@@ -36,19 +35,10 @@ export const useChatPayments = (candidato, finanzas, setContractStatus, onSystem
                     actualizarSaldo(result.newBalance);
                 }
 
-                // 4. Feedback Activo & Siguiente Paso (Video Validation Prompt)
-                if (onSystemMessage && (user?.role === 'empresa' || user?.role === 'BUSINESS_ROLE')) {
-                    onSystemMessage(
-                        'Conexión Segura Desbloqueada',
-                        'system_info',
-                        {
-                            subtype: 'payment_success',
-                            instruction: 'Has asegurado al talento. Sugerimos agendar o invitar a una validación visual rápida ahora mismo.',
-                            timestamp: new Date().toISOString()
-                        },
-                        'prompt_video_invite'
-                    );
-                }
+                // 4. Feedback Activo
+                // 🚀 SENIOR FIX: Eliminada la inyección de `onSystemMessage` desde el Frontend.
+                // Ahora el `rpc_process_protocol_step1_v3` inserta el mensaje de "Conexión Segura Desbloqueada" 
+                // directamente en la tabla mensajes para garantizar SSOT y seguridad.
 
                 showToast(UI_STRINGS.CHAT.PAYMENT_SUCCESS, "success");
                 setIsPaying(false);

@@ -51,7 +51,7 @@ export const useSkillMatchCompanies = () => {
                     .select(`
                         id,
                         titulo,
-                        tags,
+                        etiquetas,
                         categoria,
                         pago_monto,
                         lat,
@@ -92,7 +92,7 @@ export const useSkillMatchCompanies = () => {
                     if (userCoords && !isInZone) return;
 
                     // ── SKILLS OVERLAP ──
-                    const vacancyTags = (v.tags || []).map(t => String(t).toLowerCase().trim());
+                    const vacancyTags = (v.etiquetas || []).map(t => String(t).toLowerCase().trim());
                     const vacancyCategory = v.categoria ? String(v.categoria).toLowerCase().trim() : '';
 
                     let matchCount = 0;

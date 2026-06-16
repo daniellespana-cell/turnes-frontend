@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star, Send, Lock, Check, X, ShieldCheck, CheckCircle2 } from 'lucide-react';
-
+import { Star, Send, X, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { AssetResolver } from '../../utils/assetHelper';
 
 const CandidatoCard = ({ can, onUpdate, onSellar }) => {
   const navigate = useNavigate();
@@ -26,9 +26,10 @@ const CandidatoCard = ({ can, onUpdate, onSellar }) => {
         <div className="flex items-center gap-5">
           <div className="relative">
             <img
-              src={can.avatar || "https://ui-avatars.com/api/?name=" + can.name}
+              src={AssetResolver.getAvatar(can.avatar_url || can.avatar, can.name)}
               className="w-16 h-16 rounded-2xl object-cover border-2 border-white/5 shadow-2xl"
               alt={can.name}
+              onError={(e) => { e.target.src = AssetResolver.getAvatar(null, can.name); }}
             />
           </div>
           <div className="min-w-0 flex-1">

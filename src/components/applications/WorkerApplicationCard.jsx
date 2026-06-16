@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
-import { Briefcase, MessageCircle, MapPin, Map, DollarSign, Calendar } from 'lucide-react';
+import { MessageCircle, MapPin, DollarSign, Calendar } from 'lucide-react';
 
 import React from 'react';
 import { formatCurrency } from '../../services/financeService';
+import { AssetResolver } from '../../utils/assetHelper';
 
 /**
  * WorkerApplicationCard (Premium 2026 UI - Dense Edition)
@@ -32,7 +33,7 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate }) => {
         showChat = false;
     } else if (app.status === 'contratado') {
         statusUI = {
-            label: 'Contratado • Aceptado',
+            label: 'Contratado • Turno Asignado',
             mainTheme: 'from-emerald-400 to-teal-500',
             bgTag: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
             glow: 'shadow-[0_0_15px_rgba(16,185,129,0.1)]'
@@ -40,12 +41,28 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate }) => {
         showChat = true;
     } else if (app.status === 'chat_abierto' || app.status === 'en_progreso') {
         statusUI = {
-            label: 'Entrevista • En Proceso',
+            label: 'Paso 3 • Entrevista Activa',
             mainTheme: 'from-blue-400 to-indigo-500',
             bgTag: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
             glow: 'shadow-[0_0_15px_rgba(59,130,246,0.1)]'
         };
         showChat = true;
+    } else if (app.status === 'confirmado' || app.status === 'confirmed') {
+        statusUI = {
+            label: 'Paso 2 • Video Verificación',
+            mainTheme: 'from-indigo-400 to-purple-500',
+            bgTag: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30',
+            glow: ''
+        };
+        showChat = false;
+    } else if (app.status === 'pendiente_pago') {
+        statusUI = {
+            label: 'Paso 1 • En Revisión de Empresa',
+            mainTheme: 'from-fuchsia-400 to-pink-500',
+            bgTag: 'bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/30',
+            glow: ''
+        };
+        showChat = false;
     } else if (app.status === 'finalizado') {
         statusUI = {
             label: 'Turno Completado',
@@ -87,11 +104,11 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate }) => {
                 <div className="flex gap-3 md:gap-4 items-start w-full">
                     {/* Avatar Super Compacto */}
                     <div className="shrink-0 w-9 h-9 md:w-12 md:h-12 rounded-xl bg-black border border-transparent flex items-center justify-center overflow-hidden relative shadow-sm">
-                        {app.companyLogo ? (
-                            <img src={app.companyLogo} alt={app.company} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out grayscale-[0.2] group-hover:grayscale-0" />
-                        ) : (
-                            <Briefcase size={18} className="text-zinc-600 md:w-5 md:h-5" strokeWidth={1.5} />
-                        )}
+                        <img 
+                            src={AssetResolver.getAvatar(app.companyLogo, app.company || 'Empresa Confidencial')} 
+                            alt={app.company} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out grayscale-[0.2] group-hover:grayscale-0" 
+                        />
                     </div>
 
                     <div className="flex flex-col flex-1 min-w-0">

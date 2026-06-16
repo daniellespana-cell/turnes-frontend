@@ -86,6 +86,26 @@ export const CandidateService = {
     },
 
     /**
+     * 🗂️ ARCHIVAR POSTULACIÓN DEL HISTORIAL
+     * Marca la postulación como 'archivado' para que no vuelva a aparecer
+     * en el historial de la empresa. Los datos y calificaciones se conservan en BD.
+     * @param {string} applicationId - UUID de la postulación
+     */
+    async archiveApplication(applicationId) {
+        if (!applicationId) return { data: null, error: { message: "Falta ID de postulación" } };
+
+        const query = supabase
+            .from('postulaciones')
+            .update({ status: 'archivado', updated_at: new Date().toISOString() })
+            .eq('id', applicationId)
+            .select('id')
+            .single();
+
+        return await BaseService.handle(query);
+    },
+
+
+    /**
      * 🌟 RED DE CONFIANZA: CALIFICAR Y SELLAR (ATOMIC)
      * Ejecuta el RPC que inserta la calificación, calcula el promedio global 
      * del candidato y sella el turno como 'finalizado'.

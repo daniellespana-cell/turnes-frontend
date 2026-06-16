@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, Download, ArrowRight, Wallet } from 'lucide-react';
+import { CheckCircle2, Download, Wallet } from 'lucide-react';
 
 import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '../../services/financeService';

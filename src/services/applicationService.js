@@ -37,5 +37,14 @@ export const applicationService = {
                 filter: `user_id=eq.${userId}`
             }, callback)
             .subscribe();
+    },
+
+    /**
+     * Cancela una suscripción de canal de Supabase de forma segura.
+     * Encapsula el acceso al cliente supabase para que los hooks nunca lo importen directamente.
+     * @param {RealtimeChannel} channel - El canal retornado por subscribeToUserApplications
+     */
+    unsubscribeChannel(channel) {
+        if (channel) supabase.removeChannel(channel);
     }
 };

@@ -2,7 +2,6 @@ import React from 'react';
 import { ChatActionProvider } from '../../context/ChatActionContext';
 import MessageRenderer from './MessageRenderer';
 import ChatSafetyFooter from './ChatSafetyFooter';
-import MobileActionDashboard from './MobileActionDashboard';
 
 import { useRef, useEffect } from 'react';
 

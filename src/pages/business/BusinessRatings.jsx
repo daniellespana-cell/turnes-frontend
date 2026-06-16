@@ -29,7 +29,7 @@ const BusinessRatings = () => {
     }
 
     return (
-        <div className="min-h-screen bg-black text-zinc-100 font-manrope selection:bg-brand-primary/30">
+        <div className="min-h-screen text-zinc-100 font-manrope selection:bg-brand-primary/30">
             <PageHeader
                 icon={Star}
                 title="Mis"

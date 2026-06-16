@@ -1,11 +1,31 @@
 import React from 'react';
-import { User, Mail, Phone } from 'lucide-react';
+import { User, Mail, Phone, MapPin } from 'lucide-react';
 import SectionCard from '../shared/SectionCard';
 import InputField from '../shared/InputField';
 import TextAreaField from '../shared/TextAreaField';
+import { CIUDADES_COORDS, CIUDADES_PRINCIPALES } from '../../../domain/geography.config';
 
-
+/**
+ * Sección de Información Personal — Perfil de Empresa (Business).
+ * Incluye selector de ciudad con resolución automática de coordenadas
+ * para alimentar el algoritmo de match geográfico de vacantes.
+ */
 const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
+
+    // Al seleccionar ciudad resolvemos lat/lng automáticamente
+    const handleCityChange = (cityName) => {
+        handleInputChange('address', cityName);
+        const coords = CIUDADES_COORDS[cityName];
+        if (coords) {
+            handleInputChange('lat', coords.lat);
+            handleInputChange('lng', coords.lng);
+        } else {
+            // Ciudad tipada a mano que no está en el catálogo — limpiar coords
+            handleInputChange('lat', null);
+            handleInputChange('lng', null);
+        }
+    };
+
     return (
         <SectionCard title="Información Personal" icon={<User size={14} />}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -30,12 +50,55 @@ const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
                     disabled={!isEditing}
                     icon={<Phone size={12} />}
                 />
+
+                {/* Ciudad — Combobox con resolución de coordenadas */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black uppercase tracking-[0.15em] text-zinc-500 flex items-center gap-1.5">
+                        <MapPin size={10} className="opacity-70" />
+                        Ciudad / Ubicación
+                    </label>
+                    <div className="relative">
+                        <input
+                            id="business-location-combobox"
+                            list="turnes-ciudades-biz"
+                            value={formData.address || ''}
+                            onChange={e => handleCityChange(e.target.value)}
+                            disabled={!isEditing}
+                            placeholder="Ej: Bucaramanga"
+                            autoComplete="off"
+                            className={`
+                                w-full bg-zinc-950 border rounded-xl px-4 py-3 text-sm text-white
+                                placeholder:text-zinc-700 outline-none transition-all duration-200
+                                ${isEditing
+                                    ? 'border-zinc-700 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 cursor-text'
+                                    : 'border-zinc-800/50 opacity-60 cursor-default'}
+                            `}
+                        />
+                        <datalist id="turnes-ciudades-biz">
+                            {CIUDADES_PRINCIPALES.map(ciudad => (
+                                <option key={ciudad} value={ciudad} />
+                            ))}
+                        </datalist>
+                    </div>
+                    {isEditing && formData.lat && (
+                        <p className="text-[10px] text-emerald-500/70 mt-0.5 px-1 flex items-center gap-1">
+                            <MapPin size={8} />
+                            Coords: {Number(formData.lat).toFixed(4)}, {Number(formData.lng).toFixed(4)}
+                        </p>
+                    )}
+                    {isEditing && !formData.lat && formData.address && (
+                        <p className="text-[10px] text-amber-500/60 mt-0.5 px-1">
+                            Ciudad no reconocida — selecciona del listado para activar el match geográfico.
+                        </p>
+                    )}
+                </div>
+
                 <TextAreaField
                     label="Sobre Mí / Biografía"
                     value={formData.bio || ''}
                     onChange={v => handleInputChange('bio', v)}
                     disabled={!isEditing}
-                    placeholder="Escriba una breve biografía sobre usted o su trayectoria profesional..."
+                    placeholder="Escriba una breve descripción de la empresa..."
                     fullWidth
                 />
             </div>

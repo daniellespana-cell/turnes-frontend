@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Zap, ChevronRight, History, UserPlus } from 'lucide-react';
+import { Zap, ChevronRight, History, UserPlus } from 'lucide-react';
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

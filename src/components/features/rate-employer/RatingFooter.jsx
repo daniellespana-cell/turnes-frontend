@@ -1,5 +1,5 @@
 import React from 'react';
-import { Send, ShieldCheck } from 'lucide-react';
+import { Send } from 'lucide-react';
 import Spinner from '../../ui/Spinner';
 
 

@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Clock, User, Star, Info, CheckCircle, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import NotFound from '../common/NotFound';
 import SEOHead from '../../components/seo/SEOHead';
 import RolPricingBlock from '../../components/sections/RolPricingBlock';
-import SectionCard from '../../components/profile/shared/SectionCard';
 import TurnesButton from '../../components/ui/TurnesButton';
 
 import { useParams, useNavigate } from 'react-router-dom';
@@ -13,6 +12,19 @@ import { ArrowRight } from 'lucide-react';
 
 // === IMPORTACIONES MODULARES ===
 import { getRoleBySlug } from '../../domain/vacantes.taxonomy';
+import { buildJobSchema } from '../../utils/seoHelpers';
+
+// ─── Diccionario de slugs del Carrusel de Marketing ────────────────────────
+// Extraído del cuerpo del componente — es dato estático, no lógica de render.
+/** @type {Record<string, string>} */
+const CAROUSEL_TITLES = {
+    reposteria: 'Chef de Repostería',
+    barista:    'Barista Profesional',
+    cocinero:   'Cocinero Rápido',
+    bartender:  'Bartender de Eventos',
+    ayudante:   'Ayudante de Cocina',
+    mesero:     'Mesero de Finde'
+};
 
 // =====================================================================
 // === ANIMATION VARIANTS ===
@@ -41,37 +53,23 @@ const DetalleRolPage = () => {
     // 2. Si la taxonomía o la DB no lo tienen (porque son del JobCarousel), 
     // fabricamos una copia idéntica a la estructura de "Mesero" para que la tarjeta randerice perfecto.
     if (!roleNode || !roleNode.marketing) {
-        
-        // Diccionario de los Slugs del Carrusel para que tengan su propio título
-        const CAROUSEL_TITLES = {
-            reposteria: "Chef de Repostería",
-            barista: "Barista Profesional",
-            cocinero: "Cocinero Rápido",
-            bartender: "Bartender de Eventos",
-            ayudante: "Ayudante de Cocina",
-            mesero: "Mesero de Finde"
-        };
+        // Si el slug no es del carrusel y de verdad no existe → 404
+        if (!CAROUSEL_TITLES[rolSlug]) return <NotFound />;
 
-        // Si el slug no es del carrusel y de verdad no existe, entonces sí tiramos 404
-        if (!CAROUSEL_TITLES[rolSlug] && !roleNode) {
-            return <NotFound />;
-        }
-
-        const title = CAROUSEL_TITLES[rolSlug] || (roleNode ? roleNode.label : "Oportunidad de Turno");
-
+        const title = CAROUSEL_TITLES[rolSlug];
         roleNode = {
-            id: rolSlug,
-            label: title,
+            id:       rolSlug,
+            label:    title,
             marketing: {
-                title: title,
-                accentColor: "emerald",
+                title,
+                accentColor: 'emerald',
                 description: `Únete a la red de ${title} en Turnes y encuentra turnos flexibles, pagos inmediatos y locales verificados en tu ciudad.`,
                 job: {
-                    title: `Vacante de ${title}`,
-                    salary: "Pago x Hora / Turno",
-                    location: "Múltiples Zonas",
-                    hours: "Turnos Flexibles",
-                    reqs: ["Experiencia comprobable", "Disponibilidad inmediata", "Actitud y compromiso"]
+                    title:    `Vacante de ${title}`,
+                    salary:   'Pago x Hora / Turno',
+                    location: 'Múltiples Zonas',
+                    hours:    'Turnos Flexibles',
+                    reqs:     ['Experiencia comprobable', 'Disponibilidad inmediata', 'Actitud y compromiso']
                 }
             }
         };
@@ -81,45 +79,8 @@ const DetalleRolPage = () => {
     const rol = roleNode.marketing;
     const { accentColor } = rol;
 
-    // ✅ SEO Dinámico & Google Jobs JSON-LD
-    const jobSchema = {
-        "@context": "https://schema.org",
-        "@type": "JobPosting",
-        "title": rol.job.title,
-        "description": rol.description,
-        "identifier": {
-            "@type": "PropertyValue",
-            "name": "Turnes",
-            "value": roleNode.id
-        },
-        "datePosted": new Date().toISOString().split('T')[0],
-        "validThrough": new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
-        "employmentType": "CONTRACTOR",
-        "hiringOrganization": {
-            "@type": "Organization",
-            "name": "Turnes",
-            "sameAs": "https://turnes.app",
-            "logo": "https://turnes.app/logo.png"
-        },
-        "jobLocation": {
-            "@type": "Place",
-            "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Girón",
-                "addressRegion": "Santander",
-                "addressCountry": "CO"
-            }
-        },
-        "baseSalary": {
-            "@type": "MonetaryAmount",
-            "currency": "COP",
-            "value": {
-                "@type": "QuantitativeValue",
-                "value": 60000,
-                "unitText": "HOUR"
-            }
-        }
-    };
+    // SEO Dinámico — JSON-LD para Google Jobs (delegado a seoHelpers)
+    const jobSchema = buildJobSchema(roleNode);
 
     // Leyenda comercial unificada
     const shortSummary = "Conecta con los mejores talentos de forma flexible. Turnos verificados al instante, sin ataduras contractuales.";

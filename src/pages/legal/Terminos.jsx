@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Info, Shield, Clock, ArrowRight, CheckCircle } from 'lucide-react';
+import { Info, CheckCircle } from 'lucide-react';
 
 
 // === IMPORTACIONES REALES ===

@@ -7,10 +7,13 @@ const P = UI_STRINGS.PROFILE;
  */
 export const normalizeCandidateProfile = (raw) => {
     if (!raw) return null;
+    const avatarUrl = raw.avatar_url || raw.avatar || null;
     return {
         id: raw.id,
         nombre_display: raw.nombre_display || raw.name || P.DEFAULT_NAME,
-        avatar_url: raw.avatar_url || raw.avatar || null,
+        // Exponer el avatar en ambas llaves para tolerancia de consumidores distintos
+        avatar_url: avatarUrl,
+        avatar: avatarUrl,
         role: raw.skills?.[0] || raw.titulo_profesional || raw.rol || P.DEFAULT_ROLE,
         // 🛡️ REFUERZO SSOT: La base de datos manda
         rating: Number(raw.reputation_score ?? raw.rating ?? raw.calificacion ?? 0).toFixed(1),
@@ -60,8 +63,9 @@ export const normalizeChatContext = (data, companyData = null) => {
     }
 
     const candidate = normalizeCandidateProfile(data.candidato);
-    const candidateName = candidate?.name || P.DEFAULT_CANDIDATE;
-    const candidateAvatar = candidate?.avatar || null;
+    const candidateName = candidate?.nombre_display || P.DEFAULT_CANDIDATE;
+    // 🐛 BUG FIX: ahora `normalizeCandidateProfile` expone `avatar_url` Y `avatar`.
+    const candidateAvatar = candidate?.avatar_url || null;
 
     return {
         id: data.id,
@@ -72,7 +76,9 @@ export const normalizeChatContext = (data, companyData = null) => {
         companyAvatar: companyLogo,
         candidate: candidateName,
         candidateAvatar: candidateAvatar,
-        avatar: candidateAvatar || companyLogo, 
+        // Aliases en ambas llaves para tolerancia de componentes con distintas expectativas
+        avatar: candidateAvatar,
+        avatar_url: candidateAvatar,
         companyId: data.vacante?.empresa_id || data.companyId,
         candidateId: candidate?.id || data.candidateId,
         payment: data.vacante?.pago_monto || data.payment,

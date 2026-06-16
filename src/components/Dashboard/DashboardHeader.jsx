@@ -1,6 +1,3 @@
-import { PlusCircle, MessageSquare, Search } from 'lucide-react';
-import { motion } from 'framer-motion';
-import typography from '../../styles/typography';
 
 import { useNavigate } from 'react-router-dom';
 

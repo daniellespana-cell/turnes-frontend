@@ -11,7 +11,6 @@ import { useChatLogic } from "../../hooks/chat/useChatLogic";
 import { useCandidatosLogic } from '../../hooks/useCandidatosLogic';
 import { CandidateService } from '../../services/candidateService';
 import { useChatUI } from '../../hooks/chat/useChatUI';
-import { AssetResolver } from '../../utils/assetHelper';
 
 const BusinessChatPage = () => {
     const { id } = useParams();
@@ -46,8 +45,12 @@ const BusinessChatPage = () => {
         if (dbContact) {
             return {
                 ...dbContact,
-                name: dbContact.candidate || "Candidato",
-                avatar: AssetResolver.getAvatar(dbContact.candidateAvatar || dbContact.candidato?.avatar_url || dbContact.candidato?.avatar) || null
+                // dbContact ya viene normalizado por `normalizeChatContext`:
+                // .candidate  → nombre del candidato
+                // .avatar / .avatar_url → URL de la foto
+                name: dbContact.candidate || 'Candidato',
+                avatar: dbContact.avatar || dbContact.avatar_url || dbContact.candidateAvatar || null,
+                avatar_url: dbContact.avatar_url || dbContact.avatar || dbContact.candidateAvatar || null,
             };
         }
         return null;

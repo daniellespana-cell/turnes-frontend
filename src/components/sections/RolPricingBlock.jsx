@@ -1,6 +1,4 @@
 import React from 'react';
-import { Percent } from 'lucide-react';
-import { motion } from 'framer-motion';
 import SectionCard from '../profile/shared/SectionCard';
 import PricingCard from '../pricing/PricingCard';
 
@@ -32,7 +30,7 @@ const RolPricingBlock = () => {
     return (
         <SectionCard 
             title="Planes de Empresa y Ahorro" 
-            icon={Briefcase} 
+            icon={<Briefcase />} 
             accent="indigo" 
             className="col-span-full mt-10"
         >

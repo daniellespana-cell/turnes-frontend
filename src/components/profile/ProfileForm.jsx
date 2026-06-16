@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LogOut } from 'lucide-react';
-import PersonalInfoSection from '../talent/WorkerProfile/PersonalInfoSection';
-import IndustrialProfileSection from '../talent/WorkerProfile/IndustrialProfileSection';
+import PersonalInfoSection from './ProfileForm/PersonalInfoSection';
+import IndustrialProfileSection from './ProfileForm/IndustrialProfileSection';
 import BillingInfoSection from './ProfileForm/BillingInfoSection';
 import ProfileActionIsland from './ProfileForm/ProfileActionIsland';
 
@@ -51,7 +51,7 @@ const ProfileForm = ({
                     isEditing={isEditing}
                 />
 
-                {/* BOTÓN LOGOUT (Mantenido Simple) */}
+                {/* BOTÓN LOGOUT */}
                 <button
                     onClick={logout}
                     className="w-full mt-4 p-3 rounded-xl border border-red-500/10 bg-red-500/5 hover:bg-red-500/10 text-red-500 flex items-center justify-center gap-2 transition-all group"
@@ -61,7 +61,7 @@ const ProfileForm = ({
                 </button>
             </motion.div>
 
-            {/* 4. ACCIÓN FLOTANTE (DYNAMIC ISLAND) */}
+            {/* 4. ACCIÓN FLOTANTE */}
             <ProfileActionIsland
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}

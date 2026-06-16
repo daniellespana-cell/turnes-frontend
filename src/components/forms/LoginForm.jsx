@@ -43,7 +43,7 @@ const LoginForm = () => {
             navigate(from, { replace: true });
 
         } catch (error) {
-            console.error('Login Error:', error);
+            // Silenciado para producción: error?.message ya se envía al UI
             // Capturamos el mensaje exacto de Supabase o nuestro Contexto
             setMessage({ text: error?.message || 'Credenciales inválidas.', type: 'error' });
         } finally {
@@ -58,7 +58,6 @@ const LoginForm = () => {
             setIsLoading(true);
             await loginWithGoogle(null, true); 
         } catch (error) {
-            console.error("Error Google:", error);
             setMessage({ text: "Error de conexión.", type: "error" });
             setIsLoading(false);
         }

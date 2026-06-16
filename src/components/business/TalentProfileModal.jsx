@@ -1,7 +1,5 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import authService from '../../services/authService';
-import { supabase } from '../../services/supabaseClient';
 import TalentProfileHeader from './talent-profile/TalentProfileHeader';
 import TalentProfileContent from './talent-profile/TalentProfileContent';
 import TalentProfileFooter from './talent-profile/TalentProfileFooter';

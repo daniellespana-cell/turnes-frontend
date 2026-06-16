@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { ArrowLeft, ArrowRight, ChevronDown, ShieldIcon, LockIcon, CheckCircle } from 'lucide-react';
+import React from 'react';
+import { ArrowLeft, LockIcon, CheckCircle } from 'lucide-react';
 import PaymentSuccessOverlay from '../../components/checkout/PaymentSuccessOverlay';
 import PlanSummaryCard from '../../components/checkout/PlanSummaryCard';
 import WalletPaymentMethod from '../../components/checkout/WalletPaymentMethod';

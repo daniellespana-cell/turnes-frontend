@@ -59,7 +59,14 @@ export const NotificationsProvider = ({ children }) => {
         notificationObserver.fetchHistory(user.id).then(rows => {
             if (!cancelled) { 
                 const normalized = rows.map(normalize);
-                setNotifications(deduplicate(normalized)); 
+                const deduped = deduplicate(normalized);
+                // 🚀 Senior Fix: Sort explicitly to guarantee Newest First (Descending) order
+                const sorted = deduped.sort((a, b) => {
+                    const dateA = new Date(a.createdAt).getTime() || 0;
+                    const dateB = new Date(b.createdAt).getTime() || 0;
+                    return dateB - dateA;
+                });
+                setNotifications(sorted); 
                 setLoading(false); 
             }
         });
@@ -75,8 +82,12 @@ export const NotificationsProvider = ({ children }) => {
             setNotifications(prev => {
                 const newNote = normalize(row);
                 const newList = [newNote, ...prev];
-                // 🚀 Aplicamos deduplicación global para limpiar incluso si el historial ya tenía el duplicado
-                return deduplicate(newList).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                // 🚀 Aplicamos deduplicación global para limpiar y ordenamos de forma estricta (Newest First)
+                return deduplicate(newList).sort((a, b) => {
+                    const dateA = new Date(a.createdAt).getTime() || 0;
+                    const dateB = new Date(b.createdAt).getTime() || 0;
+                    return dateB - dateA;
+                });
             });
         });
 
@@ -104,10 +115,16 @@ export const NotificationsProvider = ({ children }) => {
         notificationObserver.dispatch(targetUserId, tipo, referenceId, metadata), []);
 
     const deleteNotification = useCallback(async (id) => {
-        // Optimistic UI update
+        // Optimistic UI: sacar inmediatamente
+        const snapshot = notifications;
         setNotifications(prev => prev.filter(n => n.id !== id));
-        await notificationObserver.deleteNotification(id);
-    }, []);
+        try {
+            await notificationObserver.deleteNotification(id);
+        } catch {
+            // 🛡️ RLS o error de red: revertir al estado previo
+            setNotifications(snapshot);
+        }
+    }, [notifications]);
 
     const unreadCount = useMemo(() => notifications.filter(n => !n.leida).length, [notifications]);
     const userRole = user?.rol === 'postulante' ? 'candidato' : 'empresa';

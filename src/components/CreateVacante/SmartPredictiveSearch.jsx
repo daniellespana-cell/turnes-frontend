@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, MapPin, Briefcase, Sparkles, X } from 'lucide-react';
+import { MapPin, Briefcase, Sparkles, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
@@ -80,10 +80,10 @@ const SmartPredictiveSearch = ({
         <div className="relative w-full group" ref={wrapperRef}>
             {/* Input Container */}
             <div className={`
-        flex items-center gap-3 p-4 rounded-xl transition-all duration-300
-        bg-zinc-900/30 
-        group-focus-within:bg-zinc-900/50 group-focus-within:shadow-[0_0_20px_-5px_rgba(168,85,247,0.15)]
-        ${value ? 'bg-zinc-900/40' : ''}
+        flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300
+        bg-[#0f0f0f] border border-zinc-800 hover:border-zinc-700 shadow-sm
+        group-focus-within:border-emerald-500/50 group-focus-within:bg-[#151515] group-focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)]
+        ${value ? 'border-zinc-700 bg-[#121212]' : ''}
       `}>
                 <div className={`p-2 rounded-lg ${value ? 'bg-brand-primary/10 text-brand-primary' : 'bg-zinc-800/50 text-zinc-500'} transition-colors`}>
                     <Icon size={16} strokeWidth={2.5} />

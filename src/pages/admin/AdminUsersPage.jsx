@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Search, RefreshCw, Ban } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import KycBadge from '../../components/admin/shared/KycBadge';

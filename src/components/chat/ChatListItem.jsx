@@ -1,5 +1,4 @@
-import typography from '../../styles/typography';
-import { ShieldCheck, Lock, MoreVertical, Archive, ShieldAlert, Trash2 } from 'lucide-react';
+import { Lock, MoreVertical, Archive, ShieldAlert, Trash2 } from 'lucide-react';
 
 import React, { useSyncExternalStore } from 'react';
 import { chatState } from '../../services/chat/chatState';

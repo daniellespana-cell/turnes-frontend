@@ -103,6 +103,7 @@ export const useCreateVacante = (user) => {
         pago_monto: formData.payment,
         fecha_turno: formData.date,
         tipo_turno: formData.type,
+        tipo_turno_id: formData.schedule,
         status: 'activa',
         es_urgente: formData.isUrgent,
         etiquetas: formData.tags,

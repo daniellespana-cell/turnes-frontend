@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import FormField from './FormField';
 import QuantitySelector from './QuantitySelector';
 import SmartPredictiveSearch from './SmartPredictiveSearch';
@@ -26,7 +26,7 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
   };
 
   return (
-    <section className="bg-zinc-900/20 rounded-[2rem] p-6 md:p-8 space-y-5 font-manrope backdrop-blur-md">
+    <section className="space-y-6 font-manrope pt-2">
       <header className="flex items-center gap-2 mb-2 opacity-40 text-zinc-400">
         <label className="text-[9px] font-black uppercase tracking-[0.2em]">Configuración del Turno</label>
       </header>
@@ -61,7 +61,7 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
                 transition-all duration-300 group text-left
                 ${formData.isLocationConfirmed
                   ? 'bg-emerald-500/5 border border-emerald-500/15 hover:bg-emerald-500/10'
-                  : 'bg-zinc-900/50 border border-transparent  hover:bg-zinc-800/40'
+                  : 'bg-[#0f0f0f] border border-zinc-800 hover:border-zinc-700 shadow-sm'
                 }
               `}
             >
@@ -158,9 +158,9 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
 
         {/* DESCRIPCIÓN */}
         <div className="md:col-span-2 space-y-2">
-          <div className={`relative rounded-xl p-4 transition-all duration-500 ${ui.isDescriptionInvalid
+          <div className={`relative rounded-xl p-4 shadow-sm transition-all duration-300 ${ui.isDescriptionInvalid
             ? 'bg-red-500/5 border border-red-500/30'
-            : 'bg-zinc-900/30 border border-transparent focus-within:bg-zinc-900/50'
+            : 'bg-[#0f0f0f] border border-zinc-800 hover:border-zinc-700 focus-within:border-emerald-500/50 focus-within:bg-[#151515] focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)]'
             }`}>
             <textarea
               name="description"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Briefcase, Zap, AlertCircle } from 'lucide-react';
+import { Star, Briefcase, Zap } from 'lucide-react';
 
 import { getCategoryUIConfig } from '../../../domain/vacantes.taxonomy';
 

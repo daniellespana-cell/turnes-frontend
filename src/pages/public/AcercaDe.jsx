@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Target, Shield, Clock, CheckCircle, Heart, Eye } from 'lucide-react';
+import { Users, Target, Shield, Heart, Eye } from 'lucide-react';
 import CtaSection from '../../components/common/CtaSection';
 import SEO from '../../components/common/SEO';
 

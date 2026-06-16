@@ -1,6 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 import { RegisterProvider } from '../../context/RegisterContext';
 import RoleSelection from '../../components/auth/RoleSelection';
 import AuthNavbar from '../../components/layout/AuthNavbar';

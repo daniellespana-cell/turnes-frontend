@@ -1,4 +1,4 @@
-import { SECTOR_MAP, getSectorByTag } from './vacantes.taxonomy';
+import { SECTOR_MAP, getSectorByTag, TURNOS_PREDEFINIDOS } from './vacantes.taxonomy';
 import { UI_STRINGS } from './uiTranslations';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -68,7 +68,7 @@ export const normalizeVacancy = (v, coordCounts, isFallback = false) => {
         business = T.CONFIDENTIAL_COMPANY || 'Empresa Confidencial';
     }
 
-    const businessLogo  = v.empresa_logo_url         || empresa.logo_url         || null;
+    const businessLogo  = v.empresa_logo_url || empresa.logo_url || empresa.avatar_url || empresa.avatar || empresa.foto || null;
     const isVerified    = v.empresa_verificado ?? v.es_verificado ?? empresa.verificado ?? empresa.es_verificado ?? empresa.verificada ?? false;
     const rating        = empresa.calificacion        ?? 0;
 
@@ -96,23 +96,24 @@ export const normalizeVacancy = (v, coordCounts, isFallback = false) => {
         priceLabel:  price > 0 ? `$${(price / 1000).toFixed(0)}k` : T.TO_BE_NEGOTIATED,
         type:        v.modalidad     || v.tipo_turno || null,
         turnoId:     v.tipo_turno_id || null,
+        scheduleLabel: (() => {
+            if (!v.tipo_turno_id) return 'A convenir';
+            const turno = TURNOS_PREDEFINIDOS.find(t => t.id === v.tipo_turno_id);
+            if (!turno) return 'A convenir';
+            return turno.label.split(' (')[0];
+        })(),
         esUrgente:   v.es_urgente    ?? false,
         description: sanitize(v.descripcion   || ''),
         date: (() => {
-            if (!v.fecha_turno) return 'Fecha a convenir';
-            
-            // 🛡️ Universal Splitter (Supports 'T' or Space separator)
+            if (!v.fecha_turno) return 'A convenir';
             const datePart = v.fecha_turno.split(/[T ]/)[0];
             const parts = datePart.split('-');
-            if (parts.length !== 3) return 'Fecha a convenir';
-            
+            if (parts.length !== 3) return 'A convenir';
             const [year, month, day] = parts;
-            const dateObj = new Date(year, month - 1, day); // Local time constructor
-            
-            const weekday = dateObj.toLocaleDateString('es-CO', { weekday: 'short' }).replace('.', '');
-            const monthName = dateObj.toLocaleDateString('es-CO', { month: 'short' }).replace('.', '');
-            
-            return `${weekday}, ${parseInt(day)} de ${monthName}`;
+            const dateObj = new Date(year, month - 1, day);
+            const weekday  = dateObj.toLocaleDateString('es-CO', { weekday: 'short' }).replace('.', '').toUpperCase();
+            const monthName = dateObj.toLocaleDateString('es-CO', { month: 'short' }).replace('.', '').toUpperCase();
+            return `${weekday} ${parseInt(day)} ${monthName}`;
         })(),
         category:    inferCategory(v),
         tags:        (v.etiquetas     || []).map(sanitize),
@@ -133,7 +134,8 @@ export const normalizeVacancy = (v, coordCounts, isFallback = false) => {
 export const normalizeApplication = (app) => {
     const T = UI_STRINGS.VACANCY;
     const v = app.vacante || {};
-    const e = v.empresas || {};
+    const eRaw = v.empresas || v.empresa || {};
+    const e = Array.isArray(eRaw) ? (eRaw[0] || {}) : eRaw;
     const dateObj = v.fecha_turno ? new Date(v.fecha_turno) : new Date(app.created_at);
     const today = new Date();
     const isToday = dateObj.toDateString() === today.toDateString();
@@ -152,7 +154,7 @@ export const normalizeApplication = (app) => {
         role: v.titulo || T.UNTITLED,
         company: e.nombre_comercial || T.CONFIDENTIAL_COMPANY,
         companyId: e.id,
-        companyLogo: e.logo_url,
+        companyLogo: e.logo_url || e.avatar_url || e.avatar || e.foto || null,
         address: v.direccion_formateada || T.BY_CONFIRMING,
         city: 'Ciudad',
         category: v.categoria || 'Otros',

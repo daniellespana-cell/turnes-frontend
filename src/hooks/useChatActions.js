@@ -1,4 +1,3 @@
-import { PROTOCOL_STEPS } from '../services/contractService';
 
 import { useCallback } from 'react';
 import { supabase } from '../services/supabaseClient';

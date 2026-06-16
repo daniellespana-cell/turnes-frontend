@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Cookie, X, ShieldCheck, Settings } from 'lucide-react';
+import { Cookie } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CookieSettingsModal from './CookieSettingsModal';
 

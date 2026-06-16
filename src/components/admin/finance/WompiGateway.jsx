@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Hash, ExternalLink } from 'lucide-react';
+import { Hash } from 'lucide-react';
 import AdminEmptyState from '../shared/AdminEmptyState';
 
 import { CreditCard, ShieldCheck, Zap, TrendingUp } from 'lucide-react';

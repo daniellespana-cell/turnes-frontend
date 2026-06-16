@@ -87,6 +87,7 @@ const LocationSelector = ({ label, value, onChange, disabled }) => {
                 <AnimatePresence>
                     {isOpen && filteredSpecs.length > 0 && (
                         <motion.div
+                            key="location-suggestions-dropdown"
                             initial={{ opacity: 0, y: -10, scale: 0.98 }}
                             animate={{ opacity: 1, y: 8, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.98 }}

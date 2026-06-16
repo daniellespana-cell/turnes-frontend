@@ -1,6 +1,5 @@
 import React from 'react';
 import { Star } from 'lucide-react';
-import typography from '../../styles/typography';
 
 import { UI_STRINGS } from '../../domain/uiTranslations';
 import { formatDateMY } from '../../utils/formatters';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, MapPin, Briefcase, ShieldCheck } from 'lucide-react';
+import { Star, Briefcase, ShieldCheck } from 'lucide-react';
 import ReviewItem from '../detallePerfil/ReviewItem';
 import TalentKPIs from '../business/talent-profile/TalentKPIs';
 
