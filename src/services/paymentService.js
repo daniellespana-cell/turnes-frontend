@@ -61,10 +61,7 @@ class PaymentService {
             reference: reference,
             publicKey: publicKey,
             customerData: {
-                email: email || 'cliente@turnes.co', // Evitar undefined que rompe el widget
-                fullName: 'Cliente Turnes',
-                phoneNumber: '3000000000',
-                phoneNumberPrefix: '+57'
+                email: email || 'cliente@turnes.co' // Evitar undefined que rompe el widget
             },
             signature: { integrity: integritySignature }
         };
