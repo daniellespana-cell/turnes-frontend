@@ -45,7 +45,7 @@ const LandingFooter = () => {
               <a href="#" aria-label="Twitter" className="text-secondary hover:text-brand-success transition text-xl">
                 <Twitter size={20} />
               </a>
-              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-secondary hover:text-brand-success transition text-xl">
+              <a href="https://www.instagram.com/turnes.co/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-secondary hover:text-brand-success transition text-xl">
                 <Instagram size={20} />
               </a>
               <a href="#" aria-label="LinkedIn" className="text-secondary hover:text-brand-success transition text-xl">
