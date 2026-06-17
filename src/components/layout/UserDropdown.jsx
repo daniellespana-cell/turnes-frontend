@@ -42,9 +42,11 @@ const UserDropdown = ({ isOpen, onClose }) => {
                                         {user.nombre_display || user.name || 'Usuario'}
                                     </h4>
                                     <p className="text-[10px] text-zinc-500 truncate mb-1">{user.email}</p>
-                                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black tracking-widest leading-none ${badge.color}`}>
-                                        {badge.label}
-                                    </span>
+                                    {badge && (
+                                        <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black tracking-widest leading-none ${badge.color}`}>
+                                            {badge.label}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>
