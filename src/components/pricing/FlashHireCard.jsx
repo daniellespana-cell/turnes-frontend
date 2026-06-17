@@ -33,7 +33,7 @@ const FlashHireCard = () => {
                         <div className="flex flex-col sm:flex-row gap-4">
                             <Link
                                 to="/register"
-                                className="px-8 py-3 bg-white text-indigo-950 font-bold rounded-xl hover:bg-indigo-50 transition-colors shadow-lg shadow-white/10 text-center"
+                                className="px-8 py-3 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/25 text-center"
                             >
                                 Pagar Turno Único
                             </Link>

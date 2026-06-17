@@ -77,10 +77,7 @@ const PagePricingCard = ({ plan, userLoggedIn }) => {
                     to={linkTo}
                     className={`
                         w-full flex items-center justify-center py-4 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 group
-                        ${isPopular
-                            ? 'bg-emerald-500 text-black hover:bg-emerald-400 shadow-lg shadow-emerald-500/25'
-                            : 'bg-white text-black hover:bg-zinc-200'
-                        }
+                        bg-emerald-500 text-black hover:bg-emerald-400 shadow-lg shadow-emerald-500/25
                     `}
                 >
                     {plan.priceValue === 0 ? "Comenzar Gratis" : "Elegir Plan"} <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
