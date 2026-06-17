@@ -39,13 +39,13 @@ const LandingFooter = () => {
             </p>
 
             <div className="flex space-x-4">
-              <a href="#" aria-label="Facebook" className="text-secondary hover:text-brand-success transition text-xl">
+              <a href="https://facebook.com/Turnes.co" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-secondary hover:text-brand-success transition text-xl">
                 <Facebook size={20} />
               </a>
               <a href="#" aria-label="Twitter" className="text-secondary hover:text-brand-success transition text-xl">
                 <Twitter size={20} />
               </a>
-              <a href="#" aria-label="Instagram" className="text-secondary hover:text-brand-success transition text-xl">
+              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-secondary hover:text-brand-success transition text-xl">
                 <Instagram size={20} />
               </a>
               <a href="#" aria-label="LinkedIn" className="text-secondary hover:text-brand-success transition text-xl">
