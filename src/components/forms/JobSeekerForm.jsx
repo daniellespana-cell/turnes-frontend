@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService'; // Conexión Real
 import { useRegister } from '../../context/RegisterContext';
 import { validatePasswordStrength } from '../../utils/validationUtils';
+import PasswordSecurityGroup from './PasswordSecurityGroup';
 
 const FormClasses = {
     inputGroup: "space-y-0.5",
@@ -94,18 +95,7 @@ const JobSeekerForm = () => {
                     <input type="email" id="email" name="email" required className={FormClasses.input} placeholder="juan@ejemplo.com" />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                    <div className={FormClasses.inputGroup}>
-                        <label htmlFor="password" className={FormClasses.label}>Contraseña</label>
-                        <input type="password" id="password" name="password" required className={FormClasses.input} placeholder="******" />
-                        <p className="text-[9px] text-zinc-500 mt-1 ml-1 leading-tight">Mín. 8 caracteres, 1 mayúscula, 1 número y 1 símbolo.</p>
-                    </div>
-
-                    <div className={FormClasses.inputGroup}>
-                        <label htmlFor="confirmPassword" className={FormClasses.label}>Confirmar</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" required className={FormClasses.input} placeholder="******" />
-                    </div>
-                </div>
+                <PasswordSecurityGroup />
 
                 <button
                     type="submit"
