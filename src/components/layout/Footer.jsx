@@ -12,7 +12,7 @@ const LandingFooter = () => {
     <li>
       <Link
         to={to}
-        className="text-secondary hover:text-brand-success transition-colors text-base"
+        className="inline-block py-1.5 text-sm text-zinc-400 hover:text-emerald-400 hover:translate-x-1 transition-all duration-300"
       >
         {label}
       </Link>
@@ -20,43 +20,45 @@ const LandingFooter = () => {
   );
 
   return (
-    <footer className="bg-app/90 backdrop-blur-sm shadow-lg border-t border-zinc-800 text-main pt-6 pb-4">
-      <div className="max-w-7xl mx-auto px-6">
-
+    <footer className="bg-[#09090b] border-t border-zinc-800/50 text-white pt-12 pb-6 relative overflow-hidden">
+      {/* Subtle background glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent"></div>
+      
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* GRID PRINCIPAL */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-4">
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-8 py-8">
+          
           {/* 1. Logo + Info */}
-          <div className="flex flex-col items-start min-w-[200px]">
+          <div className="flex flex-col items-start sm:col-span-2 md:col-span-1">
             <img
               src={logoFromAssets}
               alt="Turnes Logo"
-              className="h-10 w-auto object-contain select-none logo-animated mb-3"
+              className="h-10 w-auto object-contain select-none mb-6 hover:scale-105 transition-transform duration-300"
             />
 
-            <p className="text-secondary mb-4 text-base">
-              La plataforma moderna para gestionar turnos y citas de manera eficiente.
+            <p className="text-zinc-400 mb-8 text-sm leading-relaxed max-w-sm sm:max-w-md md:max-w-xs">
+              La plataforma moderna para gestionar turnos y citas de manera eficiente y automatizada.
             </p>
 
-            <div className="flex space-x-4">
-              <a href="https://facebook.com/Turnes.co" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-secondary hover:text-brand-success transition text-xl">
-                <Facebook size={20} />
+            <div className="flex items-center gap-3">
+              <a href="https://facebook.com/Turnes.co" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="p-2.5 rounded-xl bg-zinc-800/50 text-zinc-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all duration-300 group">
+                <Facebook size={18} className="group-hover:scale-110 transition-transform" />
               </a>
-              <a href="#" aria-label="Twitter" className="text-secondary hover:text-brand-success transition text-xl">
-                <Twitter size={20} />
+              <a href="#" aria-label="Twitter" className="p-2.5 rounded-xl bg-zinc-800/50 text-zinc-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all duration-300 group">
+                <Twitter size={18} className="group-hover:scale-110 transition-transform" />
               </a>
-              <a href="https://www.instagram.com/turnes.co/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-secondary hover:text-brand-success transition text-xl">
-                <Instagram size={20} />
+              <a href="https://www.instagram.com/turnes.co/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="p-2.5 rounded-xl bg-zinc-800/50 text-zinc-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all duration-300 group">
+                <Instagram size={18} className="group-hover:scale-110 transition-transform" />
               </a>
-              <a href="#" aria-label="LinkedIn" className="text-secondary hover:text-brand-success transition text-xl">
-                <Linkedin size={20} />
+              <a href="#" aria-label="LinkedIn" className="p-2.5 rounded-xl bg-zinc-800/50 text-zinc-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all duration-300 group">
+                <Linkedin size={18} className="group-hover:scale-110 transition-transform" />
               </a>
             </div>
           </div>
 
           {/* 2. Enlaces rápidos */}
           <div>
-            <h4 className="text-xl font-semibold mb-4 text-white">Enlaces Rápidos</h4>
+            <h4 className="text-xs font-black mb-6 text-white uppercase tracking-widest">Enlaces Rápidos</h4>
             <ul className="space-y-2 list-none p-0">
               <FooterLink to="/" label="Inicio" />
               <FooterLink to="/explorar" label="Explorar Vacantes" />
@@ -68,7 +70,7 @@ const LandingFooter = () => {
 
           {/* 3. Legal */}
           <div>
-            <h4 className="text-xl font-semibold mb-4 text-white">Legal & Docs</h4>
+            <h4 className="text-xs font-black mb-6 text-white uppercase tracking-widest">Legal & Docs</h4>
             <ul className="space-y-2 list-none p-0">
               <FooterLink to="/privacidad" label="Política de Privacidad" />
               <FooterLink to="/terminos" label="Términos y Condiciones" />
@@ -79,19 +81,26 @@ const LandingFooter = () => {
 
           {/* 4. Soporte */}
           <div>
-            <h4 className="text-xl font-semibold mb-4 text-white">Soporte</h4>
-            <ul className="space-y-3 text-base list-none p-0">
-              <li className="flex items-center text-secondary">
-                <Mail size={18} className="text-brand-success mr-3" />
-                soporte@turnes.com
+            <h4 className="text-xs font-black mb-6 text-white uppercase tracking-widest">Soporte</h4>
+            <ul className="space-y-4 list-none p-0">
+              <li>
+                <a href="mailto:soporte@turnes.com" className="group flex items-center text-sm text-zinc-400 hover:text-emerald-400 transition-colors duration-300">
+                  <div className="p-2.5 rounded-xl bg-zinc-800/50 group-hover:bg-emerald-500/20 mr-3.5 transition-colors border border-zinc-700/50 group-hover:border-emerald-500/30">
+                    <Mail size={16} className="text-emerald-500" />
+                  </div>
+                  soporte@turnes.com
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
         {/* BOTTOM BAR */}
-        <div className="border-t border-zinc-800 mt-6 pt-6 text-center text-secondary text-base">
+        <div className="border-t border-zinc-800/50 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center text-zinc-500 text-xs font-medium">
           <p>&copy; {currentYear} Turnes. Todos los derechos reservados.</p>
+          <div className="flex gap-6">
+            <span className="hover:text-emerald-400 cursor-pointer transition-colors">Hecho con ❤️ en Colombia</span>
+          </div>
         </div>
       </div>
     </footer>
