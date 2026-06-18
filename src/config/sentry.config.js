@@ -11,17 +11,14 @@ export const initSentry = () => {
       dsn: SENTRY_DSN,
       integrations: [
         Sentry.browserTracingIntegration(),
-        Sentry.replayIntegration({
-          maskAllText: true,
-          blockAllMedia: true,
-        }),
+        // 🚨 SE ELIMINÓ replayIntegration() PORQUE DESTRUYE EL RENDIMIENTO AL GUARDAR EL DOM EN SESSION STORAGE
       ],
       // Performance Monitoring
       tracesSampleRate: 0.2, // 20% of transactions for performance monitoring
       tracePropagationTargets: ["localhost", /^https:\/\/turnes\.app/],
-      // Session Replay
-      replaysSessionSampleRate: 0.1, // 10% of sessions will be recorded
-      replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors will be recorded
+      // Session Replay (Apagado completamente por performance)
+      replaysSessionSampleRate: 0,
+      replaysOnErrorSampleRate: 0,
       
       environment: "production",
       release: "turnes-vite@1.0.0",

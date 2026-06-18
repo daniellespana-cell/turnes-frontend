@@ -13,6 +13,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Optimizado para persistencia de sesión en localStorage (defecto en web)
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
+        storage: window.localStorage, // 🔒 FORZAR que use LocalStorage, NUNCA SessionStorage
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: true
