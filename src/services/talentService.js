@@ -12,10 +12,16 @@ class TalentService {
      */
     async getRadarTalent(lat, lng, query = '') {
         try {
+            // 🛑 ZERO-TRUST: Mismo bloqueo estricto que en searchTalent
+            if (!lat || !lng) {
+                console.warn("[TalentService] GPS requerido para radar.");
+                return [];
+            }
+
             // 1. Llamada primaria al Radar (PostGIS)
             const { data, error } = await supabase.rpc('buscar_talento_cercano', {
-                user_lat: lat || 7.0682,
-                user_lng: lng || -73.1698,
+                user_lat: lat,
+                user_lng: lng,
                 radio_km: 5, // Radio máximo exigido
                 search_query: query
             });
@@ -42,9 +48,15 @@ class TalentService {
      */
     async searchTalent(lat, lng, query, radiusKm = 5, limit = 20, offset = 0) {
         try {
+            // 🛑 ZERO-TRUST: Si el usuario/empresa no tiene ubicación configurada ni GPS activo,
+            // cancelamos la petición al instante. NO se inyectan coordenadas falsas.
+            if (!lat || !lng) {
+                return { data: [], error: { message: "GPS_REQUIRED" } };
+            }
+
             const { data, error } = await supabase.rpc('buscar_talento_cercano', {
-                user_lat: lat || 7.0682,
-                user_lng: lng || -73.1698,
+                user_lat: lat,
+                user_lng: lng,
                 radio_km: radiusKm,
                 search_query: query || '',
                 p_limit: limit,
