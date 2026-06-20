@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAnimation, motion } from 'framer-motion';
 
-import repImg from '../../assets/roles/rep.jpg';
-import baristaImg from '../../assets/roles/barista.jpg';
-import meseroImg from '../../assets/roles/mesero.jpg';
-import cocineroImg from '../../assets/roles/cocinero.jpg';
-import bartenderImg from '../../assets/roles/bartender.jpg';
-import ayudanteImg from '../../assets/roles/ayudante.jpg';
+import repImg from '../../assets/roles/rep.webp';
+import baristaImg from '../../assets/roles/barista.webp';
+import meseroImg from '../../assets/roles/mesero.webp';
+import cocineroImg from '../../assets/roles/cocinero.webp';
+import bartenderImg from '../../assets/roles/bartender.webp';
+import ayudanteImg from '../../assets/roles/ayudante.webp';
 
 // Lista de Roles (Mock Data)
 const jobRoles = [
