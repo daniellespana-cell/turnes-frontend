@@ -24,7 +24,7 @@ export const ActivityService = {
                     .limit(4),
                 supabase
                     .from('notificaciones')
-                    .select('id, created_at, tipo, mensaje')
+                    .select('id, created_at, tipo, metadata')
                     .eq('user_id', userId)
                     .order('created_at', { ascending: false })
                     .limit(3)
@@ -49,10 +49,11 @@ export const ActivityService = {
             // Process Notificaciones
             if (nR.status === 'fulfilled' && nR.value.data) {
                 nR.value.data.forEach(n => {
+                    const textFallback = n.metadata?.mensaje || n.metadata?.title || 'Nueva notificación de la plataforma';
                     all.push({ 
                         id: `n-${n.id}`, 
                         type: n.tipo?.includes('REVIEW') ? 'review' : 'notification', 
-                        text: n.mensaje || 'Notificación', 
+                        text: textFallback, 
                         time: n.created_at 
                     });
                 });
