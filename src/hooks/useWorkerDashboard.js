@@ -89,7 +89,8 @@ export const useWorkerDashboard = () => {
         }
 
         loadRecommendations();
-    }, [geo.loading, geo.lat, geo.lng, user]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [geo.loading, geo.lat, geo.lng, user?.id, user?.lat, user?.lng]);
 
     // ── Apply to vacancy ──────────────────────────────────────────────────────
     const applyToVacancy = useCallback(async (vacancyId) => {
