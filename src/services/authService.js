@@ -1,6 +1,7 @@
 import { supabase } from './supabaseClient';
 import { BaseService } from './base/BaseService';
 import { logger } from '../utils/logger';
+import { profileMapper } from '../utils/profileMapper';
 
 /**
  * 🔐 AUTH SERVICE (Supabase Bridge)
@@ -170,7 +171,6 @@ export const authService = {
      */
     async updateProfile(userId, updates) {
         // 🔄 Mapeo Delegado (Senior Separation of Concerns)
-        const { profileMapper } = await import('../utils/profileMapper');
         const rawPayload = profileMapper.mapUIToDB(updates);
 
         // ✅ WHITELIST: Solo columnas que existen en public.perfiles
