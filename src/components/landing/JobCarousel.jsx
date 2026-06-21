@@ -86,6 +86,8 @@ const JobCarousel = () => {
                             <img
                                 src={role.img}
                                 alt={role.title}
+                                loading="lazy"
+                                decoding="async"
                                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-40"
                                 onError={(e) => {
                                     e.target.onerror = null;
