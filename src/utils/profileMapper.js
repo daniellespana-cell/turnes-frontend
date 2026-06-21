@@ -69,6 +69,27 @@ export const profileMapper = {
     },
 
     /**
+     * Filtra datos sensibles (DLP) para evitar fuga de plataforma (correos y teléfonos).
+     */
+    sanitizeDLP(text) {
+        if (!text || typeof text !== 'string') return text;
+        
+        let sanitized = text;
+
+        // 1. Enmascarar correos electrónicos
+        sanitized = sanitized.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[CORREO PROTEGIDO]');
+        
+        // 2. Enmascarar números de teléfono (detecta 10 dígitos con o sin prefijo +57, espacios, guiones)
+        // Ejemplo: 3105555555, 310 555 5555, 310-555-5555, +57 310 555 5555
+        sanitized = sanitized.replace(/(?:\+?57[\s-]?)?(?:3\d{2}[\s-]?\d{3}[\s-]?\d{4})/g, '[TELÉFONO PROTEGIDO]');
+        
+        // 3. Enmascarar palabras clave sospechosas
+        sanitized = sanitized.replace(/(?:whatsapp|wa\.me|celular|cel:|llámame al|escríbeme al|mi numero es)/gi, '[CONTACTO PROTEGIDO]');
+        
+        return sanitized;
+    },
+
+    /**
      * Mapea actualizaciones de la UI a los nombres de columna de la DB.
      * @param {Object} uiUpdates - Datos desde formularios de React
      */
@@ -92,9 +113,23 @@ export const profileMapper = {
             configuraciones: 'configuraciones'
         };
 
+        const dlpFields = ['nombre_display', 'nombre_empresa', 'bio'];
+
         Object.keys(uiUpdates).forEach(key => {
             if (mapping[key]) {
-                dbPayload[mapping[key]] = uiUpdates[key];
+                let value = uiUpdates[key];
+
+                // Aplicar escudo DLP en campos susceptibles de fuga
+                if (dlpFields.includes(mapping[key]) && typeof value === 'string') {
+                    value = profileMapper.sanitizeDLP(value);
+                }
+
+                // Validar que las habilidades personalizadas no escondan números
+                if (mapping[key] === 'skills' && Array.isArray(value)) {
+                    value = value.map(skill => typeof skill === 'string' ? profileMapper.sanitizeDLP(skill) : skill);
+                }
+
+                dbPayload[mapping[key]] = value;
             }
         });
 
