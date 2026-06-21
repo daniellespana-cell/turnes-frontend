@@ -196,20 +196,6 @@ export const authService = {
         delete dbPayload.reputation_count;
         delete dbPayload.rol;
 
-        if (Object.keys(dbPayload).length === 0) {
-            logger.warn('[authService.updateProfile] No hay campos válidos para actualizar en perfiles.');
-            return null;
-        }
-
-        const { data, error } = await supabase
-            .from('perfiles')
-            .update(dbPayload)
-            .eq('id', userId)
-            .select()
-            .single();
-
-        if (error) throw error;
-
         // 🏢 Sincronización con tabla empresas (columnas distintas)
         const empresaPayload = {};
         if (updates.company  !== undefined) empresaPayload.nombre_comercial  = updates.company;
@@ -219,12 +205,23 @@ export const authService = {
         if (updates.lat      !== undefined) empresaPayload.lat                = updates.lat;
         if (updates.lng      !== undefined) empresaPayload.lng                = updates.lng;
 
-        if (Object.keys(empresaPayload).length > 0) {
-            const { error: empError } = await supabase
-                .from('empresas')
-                .update(empresaPayload)
-                .eq('id', userId);
-            if (empError) logger.warn('[authService.updateProfile] Error sync empresas:', empError.message);
+        if (Object.keys(dbPayload).length === 0 && Object.keys(empresaPayload).length === 0) {
+            logger.warn('[authService.updateProfile] No hay campos válidos para actualizar.');
+            return null;
+        }
+
+        // 🛡️ Lógica Transaccional (Single Source of Truth)
+        // En lugar de hacer dos peticiones HTTP separadas, delegamos la escritura atómica a Supabase (RPC).
+        // Si una falla, Postgres hace Rollback de la otra automáticamente.
+        const { data, error } = await supabase.rpc('rpc_update_user_profile', {
+            p_user_id: userId,
+            p_perfiles_payload: Object.keys(dbPayload).length > 0 ? dbPayload : null,
+            p_empresas_payload: Object.keys(empresaPayload).length > 0 ? empresaPayload : null
+        });
+
+        if (error) {
+            logger.error('[authService.updateProfile] Falló la transacción RPC:', error);
+            throw error;
         }
 
         return data;
