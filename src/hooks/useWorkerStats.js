@@ -39,7 +39,7 @@ export const useWorkerStats = () => {
                     supabase
                         .from('reviews')
                         .select('rating')
-                        .eq('reviewed_id', user.id)
+                        .eq('target_id', user.id)
                 ]);
 
                 // Turnos finalizados y ganancias (SSOT: Salario del trabajador post-curación)
