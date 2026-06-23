@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Info, ArrowRight } from 'lucide-react';
-import TurnesButton from '../../ui/TurnesButton';
+import TurnesButton from '../ui/TurnesButton';
 import { useNavigate } from 'react-router-dom';
 
 const fadeInUp = {
