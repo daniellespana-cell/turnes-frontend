@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapPin, Clock, Ticket } from 'lucide-react';
-
+import Skeleton from '../ui/Skeleton';
 import { useNavigate } from 'react-router-dom';
 
 /**
