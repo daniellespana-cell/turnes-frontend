@@ -16,14 +16,14 @@ const TIPS = [
 const DailyTip = ({ stats, loading }) => {
     const navigate = useNavigate();
 
-    if (loading || !stats) return <Skeleton className="w-full h-24" />;
-
     const tip = useMemo(() => {
         const dayIndex = new Date().getDay();
         // Buscar el primer tip cuya condición se cumpla, rotando por día
         const applicable = TIPS.filter(t => t.condition(stats));
         return applicable[dayIndex % applicable.length] || TIPS[TIPS.length - 1];
     }, [stats]);
+
+    if (loading || !stats) return <Skeleton className="w-full h-24" />;
 
     const Icon = tip.icon;
 
