@@ -1,3 +1,32 @@
+# 🛑 Bloqueo explícito de Bots de Inteligencia Artificial (Scrapers)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Anthropic-ai
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: Omgili
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+# 🌍 Configuración para Buscadores Normales (Google, Bing, etc.)
 User-agent: *
 Allow: /
 Allow: /explorar
