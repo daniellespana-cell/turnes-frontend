@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { UserCircle, Zap, Star, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Skeleton from '../ui/Skeleton';
 
 const TIPS = [
     { condition: (s) => (s?.profileCompletion || 0) < 80, icon: UserCircle, color: 'text-amber-400', bg: 'from-amber-500/10 to-orange-500/5', border: 'border-amber-500/15', text: 'Completa tu perfil para aparecer en 3× más búsquedas de empresas.', cta: 'Completar Perfil', route: '/perfil' },
@@ -12,8 +13,10 @@ const TIPS = [
     { condition: () => true, icon: TrendingUp, color: 'text-purple-400', bg: 'from-purple-500/10 to-indigo-500/5', border: 'border-purple-500/15', text: 'Mantén tu perfil actualizado para recibir mejores ofertas cada semana.', cta: 'Ver Perfil', route: '/perfil' },
 ];
 
-const DailyTip = ({ stats }) => {
+const DailyTip = ({ stats, loading }) => {
     const navigate = useNavigate();
+
+    if (loading || !stats) return <Skeleton className="w-full h-24" />;
 
     const tip = useMemo(() => {
         const dayIndex = new Date().getDay();

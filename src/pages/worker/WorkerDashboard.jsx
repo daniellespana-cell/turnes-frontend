@@ -2,7 +2,6 @@ import React from 'react';
 import { MapPinOff } from 'lucide-react';
 import ProfileBanner from '../../components/Dashboard/ProfileBanner';
 import EliteBanner from '../../components/Dashboard/EliteBanner';
-import Spinner from '../../components/ui/Spinner';
 import HeroStatsRing from '../../components/worker-dashboard/HeroStatsRing';
 import SkillMatchRadar from '../../components/worker-dashboard/SkillMatchRadar';
 import QuickStatsStrip from '../../components/worker-dashboard/QuickStatsStrip';
@@ -37,25 +36,20 @@ const GpsWarning = () => (
  */
 const WorkerDashboard = () => {
     const { 
-        user, loading, priorityAction, gpsDenied, 
+        user, recommendationsLoading, priorityAction, gpsDenied, 
         appliedIds 
     } = useWorkerDashboard();
     
     const { stats, loading: statsLoading } = useWorkerStats();
     const { companies, loading: companiesLoading } = useSkillMatchCompanies();
 
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-4">
-                <Spinner size="lg" variant="emerald" text="Preparando tu Command Center" />
-            </div>
-        );
-    }
+    // 🚀 LCP Optimization: ELIMINADO EL SPINNER GLOBAL
+    // El dashboard se renderiza inmediatamente. La estructura base no espera a la BD.
 
     return (
         <div className="max-w-md mx-auto md:max-w-5xl md:px-6 pb-24 pt-20 px-4 min-h-screen font-manrope space-y-5 animate-fade-in">
 
-            {/* 1. WELCOME HEADER */}
+            {/* 1. WELCOME HEADER (Aparece al instante) */}
             <header className="flex justify-between items-end">
                 <div>
                     <p className="text-zinc-500 text-[11px] font-bold uppercase tracking-widest mb-1">
@@ -78,15 +72,14 @@ const WorkerDashboard = () => {
             <main className="space-y-5 md:grid md:grid-cols-2 md:gap-5 md:space-y-0">
                 {/* Left: Financial & Progress */}
                 <div className="space-y-5">
-                    {!statsLoading && (
-                        <HeroStatsRing
-                            stats={stats}
-                            avatarUrl={user?.avatar_url}
-                            userName={user?.name}
-                        />
-                    )}
-                    {!statsLoading && <QuickStatsStrip stats={stats} />}
-                    <DailyTip stats={stats} />
+                    <HeroStatsRing
+                        stats={stats}
+                        avatarUrl={user?.avatar_url}
+                        userName={user?.name}
+                        loading={statsLoading}
+                    />
+                    <QuickStatsStrip stats={stats} loading={statsLoading} />
+                    <DailyTip stats={stats} loading={statsLoading} />
                 </div>
 
                 {/* Right: Networking & Activity */}
@@ -97,11 +90,12 @@ const WorkerDashboard = () => {
             </main>
 
             {/* 4. DYNAMIC PRIORITY CONTENT (Lower Body) */}
-            <TodayMission priorityAction={priorityAction} />
+            <TodayMission priorityAction={priorityAction} loading={recommendationsLoading} />
             
             <RecommendedSection 
                 priorityAction={priorityAction} 
                 appliedIds={appliedIds} 
+                loading={recommendationsLoading}
             />
         </div>
     );

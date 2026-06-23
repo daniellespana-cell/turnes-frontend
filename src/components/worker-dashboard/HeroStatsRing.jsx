@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 
 import { useEffect, useState } from 'react';
 import { AssetResolver } from '../../utils/assetHelper';
+import Skeleton from '../ui/Skeleton';
 
 /**
  * HeroStatsRing — Anillo SVG animado tipo Apple Watch Activity Ring.
@@ -50,8 +51,8 @@ const AnimatedRing = ({ radius, strokeWidth, progress, color, trackColor, delay 
     );
 };
 
-const HeroStatsRing = ({ stats, avatarUrl, userName }) => {
-    if (!stats) return null;
+const HeroStatsRing = ({ stats, avatarUrl, userName, loading }) => {
+    if (loading || !stats) return <Skeleton className="w-full h-[228px]" />;
 
     const shiftsGoal = Math.max(1, stats.totalShifts >= 10 ? Math.ceil(stats.totalShifts * 1.2) : 10);
     const shiftsPercent = Math.min(100, Math.round((stats.totalShifts / shiftsGoal) * 100));

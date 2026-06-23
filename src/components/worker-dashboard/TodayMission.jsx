@@ -7,9 +7,10 @@ import { useNavigate } from 'react-router-dom';
  * TodayMission — Widget de alta prioridad para el Dashboard.
  * Responsabilidad: Mostrar el turno activo o la misión principal del día con acciones rápidas.
  */
-const TodayMission = ({ priorityAction }) => {
+const TodayMission = ({ priorityAction, loading }) => {
     const navigate = useNavigate();
 
+    if (loading) return <Skeleton className="w-full h-[200px]" />;
     if (priorityAction?.type !== 'SHIFT_TODAY') return null;
 
     const { data, title, subtitle, actionLabel } = priorityAction;

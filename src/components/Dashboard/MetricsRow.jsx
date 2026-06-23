@@ -1,7 +1,18 @@
 import React from 'react';
 import { Star, Target, Zap } from 'lucide-react';
+import Skeleton from '../ui/Skeleton';
 
-const MetricsRow = ({ fillRate, averageRating, percentile }) => {
+const MetricsRow = ({ fillRate, averageRating, percentile, loading }) => {
+  if (loading) {
+    return (
+      <section className="grid grid-cols-3 gap-2 md:gap-4 px-1">
+        {[1, 2, 3].map(i => (
+          <Skeleton key={i} className="h-20" />
+        ))}
+      </section>
+    );
+  }
+
   return (
     <section className="grid grid-cols-3 gap-2 md:gap-4 px-1">
       {[

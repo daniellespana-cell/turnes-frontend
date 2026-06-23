@@ -4,12 +4,13 @@ import VacancyCard from '../features/VacancyCard';
 
 import { useNavigate } from 'react-router-dom';
 import { typography } from '../../styles/typography';
+import Skeleton from '../ui/Skeleton';
 
 /**
  * RecommendedSection — Atomic Component
  * Responsabilidad: Renderizar el feed de recomendaciones con scroll horizontal y navegación profunda.
  */
-const RecommendedSection = ({ priorityAction, appliedIds }) => {
+const RecommendedSection = ({ priorityAction, appliedIds, loading }) => {
     const navigate = useNavigate();
 
     const handleExplore = (vacancy) => {
@@ -18,6 +19,21 @@ const RecommendedSection = ({ priorityAction, appliedIds }) => {
             state: { selectedVacancyId: vacancy.id } 
         });
     };
+
+    if (loading) {
+        return (
+            <section className="space-y-3">
+                <div className="flex items-center justify-between">
+                    <Skeleton className="w-32 h-6" />
+                </div>
+                <div className="flex overflow-hidden pb-4 gap-4 px-1">
+                    {[1, 2, 3].map(i => (
+                        <Skeleton key={i} className="snap-center shrink-0 w-[85%] md:w-[32%] h-[240px]" />
+                    ))}
+                </div>
+            </section>
+        );
+    }
 
     if (priorityAction?.type === 'SHIFT_TODAY') return null; // Handled by separate Mission widget
 

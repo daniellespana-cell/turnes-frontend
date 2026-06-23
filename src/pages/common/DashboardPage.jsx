@@ -51,13 +51,12 @@ const DashboardPage = () => {
       />
 
       {/* 1.1 🔥 STRATEGIC METRICS ROW (Senior Scale) */}
-      {!metricsLoading && (
-        <MetricsRow 
-          fillRate={fillRate} 
-          averageRating={averageRating} 
-          percentile={percentile} 
-        />
-      )}
+      <MetricsRow 
+        fillRate={fillRate} 
+        averageRating={averageRating} 
+        percentile={percentile} 
+        loading={metricsLoading}
+      />
 
       <GlowDivider />
 

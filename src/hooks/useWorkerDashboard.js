@@ -9,7 +9,7 @@ import { normalizeVacancy } from '../domain/vacancy.mapper';
 
 export const useWorkerDashboard = () => {
     const { user, isAuthenticated } = useAuth();
-    const [loading, setLoading] = useState(true);
+    const [recommendationsLoading, setRecommendationsLoading] = useState(true);
     const [recommended, setRecommended] = useState([]);
     const [appliedIds, setAppliedIds] = useState(new Set());
     const [isApplying, setIsApplying] = useState(null);
@@ -51,7 +51,7 @@ export const useWorkerDashboard = () => {
             const lng = geo.lng ?? user?.lng ?? null;
 
             if (!lat || !lng) {
-                setLoading(false);
+                setRecommendationsLoading(false);
                 return;
             }
 
@@ -84,7 +84,7 @@ export const useWorkerDashboard = () => {
             } catch (err) {
                 console.error('[useWorkerDashboard] Error loading recommendations:', err);
             } finally {
-                setLoading(false);
+                setRecommendationsLoading(false);
             }
         }
 
@@ -152,7 +152,7 @@ export const useWorkerDashboard = () => {
 
     return {
         ...dashboardData,
-        loading,
+        recommendationsLoading,
         appliedIds,
         isApplying,
         applyToVacancy,

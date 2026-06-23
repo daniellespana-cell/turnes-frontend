@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 
 import { Briefcase, Star, Send, CalendarDays } from 'lucide-react';
 
+import Skeleton from '../ui/Skeleton';
+
 /**
  * QuickStatsStrip — Fila horizontal scrollable de micro-KPIs
  * con animación stagger de entrada.
@@ -14,8 +16,16 @@ const STAT_CONFIG = [
     { key: 'daysSinceJoin', label: 'Días', icon: CalendarDays, color: 'text-purple-400', bg: 'bg-purple-500/10', format: v => v ?? 1 },
 ];
 
-const QuickStatsStrip = ({ stats }) => {
-    if (!stats) return null;
+const QuickStatsStrip = ({ stats, loading }) => {
+    if (loading || !stats) {
+        return (
+            <div className="flex gap-3 overflow-hidden pb-1">
+                {[1, 2, 3, 4].map(i => (
+                    <Skeleton key={i} className="flex-1 min-w-[100px] h-[100px]" />
+                ))}
+            </div>
+        );
+    }
 
     return (
         <div className="flex gap-3 overflow-x-auto pb-1 custom-scrollbar snap-x">
