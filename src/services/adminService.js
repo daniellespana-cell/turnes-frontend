@@ -82,6 +82,38 @@ export const AdminService = {
     },
 
     /**
+     * 🛡️ ZERO TRUST BAN: Invoca la Edge Function para banear a nivel de Auth Server
+     * @param {string} userId
+     */
+    async suspendUser(userId) {
+        try {
+            const { data, error } = await supabase.functions.invoke('admin-ban-user', {
+                body: { targetUserId: userId }
+            });
+            if (error) throw error;
+            return { data, error: null };
+        } catch (error) {
+            console.error('🔥 Error suspendiendo usuario:', error);
+            return { data: null, error };
+        }
+    },
+
+    /**
+     * Envía enlace oficial de reseteo de clave usando Supabase Auth.
+     * @param {string} email
+     */
+    async resetUserPassword(email) {
+        try {
+            const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+            if (error) throw error;
+            return { data, error: null };
+        } catch (error) {
+            console.error('🔥 Error enviando reset de password:', error);
+            return { data: null, error };
+        }
+    },
+
+    /**
      * Obtener detalle completo de una solicitud para auditoría y revisión (Admin Only)
      * Desacopla la lógica de red del componente UI.
      */

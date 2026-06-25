@@ -79,7 +79,7 @@ const AdminUsersPage = () => {
                                         <td className="px-6 py-4"><KycBadge verified={user.verificado} /></td>
                                         <td className="px-6 py-4"><p className="text-xs text-white">{new Date(user.created_at).toLocaleDateString('es-CO')}</p></td>
                                         <td className="px-6 py-4 text-right"><div className="flex items-center justify-end gap-2">
-                                            <button onClick={() => handleResetPassword(getName(user))} className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg"><RefreshCw size={14} /></button>
+                                            <button onClick={() => handleResetPassword(user.email, getName(user))} className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg"><RefreshCw size={14} /></button>
                                             <button onClick={() => setBanTarget({ id: user.id, name: getName(user) })} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg"><Ban size={14} /></button>
                                         </div></td>
                                     </motion.tr>
@@ -103,7 +103,7 @@ const AdminUsersPage = () => {
                                 </div>
                                 <div className="flex items-center justify-between"><KycBadge verified={user.verificado} /><p className="text-[10px] text-zinc-500">{new Date(user.created_at).toLocaleDateString('es-CO')}</p></div>
                                 <div className="flex items-center justify-end gap-2 border-t border-white/5 pt-3">
-                                    <button onClick={() => handleResetPassword(getName(user))} className="px-3 py-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase text-blue-400 bg-blue-500/10 rounded border border-blue-500/20"><RefreshCw size={12} /> Reset</button>
+                                    <button onClick={() => handleResetPassword(user.email, getName(user))} className="px-3 py-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase text-blue-400 bg-blue-500/10 rounded border border-blue-500/20"><RefreshCw size={12} /> Reset</button>
                                     <button onClick={() => setBanTarget({ id: user.id, name: getName(user) })} className="px-3 py-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase text-red-400 bg-red-500/10 rounded border border-red-500/20"><Ban size={12} /> Suspender</button>
                                 </div>
                             </div>

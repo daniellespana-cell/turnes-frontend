@@ -52,21 +52,29 @@ export const useAdminUsers = () => {
         }
         setActionLoading(userId);
         try {
-            // TODO: Implementar AdminService.banUser(userId) real
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            showToast(`Cuenta suspendida (Audit Log generado).`, 'success');
+            const { error } = await AdminService.suspendUser(userId);
+            if (error) throw error;
+            showToast(`Cuenta suspendida (Baneo Total y Audit Log generado).`, 'success');
+            loadUsers(); // Refrescar lista
             return true;
-        } catch {
-            showToast('No se pudo suspender.', 'error');
+        } catch (error) {
+            console.error(error);
+            showToast('No se pudo suspender a este usuario.', 'error');
             return false;
         } finally {
             setActionLoading(null);
         }
     };
 
-    const handleResetPassword = (name) => {
-        // TODO: Implementar AdminService.resetPassword(userId) real
-        showToast('Regla de negocio: Enlace temporal de reseteo generado (SIMULADO).', 'success');
+    const handleResetPassword = async (email, name) => {
+        try {
+            const { error } = await AdminService.resetUserPassword(email);
+            if (error) throw error;
+            showToast(`Enlace oficial de reseteo enviado a ${email}.`, 'success');
+        } catch (error) {
+            console.error(error);
+            showToast('Fallo al enviar correo de reseteo.', 'error');
+        }
     };
 
     return {
