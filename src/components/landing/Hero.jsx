@@ -53,6 +53,8 @@ const Hero = () => {
           src={heroBackgroundImage}
           alt="Fondo Hero"
           className="w-full h-full object-cover object-center"
+          width="1920"
+          height="1080"
           fetchPriority="high" // ⚡ Senior Dev Move: Prioritize LCP
           loading="eager"
         />

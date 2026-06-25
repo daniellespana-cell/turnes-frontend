@@ -79,10 +79,27 @@ export default defineConfig({
     }
   },
   
-  // 🟢 Optimización de build
+  // 🟢 Optimización de build y Arquitectura de Chunks (Anti-TBT)
   build: {
     outDir: 'dist',
     sourcemap: true,
+    // ⚡ Senior Move: Forzar la división del AST (Abstract Syntax Tree) para paralelizar descarga y reducir Script Evaluation en móviles
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) return 'vendor-react';
+            if (id.includes('@supabase')) return 'vendor-supabase';
+            if (id.includes('leaflet') || id.includes('react-leaflet')) return 'vendor-maps';
+            if (id.includes('jspdf') || id.includes('html2canvas')) return 'vendor-pdf';
+            if (id.includes('@daily-co')) return 'vendor-rtc';
+            if (id.includes('framer-motion') || id.includes('lucide-react') || id.includes('sonner')) return 'vendor-ui';
+            if (id.includes('@sentry')) return 'vendor-sentry';
+            return 'vendor-core';
+          }
+        }
+      }
+    }
   },
   
   // 🔧 Configuración de preview (para producción local)
