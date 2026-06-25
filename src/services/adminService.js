@@ -244,7 +244,7 @@ export const AdminService = {
         // 1. Extraer billeteras ordenadas por saldo
         const { data: billeteras, error } = await supabase
             .from('billeteras')
-            .select('id, saldo, updated_at, user_id')
+            .select('id, saldo, updated_at')
             .order('saldo', { ascending: false })
             .limit(limit);
 

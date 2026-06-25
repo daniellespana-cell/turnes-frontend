@@ -4,8 +4,8 @@ import HeroSearch from './HeroSearch';
 
 // Imported
 
-// 🟢 Importamos la imagen desde la ruta relativa correcta (WebP Optimizado)
-import heroBackgroundImage from '../../assets/mi-foto-hero.webp';
+// 🟢 LCP Optimization: Imagen servida desde /public para permitir <link rel="preload">
+const heroBackgroundImage = '/mi-foto-hero.webp';
 
 // Variantes de animación
 const fadeInUp = {

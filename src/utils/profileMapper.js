@@ -15,7 +15,9 @@ export const profileMapper = {
     normalize(profileData, sessionUser) {
         if (!profileData && !sessionUser) return null;
 
-        const currentRole = profileData?.rol || sessionUser?.user_metadata?.rol || 'postulante';
+        // 🛡️ ZERO TRUST & FAST FCP: Leemos el rol desde los Custom Claims criptográficos
+        const jwtRole = sessionUser?.app_metadata?.rol;
+        const currentRole = profileData?.rol || jwtRole || sessionUser?.user_metadata?.rol || 'postulante';
 
         // 🏗️ CONSTRUCCIÓN DEL OBJETO BASE
         const base = {
@@ -34,7 +36,8 @@ export const profileMapper = {
 
             // 🛡️ SECURITY & HYDRATION
             created_at: sessionUser?.created_at || profileData?.created_at,
-            is_hydrated: !!profileData,
+            // ⚡ HYDRATION BOTTLENECK REMOVED: Si el JWT ya trae el rol, renderizamos de inmediato
+            is_hydrated: !!profileData || !!jwtRole,
             needs_onboarding: currentRole === 'pendiente',
         };
 
