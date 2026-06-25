@@ -1,32 +1,7 @@
-# 🛑 Bloqueo explícito de Bots de Inteligencia Artificial (Scrapers)
-User-agent: GPTBot
-Disallow: /
+# 🛑 Bloqueo explícito de Bots (Eliminado para permitir AEO)
+# Hemos habilitado a GPTBot, Claude y Google-Extended para Answer Engine Optimization.
 
-User-agent: ChatGPT-User
-Disallow: /
-
-User-agent: Google-Extended
-Disallow: /
-
-User-agent: Anthropic-ai
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
-
-User-agent: Omgilibot
-Disallow: /
-
-User-agent: Omgili
-Disallow: /
-
-User-agent: FacebookBot
-Disallow: /
-
-User-agent: Diffbot
-Disallow: /
-
-# 🌍 Configuración para Buscadores Normales (Google, Bing, etc.)
+# 🌍 Configuración para Buscadores Normales y Bots de IA
 User-agent: *
 Allow: /
 Allow: /explorar
@@ -44,4 +19,4 @@ Disallow: /checkout/
 Disallow: /admin/
 Disallow: /verification/
 
-Sitemap: https://turnes.co/sitemap.xml
+Sitemap: https://llrveqigkgyafgzofoqh.supabase.co/functions/v1/sitemap
