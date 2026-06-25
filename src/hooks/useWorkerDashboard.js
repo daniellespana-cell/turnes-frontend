@@ -41,9 +41,12 @@ export const useWorkerDashboard = () => {
         };
     }, [fetchAppliedIds, isAuthenticated, user?.id]);
 
+    const lastFetchedCoord = useRef({ lat: null, lng: null });
+
     // 🔄 FETCH REAL RECOMMENDATIONS
     useEffect(() => {
-        async function loadRecommendations() {
+        let isCancelled = false;
+        const timer = setTimeout(async () => {
             if (geo.loading || !user) return;
 
             // Coordenadas reales: GPS > perfil del usuario > null
@@ -55,11 +58,18 @@ export const useWorkerDashboard = () => {
                 return;
             }
 
+            // 🛡️ ANTI-DDOS: Prevenir llamados si la coordenada no cambió significativamente (0.5km)
+            if (lastFetchedCoord.current.lat) {
+                const dist = GeoService.calculateDistance(lat, lng, lastFetchedCoord.current.lat, lastFetchedCoord.current.lng);
+                if (dist < 0.5) return;
+            }
+
             try {
                 // 🚀 Optimized Fetch via PostGIS RPC (Bypasses RLS issues and filters by distance on DB)
                 const { data, error } = await GeoService.fetchNearby(lat, lng, 30, user.id);
 
-                if (!error && data) {
+                if (!error && data && !isCancelled) {
+                    lastFetchedCoord.current = { lat, lng };
                     // 2. Normalize and inject distance for UI
                     const normalized = data.map(v => {
                         const norm = normalizeVacancy(v, new Map(), false);
@@ -78,17 +88,19 @@ export const useWorkerDashboard = () => {
 
                     // 3. Score and Sort by Relevance
                     const scored = MatchService.scoreVacancies(normalized, userProfile);
-
                     setRecommended(scored.slice(0, 3));
                 }
             } catch (err) {
                 console.error('[useWorkerDashboard] Error loading recommendations:', err);
             } finally {
-                setRecommendationsLoading(false);
+                if (!isCancelled) setRecommendationsLoading(false);
             }
-        }
+        }, 800); // 🛡️ 800ms Debounce to let GPS stabilize
 
-        loadRecommendations();
+        return () => {
+            isCancelled = true;
+            clearTimeout(timer);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [geo.loading, geo.lat, geo.lng, user?.id, user?.lat, user?.lng]);
 
