@@ -2,12 +2,13 @@ import React from 'react';
 import { Sparkles, ShieldCheck, Star, ChevronRight, MapPin, Briefcase } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useGeolocation } from '../../hooks/useGeolocation';
 import { talentService } from '../../services/talentService';
 import { AssetResolver } from '../../utils/assetHelper';
+import { GeoService } from '../../services/geoService';
 
 /**
  * 🛰️ TalentRadar (Premium Interactive v4.0)
@@ -20,23 +21,42 @@ const TalentRadar = () => {
     const geo = useGeolocation();
     const [candidates, setCandidates] = useState([]);
     const [loading, setLoading] = useState(true);
+    const lastFetchedCoord = useRef({ lat: null, lng: null });
 
     useEffect(() => {
-        const fetchTalent = async () => {
+        let isCancelled = false;
+        const timer = setTimeout(async () => {
             if (geo.loading || !user) return;
-            setLoading(true);
+            
+            const lat = geo.lat || 7.0682;
+            const lng = geo.lng || -73.1698;
 
-            // 🛡️ ANTI-JITTER: Redondeamos a 3 decimales (~100 metros)
-            const lat = Number(geo.lat || 7.0682).toFixed(3);
-            const lng = Number(geo.lng || -73.1698).toFixed(3);
+            // 🛡️ ANTI-DDOS: Prevenir llamados si la coordenada no cambió significativamente (0.5km)
+            if (lastFetchedCoord.current.lat) {
+                const dist = GeoService.calculateDistance(lat, lng, lastFetchedCoord.current.lat, lastFetchedCoord.current.lng);
+                if (dist < 0.5) return;
+            }
 
-            const data = await talentService.getRadarTalent(lat, lng, '');
-            setCandidates(data || []);
-            setLoading(false);
+            if (!isCancelled) setLoading(true);
+
+            try {
+                const data = await talentService.getRadarTalent(lat, lng, '');
+                if (!isCancelled) {
+                    lastFetchedCoord.current = { lat, lng };
+                    setCandidates(data || []);
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                if (!isCancelled) setLoading(false);
+            }
+        }, 800);
+
+        return () => {
+            isCancelled = true;
+            clearTimeout(timer);
         };
-
-        fetchTalent();
-    }, [user, geo.loading, Math.round(geo.lat * 1000), Math.round(geo.lng * 1000)]);
+    }, [user, geo.loading, geo.lat, geo.lng]);
 
     const hasCandidates = candidates && candidates.length > 0;
 

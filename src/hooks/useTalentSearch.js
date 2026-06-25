@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useGeolocation } from './useGeolocation';
 import { getCategoriasList, SECTOR_MAP } from '../domain/vacantes.taxonomy';
 import { talentService } from '../services/talentService';
+import { GeoService } from '../services/geoService';
 
 export const useTalentSearch = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -15,6 +16,7 @@ export const useTalentSearch = () => {
     const [loadingMore, setLoadingMore] = useState(false); // Para el spinner inferior
     const [activeSector, setActiveSector] = useState('TODOS');
     const [error, setError] = useState(null);
+    const lastFetchedCoord = useRef({ lat: null, lng: null });
     
     // Pagination State
     const [page, setPage] = useState(0);
@@ -71,12 +73,32 @@ export const useTalentSearch = () => {
     // Reactivity to Geo and Mount
     // 🛡️ REFUERZO ANTI-EGRESS: Evitamos el bucle infinito por fluctuación de GPS
     useEffect(() => {
-        if (!geo.loading) {
-            setPage(0);
-            setHasMore(true);
-            performSearch(query, geo.lat, geo.lng, 0, false);
-        }
-    }, [geo.loading, Math.round((geo.lat || 0) * 1000), Math.round((geo.lng || 0) * 1000)]);
+        let isCancelled = false;
+        const timer = setTimeout(() => {
+            if (!geo.loading) {
+                const lat = geo.lat || 0;
+                const lng = geo.lng || 0;
+
+                // 🛡️ ANTI-DDOS: Prevenir llamados si la coordenada no cambió significativamente (0.5km)
+                if (lastFetchedCoord.current.lat) {
+                    const dist = GeoService.calculateDistance(lat, lng, lastFetchedCoord.current.lat, lastFetchedCoord.current.lng);
+                    if (dist < 0.5) return;
+                }
+
+                if (!isCancelled) {
+                    lastFetchedCoord.current = { lat, lng };
+                    setPage(0);
+                    setHasMore(true);
+                    performSearch(query, lat, lng, 0, false);
+                }
+            }
+        }, 800);
+
+        return () => {
+            isCancelled = true;
+            clearTimeout(timer);
+        };
+    }, [geo.loading, geo.lat, geo.lng]);
 
     // Taxonomy Filtering (Client Side for refined UI feedback)
     const filteredResults = useMemo(() => {
