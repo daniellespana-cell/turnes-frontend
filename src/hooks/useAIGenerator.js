@@ -11,6 +11,7 @@ export const useAIGenerator = () => {
         try {
             const { data, error } = await supabase.functions.invoke('generate-ai-bio', {
                 method: 'POST',
+                body: {} // IMPORTANTE: Enviar un JSON vacío para que el API Gateway no arroje 400 Bad Request
             });
 
             if (error) {
