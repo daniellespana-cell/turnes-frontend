@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '../supabaseClient';
+import { supabase } from '../services/supabaseClient';
 import { useToast } from '../context/ToastContext';
 
 export const useAIGenerator = () => {

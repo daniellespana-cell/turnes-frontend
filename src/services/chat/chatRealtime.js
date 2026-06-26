@@ -75,8 +75,8 @@ class ChatRealtimeService {
                     // Si el usuario está viendo un chat específico, recargarlo completo
                     const snapshot = chatState.getSnapshot();
                     if (chatState._activeChatId) {
-                        import('../../services/chat/chatStorage').then(module => {
-                            module.ChatStorage.fetchMessages(chatState._activeChatId);
+                        import('./chatNetwork').then(module => {
+                            module.chatNetwork.fetchMessages(chatState._activeChatId);
                         });
                     }
                 }
