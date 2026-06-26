@@ -15,16 +15,16 @@ export const ReputationService = {
         // En un esquema Senior, el promedio ya viene precalculado en el perfil.
         // Pero si necesitamos forzar la lectura cruda:
         const query = supabase
-            .from('calificaciones')
-            .select('score')
-            .eq('evaluated_id', userId);
+            .from('reviews')
+            .select('rating')
+            .eq('target_id', userId);
 
         const { data, error } = await BaseService.handle(query);
 
         if (error || !data || data.length === 0) return 0;
 
         // Calcular promedio simple
-        const sum = data.reduce((acc, curr) => acc + curr.score, 0);
+        const sum = data.reduce((acc, curr) => acc + curr.rating, 0);
         return (sum / data.length).toFixed(1);
     },
 
@@ -37,19 +37,20 @@ export const ReputationService = {
     async getRecentReviews(userId, limit = 5) {
         if (!userId) return { data: [], error: null };
 
-        // Nota: En Supabase, para hacer JOIN con perfiles desde una FK que apunta a auth.users,
-        // PostgREST a menudo requiere omitir el nombre de la FK y solo pedir la tabla si la cardinalidad es clara,
-        // o usar una vista. Usaremos el alias genérico 'author' sobre la tabla perfiles.
         const query = supabase
-            .from('calificaciones')
+            .from('reviews')
             .select(`
                 id,
-                score,
+                rating,
                 comment,
                 created_at,
-                evaluator_id
+                author_id,
+                perfiles!reviews_author_id_fkey(
+                    nombre_display,
+                    avatar_url
+                )
             `)
-            .eq('evaluated_id', userId)
+            .eq('target_id', userId)
             .order('created_at', { ascending: false })
             .limit(limit);
 
@@ -59,14 +60,14 @@ export const ReputationService = {
 
         // Fetch manual de perfiles para evitar crashes de FK de PostgREST en producción
         // y mantener compatibilidad 100% con el esquema actual.
-        const evaluatorIds = [...new Set(res.data.map(r => r.evaluator_id).filter(Boolean))];
+        const authorIds = [...new Set(res.data.map(r => r.author_id).filter(Boolean))];
         let profilesMap = {};
 
-        if (evaluatorIds.length > 0) {
+        if (authorIds.length > 0) {
             const { data: profilesData } = await supabase
                 .from('perfiles')
                 .select('id, nombre_display, avatar_url, rol')
-                .in('id', evaluatorIds);
+                .in('id', authorIds);
 
             if (profilesData) {
                 profilesData.forEach(p => profilesMap[p.id] = p);
@@ -76,10 +77,10 @@ export const ReputationService = {
         // Mapeamos para que la UI reciba los mismos campos que antes
         const finalData = res.data.map(r => ({
             id: r.id,
-            rating: r.score, // UI mapped
+            rating: r.rating, // UI mapped
             comment: r.comment,
             created_at: r.created_at,
-            author: profilesMap[r.evaluator_id] || null
+            author: profilesMap[r.author_id] || null
         }));
 
         return { data: finalData, error: null };
@@ -97,15 +98,15 @@ export const ReputationService = {
 
         // Map UI format to Database Format
         const payload = {
-            evaluated_id: reviewData.target_id,
-            evaluator_id: reviewData.author_id,
-            score: reviewData.rating,
+            target_id: reviewData.target_id,
+            author_id: reviewData.author_id,
+            rating: reviewData.rating,
             comment: reviewData.comment,
-            vacancy_id: reviewData.shift_id
+            shift_id: reviewData.shift_id
         };
 
         const query = supabase
-            .from('calificaciones')
+            .from('reviews')
             .insert(payload)
             .select()
             .single();
