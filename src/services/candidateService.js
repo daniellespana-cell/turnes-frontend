@@ -198,16 +198,16 @@ export const CandidateService = {
         const to = from + pageSize - 1;
 
         const query = supabase
-            .from('calificaciones')
+            .from('reviews')
             .select(`
                 id,
-                score,
+                rating,
                 comment,
                 created_at,
-                vacancy_id,
-                evaluator_id
+                shift_id,
+                author_id
             `)
-            .eq('evaluated_id', userId)
+            .eq('target_id', userId)
             .order('created_at', { ascending: false })
             .range(from, to);
 
@@ -216,14 +216,14 @@ export const CandidateService = {
         if (response.error || !response.data) return response;
 
         // Fetch manual de perfiles para evitar crashes de FK de PostgREST en producción
-        const evaluatorIds = [...new Set(response.data.map(r => r.evaluator_id).filter(Boolean))];
+        const authorIds = [...new Set(response.data.map(r => r.author_id).filter(Boolean))];
         let profilesMap = {};
 
-        if (evaluatorIds.length > 0) {
+        if (authorIds.length > 0) {
             const { data: profilesData } = await supabase
                 .from('perfiles')
                 .select('id, nombre_display, avatar_url')
-                .in('id', evaluatorIds);
+                .in('id', authorIds);
 
             if (profilesData) {
                 profilesData.forEach(p => profilesMap[p.id] = p);
@@ -233,11 +233,11 @@ export const CandidateService = {
         // Mapeamos para que la UI (y el resto del método) reciba los mismos campos que antes
         response.data = response.data.map(r => ({
             id: r.id,
-            rating: r.score, // UI mapped
+            rating: r.rating, // UI mapped
             comment: r.comment,
             created_at: r.created_at,
-            shift_id: r.vacancy_id, // UI mapped
-            author: profilesMap[r.evaluator_id] || null
+            shift_id: r.shift_id, // UI mapped
+            author: profilesMap[r.author_id] || null
         }));
 
         // 🛡️ DOBLE CIEGO: Ocultar reseñas si las calificaciones no han sido desbloqueadas
