@@ -1,9 +1,10 @@
 import React from 'react';
-import { User, Mail, Phone, MapPin } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Sparkles, Loader2 } from 'lucide-react';
 import SectionCard from '../shared/SectionCard';
 import InputField from '../shared/InputField';
 import TextAreaField from '../shared/TextAreaField';
 import { CIUDADES_COORDS, CIUDADES_PRINCIPALES } from '../../../domain/geography.config';
+import { useAIGenerator } from '../../../hooks/useAIGenerator';
 
 /**
  * Sección de Información Personal — Perfil de Empresa (Business).
@@ -11,6 +12,14 @@ import { CIUDADES_COORDS, CIUDADES_PRINCIPALES } from '../../../domain/geography
  * para alimentar el algoritmo de match geográfico de vacantes.
  */
 const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
+    const { isGenerating, generateBio } = useAIGenerator();
+
+    const handleAIGenerate = async () => {
+        const generatedBio = await generateBio();
+        if (generatedBio) {
+            handleInputChange('bio', generatedBio);
+        }
+    };
 
     // Al seleccionar ciudad resolvemos lat/lng automáticamente
     const handleCityChange = (cityName) => {
@@ -93,14 +102,37 @@ const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
                     )}
                 </div>
 
-                <TextAreaField
-                    label="Sobre Mí / Biografía"
-                    value={formData.bio || ''}
-                    onChange={v => handleInputChange('bio', v)}
-                    disabled={!isEditing}
-                    placeholder="Escriba una breve descripción de la empresa..."
-                    fullWidth
-                />
+                <div className="md:col-span-2 space-y-2 mt-4">
+                    <div className="flex justify-between items-center">
+                        <label className="text-[10px] font-semibold tracking-wider text-zinc-500 uppercase">
+                            Sobre Mí / Biografía
+                        </label>
+                        {isEditing && (
+                            <button
+                                type="button"
+                                onClick={handleAIGenerate}
+                                disabled={isGenerating}
+                                className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 hover:text-emerald-300 transition-colors disabled:opacity-50"
+                            >
+                                {isGenerating ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                                {isGenerating ? 'Generando...' : 'Generar con IA'}
+                            </button>
+                        )}
+                    </div>
+                    <textarea
+                        value={formData.bio || ''}
+                        onChange={e => handleInputChange('bio', e.target.value)}
+                        disabled={!isEditing}
+                        placeholder="Escriba una breve descripción de la empresa..."
+                        className={`
+                            w-full min-h-[120px] bg-zinc-950/50 border rounded-xl p-4 text-sm text-white resize-none
+                            placeholder:text-zinc-700 outline-none transition-all duration-200
+                            ${isEditing 
+                                ? 'border-zinc-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30' 
+                                : 'border-zinc-800/50 opacity-60'}
+                        `}
+                    />
+                </div>
             </div>
         </SectionCard>
     );
