@@ -1,10 +1,9 @@
 import React from 'react';
-import { User, Mail, Phone, MapPin, Sparkles, Loader2 } from 'lucide-react';
+import { User, Mail, Phone, MapPin } from 'lucide-react';
 import SectionCard from '../shared/SectionCard';
 import InputField from '../shared/InputField';
 import TextAreaField from '../shared/TextAreaField';
 import { CIUDADES_COORDS, CIUDADES_PRINCIPALES } from '../../../domain/geography.config';
-import { useAIGenerator } from '../../../hooks/useAIGenerator';
 
 /**
  * Sección de Información Personal — Perfil de Empresa (Business).
@@ -12,15 +11,6 @@ import { useAIGenerator } from '../../../hooks/useAIGenerator';
  * para alimentar el algoritmo de match geográfico de vacantes.
  */
 const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
-    const { isGenerating, generateBio } = useAIGenerator();
-
-    const handleAIGenerate = async () => {
-        const generatedBio = await generateBio();
-        if (generatedBio) {
-            handleInputChange('bio', generatedBio);
-        }
-    };
-
     // Al seleccionar ciudad resolvemos lat/lng automáticamente
     const handleCityChange = (cityName) => {
         handleInputChange('address', cityName);
@@ -107,17 +97,6 @@ const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
                         <label className="text-[10px] font-semibold tracking-wider text-zinc-500 uppercase">
                             Sobre Mí / Biografía
                         </label>
-                        {isEditing && (
-                            <button
-                                type="button"
-                                onClick={handleAIGenerate}
-                                disabled={isGenerating}
-                                className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 hover:text-emerald-300 transition-colors disabled:opacity-50"
-                            >
-                                {isGenerating ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
-                                {isGenerating ? 'Generando...' : 'Generar con IA'}
-                            </button>
-                        )}
                     </div>
                     <textarea
                         value={formData.bio || ''}
