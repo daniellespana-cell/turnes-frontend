@@ -61,6 +61,29 @@ class ChatRealtimeService {
             .subscribe((status) => {
                 if (status === 'SUBSCRIBED') logger.info("✅ Realtime Bandeja: OK");
             });
+
+        // ── AUTO-SYNC EN BACKGROUND / FOREGROUND ────────────────────
+        // Cuando el usuario sale a WhatsApp y vuelve, el WebSocket se reconecta,
+        // pero los mensajes enviados durante ese lapso se pierden.
+        // Solución: Refrescar la base de datos completa al retomar el foco.
+        if (typeof window !== 'undefined') {
+            this._handleVisibility = () => {
+                if (document.visibilityState === 'visible') {
+                    logger.info("🔄 App retornó al primer plano. Sincronizando chats...");
+                    this._debouncedRefresh(); // Recarga la bandeja
+                    
+                    // Si el usuario está viendo un chat específico, recargarlo completo
+                    const snapshot = chatState.getSnapshot();
+                    if (chatState._activeChatId) {
+                        import('../../services/chat/chatStorage').then(module => {
+                            module.ChatStorage.fetchMessages(chatState._activeChatId);
+                        });
+                    }
+                }
+            };
+            document.addEventListener('visibilitychange', this._handleVisibility);
+            window.addEventListener('focus', this._handleVisibility);
+        }
     }
 
     // ── HANDLERS ─────────────────────────────────────────────────────────
@@ -122,6 +145,11 @@ class ChatRealtimeService {
         if (this._refreshDebounce) {
             clearTimeout(this._refreshDebounce);
             this._refreshDebounce = null;
+        }
+        if (typeof window !== 'undefined' && this._handleVisibility) {
+            document.removeEventListener('visibilitychange', this._handleVisibility);
+            window.removeEventListener('focus', this._handleVisibility);
+            this._handleVisibility = null;
         }
     }
 }

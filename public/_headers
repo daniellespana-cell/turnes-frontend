@@ -1,0 +1,26 @@
+# Reglas de Caché (Cloudflare Pages)
+
+# 1. Los assets generados por Vite (JS, CSS) tienen hash.
+# ¡Nunca cambian! Se pueden cachear de forma agresiva por 1 año.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 2. Las imágenes y media general
+/*.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+/*.webp
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+/*.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+
+# 3. Service Worker, Manifest, y el HTML principal
+# NUNCA se deben cachear a largo plazo, de lo contrario
+# los usuarios no verán las actualizaciones de la app.
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+/manifest.json
+  Cache-Control: public, max-age=0, must-revalidate
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

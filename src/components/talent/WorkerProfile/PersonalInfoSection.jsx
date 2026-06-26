@@ -1,7 +1,8 @@
 import React from 'react';
-import { User, Mail, MapPin } from 'lucide-react';
+import { User, Mail, MapPin, Sparkles, Loader2 } from 'lucide-react';
 import SectionCard from '../../profile/shared/SectionCard';
 import InputField from '../../profile/shared/InputField';
+import { useAIGenerator } from '../../../hooks/useAIGenerator';
 
 import { CIUDADES_PRINCIPALES } from '../../../domain/geography.config';
 
@@ -16,6 +17,15 @@ import { CIUDADES_PRINCIPALES } from '../../../domain/geography.config';
  *   3. Soporte correcto para el algoritmo de match geográfico
  */
 const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
+    const { generateBio, isGenerating } = useAIGenerator();
+
+    const handleAIGenerate = async () => {
+        const generatedText = await generateBio();
+        if (generatedText) {
+            handleInputChange('bio', generatedText);
+        }
+    };
+
     return (
         <SectionCard title="Información Personal" icon={<User size={14} />}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -69,15 +79,38 @@ const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
                         </p>
                     )}
                 </div>
-
-                <InputField
-                    label="Bio / Presentación"
-                    value={formData.bio || ''}
-                    onChange={v => handleInputChange('bio', v)}
-                    disabled={!isEditing}
-                    fullWidth
-                    placeholder="Ej: Tengo 3 años de experiencia en servicio al cliente..."
-                />
+                <div className="md:col-span-2 space-y-2">
+                    <div className="flex justify-between items-center">
+                        <label className="text-[11px] font-semibold tracking-wider text-zinc-500 uppercase">
+                            Bio / Presentación
+                        </label>
+                        {isEditing && (
+                            <button
+                                type="button"
+                                onClick={handleAIGenerate}
+                                disabled={isGenerating}
+                                className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 hover:text-emerald-300 transition-colors disabled:opacity-50"
+                            >
+                                {isGenerating ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                                {isGenerating ? 'Generando...' : 'Generar con IA'}
+                            </button>
+                        )}
+                    </div>
+                    <textarea
+                        value={formData.bio || ''}
+                        onChange={e => handleInputChange('bio', e.target.value)}
+                        disabled={!isEditing || isGenerating}
+                        placeholder="Ej: Tengo 3 años de experiencia en servicio al cliente..."
+                        rows={3}
+                        className={`
+                            w-full bg-zinc-950 border rounded-xl px-4 py-3 text-sm text-white resize-none
+                            placeholder:text-zinc-700 outline-none transition-all duration-200
+                            ${isEditing && !isGenerating
+                                ? 'border-zinc-700 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 cursor-text'
+                                : 'border-zinc-800/50 opacity-60 cursor-default'}
+                        `}
+                    />
+                </div>
             </div>
         </SectionCard>
     );
