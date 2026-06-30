@@ -103,24 +103,28 @@ export const FinanceService = {
     },
 
     /**
-     * Realiza un polling a la base de datos verificando si el Webhook de Wompi
-     * ya acreditó el saldo, buscando el transactionId en el JSONB metadata.
+     * Realiza un polling a la base de datos (Read-Only) verificando si el Webhook de Wompi
+     * ya insertó el movimiento en la billetera. (Single Source of Truth)
      */
-    async waitForTransaction(transactionId, maxWaitMs = 120000) {
+    async waitForTransaction(transactionId, maxWaitMs = 60000) {
         const checkInterval = 3000;
         let elapsed = 0;
 
         while (elapsed < maxWaitMs) {
-            // 🛰️ RADAR RPC
-            const { data, error } = await supabase.rpc('rpc_verify_transaction_status', {
-                p_wompi_id: transactionId
-            });
+            // 🛰️ RADAR READ-ONLY: Buscar si el webhook ya registró el movimiento
+            const { data, error } = await supabase
+                .from('movimientos')
+                .select('id, estado')
+                .eq('referencia->>wompi_id', transactionId)
+                .maybeSingle();
 
-            if (data?.found && (data.status === 'APPROVED' || data.status === 'completado')) {
-                return data;
+            if (data && data.id) {
+                return { found: true, status: 'APPROVED' };
             }
 
-            if (error) console.warn("Polling Warning:", error);
+            if (error && error.code !== 'PGRST116') {
+                console.warn("Polling Warning:", error);
+            }
 
             await new Promise(resolve => setTimeout(resolve, checkInterval));
             elapsed += checkInterval;
