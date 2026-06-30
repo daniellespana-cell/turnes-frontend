@@ -12,6 +12,7 @@ import { PATHS } from '../config/routes.paths';
 import { rootLoader } from './loaders';
 import { useAuth } from '../context/AuthContext';
 import { GlobalLoading } from './RouterComponents';
+import { RouterErrorBoundary } from '../components/error/RouterErrorBoundary';
 
 // Layouts & Security
 import MainLayout from '../components/layout/MainLayout';
@@ -226,6 +227,7 @@ export const router = createBrowserRouter([
     {
         path: "/",
         element: <AuthSyncBridge />, 
+        errorElement: <RouterErrorBoundary />,
         loader: rootLoader,
         HydrateFallback: GlobalLoading,
         id: "root",
