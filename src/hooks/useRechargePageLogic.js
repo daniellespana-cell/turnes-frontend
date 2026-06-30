@@ -50,8 +50,8 @@ export const useRechargePageLogic = () => {
 
     // 4. ORQUESTADOR DE PAGO (INTEGRACIÓN WOMPI)
     const handlePayment = useCallback(async () => {
-        if (amount < 20000) {
-            triggerToast('warning', 'El monto mínimo permitido es $20.000');
+        if (amount < 2000) {
+            triggerToast('warning', 'El monto mínimo permitido es $2.000');
             return;
         }
 
