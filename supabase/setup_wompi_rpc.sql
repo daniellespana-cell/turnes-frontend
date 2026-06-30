@@ -31,5 +31,13 @@ BEGIN
         updated_at = now()
     WHERE id = p_billetera_id;
 
+    -- 3. Crear notificación in-app para el usuario
+    INSERT INTO public.notificaciones (user_id, tipo, metadata)
+    VALUES (
+        p_billetera_id,
+        'RECHARGE_SUCCESS',
+        jsonb_build_object('amount', p_monto, 'wompi_id', p_wompi_id)
+    );
+
 END;
 $$;
