@@ -13,13 +13,16 @@ SECURITY DEFINER
 AS $$
 BEGIN
     -- 1. Insertar el movimiento (Historial)
-    INSERT INTO public.movimientos (billetera_id, tipo, monto, concepto, referencia)
+    -- Guardamos el ID de wompi en 'metadata' (JSONB) en vez de 'referencia' (TEXT) 
+    -- para que la interfaz pueda hacer polling sin errores de tipo.
+    INSERT INTO public.movimientos (billetera_id, tipo, monto, concepto, referencia, metadata)
     VALUES (
         p_billetera_id, 
         'DEPOSITO', 
         p_monto, 
         'Recarga vía Wompi (Webhook)', 
-        jsonb_build_object('wompi_id', p_wompi_id, 'referencia_original', p_referencia)
+        p_referencia,
+        jsonb_build_object('wompi_id', p_wompi_id)
     );
 
     -- 2. Incrementar el saldo de la billetera atómicamente

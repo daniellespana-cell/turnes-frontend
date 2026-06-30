@@ -115,7 +115,7 @@ export const FinanceService = {
             const { data, error } = await supabase
                 .from('movimientos')
                 .select('id, estado')
-                .eq('referencia->>wompi_id', transactionId)
+                .eq('metadata->>wompi_id', transactionId)
                 .maybeSingle();
 
             if (data && data.id) {
