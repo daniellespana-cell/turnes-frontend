@@ -3,9 +3,8 @@ import { CreditCard, AlertCircle } from 'lucide-react';
 
 
 const RechargeAmount = ({ amount, setAmount, onAmountChange }) => {
-  // TODO(temporary): Bajado temporalmente a 2k para pruebas en producción. Restaurar a 20k después.
-  const MIN_AMOUNT = 2000;
-  const QUICK_AMOUNTS = [20000, 50000, 100000, 200000, 500000];
+  const MIN_AMOUNT = 15000;
+  const QUICK_AMOUNTS = [15000, 50000, 100000, 200000, 500000];
 
   // Validación de error: monto mayor a 0 pero menor al mínimo
   const isInvalid = amount > 0 && amount < MIN_AMOUNT;
@@ -45,7 +44,7 @@ const RechargeAmount = ({ amount, setAmount, onAmountChange }) => {
         {/* Feedback visual de error */}
         {isInvalid && (
           <span className="flex items-center gap-1.5 text-[10px] font-bold text-red-400 bg-red-500/10 px-2.5 py-1 rounded-full border border-red-500/10">
-            <AlertCircle size={12} /> Mínimo $20k
+            <AlertCircle size={12} /> Mínimo $15k
           </span>
         )}
       </div>
