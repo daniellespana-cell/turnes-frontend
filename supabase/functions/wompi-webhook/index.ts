@@ -15,6 +15,7 @@ const corsHeaders = {
 // Secreto de Eventos de Wompi (Debe estar configurado en Supabase Dashboard Secrets)
 // Es diferente a la Llave Pública/Privada o la de Integridad.
 const WOMPI_EVENTS_SECRET = Deno.env.get('WOMPI_EVENTS_SECRET'); 
+const WOMPI_TEST_EVENTS_SECRET = Deno.env.get('WOMPI_TEST_EVENTS_SECRET'); 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
 
@@ -31,16 +32,25 @@ async function validateWompiSignature(payload: any, signature: string, timestamp
   const status = payload.data.transaction.status;
   const amount = payload.data.transaction.amount_in_cents;
   
-  const concatenatedString = `${id}${status}${amount}${timestamp}${WOMPI_EVENTS_SECRET}`;
-
-  // SHA256 Hash
   const encoder = new TextEncoder();
-  const data = encoder.encode(concatenatedString);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const expectedSignature = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-  return signature === expectedSignature;
+  // Función interna para chequear un secreto específico
+  const checkSecret = async (secret: string) => {
+    if (!secret) return false;
+    const concatenatedString = `${id}${status}${amount}${timestamp}${secret}`;
+    const data = encoder.encode(concatenatedString);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const expectedSignature = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return signature === expectedSignature;
+  };
+
+  // Verificamos primero con el secreto de Producción, si falla intentamos con el de Pruebas (Sandbox)
+  const isProdValid = await checkSecret(WOMPI_EVENTS_SECRET);
+  if (isProdValid) return true;
+
+  const isTestValid = await checkSecret(WOMPI_TEST_EVENTS_SECRET);
+  return isTestValid;
 }
 
 serve(async (req) => {
