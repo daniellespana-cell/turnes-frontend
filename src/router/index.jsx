@@ -13,6 +13,7 @@ import { rootLoader } from './loaders';
 import { useAuth } from '../context/AuthContext';
 import { GlobalLoading } from './RouterComponents';
 import { RouterErrorBoundary } from '../components/error/RouterErrorBoundary';
+import PWAInstallPrompt from '../components/pwa/PWAInstallPrompt';
 
 // Layouts & Security
 import MainLayout from '../components/layout/MainLayout';
@@ -190,6 +191,7 @@ const AuthSyncBridge = () => {
             <CookieSentinel />
             <CookieBanner />
             <CookieTrigger />
+            <PWAInstallPrompt />
             <Outlet />
         </>
     );

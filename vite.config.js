@@ -17,7 +17,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['logo-turnes.png'],
+      includeAssets: ['logo-pwa.png'],
       manifest: {
         name: 'Turnes',
         short_name: 'Turnes',
@@ -25,15 +25,16 @@ export default defineConfig({
         theme_color: '#09090b',
         background_color: '#09090b',
         display: 'standalone',
+        orientation: 'portrait',
         icons: [
           {
-            src: 'logo-turnes.png',
+            src: 'logo-pwa.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: 'logo-turnes.png',
+            src: 'logo-pwa.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
