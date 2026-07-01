@@ -49,7 +49,10 @@ const BusinessLayout = ({ user }) => {
             - Dashboard: pt-24 (Navbar height + gap)
             - Internas: pt-8 (Header mas arriba)
         */}
-        <main className={`flex-1 ${isChat ? 'pt-0 pb-0 px-0' : 'pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}>
+        <main 
+          className={`flex-1 ${isChat ? 'pt-0 pb-0 px-0' : 'pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}
+          style={{ paddingTop: isChat ? 'env(safe-area-inset-top)' : 'calc(6rem + env(safe-area-inset-top))' }}
+        >
           <div className={isChat ? 'w-full h-full' : 'max-w-6xl mx-auto'}>
             {/* El Outlet hereda el usuario para las sub-páginas */}
             <Outlet context={{ user }} />

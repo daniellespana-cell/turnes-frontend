@@ -26,7 +26,10 @@ const AuthNavbar = () => {
     const isLogin = location.pathname === '/login';
 
     return (
-        <nav className="absolute top-0 left-0 w-full z-50 p-6 flex items-center justify-between">
+        <nav 
+            className="absolute top-0 left-0 w-full z-50 p-6 flex items-center justify-between"
+            style={{ paddingTop: 'calc(1.5rem + env(safe-area-inset-top))' }}
+        >
             {/* Logo Official */}
             <Link to="/" className="flex items-center space-x-2 group">
                 <img
