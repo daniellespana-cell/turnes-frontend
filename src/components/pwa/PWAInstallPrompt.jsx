@@ -21,6 +21,13 @@ const PWAInstallPrompt = () => {
     
     // Check if dismiss cookie/localStorage exists
     const hasDismissed = localStorage.getItem('pwa_prompt_dismissed');
+    
+    // --- DEBUG MODE FOR DEVELOPERS ---
+    const isDebug = window.location.search.includes('pwa=1');
+    if (isDebug) {
+      setTimeout(() => setShowPrompt(true), 1000);
+      return;
+    }
 
     if (isIosDevice && !hasDismissed) {
       setIsIOS(true);
