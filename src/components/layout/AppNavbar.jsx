@@ -34,7 +34,10 @@ const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
   const iconSvgClass = "w-6 h-6 text-zinc-300 drop-shadow-[0_5px_8px_rgba(0,0,0,0.9)] filter group-hover:text-white group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] transition-all duration-500 transform group-hover:-translate-y-0.5";
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-[#060606] border-b border-zinc-800/50 transition-all duration-500 shadow-xl">
+    <nav 
+      className="fixed top-0 left-0 w-full z-50 bg-[#060606] border-b border-zinc-800/50 transition-all duration-500 shadow-xl"
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20 relative gap-2">
 

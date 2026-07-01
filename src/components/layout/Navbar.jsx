@@ -55,7 +55,7 @@ const AnimatedButton = ({ to, label, isMobile = false, isHeaderMobile = false, o
         relative rounded-xl overflow-hidden transition-all duration-300 flex items-center justify-center
         ${variant === 'primary' ? primaryStyles : ghostStyles}
         ${isMobile ? "w-full text-center px-4 py-2.5 mt-2" : ""}
-        ${isHeaderMobile ? "px-3 py-1.5 text-xs ml-1" : ""}
+        ${isHeaderMobile ? "px-4 py-2 text-sm ml-1 font-bold shadow-md" : ""}
         ${!isMobile && !isHeaderMobile ? "px-5 py-2" : ""}
       `}
     >
@@ -72,11 +72,14 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navbarClasses =
-    "fixed top-0 left-0 w-full z-50 bg-[#0a0a0a]/90 backdrop-blur-md  border-b border-zinc-800 transition-all duration-300";
+    "fixed top-0 left-0 w-full z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-zinc-800 transition-all duration-300";
 
   return (
     <>
-      <nav className={navbarClasses}>
+      <nav 
+        className={navbarClasses} 
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
 
