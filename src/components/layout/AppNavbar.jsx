@@ -8,7 +8,6 @@ import { useNavbarVisibility } from '../../hooks/useNavbarVisibility';
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import turnesLogo from "../../assets/logo-turnes.png";
 import { useSyncExternalStore, useMemo } from 'react';
 import { ChatStorage } from '../../services/chat';
 const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
@@ -48,11 +47,6 @@ const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
                 <Menu className={iconSvgClass} strokeWidth={2.5} />
               </button>
             </div>
-
-            {/* 2. Logo Section */}
-            <Link to="/dashboard" className="flex-shrink-0 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-              <img src={turnesLogo} alt="Turnes" className="h-6 md:h-8 w-auto object-contain brightness-110" />
-            </Link>
           </div>
 
           <div className="flex-1"></div>

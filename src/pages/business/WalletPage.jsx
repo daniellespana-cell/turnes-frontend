@@ -43,7 +43,8 @@ const WalletPage = () => {
     );
   }
 
-  const hasTransactions = data?.transactions && data.transactions.length > 0;
+  const transactions = (data?.transactions || []).slice(0, 5);
+  const hasTransactions = transactions.length > 0;
 
   return (
     <div className="max-w-6xl mx-auto pb-20 pt-4 md:pt-8 px-4 md:px-6 min-h-screen text-zinc-300 antialiased font-manrope space-y-8">
@@ -89,7 +90,7 @@ const WalletPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-8">
           {hasTransactions || isLoading ? (
-            <TransactionTable transactions={data?.transactions || []} isLoading={isLoading} />
+            <TransactionTable transactions={transactions} isLoading={isLoading} />
           ) : (
             <EmptyWalletState />
           )}
