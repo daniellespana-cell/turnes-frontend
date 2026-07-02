@@ -8,10 +8,24 @@ import { formatCurrency } from '../../services/financeService';
 
 const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoading }) => {
   const [filter, setFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const filteredTransactions = transactions.filter(tx =>
     filter === 'all' ? true : tx.type === filter
   );
+
+  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
+  const currentTransactions = filteredTransactions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Reset page when filter changes
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+    setCurrentPage(1);
+  };
 
   const downloadInvoice = () => {
     const doc = new jsPDF();
@@ -51,7 +65,7 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <select
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={handleFilterChange}
             className="bg-transparent text-zinc-500 text-[10px] font-bold px-2 py-1 outline-none hover:text-zinc-300 transition-colors cursor-pointer uppercase tracking-wider"
           >
             <option value="all" className="bg-[#0f0f10]">Todos</option>
@@ -89,7 +103,7 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
                 </tr>
               ))
             ) : (
-              filteredTransactions.map((tx) => {
+              currentTransactions.map((tx) => {
                 const isIncome = tx.type === 'deposit';
                 return (
                   <tr key={tx.id} className="group hover:bg-white/[0.01] transition-colors">
@@ -119,6 +133,31 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
           </tbody>
         </table>
       </div>
+
+      {/* PAGINACIÓN */}
+      {!isLoading && totalPages > 1 && (
+        <div className="px-5 py-4 border-t border-white/5 flex items-center justify-between">
+          <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+            Página {currentPage} de {totalPages}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              Anterior
+            </button>
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

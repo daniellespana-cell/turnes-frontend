@@ -43,7 +43,7 @@ const WalletPage = () => {
     );
   }
 
-  const transactions = (data?.transactions || []).slice(0, 5);
+  const transactions = data?.transactions || [];
   const hasTransactions = transactions.length > 0;
 
   return (
