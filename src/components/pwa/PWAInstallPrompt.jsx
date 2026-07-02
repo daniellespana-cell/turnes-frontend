@@ -12,42 +12,35 @@ const PWAInstallPrompt = () => {
     // Check if app is already installed
     const isAppInstalled = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
     setIsStandalone(isAppInstalled);
-
     if (isAppInstalled) return;
 
-    // --- iOS Detection ---
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIosDevice = /iphone|ipad|ipod/.test(userAgent);
-    
-    // Check if dismiss cookie/localStorage exists
     const hasDismissed = localStorage.getItem('pwa_prompt_dismissed');
-    
-    // --- DEBUG MODE FOR DEVELOPERS ---
     const isDebug = window.location.search.includes('pwa=1');
-    if (isDebug) {
-      setTimeout(() => setShowPrompt(true), 1000);
-      return;
-    }
 
-    if (isIosDevice && !hasDismissed) {
+    // iOS: show native instructions guide
+    if (isIosDevice) {
       setIsIOS(true);
-      // Slight delay so it doesn't block initial render
-      setTimeout(() => setShowPrompt(true), 3000);
+      if (!hasDismissed || isDebug) {
+        setTimeout(() => setShowPrompt(true), isDebug ? 1000 : 3000);
+      }
     }
 
-    // --- Android / Chrome Detection ---
+    // Android / Chrome: wire up the native install prompt event
     const handleBeforeInstallPrompt = (e) => {
-      // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault();
-      // Stash the event so it can be triggered later.
       setDeferredPrompt(e);
-      
-      if (!hasDismissed) {
+      if (!hasDismissed || isDebug) {
         setShowPrompt(true);
       }
     };
-
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Debug mode: force show prompt even without native event
+    if (isDebug && !isIosDevice) {
+      setTimeout(() => setShowPrompt(true), 1000);
+    }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
