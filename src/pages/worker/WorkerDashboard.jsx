@@ -47,7 +47,7 @@ const WorkerDashboard = () => {
     // El dashboard se renderiza inmediatamente. La estructura base no espera a la BD.
 
     return (
-        <div className="max-w-md mx-auto md:max-w-5xl pb-24 pt-4 min-h-screen font-manrope space-y-5 animate-fade-in">
+        <div className="max-w-md mx-auto md:max-w-5xl pb-24 pt-4 min-h-screen font-manrope space-y-5 animate-fade-in px-4 md:px-0">
 
             {/* 1. WELCOME HEADER (Aparece al instante) */}
             <header className="flex justify-between items-end">

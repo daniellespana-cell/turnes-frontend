@@ -40,7 +40,7 @@ const VacancyCard = ({
             whileHover={{ y: -4 }}
             onClick={handleCardActivate}
             onKeyDown={handleCardKey}
-            className={`group relative bg-zinc-900/30 backdrop-blur-xl rounded-3xl p-5 md:p-6 pb-5 md:pb-6 hover:bg-zinc-900/60 transition-all duration-500 flex flex-col justify-between h-full min-w-[340px] md:min-w-0 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 border
+            className={`group relative bg-zinc-900/30 backdrop-blur-xl rounded-3xl p-5 md:p-6 pb-5 md:pb-6 hover:bg-zinc-900/60 transition-all duration-500 flex flex-col justify-between h-full w-full min-w-[280px] md:min-w-0 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 border
                 ${vacancy.esUrgente && (!vacancy.urgenteExpiracion || new Date(vacancy.urgenteExpiracion) > new Date())
                     ? 'border-orange-500/30 shadow-[0_0_20px_rgba(234,88,12,0.1)]'
                     : 'border-zinc-800/60'
