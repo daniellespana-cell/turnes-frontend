@@ -58,7 +58,7 @@ const TalentSearchPage = () => {
     }, [loading, loadingMore, hasMore, loadMore]);
 
     return (
-        <div className="max-w-7xl mx-auto pb-20 pt-4 md:pt-8 px-4 md:px-6 min-h-screen text-zinc-300 antialiased font-manrope">
+        <div className="max-w-7xl mx-auto pb-20 pt-4 md:pt-8 px-4 md:px-6 min-h-screen text-zinc-300 antialiased font-manrope w-full min-w-0">
 
             {/* HEADER */}
             <header className="flex flex-col gap-6 mb-8">
