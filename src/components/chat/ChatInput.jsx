@@ -2,7 +2,7 @@ import React from 'react';
 import { Send, ShieldCheck, ShieldAlert, Lock, X, Lightbulb, Info } from 'lucide-react';
 import ChatSuggestions from './ChatSuggestions';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef } from 'react';
 
 // Components & Hooks
 import { useChatSecurity } from '../../hooks/chat/useChatSecurity';
@@ -11,29 +11,7 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
   const [text, setText] = useState('');
   const [isWarning, setIsWarning] = useState(false);
   const [showTips, setShowTips] = useState(true);
-  const containerRef = useRef(null);
   const inputRef = useRef(null);
-
-  // 🍎 iOS Safari: Anclar el input al fondo real del viewport visible
-  // Safari Mobile redimensiona el visualViewport (no el layout viewport) al abrir el teclado,
-  // lo que provoca que el input "flote" y salte. Este efecto lo ancla al fondo real.
-  useEffect(() => {
-    const vv = window.visualViewport;
-    if (!vv) return; // No soportado (desktop)
-
-    const handleResize = () => {
-      if (!containerRef.current) return;
-      const offsetTop = window.innerHeight - vv.height - vv.offsetTop;
-      containerRef.current.style.transform = offsetTop > 0 ? `translateY(-${offsetTop}px)` : 'translateY(0)';
-    };
-
-    vv.addEventListener('resize', handleResize);
-    vv.addEventListener('scroll', handleResize);
-    return () => {
-      vv.removeEventListener('resize', handleResize);
-      vv.removeEventListener('scroll', handleResize);
-    };
-  }, []);
 
   // 1. SECURITY HOOK
   const { validateSecurity } = useChatSecurity();
@@ -57,13 +35,15 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
     if (cleanText && cleanText.trim()) {
       onSend(cleanText);
       setText('');
+      // 🍎 iOS: blur para que el teclado se cierre y el viewport se restaure limpiamente
+      inputRef.current?.blur();
     }
   };
 
   // CASO: CICLO SELLADO (PASO 5)
   if (showClosedBanner) {
     return (
-      <div className="p-4 md:px-8 pb-8 bg-[#050505] border-t border-white/5 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="p-4 md:px-8 bg-[#050505] border-t border-white/5 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
         <div className="max-w-4xl mx-auto space-y-3">
           <div className="flex items-start gap-4 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/10">
             <Info size={18} className="text-indigo-400 shrink-0 mt-0.5" />
@@ -88,7 +68,7 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
 
   // INTERFAZ ACTIVA (PASOS 1, 2, 3 y 4)
   return (
-    <div ref={containerRef} className="px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5 relative will-change-transform" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+    <div className="shrink-0 px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5 relative" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
 
       {/* SUGERENCIAS (SCROLL HORIZONTAL 2026 UX) */}
       <div className={`max-w-4xl mx-auto flex items-center gap-2 transition-all duration-700 overflow-hidden ${(!text && showTips && !isContracted) ? 'max-h-20 mb-3 opacity-100' : 'max-h-0 mb-0 opacity-0'}`}>

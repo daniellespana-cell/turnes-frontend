@@ -74,7 +74,7 @@ const ChatView = ({
           </div>
       )}
 
-      {/* ÁREA DE MENSAJES */}
+      {/* ÁREA DE MENSAJES — Único contenedor de scroll */}
       <div className="flex-1 overflow-hidden min-h-0 flex flex-col bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-zinc-900/20 via-black to-black">
         <MessageList
           messages={messages}
@@ -103,19 +103,17 @@ const ChatView = ({
         />
       </div>
 
-      {/* INPUT: Se bloquea si está cerrado O si no se ha pagado */}
-      <div className="w-full relative z-10">
-        <ChatInput
-          onSend={enviarMensaje}
-          isPaid={isPaid}
-          // Pasamos canWrite para habilitar input aunque no se haya pagado
-          canWrite={permisos?.canWrite}
-          isClosed={realIsClosed}
-          userRole={userRole} // 🆕
-          isContracted={candidato?.status === 'contratado'}
-          isRehire={isRehireActive} // 🆕 FAST-TRACK Context
-        />
-      </div>
+      {/* INPUT: shrink-0 garantiza que nunca se comprima ni se mueva */}
+      <ChatInput
+        onSend={enviarMensaje}
+        isPaid={isPaid}
+        // Pasamos canWrite para habilitar input aunque no se haya pagado
+        canWrite={permisos?.canWrite}
+        isClosed={realIsClosed}
+        userRole={userRole} // 🆕
+        isContracted={candidato?.status === 'contratado'}
+        isRehire={isRehireActive} // 🆕 FAST-TRACK Context
+      />
 
       {/* Indicador visual: Solo si no está cerrado y ya se pagó */}
       {isPaid && !realIsClosed && (
