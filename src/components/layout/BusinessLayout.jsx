@@ -50,10 +50,10 @@ const BusinessLayout = ({ user }) => {
             - Internas: pt-8 (Header mas arriba)
         */}
         <main 
-          className={`flex-1 flex flex-col ${isChat ? 'pt-0 pb-0 px-0' : 'pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}
+          className={`flex-1 flex flex-col min-w-0 w-full ${isChat ? 'pt-0 pb-0 px-0' : 'pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}
           style={{ paddingTop: isChat ? 'env(safe-area-inset-top)' : 'calc(6rem + env(safe-area-inset-top))' }}
         >
-          <div className={`flex-1 flex flex-col ${isChat ? 'w-full h-full' : 'max-w-6xl mx-auto w-full'}`}>
+          <div className={`flex-1 flex flex-col min-w-0 w-full ${isChat ? 'h-full' : 'max-w-6xl mx-auto'}`}>
             {/* El Outlet hereda el usuario para las sub-páginas */}
             <Outlet context={{ user }} />
           </div>
