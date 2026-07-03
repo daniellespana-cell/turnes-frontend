@@ -89,7 +89,7 @@ const PWAInstallPrompt = () => {
           <div className="flex items-start gap-4">
             {/* App Icon */}
             <div className="w-14 h-14 shrink-0 rounded-xl bg-gradient-to-tr from-zinc-800 to-zinc-700 p-0.5 shadow-inner">
-              <img src="/logo-pwa.png" alt="Turnes App" className="w-full h-full object-cover rounded-[10px]" />
+              <img src="/pwa-192x192.png" alt="Turnes App" className="w-full h-full object-cover rounded-[10px]" />
             </div>
             
             {/* Content */}
