@@ -2,7 +2,7 @@ import React from 'react';
 import { Send, ShieldCheck, ShieldAlert, Lock, X, Lightbulb, Info } from 'lucide-react';
 import ChatSuggestions from './ChatSuggestions';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 // Components & Hooks
 import { useChatSecurity } from '../../hooks/chat/useChatSecurity';
@@ -11,6 +11,29 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
   const [text, setText] = useState('');
   const [isWarning, setIsWarning] = useState(false);
   const [showTips, setShowTips] = useState(true);
+  const containerRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // 🍎 iOS Safari: Anclar el input al fondo real del viewport visible
+  // Safari Mobile redimensiona el visualViewport (no el layout viewport) al abrir el teclado,
+  // lo que provoca que el input "flote" y salte. Este efecto lo ancla al fondo real.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return; // No soportado (desktop)
+
+    const handleResize = () => {
+      if (!containerRef.current) return;
+      const offsetTop = window.innerHeight - vv.height - vv.offsetTop;
+      containerRef.current.style.transform = offsetTop > 0 ? `translateY(-${offsetTop}px)` : 'translateY(0)';
+    };
+
+    vv.addEventListener('resize', handleResize);
+    vv.addEventListener('scroll', handleResize);
+    return () => {
+      vv.removeEventListener('resize', handleResize);
+      vv.removeEventListener('scroll', handleResize);
+    };
+  }, []);
 
   // 1. SECURITY HOOK
   const { validateSecurity } = useChatSecurity();
@@ -65,7 +88,7 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
 
   // INTERFAZ ACTIVA (PASOS 1, 2, 3 y 4)
   return (
-    <div className="px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5 relative">
+    <div ref={containerRef} className="px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5 relative will-change-transform" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
 
       {/* SUGERENCIAS (SCROLL HORIZONTAL 2026 UX) */}
       <div className={`max-w-4xl mx-auto flex items-center gap-2 transition-all duration-700 overflow-hidden ${(!text && showTips && !isContracted) ? 'max-h-20 mb-3 opacity-100' : 'max-h-0 mb-0 opacity-0'}`}>
@@ -105,10 +128,12 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
           </div>
 
           <input
+            ref={inputRef}
             disabled={isInputDisabled}
             onChange={(e) => setText(e.target.value)}
             value={text}
             placeholder={getPlaceholderText()}
+            enterKeyHint="send"
             className={`flex-1 bg-transparent text-[16px] text-zinc-100 outline-none placeholder:text-zinc-600 font-medium py-2 ${isInputDisabled ? 'cursor-not-allowed text-zinc-500' : ''}`}
           />
 

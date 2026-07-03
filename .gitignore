@@ -27,3 +27,5 @@ out/
 *.njsproj
 *.sln
 *.sw?
+
+secrets.env
