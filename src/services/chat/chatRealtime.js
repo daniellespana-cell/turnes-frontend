@@ -127,7 +127,13 @@ class ChatRealtimeService {
     _debouncedRefresh() {
         if (this._refreshDebounce) clearTimeout(this._refreshDebounce);
         this._refreshDebounce = setTimeout(() => {
-            chatConversations.loadConversations();
+            chatConversations.loadConversations().then(() => {
+                // 🔥 CRÍTICO: Disparar actualización global del protocolo
+                // para que cualquier chat ABIERTO se bloquee en tiempo real
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new Event('turnes_contract_update'));
+                }
+            });
         }, 500);
     }
 
