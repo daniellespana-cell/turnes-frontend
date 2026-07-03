@@ -26,7 +26,7 @@ export const PostulanteCard = ({ cand, isSelected, isAnyHired, isProcessing, onC
       }`}
     >
 
-      <div className="p-3 md:p-4 flex flex-col gap-3">
+      <div className="p-4 md:p-5 flex flex-col gap-4">
 
         {/* IDENTIDAD COMPACTA & CLICKABLE PERFIL NAV */}
         <div className="flex items-center justify-between">
@@ -35,7 +35,7 @@ export const PostulanteCard = ({ cand, isSelected, isAnyHired, isProcessing, onC
             className="flex items-center gap-2 cursor-pointer group flex-1 min-w-0"
           >
             <div className="relative shrink-0">
-              <img src={AssetResolver.getAvatar(cand.avatar_url || cand.avatar, cand.name || 'Candidato')} className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-transparent bg-zinc-800 group-hover:border-white/30 transition-colors" alt="" />
+              <img src={AssetResolver.getAvatar(cand.avatar_url || cand.avatar, cand.name || 'Candidato')} className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-transparent bg-zinc-800 group-hover:border-white/30 transition-colors" alt="" />
               {/* VERIFIED BADGE (Standardized) */}
               {(cand.verified || cand.isVerified) && (
                 <div className="absolute -bottom-0.5 -right-0.5 bg-blue-500 text-white p-0.5 rounded-full ring-2 ring-[#0a0a0a] shadow-md z-10" title="Verificado">
@@ -45,30 +45,30 @@ export const PostulanteCard = ({ cand, isSelected, isAnyHired, isProcessing, onC
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
-                <h2 className={`${typography.entityName} text-sm md:text-base group-hover:text-blue-400 transition-colors`}>
+                <h2 className={`${typography.entityName} text-base md:text-lg group-hover:text-blue-400 transition-colors`}>
                   {cand.name.split(' ')[0]}
                 </h2>
-                <ChevronRight size={14} className="text-zinc-600 group-hover:text-blue-400 opacity-0 group-hover:opacity-100 transition-all -ml-1 translate-x-1 group-hover:translate-x-0" />
+                <ChevronRight size={16} className="text-zinc-600 group-hover:text-blue-400 opacity-0 group-hover:opacity-100 transition-all -ml-1 translate-x-1 group-hover:translate-x-0" />
               </div>
-              <p className={typography.meta + " text-[8px] md:text-[9px] opacity-60 truncate -mt-0.5"}>{cand.role}</p>
+              <p className={typography.meta + " text-[9px] md:text-[10px] opacity-60 truncate -mt-0.5"}>{cand.role}</p>
             </div>
           </div>
         </div>
 
         {/* DATOS TÉCNICOS */}
-        <div className="flex items-center justify-between py-1.5 border-y border-white/5">
+        <div className="flex items-center justify-between py-2 border-y border-white/5">
           <div className="flex flex-col">
-            <p className={typography.sectionTitle + " text-[7px] uppercase tracking-wider"}>Cercanía</p>
+            <p className={typography.sectionTitle + " text-[8px] md:text-[9px] uppercase tracking-wider mb-0.5"}>Cercanía</p>
             <div className="flex items-center gap-1 text-blue-500">
-              <MapPin size={8} />
-              <span className={typography.data + " text-[10px] md:text-xs"}>{cand.distance}</span>
+              <MapPin size={10} />
+              <span className={typography.data + " text-xs md:text-sm font-bold"}>{cand.distance}</span>
             </div>
           </div>
           <div className="flex flex-col items-end">
-            <p className={typography.sectionTitle + " text-[7px] uppercase tracking-wider"}>Reputación</p>
+            <p className={typography.sectionTitle + " text-[8px] md:text-[9px] uppercase tracking-wider mb-0.5"}>Reputación</p>
             <div className="flex items-center gap-1 text-yellow-500">
-              <Star size={8} fill="currentColor" />
-              <span className={typography.data + " text-[10px] md:text-xs"}>{cand.rating}</span>
+              <Star size={10} fill="currentColor" />
+              <span className={typography.data + " text-xs md:text-sm font-bold"}>{cand.rating}</span>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@ export const PostulanteCard = ({ cand, isSelected, isAnyHired, isProcessing, onC
             <button
               disabled={isAnyHired || isProcessing}
               onClick={() => onContratar(cand)}
-              className={`flex-1 py-2 md:py-2.5 rounded-lg border flex items-center justify-center gap-2 active:scale-95 transition-all ${typography.action} text-[9px] tracking-widest disabled:opacity-50 disabled:cursor-not-allowed ${
+              className={`flex-1 py-2.5 md:py-3 rounded-lg border flex items-center justify-center gap-2 active:scale-95 transition-all ${typography.action} text-[10px] md:text-xs tracking-widest disabled:opacity-50 disabled:cursor-not-allowed ${
                 isProcessing
                   ? 'bg-zinc-800 border-zinc-700 text-zinc-400'
                   : 'bg-transparent border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:border-blue-400'
@@ -97,14 +97,14 @@ export const PostulanteCard = ({ cand, isSelected, isAnyHired, isProcessing, onC
           ) : (cand.status === 'contratado' || cand.status === 'chat_abierto' || isSelected) ? (
             <button
               onClick={() => onChatMatch?.()}
-              className={`flex-1 py-2 md:py-2.5 bg-emerald-500 text-black rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all ${typography.action} text-[9px]`}
+              className={`flex-1 py-2.5 md:py-3 bg-emerald-500 text-black rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all ${typography.action} text-[10px] md:text-xs font-bold`}
             >
-              <MessageCircle size={14} strokeWidth={3} /> {isSelected || cand.status === 'contratado' ? 'Chat Match 🎉' : 'Ir al Chat'}
+              <MessageCircle size={16} strokeWidth={3} /> {isSelected || cand.status === 'contratado' ? 'Chat Match 🎉' : 'Ir al Chat'}
             </button>
           ) : (
             <button
               disabled
-              className={`flex-1 py-2 md:py-2.5 bg-zinc-800/50 text-zinc-500 rounded-lg border border-zinc-800 flex items-center justify-center gap-2 ${typography.action} text-[9px] cursor-not-allowed`}
+              className={`flex-1 py-2.5 md:py-3 bg-zinc-800/50 text-zinc-500 rounded-lg border border-zinc-800 flex items-center justify-center gap-2 ${typography.action} text-[10px] md:text-xs cursor-not-allowed`}
             >
               {cand.status === 'rechazado' ? 'Rechazado' : 'Finalizado'}
             </button>

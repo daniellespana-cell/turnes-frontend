@@ -35,7 +35,7 @@ const DetalleVacantePage = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto pb-12 pt-6 px-4 font-manrope min-h-screen text-zinc-300 antialiased">
+    <div className="w-full min-w-0 max-w-6xl mx-auto pb-12 pt-6 px-4 font-manrope min-h-screen text-zinc-300 antialiased">
       <HeaderDetalle />
 
       <div className="w-full space-y-12">

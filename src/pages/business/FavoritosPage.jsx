@@ -84,7 +84,7 @@ const FavoritosPage = () => {
   );
 
   return (
-    <div className="max-w-5xl mx-auto pb-20 pt-4 md:pt-8 px-4 animate-fade-in font-manrope antialiased min-h-screen">
+    <div className="w-full min-w-0 max-w-5xl mx-auto pb-20 pt-4 md:pt-8 px-4 animate-fade-in font-manrope antialiased min-h-screen">
 
       <FavoritosHeader
         onBack={() => navigate(-1)}

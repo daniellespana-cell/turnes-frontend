@@ -107,14 +107,6 @@ const VacanteRow = ({ data, onAction }) => {
             <span className="text-[10px] text-zinc-700 font-medium italic px-4">Sin postulantes</span>
           )}
 
-          {/* BOTON X ELIMINAR */}
-          <button
-            onClick={() => onAction?.(data.id, 'delete-confirm')}
-            className="p-2 text-zinc-500 hover:text-red-500 bg-white/5 hover:bg-red-500/10 rounded-full transition-all"
-            title="Eliminar vacante"
-          >
-            <X size={16} />
-          </button>
 
           {/* DESKTOP MENU TRIGGER */}
           <div className="relative">
@@ -145,12 +137,7 @@ const VacanteRow = ({ data, onAction }) => {
 
           {/* MOBILE MENU TRIGGER */}
           <div className="absolute top-4 right-4 z-20 flex items-center gap-1">
-            <button
-              onClick={() => onAction?.(data.id, 'delete-confirm')}
-              className="p-2 text-zinc-500 hover:text-red-500 bg-white/5 hover:bg-red-500/10 rounded-lg active:scale-95 transition-all"
-            >
-              <X size={18} />
-            </button>
+
             <div className="relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
