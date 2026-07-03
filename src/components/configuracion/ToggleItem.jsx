@@ -16,9 +16,9 @@ const ToggleItem = ({ icon: Icon, title, desc, checked, onChange }) => (
         {/* IOS Style Toggle */}
         <button
             type="button"
-            className={`w-11 h-6 rounded-full relative transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${checked ? 'bg-emerald-500' : 'bg-zinc-700'}`}
+            className={`shrink-0 w-12 h-6 rounded-full relative transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-inner ${checked ? 'bg-emerald-500' : 'bg-zinc-700'}`}
         >
-            <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform duration-300 ${checked ? 'translate-x-5' : 'translate-x-0'}`} />
+            <div className={`absolute top-[2px] left-[2px] bg-white w-5 h-5 rounded-full shadow-md transition-transform duration-300 ease-in-out ${checked ? 'translate-x-6' : 'translate-x-0'}`} />
         </button>
     </div>
 );
