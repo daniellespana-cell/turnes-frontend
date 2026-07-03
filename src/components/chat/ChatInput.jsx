@@ -19,7 +19,7 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
   const showClosedBanner = isClosed;
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e?.preventDefault();
 
     // 2. VALIDATION VIA HOOK
     const check = validateSecurity(text);
@@ -70,8 +70,8 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
   return (
     <div className="shrink-0 px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
 
-      {/* SUGERENCIAS — Solo Desktop para evitar bugs visuales en iOS */}
-      <div className={`max-w-4xl mx-auto hidden md:flex items-center gap-2 transition-all duration-700 overflow-hidden ${(!text && showTips && !isContracted) ? 'max-h-20 mb-3 opacity-100' : 'max-h-0 mb-0 opacity-0'}`}>
+      {/* SUGERENCIAS (SCROLL HORIZONTAL 2026 UX) */}
+      <div className={`max-w-4xl mx-auto flex items-center gap-2 transition-all duration-700 overflow-hidden ${(!text && showTips && !isContracted) ? 'max-h-20 mb-3 opacity-100' : 'max-h-0 mb-0 opacity-0'}`}>
         <div className="flex overflow-x-auto gap-2 flex-1 pb-2 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <ChatSuggestions
             onSend={(s) => { onSend(s); setText(''); }}
@@ -80,7 +80,7 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
             userRole={userRole}
           />
         </div>
-        <button type="button" onClick={() => setShowTips(false)} className="shrink-0 p-1.5 text-zinc-600 hover:text-white transition-colors bg-white/5 rounded-full">
+        <button type="button" onClick={() => setShowTips(false)} className="shrink-0 p-1.5 text-zinc-600 hover:text-white transition-colors bg-white/5 rounded-full hidden md:block">
           <X size={12} />
         </button>
       </div>
@@ -91,7 +91,18 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex items-center gap-2">
+      {/* 🍎 iOS FIX: Cambiado de <form> a <div> para ELIMINAR el "Form Accessory Bar" (flechas y botón Done) en Safari */}
+      <div className="max-w-4xl mx-auto flex items-center gap-2">
+        <button
+          type="button"
+          disabled={isInputDisabled}
+          onClick={() => setShowTips(!showTips)}
+          className={`p-1.5 transition-all duration-300 rounded-full ${showTips ? 'bg-zinc-800/80' : 'hover:bg-zinc-800/40'} ${isInputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          title="Sugerencias rápidas"
+        >
+          <Lightbulb size={14} className={showTips ? 'fill-yellow-500/20 text-yellow-500' : 'text-zinc-500'} strokeWidth={2} />
+        </button>
+
         <div className="flex-1 flex items-center gap-3 bg-zinc-900/60 border border-transparent rounded-3xl py-1.5 px-4 focus-within:border-white/20 focus-within:bg-zinc-900 transition-all shadow-sm">
           <div className={`transition-colors duration-500 ${isPaid ? 'text-emerald-500/70' : 'text-zinc-600'}`}>
             {isPaid ? <ShieldCheck size={14} strokeWidth={2} /> : <Lock size={14} strokeWidth={2} />}
@@ -101,6 +112,9 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
             ref={inputRef}
             disabled={isInputDisabled}
             onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSubmit(e);
+            }}
             value={text}
             placeholder={getPlaceholderText()}
             enterKeyHint="send"
@@ -110,7 +124,8 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
         </div>
 
         <button
-          type="submit"
+          type="button"
+          onClick={handleSubmit}
           disabled={!text.trim() || isWarning || !canWrite}
           className={`
             p-2.5 rounded-full transition-all duration-300 shrink-0
@@ -122,7 +137,7 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
         >
           <Send size={18} strokeWidth={2.5} />
         </button>
-      </form>
+      </div>
     </div>
   );
 };
