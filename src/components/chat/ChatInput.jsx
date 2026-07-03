@@ -109,7 +109,7 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
             onChange={(e) => setText(e.target.value)}
             value={text}
             placeholder={getPlaceholderText()}
-            className={`flex-1 bg-transparent text-[13px] text-zinc-100 outline-none placeholder:text-zinc-600 font-medium py-2 ${isInputDisabled ? 'cursor-not-allowed text-zinc-500' : ''}`}
+            className={`flex-1 bg-transparent text-[16px] text-zinc-100 outline-none placeholder:text-zinc-600 font-medium py-2 ${isInputDisabled ? 'cursor-not-allowed text-zinc-500' : ''}`}
           />
 
           <button
