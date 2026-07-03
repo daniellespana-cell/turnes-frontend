@@ -72,7 +72,7 @@ const WorkerChatPage = () => {
     const handleBack = () => navigate('/dashboard/vacantes');
 
     return (
-        <div className="flex h-[100dvh] w-full overflow-hidden relative font-manrope">
+        <div className="flex h-full w-full overflow-hidden relative font-manrope">
             <ChatView
                 chat={chat}
                 candidato={activeEntity}

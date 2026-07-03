@@ -21,7 +21,7 @@ const BusinessLayout = ({ user }) => {
   const setIsMobileMenuOpen = setIsMobileOpen;
 
   return (
-    <div className="flex min-h-[100dvh] bg-[#0a0a0a] relative">
+    <div className={`flex bg-[#0a0a0a] relative ${isChat ? 'h-[100dvh] overflow-hidden' : 'min-h-[100dvh]'}`}>
       {/* Sidebar con lógica de expansión y responsive */}
       <BaseSidebar
         menuItems={BUSINESS_MENU}
