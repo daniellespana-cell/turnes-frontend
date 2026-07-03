@@ -1,12 +1,13 @@
 import React from 'react';
 import ToggleItem from '../ToggleItem';
 
-import { Mail, Globe } from 'lucide-react';
+import { Mail, Globe, Smartphone } from 'lucide-react';
 import { useSettings } from '../../../hooks/useSettings';
-// Simplified path if in same folder, but wait, structure.
+import { usePushNotifications } from '../../../hooks/usePushNotifications';
 
 const NotificationsTab = () => {
     const { settings, toggleNotification } = useSettings();
+    const { isSupported, isSubscribed, loading, subscribe, unsubscribe } = usePushNotifications();
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
@@ -23,6 +24,26 @@ const NotificationsTab = () => {
                     checked={settings.notifications.email}
                     onChange={() => toggleNotification('email')}
                 />
+                
+                {isSupported && (
+                    <div className="relative">
+                        <ToggleItem
+                            icon={Smartphone}
+                            title="Notificaciones Push (App)"
+                            desc="Recibe alertas en la pantalla de tu celular para nuevos mensajes y postulaciones."
+                            checked={isSubscribed}
+                            onChange={() => {
+                                if (isSubscribed) unsubscribe();
+                                else subscribe();
+                            }}
+                        />
+                        {loading && (
+                            <div className="absolute inset-0 bg-[#0a0a0a]/50 flex items-center justify-center rounded-2xl backdrop-blur-sm z-10">
+                                <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                        )}
+                    </div>
+                )}
                 <ToggleItem
                     icon={Globe}
                     title="Novedades y Marketing"

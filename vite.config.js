@@ -16,13 +16,13 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.js',
       registerType: 'autoUpdate',
       includeAssets: ['pwa-192x192.png', 'pwa-512x512.png', 'pwa-maskable-512x512.png'],
-      // Force the new Service Worker to take over immediately (fixes Android showing old icon)
-      workbox: {
-        skipWaiting: true,
-        clientsClaim: true,
-        cleanupOutdatedCaches: true,
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}']
       },
       manifest: {
         name: 'Turnes',
