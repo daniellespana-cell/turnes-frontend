@@ -68,10 +68,10 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
 
   // INTERFAZ ACTIVA (PASOS 1, 2, 3 y 4)
   return (
-    <div className="shrink-0 px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5 relative" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+    <div className="shrink-0 px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
 
-      {/* SUGERENCIAS (SCROLL HORIZONTAL 2026 UX) */}
-      <div className={`max-w-4xl mx-auto flex items-center gap-2 transition-all duration-700 overflow-hidden ${(!text && showTips && !isContracted) ? 'max-h-20 mb-3 opacity-100' : 'max-h-0 mb-0 opacity-0'}`}>
+      {/* SUGERENCIAS — Solo Desktop para evitar bugs visuales en iOS */}
+      <div className={`max-w-4xl mx-auto hidden md:flex items-center gap-2 transition-all duration-700 overflow-hidden ${(!text && showTips && !isContracted) ? 'max-h-20 mb-3 opacity-100' : 'max-h-0 mb-0 opacity-0'}`}>
         <div className="flex overflow-x-auto gap-2 flex-1 pb-2 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <ChatSuggestions
             onSend={(s) => { onSend(s); setText(''); }}
@@ -80,29 +80,19 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
             userRole={userRole}
           />
         </div>
-        <button type="button" onClick={() => setShowTips(false)} className="shrink-0 p-1.5 text-zinc-600 hover:text-white transition-colors bg-white/5 rounded-full hidden md:block">
+        <button type="button" onClick={() => setShowTips(false)} className="shrink-0 p-1.5 text-zinc-600 hover:text-white transition-colors bg-white/5 rounded-full">
           <X size={12} />
         </button>
       </div>
 
       {isWarning && (
-        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[8px] font-black uppercase px-6 py-2 rounded-full flex items-center gap-2  z-50 tracking-widest">
+        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[8px] font-black uppercase px-6 py-2 rounded-full flex items-center gap-2 z-50 tracking-widest">
           <ShieldAlert size={12} /> Protocolo Anti-Fuga
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex items-center gap-2">
-        <button
-          type="button"
-          disabled={isInputDisabled}
-          onClick={() => setShowTips(!showTips)}
-          className={`p-1.5 transition-all duration-300 rounded-full ${showTips ? 'bg-zinc-800/80' : 'hover:bg-zinc-800/40'} ${isInputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-          title="Sugerencias rápidas"
-        >
-          <Lightbulb size={14} className={showTips ? 'fill-yellow-500/20 text-yellow-500' : 'text-zinc-500'} strokeWidth={2} />
-        </button>
-
-        <div className="flex-1 flex items-center gap-3 bg-zinc-900/60 border border-transparent rounded-3xl py-1 px-4 focus-within:border-white/20 focus-within:bg-zinc-900 transition-all shadow-sm">
+        <div className="flex-1 flex items-center gap-3 bg-zinc-900/60 border border-transparent rounded-3xl py-1.5 px-4 focus-within:border-white/20 focus-within:bg-zinc-900 transition-all shadow-sm">
           <div className={`transition-colors duration-500 ${isPaid ? 'text-emerald-500/70' : 'text-zinc-600'}`}>
             {isPaid ? <ShieldCheck size={14} strokeWidth={2} /> : <Lock size={14} strokeWidth={2} />}
           </div>
@@ -114,23 +104,24 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
             value={text}
             placeholder={getPlaceholderText()}
             enterKeyHint="send"
+            autoComplete="off"
             className={`flex-1 bg-transparent text-[16px] text-zinc-100 outline-none placeholder:text-zinc-600 font-medium py-2 ${isInputDisabled ? 'cursor-not-allowed text-zinc-500' : ''}`}
           />
-
-          <button
-            type="submit"
-            disabled={!text.trim() || isWarning || !canWrite}
-            className={`
-              p-1.5 rounded-full transition-all duration-300 mt-0.5 mb-0.5
-              ${text.trim() && !isWarning && !isClosed
-                ? 'bg-blue-600 text-white opacity-100 scale-100 shadow-sm'
-                : 'bg-transparent text-zinc-700 opacity-50 scale-95'
-              }
-            `}
-          >
-            <Send size={14} strokeWidth={text.trim() ? 2.5 : 2} className={text.trim() && !isWarning && !isClosed ? '-ml-0.5' : ''} />
-          </button>
         </div>
+
+        <button
+          type="submit"
+          disabled={!text.trim() || isWarning || !canWrite}
+          className={`
+            p-2.5 rounded-full transition-all duration-300 shrink-0
+            ${text.trim() && !isWarning && !isClosed
+              ? 'bg-blue-600 text-white opacity-100 scale-100 shadow-lg shadow-blue-600/30'
+              : 'bg-zinc-800 text-zinc-600 opacity-60 scale-95'
+            }
+          `}
+        >
+          <Send size={18} strokeWidth={2.5} />
+        </button>
       </form>
     </div>
   );
