@@ -36,7 +36,6 @@ import ProtectedRoute from '../components/auth/ProtectedRoute';
 import GuestRoute from '../components/auth/GuestRoute';
 import CookieBanner from '../components/common/cookies/CookieBanner';
 import CookieSentinel from '../components/common/cookies/CookieSentinel';
-import CookieTrigger from '../components/common/cookies/CookieTrigger';
 
 /* =========================================================================
    PAGES (LAZY)
@@ -190,7 +189,6 @@ const AuthSyncBridge = () => {
         <>
             <CookieSentinel />
             <CookieBanner />
-            <CookieTrigger />
             <PWAInstallPrompt />
             <Outlet />
         </>

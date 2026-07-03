@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import CookieSettingsModal from '../common/cookies/CookieSettingsModal';
 
 
 import logoFromAssets from '../../assets/logo-turnes.png';
 
 const LandingFooter = () => {
   const currentYear = new Date().getFullYear();
+  const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
 
   const FooterLink = ({ to, label }) => (
     <li>
@@ -76,6 +78,14 @@ const LandingFooter = () => {
               <FooterLink to="/terminos" label="Términos y Condiciones" />
               <FooterLink to="/politicas" label="Políticas de Usuario" />
               <FooterLink to="/politica-pagos" label="Política de Pagos" />
+              <li>
+                <button 
+                  onClick={() => setIsCookieModalOpen(true)} 
+                  className="inline-block py-1.5 text-sm text-zinc-400 hover:text-emerald-400 hover:translate-x-1 transition-all duration-300"
+                >
+                  Preferencias de Cookies
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -103,6 +113,8 @@ const LandingFooter = () => {
           </div>
         </div>
       </div>
+
+      <CookieSettingsModal isOpen={isCookieModalOpen} onClose={() => setIsCookieModalOpen(false)} />
     </footer>
   );
 };
