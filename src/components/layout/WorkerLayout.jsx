@@ -16,7 +16,7 @@ const WorkerLayout = ({ user }) => {
 
     // Mismo patrón "Clean Layout" que BusinessLayout
     return (
-        <div className={`flex bg-[#0a0a0a] relative ${isChat ? 'h-[100dvh] overflow-hidden' : 'min-h-[100dvh]'}`}>
+        <div className="flex min-h-[100dvh] bg-[#0a0a0a] relative">
             <BaseSidebar
                 menuItems={WORKER_MENU}
                 isExpanded={isExpanded}
@@ -36,10 +36,10 @@ const WorkerLayout = ({ user }) => {
                 )}
 
                 <main 
-                    className={`flex-1 ${isChat ? 'pt-0 pb-0 px-0' : 'pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}
+                    className={`flex-1 flex flex-col ${isChat ? 'pt-0 pb-0 px-0' : 'pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}
                     style={{ paddingTop: isChat ? 'env(safe-area-inset-top)' : 'calc(6rem + env(safe-area-inset-top))' }}
                 >
-                    <div className={isChat ? 'w-full h-full' : 'max-w-6xl mx-auto'}>
+                    <div className={`flex-1 flex flex-col ${isChat ? 'w-full h-full' : 'max-w-6xl mx-auto w-full'}`}>
                         <Outlet context={{ user }} />
                     </div>
                 </main>
