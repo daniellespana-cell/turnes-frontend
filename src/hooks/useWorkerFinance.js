@@ -30,7 +30,7 @@ export const useWorkerFinance = () => {
             }
             setError(null);
 
-            const LIMIT = 20;
+            const LIMIT = 5;
             const currentOffset = offsetRef.current;
 
             // 🚀 SSOT CALL: El hook ya no sabe CÓMO se consultan los datos, solo los pide.

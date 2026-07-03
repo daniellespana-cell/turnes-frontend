@@ -4,6 +4,8 @@ import EmptyState from '../../components/common/EmptyState';
 import RateEmployerModal from '../../components/features/RateEmployerModal';
 import PageHeader from '../../components/common/PageHeader';
 import WorkerApplicationCard from '../../components/applications/WorkerApplicationCard';
+import ConfirmationModal from '../../components/common/ConfirmationModal';
+import { useToast } from '../../context/ToastContext';
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,9 +16,26 @@ const WorkerApplications = () => {
     const navigate = useNavigate();
     const { 
         applications, loading, isRefreshing, error, refetch, 
-        hasMore, loadMore, activeTab, setActiveTab 
+        hasMore, loadMore, activeTab, setActiveTab, cancelApplication 
     } = useWorkerApplications();
     const [ratingApp, setRatingApp] = React.useState(null);
+    const { showToast } = useToast();
+    const [cancelModal, setCancelModal] = React.useState({ isOpen: false, appId: null });
+    const [isCancelling, setIsCancelling] = React.useState(false);
+
+    const handleConfirmCancel = async () => {
+        if (!cancelModal.appId) return;
+        setIsCancelling(true);
+        const { success, error } = await cancelApplication(cancelModal.appId);
+        setIsCancelling(false);
+        setCancelModal({ isOpen: false, appId: null });
+
+        if (success) {
+            showToast("Postulación retirada con éxito", "success");
+        } else {
+            showToast("Hubo un error al retirar la postulación", "error");
+        }
+    };
 
     return (
         <div className="min-h-screen pb-20 text-zinc-100 flex flex-col font-manrope selection:bg-brand-primary/30">
@@ -93,6 +112,8 @@ const WorkerApplications = () => {
                                     app={app}
                                     onChat={() => navigate(`/dashboard/chats`)}
                                     onRate={(appData) => setRatingApp(appData)}
+                                    onCancel={(appId) => setCancelModal({ isOpen: true, appId })}
+                                    isRefreshing={isRefreshing}
                                 />
                             ))}
 
@@ -134,6 +155,18 @@ const WorkerApplications = () => {
                 onRatingSuccess={() => {
                     refetch();
                 }}
+            />
+
+            {/* Modal de Confirmación para Cancelar */}
+            <ConfirmationModal
+                isOpen={cancelModal.isOpen}
+                onClose={() => !isCancelling && setCancelModal({ isOpen: false, appId: null })}
+                onConfirm={handleConfirmCancel}
+                title="¿Retirar postulación?"
+                message="Si te retiras de este proceso, la empresa ya no podrá contactarte y perderás tu lugar. Esta acción no se puede deshacer."
+                confirmText={isCancelling ? "Retirando..." : "Sí, retirar"}
+                type="delete"
+                isLoading={isCancelling}
             />
         </div>
     );

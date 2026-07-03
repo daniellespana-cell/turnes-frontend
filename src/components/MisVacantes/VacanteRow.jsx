@@ -1,5 +1,5 @@
 import React from 'react';
-import { MoreHorizontal, Trash2, Edit3, Copy, Users, Rocket } from 'lucide-react';
+import { MoreHorizontal, Trash2, Edit3, Copy, Users, Rocket, X } from 'lucide-react';
 
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -107,6 +107,15 @@ const VacanteRow = ({ data, onAction }) => {
             <span className="text-[10px] text-zinc-700 font-medium italic px-4">Sin postulantes</span>
           )}
 
+          {/* BOTON X ELIMINAR */}
+          <button
+            onClick={() => onAction?.(data.id, 'delete-confirm')}
+            className="p-2 text-zinc-500 hover:text-red-500 bg-white/5 hover:bg-red-500/10 rounded-full transition-all"
+            title="Eliminar vacante"
+          >
+            <X size={16} />
+          </button>
+
           {/* DESKTOP MENU TRIGGER */}
           <div className="relative">
             <button
@@ -135,14 +144,22 @@ const VacanteRow = ({ data, onAction }) => {
           </div>
 
           {/* MOBILE MENU TRIGGER */}
-          <div className="absolute top-4 right-4 z-20">
+          <div className="absolute top-4 right-4 z-20 flex items-center gap-1">
             <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="p-2 text-zinc-500 hover:text-white bg-white/5 rounded-lg active:scale-95 transition-all"
+              onClick={() => onAction?.(data.id, 'delete-confirm')}
+              className="p-2 text-zinc-500 hover:text-red-500 bg-white/5 hover:bg-red-500/10 rounded-lg active:scale-95 transition-all"
             >
-              <MoreHorizontal size={18} />
+              <X size={18} />
             </button>
-            {showMenu && <DropdownMenu />}
+            <div className="relative">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="p-2 text-zinc-500 hover:text-white bg-white/5 rounded-lg active:scale-95 transition-all"
+              >
+                <MoreHorizontal size={18} />
+              </button>
+              {showMenu && <DropdownMenu />}
+            </div>
           </div>
         </div>
 

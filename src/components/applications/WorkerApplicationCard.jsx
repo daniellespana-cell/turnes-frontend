@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { MessageCircle, MapPin, DollarSign, Calendar } from 'lucide-react';
+import { MessageCircle, MapPin, DollarSign, Calendar, X } from 'lucide-react';
 
 import React from 'react';
 import { formatCurrency } from '../../services/financeService';
@@ -10,7 +10,7 @@ import { AssetResolver } from '../../utils/assetHelper';
  * Componente modular extraído de WorkerApplications para mejorar rendimiento (React.memo)
  * y prevenir re-renders durante el scroll infinito.
  */
-const WorkerApplicationCard = React.memo(({ app, onChat, onRate }) => {
+const WorkerApplicationCard = React.memo(({ app, onChat, onRate, onCancel }) => {
     // Definición de estados (Lógica de negocio robusta)
     const isClosed = app.vacancyStatus === 'cerrada';
     const isWinner = app.status === 'contratado' || app.status === 'finalizado';
@@ -97,6 +97,19 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate }) => {
 
             {/* Mesh Gradient Sutil (casi invisible hasta hover) */}
             <div className={`absolute -top-10 -right-10 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br ${statusUI.mainTheme} opacity-0 group-hover:opacity-[0.08] blur-[20px] transition-opacity duration-700 pointer-events-none rounded-full`} />
+
+            {/* Botón de Cancelar Postulación (Arriba a la derecha) */}
+            {(app.status === 'pendiente' || app.status === 'pendiente_pago' || app.status === 'confirmado') && (
+                <div className="absolute top-3 right-3 md:top-5 md:right-5 z-20">
+                    <button
+                        onClick={(e) => { e.stopPropagation(); onCancel?.(app.id); }}
+                        className="text-zinc-500/70 md:text-zinc-500/0 md:group-hover:text-red-500/70 p-2 bg-transparent hover:bg-red-500/10 rounded-lg hover:scale-105 active:scale-95 transition-all hover:text-red-500"
+                        title="Cancelar postulación"
+                    >
+                        <X size={16} strokeWidth={2.5} />
+                    </button>
+                </div>
+            )}
 
             <div className="relative p-3 md:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-5">
 

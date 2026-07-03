@@ -154,6 +154,20 @@ export const useWorkerApplications = () => {
         };
     }, [isAuthenticated, user?.id, fetchApplications]);
 
+    const cancelApplication = useCallback(async (applicationId) => {
+        try {
+            const { error: cancelError } = await VacancyService.cancelApplication(applicationId);
+            if (cancelError) throw cancelError;
+            
+            // Optimistic update
+            setApplications(prev => prev.filter(app => app.id !== applicationId));
+            return { success: true };
+        } catch (err) {
+            console.error('[useWorkerApplications] Cancel error:', err);
+            return { error: err };
+        }
+    }, []);
+
     return { 
         applications, 
         loading: loading && !isRefreshing, 
@@ -163,6 +177,7 @@ export const useWorkerApplications = () => {
         setActiveTab, 
         hasMore,
         loadMore,
+        cancelApplication,
         refetch: () => fetchApplications(false)
     };
 };

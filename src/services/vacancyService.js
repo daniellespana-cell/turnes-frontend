@@ -282,6 +282,17 @@ export const VacancyService = {
     },
 
     /**
+     * Cancelar una postulación (Rol: Trabajador)
+     * Utiliza RPC para bypass de políticas RLS y asegurar atomicidad.
+     */
+    async cancelApplication(applicationId) {
+        const query = supabase.rpc('rpc_cancel_worker_application', {
+            p_application_id: applicationId
+        });
+        return BaseService.handle(query);
+    },
+
+    /**
      * Eliminar una vacante (Soft Delete — preserva historial)
      * NUNCA hacer hard delete: las FK cascade destruirían postulaciones, ratings y reviews.
      * @param {string} id
