@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronRight, MapPinOff } from 'lucide-react';
 import VacancyCard from '../features/VacancyCard';
-
+import RadarEmptyState from './RadarEmptyState';
 import { useNavigate } from 'react-router-dom';
 import { typography } from '../../styles/typography';
 import Skeleton from '../ui/Skeleton';
@@ -69,16 +69,7 @@ const RecommendedSection = ({ priorityAction, appliedIds, loading }) => {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-10 bg-zinc-900/20 rounded-3xl ring-1 ring-white/5">
-                    <MapPinOff size={28} className="text-zinc-700 mx-auto mb-3" />
-                    <p className="text-zinc-500 text-sm font-medium">No hay vacantes cerca de ti ahora</p>
-                    <button
-                        onClick={() => navigate('/dashboard/explorar')}
-                        className="mt-4 text-emerald-400 text-[11px] font-bold uppercase tracking-widest hover:text-emerald-300"
-                    >
-                        Explorar todas las vacantes →
-                    </button>
-                </div>
+                <RadarEmptyState />
             )}
         </section>
     );

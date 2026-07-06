@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import EmptyState from '../common/EmptyState';
 import ErrorView from '../common/ErrorView';
+import RadarEmptyState from '../worker-dashboard/RadarEmptyState';
 import ExploreCarouselSkeleton from './explore/ExploreCarouselSkeleton';
 import ExploreSectionedList from './explore/ExploreSectionedList';
 import ExploreGridList from './explore/ExploreGridList';
@@ -71,16 +72,8 @@ const ExploreContent = ({
                 ) : error ? (
                     <ErrorView message={error} />
                 ) : vacancies.length === 0 ? (
-                    <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full py-12">
-                        <EmptyState
-                            icon={Search}
-                            title="Sin vacantes disponibles"
-                            description={viewMode === 'map'
-                                ? 'No hay vacantes con coordenadas GPS en este radio. Amplía el radio o mueve el punto de búsqueda.'
-                                : 'Intenta ajustar tus filtros de búsqueda o el radio de distancia.'}
-                            actionLabel="Limpiar Filtros"
-                            onAction={() => { setActiveCategory('TODOS'); setSearchQuery(''); clearFilters(); }}
-                        />
+                    <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full py-12 flex justify-center">
+                        <RadarEmptyState />
                     </motion.div>
                 ) : viewMode === 'map' ? (
                     <ExploreMapView
