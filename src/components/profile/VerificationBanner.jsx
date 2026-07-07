@@ -5,32 +5,22 @@ import { BadgeCheck, Sparkles, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const VerificationBanner = ({ variant = 'business' }) => { // 'business' | 'worker'
+/**
+ * 🛡️ VerificationBanner (Componente Presentacional Puro)
+ * 
+ * NO fetchea datos. NO tiene precios hardcodeados.
+ * Recibe `verifyPrice` como prop desde su padre (SSOT).
+ * Si no recibe precio, no muestra la sección de precio.
+ */
+const VerificationBanner = ({ verifyPrice = null }) => {
     const navigate = useNavigate();
     const { user } = useAuth();
 
-    // 🧹 CLEANUP: Hide for workers (logic removed)
-    if (variant === 'worker') return null;
-
-    // 🧠 SMART LOGIC: Auto-hide if already verified
+    // 🧹 CLEANUP: Solo visible para empresas no verificadas
+    if (user?.rol !== 'empresa') return null;
     if (user?.verificado) return null;
 
-    // Configuración por Rol (Precios Fijos - No Inventados)
-    const config = variant === 'worker' ? {
-        title: "Verificación Profesional",
-        badge: "Talento",
-        desc: "Destaca tu perfil y accede a vacantes VIP.",
-        stat: "prioridad de contratación",
-        price: "$15.000",
-        route: `/plan-action/verify` 
-    } : {
-        title: "Verificación Elite",
-        badge: "Premium",
-        desc: "Atrae más postulantes con el sello de confianza.",
-        stat: "más postulantes",
-        price: "$25.000",
-        route: `/plan-action/verify`
-    };
+    const route = `/plan-action/verify`;
 
     return (
         <motion.div
@@ -38,7 +28,7 @@ const VerificationBanner = ({ variant = 'business' }) => { // 'business' | 'work
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="w-full relative overflow-hidden rounded-2xl p-[1px] group cursor-pointer"
-            onClick={() => navigate(config.route)}
+            onClick={() => navigate(route)}
         >
             {/* Borde Gradiente Animado */}
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-emerald-400 to-purple-500 opacity-50 group-hover:opacity-100 transition-opacity duration-500 bg-[length:200%_auto] animate-gradient" />
@@ -57,24 +47,26 @@ const VerificationBanner = ({ variant = 'business' }) => { // 'business' | 'work
 
                     <div className="text-left">
                         <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                            {config.title}
+                            Verificación Elite
                             <span className="px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-500 to-emerald-500 text-[9px] font-black uppercase tracking-wider text-white shadow-lg">
-                                {config.badge}
+                                Premium
                             </span>
                         </h3>
                         <p className="text-sm text-zinc-400 font-medium mt-0.5 flex items-center gap-1.5 flex-wrap">
                             <Sparkles size={12} className="text-purple-400" />
-                            Obtén <span className="text-white font-bold">40% más {config.stat}</span> con el sello.
+                            Obtén <span className="text-white font-bold">40% más postulantes</span> con el sello.
                         </p>
                     </div>
                 </div>
 
                 {/* Contenido Derecha (Precio + CTA) */}
                 <div className="flex items-center gap-4 relative z-10 w-full sm:w-auto justify-between sm:justify-end">
-                    <div className="text-right hidden sm:block">
-                        <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">Inversión Única</p>
-                        <p className="text-xl font-black text-white">{config.price}</p>
-                    </div>
+                    {verifyPrice !== null && (
+                        <div className="text-right hidden sm:block">
+                            <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">Inversión Única</p>
+                            <p className="text-xl font-black text-white">${verifyPrice.toLocaleString()}</p>
+                        </div>
+                    )}
 
                     <button
                         className="flex-1 sm:flex-none py-2.5 px-6 rounded-xl bg-white text-black font-bold text-sm hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 group/btn shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)]"
@@ -84,11 +76,13 @@ const VerificationBanner = ({ variant = 'business' }) => { // 'business' | 'work
                     </button>
 
                     {/* Precio Móvil */}
-                    <div className="text-right sm:hidden">
-                        <p className="text-lg font-black text-white">
-                            {config.price.replace('.000', 'k')}
-                        </p>
-                    </div>
+                    {verifyPrice !== null && (
+                        <div className="text-right sm:hidden">
+                            <p className="text-lg font-black text-white">
+                                ${(verifyPrice / 1000).toFixed(0)}k
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         </motion.div>

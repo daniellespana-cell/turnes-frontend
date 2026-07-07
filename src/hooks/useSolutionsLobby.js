@@ -63,7 +63,7 @@ export const useSolutionsLobby = (onCreate) => {
         };
 
         const boostData = getServiceData('rocket') || getServiceData('impulso') || { id: 'boost', price: 7000, title: 'Impulso Urgente' };
-        const verifyData = getServiceData('shield-check') || getServiceData('verificación') || { id: 'verify', price: 25000, title: 'Verificación Elite' };
+        const verifyData = getServiceData('shield-check') || getServiceData('verificación') || { id: 'verify', price: 0, title: 'Verificación Elite' };
 
         return [
             {

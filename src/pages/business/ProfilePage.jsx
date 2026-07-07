@@ -3,12 +3,14 @@ import { User, Check, Shield, Lock } from 'lucide-react';
 import ProfileHeader from '../../components/profile/ProfileHeader';
 import WalletCard from '../../components/profile/WalletCard';
 import ProfileForm from '../../components/profile/ProfileForm';
+import WelcomeBonusBanner from '../../components/business/WelcomeBonusBanner';
 import StatCard from '../../components/profile/shared/StatCard';
 import VerificationBanner from '../../components/profile/VerificationBanner';
 import ChangePasswordModal from '../../components/profile/ChangePasswordModal';
 import GlowDivider from '../../components/common/GlowDivider';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { configService } from '../../services/configService';
 
 // 🧠 CONEXIÓN CEREBRO (Hook Logic)
 import { useProfileLogic } from '../../hooks/useProfileLogic';
@@ -35,8 +37,26 @@ const ProfilePage = () => {
 
     const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
 
+    // 🏷️ SSOT: Leer precio de verificación desde la BD (tabla microservices)
+    const [verifyPrice, setVerifyPrice] = useState(null);
+    useEffect(() => {
+        const fetchPrice = async () => {
+            const { data } = await configService.getMicroservices();
+            if (data) {
+                const verifyService = data.find(s =>
+                    s.target_audience === 'EMPRESAS' &&
+                    (s.icon_key === 'shield-check' || s.title?.toLowerCase().includes('verificación'))
+                );
+                if (verifyService) setVerifyPrice(parseFloat(verifyService.price));
+            }
+        };
+        fetchPrice();
+    }, []);
+
     return (
         <div className="max-w-6xl mx-auto pb-32 px-4 md:px-8 pt-8 space-y-8">
+            
+            <WelcomeBonusBanner />
 
             {/* --- HEADER HERO --- */}
             <ProfileHeader
@@ -52,8 +72,8 @@ const ProfilePage = () => {
 
             <GlowDivider />
 
-            {/* --- BANNER VERIFICACIÓN ELITE --- */}
-            <VerificationBanner />
+            {/* --- BANNER VERIFICACIÓN ELITE (Precio inyectado desde SSOT) --- */}
+            <VerificationBanner verifyPrice={verifyPrice} />
 
             <GlowDivider />
 

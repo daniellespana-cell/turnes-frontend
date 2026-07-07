@@ -57,6 +57,11 @@ export const useCandidatosLogic = () => {
             skills:      app.candidato.skills || [],
             match:       MatchService.calculateScore(app.vacante, candidateProfile),
             status:      app.status,
+            step:        app.step || 0,
+
+            // 🛡️ Flag SSOT: el chat fue sellado (Step 4 ejecutado desde el Chat UI)
+            // Este timestamp lo inyecta atómicamente `rpc_seal_chat_v2` en protocol_state.
+            isChatSealed: !!app.protocol_state?.step4_sealed_at,
 
             // Reputación — búsqueda polimórfica para cubrir versiones previas del protocol_state
             rating:              app.protocol_state?.candidato_rated_stars
@@ -133,8 +138,11 @@ export const useCandidatosLogic = () => {
 
     // ─── Filtrado ───────────────────────────────────────────────────────────
     // ⚠️ 'pendiente' y 'visto' van a la tarjeta de Mis Vacantes, no a este panel
+    // ⚠️ 'chat_abierto' pertenece al Chat UI (Steps 1-2), NO aquí.
+    // ⚠️ 'contratado' sin sello (step4_sealed_at) sigue en proceso en el Chat.
+    //     Solo candidatos con chat SELLADO están listos para calificar.
     const candidatosFiltrados = useMemo(() => ({
-        pendientes: candidatos.filter(c => c.status === 'contratado' || c.status === 'chat_abierto'),
+        pendientes: candidatos.filter(c => c.status === 'contratado' && c.isChatSealed),
         historial:  candidatos.filter(c => c.status === 'finalizado')
     }), [candidatos]);
 

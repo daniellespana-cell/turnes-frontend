@@ -48,6 +48,31 @@ BEGIN
     -- 3. CALCULO DE PRECIO (Backend Source of Truth)
     v_monto_a_cobrar := public.fn_calculate_hiring_cost(p_application_id);
 
+    -- 🌟 APLICACIÓN DE BONO DE BIENVENIDA (Defensa B) 🌟
+    DECLARE
+        v_nit VARCHAR;
+        v_tiene_logo BOOLEAN;
+    BEGIN
+        -- Extraer NIT y verificar si tiene logo desde la tabla empresas
+        SELECT nit_rut, (logo_url IS NOT NULL AND btrim(logo_url) <> '')
+        INTO v_nit, v_tiene_logo
+        FROM public.empresas 
+        WHERE id = v_empresa_id
+        LIMIT 1;
+
+        IF v_nit IS NOT NULL AND v_tiene_logo THEN
+            -- Si no ha redimido el descuento, aplicarlo
+            IF NOT EXISTS (SELECT 1 FROM public.descuentos_bienvenida_redimidos WHERE nit = v_nit) THEN
+                v_monto_a_cobrar := v_monto_a_cobrar - 5000;
+                IF v_monto_a_cobrar < 0 THEN v_monto_a_cobrar := 0; END IF;
+                
+                -- Marcar el NIT como redimido para evitar Sybil Attacks
+                INSERT INTO public.descuentos_bienvenida_redimidos (nit, billetera_id)
+                VALUES (v_nit, v_empresa_id);
+            END IF;
+        END IF;
+    END;
+
     -- 4. Verificación de Billetera
     SELECT saldo INTO v_saldo_actual FROM public.billeteras WHERE id = v_empresa_id FOR UPDATE;
     

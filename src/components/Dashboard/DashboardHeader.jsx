@@ -14,7 +14,7 @@ export const DashboardHeader = ({ name, balance, unread }) => {
       <div className="min-w-0">
         <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight truncate">
           Hola, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">
-            {name?.split(' ')[0]}
+            {name}
           </span>
         </h1>
       </div>
