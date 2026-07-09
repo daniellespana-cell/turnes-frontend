@@ -135,9 +135,9 @@ const LoginForm = () => {
             {message && <MessageBox message={message.text} type={message.type} />}
 
             {/* SEPARATOR */}
-            <div className="relative flex items-center py-1">
+            <div className="relative flex items-center py-3">
                 <div className="flex-grow border-t border-zinc-800"></div>
-                <span className="flex-shrink-0 mx-3 text-zinc-600 text-[10px]">O</span>
+                <span className="flex-shrink-0 mx-4 text-zinc-500 text-[11px] font-medium lowercase">o ingresa con</span>
                 <div className="flex-grow border-t border-zinc-800"></div>
             </div>
 

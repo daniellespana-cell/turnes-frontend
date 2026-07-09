@@ -9,8 +9,8 @@ const AnimatedButton = ({ to, label, isSuccess = false }) => (
     <Link
         to={to}
         className={`
-      btn relative rounded-lg font-semibold overflow-hidden group transition-all duration-300
-      text-white border px-4 py-2 ml-2 shadow-md flex items-center justify-center
+      btn relative rounded-xl font-bold overflow-hidden group transition-all duration-300
+      text-white border px-5 py-2.5 md:px-6 md:py-3 ml-3 shadow-md flex items-center justify-center text-sm md:text-base
       ${isSuccess
                 ? "border-brand-success bg-brand-primary hover:bg-brand-primary/90 hover:border-white/70 shadow-brand-primary/30"
                 : "border-transparent bg-transparent hover:bg-white/5 text-zinc-300 hover:text-white"
@@ -43,13 +43,13 @@ const AuthNavbar = () => {
             <div className="flex items-center gap-2">
                 {isLogin ? (
                     <>
-                        <span className="text-xs text-zinc-500 hidden sm:block font-medium">¿No tienes cuenta?</span>
+                        <span className="text-sm md:text-base text-zinc-400 hidden sm:block font-medium">¿No tienes cuenta?</span>
                         {/* "Regístrate" needs to look like the primary CTA */}
                         <AnimatedButton to="/register" label="Regístrate" isSuccess={true} />
                     </>
                 ) : (
                     <>
-                        <span className="text-xs text-zinc-500 hidden sm:block font-medium">¿Ya tienes cuenta?</span>
+                        <span className="text-sm md:text-base text-zinc-400 hidden sm:block font-medium">¿Ya tienes cuenta?</span>
                         {/* "Ingresar" also primary for consistency request */}
                         <AnimatedButton to="/login" label="Ingresar" isSuccess={true} />
                     </>

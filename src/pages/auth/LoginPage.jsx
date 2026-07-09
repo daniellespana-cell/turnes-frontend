@@ -10,14 +10,28 @@ const LoginPage = () => {
     const [isFirstTime, setIsFirstTime] = useState(false);
 
     useEffect(() => {
-        // Chequeo rápido en caché para ver si el usuario ya ha interactuado antes
-        const hasLoggedIn = localStorage.getItem('turnes_has_logged_in');
-        if (!hasLoggedIn) {
+        // Chequeo heurístico inteligente en caché
+        let isKnownUser = !!localStorage.getItem('turnes_has_logged_in');
+        
+        if (!isKnownUser) {
+            // Buscamos rastros de sesiones previas de Supabase (sb-...) o de la app
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && (key.startsWith('sb-') || key.includes('supabase') || key.includes('turnes'))) {
+                    isKnownUser = true;
+                    // Migración silenciosa para la próxima vez
+                    localStorage.setItem('turnes_has_logged_in', 'true');
+                    break;
+                }
+            }
+        }
+
+        if (!isKnownUser) {
             setIsFirstTime(true);
         }
     }, []);
     return (
-        <div className="min-h-screen w-full bg-[#09090b] font-sans flex flex-col items-center justify-center text-white selection:bg-emerald-500/30 relative overflow-hidden">
+        <div className="min-h-screen w-full bg-[#09090b] font-manrope antialiased flex flex-col items-center justify-center text-white selection:bg-emerald-500/30 relative overflow-hidden">
 
             {/* --- ANTIGRAVITY ANIMATED BACKGROUND --- */}
             <AntigravityBackground />
@@ -38,11 +52,11 @@ const LoginPage = () => {
                 </div>
 
                 {isFirstTime && (
-                    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3.5 text-center animate-fade-in">
-                        <p className="text-emerald-400 text-sm font-medium">
+                    <div className="bg-emerald-500/15 border-2 border-emerald-500/30 rounded-2xl p-4 md:p-5 text-center animate-fade-in shadow-lg">
+                        <p className="text-emerald-400 text-base md:text-lg font-medium leading-relaxed">
                             ¿Primera vez en Turnes?{' '}
-                            <Link to="/auth/tipo-registro" className="font-bold underline text-emerald-300">
-                                Regístrate aquí primero
+                            <Link to="/auth/tipo-registro" className="font-extrabold underline decoration-2 underline-offset-4 text-emerald-300 hover:text-white transition-colors">
+                                Escoge tu rol y regístrate
                             </Link>
                         </p>
                     </div>
