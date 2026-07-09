@@ -32,18 +32,18 @@ const CandidatoRow = ({ can, onDismiss }) => {
         <div className="relative shrink-0 group/avatar">
           <img 
             src={AssetResolver.getAvatar(can.avatar, can.name || 'Candidato')} 
-            className="w-10 h-10 md:w-12 md:h-12 rounded-xl object-cover transition-all border border-white/5" 
+            className="w-12 h-12 md:w-14 md:h-14 rounded-xl object-cover transition-all border border-white/5" 
             alt="" 
           />
           <button
             onClick={toggleFavorite}
-            className={`absolute -top-2 -left-2 p-1.5 rounded-full border transition-all duration-300  ${isFavorite
+            className={`absolute -top-1.5 -left-1.5 p-2 rounded-full border transition-all duration-300  ${isFavorite
               ? "bg-purple-600 border-purple-400 scale-110"
               : "bg-zinc-900 border-white/10 group-hover/avatar:border-purple-500/50"
               }`}
           >
             <Heart
-              size={12}
+              size={16}
               className={`${isFavorite ? "text-white fill-white" : "text-zinc-600 group-hover/avatar:text-purple-400"}`}
             />
           </button>
@@ -80,10 +80,10 @@ const CandidatoRow = ({ can, onDismiss }) => {
                 e.stopPropagation();
                 onDismiss(can.id);
               }}
-              className="p-2 text-zinc-800 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+              className="p-2 text-zinc-600 hover:text-red-400 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100"
               title="Archivar registro"
             >
-              <X size={14} />
+              <X size={18} />
             </button>
           )}
         </div>

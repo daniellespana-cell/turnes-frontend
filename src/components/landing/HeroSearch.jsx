@@ -60,6 +60,7 @@ const HeroSearch = () => {
 
                 <button
                     type="submit"
+                    aria-label="Buscar talento"
                     className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-black rounded-xl transition-all duration-300"
                 >
                     <Search size={24} strokeWidth={2.5} />

@@ -56,8 +56,8 @@ const ProfileForm = ({
                     onClick={logout}
                     className="w-full mt-4 p-3 rounded-xl border border-red-500/10 bg-red-500/5 hover:bg-red-500/10 text-red-500 flex items-center justify-center gap-2 transition-all group"
                 >
-                    <LogOut size={14} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="font-bold text-[10px] uppercase tracking-widest">Cerrar Sesión</span>
+                    <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
+                    <span className="font-bold text-sm tracking-wider">Cerrar Sesión</span>
                 </button>
             </motion.div>
 

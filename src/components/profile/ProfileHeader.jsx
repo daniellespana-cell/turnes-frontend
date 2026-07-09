@@ -94,10 +94,10 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
                     {/* Botón Trigger Upload */}
                     <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="absolute -bottom-1 -right-1 p-1.5 bg-zinc-900 border border-zinc-700 text-white rounded-lg shadow-md hover:scale-110 transition-all z-40"
+                        className="absolute -bottom-1 -right-1 p-2 bg-zinc-900 border border-zinc-700 text-white rounded-lg shadow-md hover:scale-110 transition-all z-40"
                         disabled={isProcessing}
                     >
-                        <Camera size={12} />
+                        <Camera size={16} />
                     </button>
                     {/* Input Oculto */}
                     <input
@@ -118,10 +118,10 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
                             <motion.div 
                                 initial={{ scale: 0, rotate: -45 }}
                                 animate={{ scale: 1, rotate: 0 }}
-                                className="flex items-center justify-center bg-[#050505] border border-emerald-500/40 rounded-[6px] p-0.5 shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]" 
+                                className="flex items-center justify-center bg-[#050505] border border-emerald-500/40 rounded-[8px] p-1 shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]" 
                                 title="Cuenta Verificada"
                             >
-                                <Check size={11} className="text-emerald-400" strokeWidth={4} />
+                                <Check size={14} className="text-emerald-400" strokeWidth={4} />
                             </motion.div>
                         )}
                     </h1>
@@ -136,14 +136,14 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
                         <div className="flex gap-2">
                             <button
                                 onClick={() => setIsEditing(false)}
-                                className="px-3 py-1.5 rounded-lg border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-900 transition-colors text-xs font-medium"
+                                className="px-4 py-2 rounded-lg border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-900 transition-colors text-sm font-medium"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={handleSave}
                                 disabled={loading}
-                                className="px-3 py-1.5 rounded-lg bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-colors"
+                                className="px-4 py-2 rounded-lg bg-white text-black font-bold text-sm hover:bg-zinc-200 transition-colors"
                             >
                                 {loading ? '...' : 'Guardar'}
                             </button>
@@ -151,9 +151,9 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
                     ) : (
                         <button
                             onClick={() => setIsEditing(true)}
-                            className="px-3 py-1.5 rounded-lg bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all text-xs flex items-center gap-1.5"
+                            className="px-4 py-2 rounded-lg bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all text-sm flex items-center gap-1.5"
                         >
-                            <Edit2 size={12} /> Editar
+                            <Edit2 size={16} /> Editar
                         </button>
                     )}
                 </div>

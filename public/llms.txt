@@ -1,0 +1,12 @@
+# Turnes AI Documentation
+
+Bienvenido al archivo de navegación para agentes de IA (llms.txt) de Turnes.
+
+Turnes es la plataforma líder para conectar talento de la industria de eventos y hospitalidad con empresas en tiempo real. 
+
+## Enlaces Rápidos
+- [Inicio](https://turnes.co/)
+- [Registro de Talento](https://turnes.co/register)
+- [Registro de Empresas](https://turnes.co/register?role=company)
+- [Precios](https://turnes.co/precios)
+- [Contacto](https://turnes.co/contacto)

@@ -9,7 +9,7 @@ import { MapPin, Clock, DollarSign, Calendar } from 'lucide-react';
 import { TURNOS_PREDEFINIDOS } from "../../domain/vacantes.taxonomy";
 
 const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentChange, onOpenMap }) => {
-  const inputReset = "bg-transparent border-none outline-none text-[13px] text-zinc-200 w-full placeholder:text-zinc-700 font-medium font-manrope";
+  const inputReset = "bg-transparent border-none outline-none text-base text-zinc-200 w-full placeholder:text-zinc-600 font-medium font-manrope";
 
   const handleTextChange = (e) => {
     const { name, value } = e.target;
@@ -27,8 +27,8 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
 
   return (
     <section className="space-y-6 font-manrope pt-2">
-      <header className="flex items-center gap-2 mb-2 opacity-40 text-zinc-400">
-        <label className="text-[9px] font-black uppercase tracking-[0.2em]">Configuración del Turno</label>
+      <header className="flex items-center gap-2 mb-2 text-zinc-400">
+        <label className="text-sm font-semibold tracking-wide">Configuración del turno</label>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -60,8 +60,8 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
                 w-full flex items-center gap-3 px-4 py-2.5 rounded-xl
                 transition-all duration-300 group text-left
                 ${formData.isLocationConfirmed
-                  ? 'bg-emerald-500/5 border border-emerald-500/15 hover:bg-emerald-500/10'
-                  : 'bg-[#0f0f0f] border border-zinc-800 hover:border-zinc-700 shadow-sm'
+                  ? 'bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20'
+                  : 'bg-white/[0.02] border border-white/10 hover:border-white/20 shadow-sm'
                 }
               `}
             >
@@ -80,7 +80,7 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
               <div className="flex-1 min-w-0">
                 {formData.isLocationConfirmed ? (
                   <>
-                    <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest leading-none">
+                    <p className="text-xs font-bold text-emerald-400 uppercase tracking-wider leading-none">
                       Ubicación precisa ✓
                     </p>
                     <p className="text-[11px] text-zinc-400 mt-0.5 truncate">
@@ -89,10 +89,10 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
                   </>
                 ) : (
                   <>
-                    <p className="text-[11px] font-semibold text-zinc-300 leading-none group-hover:text-white transition-colors">
+                    <p className="text-sm font-semibold text-zinc-300 leading-none group-hover:text-white transition-colors">
                       Afinar ubicación exacta
                     </p>
-                    <p className="text-[9px] text-zinc-600 mt-0.5 group-hover:text-zinc-500 transition-colors">
+                    <p className="text-xs text-zinc-500 mt-1 group-hover:text-zinc-400 transition-colors">
                       Opcional · Mejora el match con candidatos cercanos
                     </p>
                   </>
@@ -121,8 +121,8 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
             value={formData.date}
             onChange={handleTextChange}
             min={new Date().toLocaleDateString('en-CA')} // yyyy-mm-dd local (Canada locale ISO format)
-            className={`bg-transparent border-none outline-none text-[13px] w-full font-bold font-manrope [color-scheme:dark]
-              ${formData.date ? 'text-white' : 'text-zinc-600 uppercase tracking-wider text-[11px]'}
+            className={`bg-transparent border-none outline-none text-base w-full font-bold font-manrope [color-scheme:dark]
+              ${formData.date ? 'text-white' : 'text-zinc-500 text-sm'}
             `}
             // Oculta placeholder en WebKit cuando no hay fecha
             style={{ 
@@ -160,17 +160,17 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
         <div className="md:col-span-2 space-y-2">
           <div className={`relative rounded-xl p-4 shadow-sm transition-all duration-300 ${ui.isDescriptionInvalid
             ? 'bg-red-500/5 border border-red-500/30'
-            : 'bg-[#0f0f0f] border border-zinc-800 hover:border-zinc-700 focus-within:border-emerald-500/50 focus-within:bg-[#151515] focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)]'
+            : 'bg-white/[0.02] border border-white/10 hover:border-white/20 focus-within:border-emerald-500/50 focus-within:bg-white/[0.04] focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)]'
             }`}>
             <textarea
               name="description"
               value={formData.description}
               rows="3"
               placeholder="Descripción de la vacante (Sin teléfonos ni direcciones)..."
-              className="bg-transparent border-none outline-none text-[13px] text-zinc-200 w-full placeholder:text-zinc-700 font-medium font-manrope resize-none min-h-[80px]"
+              className="bg-transparent border-none outline-none text-base text-zinc-200 w-full placeholder:text-zinc-600 font-medium font-manrope resize-none min-h-[100px]"
               onChange={handleTextChange}
             />
-            <div className={`absolute bottom-3 right-4 text-[8px] font-black tracking-widest ${ui.isDescriptionInvalid ? 'text-red-500' : 'text-zinc-800'}`}>
+            <div className={`absolute bottom-3 right-4 text-xs font-bold ${ui.isDescriptionInvalid ? 'text-red-500' : 'text-zinc-600'}`}>
               {ui.currentLength}/150
             </div>
           </div>

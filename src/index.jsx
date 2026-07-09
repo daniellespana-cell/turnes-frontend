@@ -12,9 +12,11 @@ import 'leaflet/dist/leaflet.css';
 // 🚀 Inicializar Sentinel Error Tracking (Sentry)
 initSentry();
 
-
-
-
+// 🚀 Registrar Service Worker (Requerido para PWA y Push Notifications)
+import { registerSW } from 'virtual:pwa-register';
+if ('serviceWorker' in navigator) {
+  registerSW({ immediate: true });
+}
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(

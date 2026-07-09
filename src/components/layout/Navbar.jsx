@@ -123,6 +123,8 @@ const Navbar = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={toggleMenu}
+                aria-label="Menú principal"
+                aria-expanded={isOpen}
                 className="md:hidden text-white p-1 rounded-md hover:text-brand-success focus:outline-none"
               >
                 {isOpen ? <X size={24} /> : <Menu size={24} />}

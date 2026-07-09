@@ -34,7 +34,7 @@ const ModalidadSelector = ({ selectedType, onChange, userPlan = 'Plan Básico', 
     <section className="space-y-6 font-manrope">
       {/* Label de sección ultra sutil */}
       <div className="flex items-center gap-2 ml-1 opacity-40">
-        <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400">
+        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
           01. Modalidad
         </span>
         <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent" />
@@ -47,24 +47,24 @@ const ModalidadSelector = ({ selectedType, onChange, userPlan = 'Plan Básico', 
             <button
               key={mode.id}
               onClick={() => onChange(mode.id)}
-              className={`px-4 py-4 rounded-2xl transition-all duration-500 flex items-center gap-3 text-left relative overflow-hidden group ${
+              className={`px-5 py-5 rounded-2xl transition-all duration-500 flex items-center gap-4 text-left relative overflow-hidden group ${
                 isActive 
-                ? 'bg-white/[0.03] text-white' 
-                : 'bg-transparent text-zinc-500 hover:text-zinc-300'
+                ? 'bg-white/[0.04] text-white ring-1 ring-white/10' 
+                : 'bg-transparent text-zinc-500 hover:bg-white/[0.02] hover:text-zinc-300'
               }`}
             >
-              <div className={`p-2 rounded-lg transition-colors duration-500 ${
-                isActive ? 'bg-blue-500 text-white' : 'bg-zinc-900 text-zinc-700'
+              <div className={`p-2.5 rounded-xl transition-colors duration-500 ${
+                isActive ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-white/[0.05] text-zinc-500'
               }`}>
-                <mode.icon size={14} strokeWidth={2.5} />
+                <mode.icon size={18} strokeWidth={2} />
               </div>
 
               <div className="flex-1">
-                <p className="font-bold text-[12px] tracking-tight leading-none">
+                <p className="font-bold text-base tracking-tight leading-none">
                   {mode.label}
                 </p>
-                <p className={`text-[10px] mt-1 font-medium ${
-                  isActive ? ((userCommission === 0 || userCommission === '0%') ? 'text-emerald-400 font-bold' : 'text-blue-400/70') : 'text-zinc-600'
+                <p className={`text-sm mt-1.5 font-medium ${
+                  isActive ? ((userCommission === 0 || userCommission === '0%') ? 'text-emerald-400 font-bold' : 'text-blue-400/80') : 'text-zinc-500'
                 }`}>
                   {mode.info}
                 </p>
@@ -86,19 +86,19 @@ const ModalidadSelector = ({ selectedType, onChange, userPlan = 'Plan Básico', 
           onClick={() => navigate('/dashboard/upgrade')}
         >
           <div className="flex items-center gap-3">
-            <Sparkles size={12} className="text-purple-400" />
-            <p className="text-[10px] font-medium text-zinc-400">
+            <Sparkles size={14} className="text-purple-400" />
+            <p className="text-xs font-medium text-zinc-400">
               {userPlan} <span className="mx-1.5 opacity-20">|</span> 
               <span className="text-zinc-200 group-hover:text-purple-400 transition-colors italic">Mejorar al Plan {nextPlanName}</span>
             </p>
           </div>
-          <ChevronRight size={12} className="text-zinc-700 group-hover:text-white transition-all" />
+          <ChevronRight size={14} className="text-zinc-700 group-hover:text-white transition-all" />
         </div>
       ) : (
         <div className="flex items-center justify-between px-2 py-1 opacity-60">
           <div className="flex items-center gap-3">
-            <Sparkles size={12} className="text-emerald-400" />
-            <p className="text-[10px] font-medium text-emerald-400/80">
+            <Sparkles size={14} className="text-emerald-400" />
+            <p className="text-xs font-medium text-emerald-400/80">
               {userPlan} <span className="mx-1.5 opacity-20">|</span> 
               <span className="italic">Nivel Máximo Desbloqueado</span>
             </p>

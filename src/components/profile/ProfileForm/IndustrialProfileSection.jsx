@@ -27,7 +27,9 @@ const IndustrialProfileSection = ({ formData, handleInputChange, handleSkillTogg
         handleInputChange('sector', sectorKey);
     };
 
-    const currentSectorSkills = selectedSectorKey ? (SECTOR_MAP.get(selectedSectorKey)?.skills || []) : [];
+    // 🛡️ DEFENSE IN DEPTH: Eliminar duplicados que puedan venir de la Base de Datos
+    const rawSkills = selectedSectorKey ? (SECTOR_MAP.get(selectedSectorKey)?.skills || []) : [];
+    const currentSectorSkills = Array.from(new Map(rawSkills.map(skill => [skill.label, skill])).values());
 
     return (
         <SectionCard title="Perfil Industrial" icon={<Briefcase size={14} />}>
