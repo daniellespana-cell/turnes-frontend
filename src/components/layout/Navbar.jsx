@@ -88,6 +88,8 @@ const Navbar = () => {
               <img
                 src={turnesLogo}
                 alt="Turnes Logo"
+                width="120"
+                height="32"
                 className="h-7 md:h-8 w-auto object-contain logo-animated"
               />
             </Link>

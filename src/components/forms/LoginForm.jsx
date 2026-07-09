@@ -38,6 +38,7 @@ const LoginForm = () => {
         try {
             // 1. Ejecutamos el login (que ahora es atómico gracias a nuestro AuthContext)
             await login(email, password);
+            localStorage.setItem('turnes_has_logged_in', 'true'); // Guardamos en caché que ya es usuario registrado
 
             // 2. Navegación Imperativa: Redirigimos EXACTAMENTE cuando la promesa se resuelve.
             navigate(from, { replace: true });
@@ -56,6 +57,7 @@ const LoginForm = () => {
     const handleGoogleLogin = async () => {
         try {
             setIsLoading(true);
+            localStorage.setItem('turnes_has_logged_in', 'true'); // Guardamos antes del redirect
             await loginWithGoogle(null, true); 
         } catch (error) {
             setMessage({ text: "Error de conexión.", type: "error" });
@@ -79,7 +81,7 @@ const LoginForm = () => {
                         defaultValue=""
                         required
                         autoComplete="email"
-                        className="w-full px-3 py-2 bg-zinc-900/50 border border-transparent rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm "
+                        className="w-full px-4 py-3 md:py-3.5 bg-zinc-900/50 border border-transparent rounded-xl text-base text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm "
                         placeholder="tu@email.com"
                     />
                 </div>
@@ -105,7 +107,7 @@ const LoginForm = () => {
                             defaultValue=""
                             required
                             autoComplete="current-password"
-                            className="w-full px-3 py-2 bg-zinc-900/50 border border-transparent rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm  pr-10"
+                            className="w-full px-4 py-3 md:py-3.5 bg-zinc-900/50 border border-transparent rounded-xl text-base text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/40 transition-all shadow-sm  pr-12"
                             placeholder="••••••••"
                         />
                         <button

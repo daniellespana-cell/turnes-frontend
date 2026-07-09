@@ -31,7 +31,7 @@ const PublicNavbar = () => {
           {/* LOGO + TOGGLE */}
           <div className="w-full md:w-auto flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
-              <img src={turnesLogo} alt="Turnes Logo" className="h-8 object-contain" />
+              <img src={turnesLogo} alt="Turnes Logo" width="120" height="32" className="h-8 object-contain" />
             </Link>
 
             <button 

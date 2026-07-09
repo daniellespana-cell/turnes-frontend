@@ -48,7 +48,7 @@ const BaseSidebar = ({ menuItems, isExpanded, setIsExpanded, isMobileOpen, setIs
                     {(isExpanded || isMobileOpen) && (
                         <div className="flex items-center gap-3">
                             <div className="animate-in zoom-in duration-500">
-                                <img src={turnesLogo} alt="Turnes" className="h-7 w-auto object-contain rounded-lg shadow-lg" />
+                                <img src={turnesLogo} alt="Turnes" width="120" height="28" className="h-7 w-auto object-contain rounded-lg shadow-lg" />
                             </div>
                         </div>
                     )}
