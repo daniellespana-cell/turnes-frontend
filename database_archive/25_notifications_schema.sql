@@ -44,9 +44,10 @@ CREATE POLICY "User updates own notifications"
     USING (auth.uid() = user_id);
 
 -- Inserción permitida via RPCs SECURITY DEFINER (no directo desde cliente)
-CREATE POLICY "Service role can insert notifications"
+-- Pero si se hace directo, se debe restringir explícitamente al dueño:
+CREATE POLICY "User inserts own notifications"
     ON public.notificaciones FOR INSERT
-    WITH CHECK (TRUE);
+    WITH CHECK (auth.uid() = user_id);
 
 -- GRANTS: Sin esto, PostgreSQL ni evalúa las políticas RLS
 GRANT SELECT, UPDATE ON public.notificaciones TO authenticated;

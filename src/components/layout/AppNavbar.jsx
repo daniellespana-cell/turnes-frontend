@@ -15,6 +15,12 @@ const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
   const navigate = useNavigate();
   const { showExtraActions } = useNavbarVisibility();
 
+  const chatSnapshot = useSyncExternalStore(ChatStorage.subscribe, ChatStorage.getSnapshot);
+  const unreadMessages = useMemo(() => {
+    if (!chatSnapshot?.unreadCounts) return 0;
+    return Object.values(chatSnapshot.unreadCounts).reduce((acc, count) => acc + count, 0);
+  }, [chatSnapshot?.unreadCounts]);
+
   if (!user) return null;
 
   const isBusiness       = user.role === "empresa";
@@ -22,12 +28,6 @@ const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
   const isProOrEnterprise = ['pro', 'enterprise'].some(p => userPlan.startsWith(p));
   const showUpgradeButton = isBusiness && !isProOrEnterprise;
   const upgradeTarget     = userPlan.includes('micro') ? 'Pro' : 'Premium';
-
-  const chatSnapshot = useSyncExternalStore(ChatStorage.subscribe, ChatStorage.getSnapshot);
-  const unreadMessages = useMemo(() => {
-    if (!chatSnapshot?.unreadCounts) return 0;
-    return Object.values(chatSnapshot.unreadCounts).reduce((acc, count) => acc + count, 0);
-  }, [chatSnapshot?.unreadCounts]);
   // 3D 4K SENIOR EFFECT FOR RAW ICONS (No Box/Pill Contour)
   const iconBtnClass = "relative flex items-center justify-center transition-all duration-500 group active:scale-[0.85] focus:outline-none p-2";
   const iconSvgClass = "w-6 h-6 text-zinc-300 drop-shadow-[0_5px_8px_rgba(0,0,0,0.9)] filter group-hover:text-white group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] transition-all duration-500 transform group-hover:-translate-y-0.5";

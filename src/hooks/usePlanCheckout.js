@@ -23,10 +23,15 @@ export const usePlanCheckout = (planSlug) => {
 
     useEffect(() => {
         const fetchWithTimeout = async (promise, ms = 15000) => {
-            const timeout = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('TIMEOUT_EXCEEDED')), ms)
-            );
-            return Promise.race([promise, timeout]);
+            let timerId;
+            const timeout = new Promise((_, reject) => {
+                timerId = setTimeout(() => reject(new Error('TIMEOUT_EXCEEDED')), ms);
+            });
+            try {
+                return await Promise.race([promise, timeout]);
+            } finally {
+                clearTimeout(timerId);
+            }
         };
 
         const fetchItem = async () => {
