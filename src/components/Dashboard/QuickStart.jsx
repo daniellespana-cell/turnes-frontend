@@ -45,17 +45,15 @@ export const QuickStart = ({ walletActive = false, vacancyPublished = false, isL
         >
             {/* Background Decor (JobToday subtle pulse) */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-700" />
-
             {/* ProgressBar Top */}
             <div className="absolute top-0 left-0 h-1 bg-white/5 w-full">
                 <motion.div
                     className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${progressPercentage}%` }}
+                    initial={{}}
+                    animate={{}}
                     transition={{ duration: 1, type: "spring" }}
                 />
             </div>
-
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
 
                 {/* Header Section */}

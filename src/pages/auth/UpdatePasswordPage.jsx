@@ -24,7 +24,6 @@ const UpdatePasswordPage = () => {
     return (
         <div className="min-h-screen w-full bg-[#050505] flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans selection:bg-emerald-500/30">
             <AuthBackground />
-
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -103,8 +102,8 @@ const UpdatePasswordPage = () => {
                             </p>
                             <div className="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
                                 <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: "100%" }}
+                                    initial={{}}
+                                    animate={{}}
                                     transition={{ duration: 3 }}
                                     className="h-full bg-emerald-500"
                                 />
@@ -117,9 +116,17 @@ const UpdatePasswordPage = () => {
                 <AnimatePresence>
                     {error && (
                         <motion.div
-                            initial={{ opacity: 0, y: 10, height: 0 }}
-                            animate={{ opacity: 1, y: 0, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
+                            initial={{
+                                opacity: 0,
+                                y: 10
+                            }}
+                            animate={{
+                                opacity: 1,
+                                y: 0
+                            }}
+                            exit={{
+                                opacity: 0
+                            }}
                             className="mt-4 flex items-center gap-3 bg-red-500/10 border border-red-500/20 px-4 py-3 rounded-lg text-red-200 text-xs"
                         >
                             <AlertCircle size={14} className="flex-shrink-0 text-red-500" />

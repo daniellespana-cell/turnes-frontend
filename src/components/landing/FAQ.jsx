@@ -64,9 +64,15 @@ const FAQ = () => {
               <AnimatePresence>
                 {openIndex === index && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
+                    initial={{
+                      opacity: 0
+                    }}
+                    animate={{
+                      opacity: 1
+                    }}
+                    exit={{
+                      opacity: 0
+                    }}
                     transition={{ duration: 0.15 }}
                     className="overflow-hidden"
                   >

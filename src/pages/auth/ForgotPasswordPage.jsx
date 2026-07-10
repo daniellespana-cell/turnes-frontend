@@ -132,9 +132,17 @@ const ForgotPasswordPage = () => {
                 <AnimatePresence>
                     {message && message.type === 'error' && (
                         <motion.div
-                            initial={{ opacity: 0, y: 10, height: 0 }}
-                            animate={{ opacity: 1, y: 0, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
+                            initial={{
+                                opacity: 0,
+                                y: 10
+                            }}
+                            animate={{
+                                opacity: 1,
+                                y: 0
+                            }}
+                            exit={{
+                                opacity: 0
+                            }}
                             className="mt-4 flex items-center gap-3 bg-red-500/10 border border-red-500/20 px-4 py-3 rounded-lg text-red-200 text-xs"
                         >
                             <AlertCircle size={14} className="flex-shrink-0 text-red-500" />

@@ -47,9 +47,18 @@ const ProfileBanner = () => {
     return (
         <AnimatePresence>
             <motion.div
-                initial={{ opacity: 0, height: 0, scale: 0.95 }}
-                animate={{ opacity: 1, height: 'auto', scale: 1 }}
-                exit={{ opacity: 0, height: 0, scale: 0.9 }}
+                initial={{
+                    opacity: 0,
+                    scale: 0.95
+                }}
+                animate={{
+                    opacity: 1,
+                    scale: 1
+                }}
+                exit={{
+                    opacity: 0,
+                    scale: 0.9
+                }}
                 transition={{ duration: 0.4, type: "spring" }}
                 className="w-full mb-8"
             >
@@ -85,8 +94,8 @@ const ProfileBanner = () => {
                                 {/* Progress Bar: High visibility */}
                                 <div className="w-full max-w-[320px] h-3 bg-zinc-900 rounded-full mt-4 overflow-hidden border border-white/5 p-0.5">
                                     <motion.div
-                                        initial={{ width: 0 }}
-                                        animate={{ width: `${completeness}%` }}
+                                        initial={{}}
+                                        animate={{}}
                                         transition={{ duration: 1.5, ease: "easeOut" }}
                                         className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 shadow-[0_0_15px_#10B981]"
                                     />

@@ -145,7 +145,13 @@ const VerificationDetailPage = () => {
                         </div>
                         <AnimatePresence>
                             {showRejectForm && (
-                                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+                                <motion.div initial={{
+                                    opacity: 0
+                                }} animate={{
+                                    opacity: 1
+                                }} exit={{
+                                    opacity: 0
+                                }} className="overflow-hidden">
                                     <div className="pt-4 border-t border-white/5 space-y-4">
                                         <div><label htmlFor="rejectionInput" className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Justificación Legal</label>
                                             <textarea id="rejectionInput" value={rejectionReason} onChange={e => setRejectionReason(e.target.value)} placeholder="Ejemplo: El documento provisto se encuentra ilegible..." className="w-full h-24 bg-red-500/5 border border-red-500/20 focus:border-red-500/50 rounded-2xl p-4 text-sm text-white placeholder:text-zinc-600 focus:outline-none resize-none transition-all" />

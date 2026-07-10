@@ -31,7 +31,11 @@ const EliteVerifiedCard = ({ note, onClick, onDelete }) => (
         layout
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, height: 0, scale: 0.95, overflow: 'hidden' }}
+        exit={{
+            opacity: 0,
+            scale: 0.95,
+            overflow: 'hidden'
+        }}
         transition={{ duration: 0.25 }}
         className="w-full py-5 px-6 group"
     >
@@ -106,7 +110,13 @@ const NotificationItem = ({ note, isLast, onClick, onDelete }) => {
             layout
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, height: 0, scale: 0.95, padding: 0, margin: 0, overflow: 'hidden' }}
+            exit={{
+                opacity: 0,
+                scale: 0.95,
+                padding: 0,
+                margin: 0,
+                overflow: 'hidden'
+            }}
             transition={{ duration: 0.2 }}
             className={`w-full text-left py-5 px-6 flex gap-4 items-start transition-all duration-300 group
                 ${isLast ? '' : 'border-b border-white/[0.04]'}

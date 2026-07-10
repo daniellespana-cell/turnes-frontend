@@ -67,7 +67,10 @@ const EliteBanner = ({ userName }) => {
                 <motion.section
                     initial={{ opacity: 0, y: -12, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, height: 0, marginBottom: 0, overflow: 'hidden' }}
+                    exit={{
+                        opacity: 0,
+                        overflow: 'hidden'
+                    }}
                     transition={{ duration: 0.3, ease: 'easeOut' }}
                     className="relative overflow-hidden rounded-3xl border border-blue-500/25 bg-gradient-to-br from-blue-600/10 via-blue-500/5 to-cyan-500/8 p-6"
                 >
