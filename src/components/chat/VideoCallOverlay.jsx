@@ -125,11 +125,12 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
           </div>
         )}
 
-        {roomUrl ? (
+        {roomUrl && roomUrl.startsWith('https://') ? (
           <iframe
             ref={iframeRef}
             src={roomUrl}
             onLoad={handleIframeLoad}
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"
             allow="camera *; microphone *; fullscreen *; display-capture *; autoplay *"
             className="absolute inset-0 w-full h-full border-none"
             title="Turnes Video Session"

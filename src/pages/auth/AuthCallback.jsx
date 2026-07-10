@@ -39,8 +39,11 @@ const AuthCallback = () => {
 
         // 🛡️ 2. GESTIÓN DE SESIÓN
         const handleOAuthSync = async () => {
-            const role = searchParams.get('role');
+            const rawRole = searchParams.get('role');
             const action = searchParams.get('action'); // 'login_only'
+
+            // Validación estricta del rol para prevenir inyección de parámetros (Security)
+            const role = ['empresa', 'trabajador'].includes(rawRole) ? rawRole : null;
 
             if (!user) return; // Paranoia check
 

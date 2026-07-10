@@ -80,6 +80,12 @@ serve(async (req) => {
       }
     };
 
+    // Escapar caracteres peligrosos para evitar XSS en inyección HTML
+    const safeSchema = JSON.stringify(schema)
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/&/g, '\\u0026');
+
     const html = `<!DOCTYPE html>
 <html lang="es-CO">
 <head>
@@ -102,7 +108,7 @@ serve(async (req) => {
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
-    ${JSON.stringify(schema)}
+    ${safeSchema}
   </script>
 </head>
 <body>

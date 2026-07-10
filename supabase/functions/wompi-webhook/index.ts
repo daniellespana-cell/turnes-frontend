@@ -42,7 +42,14 @@ async function validateWompiSignature(payload: any, signature: string, timestamp
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const expectedSignature = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return signature === expectedSignature;
+    
+    // Comparación segura contra ataques de tiempo (Timing-safe comparison)
+    if (signature.length !== expectedSignature.length) return false;
+    let result = 0;
+    for (let i = 0; i < signature.length; i++) {
+        result |= signature.charCodeAt(i) ^ expectedSignature.charCodeAt(i);
+    }
+    return result === 0;
   };
 
   // Verificamos primero con el secreto de Producción, si falla intentamos con el de Pruebas (Sandbox)
