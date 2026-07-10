@@ -8,11 +8,15 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = 
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
+        let timer;
         if (isOpen) {
             setIsVisible(true);
         } else {
-            setTimeout(() => setIsVisible(false), 300); // Wait for exit animation
+            timer = setTimeout(() => setIsVisible(false), 300); // Wait for exit animation
         }
+        return () => {
+            if (timer) clearTimeout(timer);
+        };
     }, [isOpen]);
 
     if (!isVisible && !isOpen) return null;

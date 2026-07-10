@@ -11,7 +11,6 @@ const PremiumBanner = ({ currentPlan = 'Basic' }) => {
 
   const plan = (currentPlan || 'Basic').toLowerCase();
   const isPaidPlan = ['pro', 'enterprise'].some(p => plan.startsWith(p));
-  if (isPaidPlan) return null;
 
   const config = {
     basic: {
@@ -34,12 +33,15 @@ const PremiumBanner = ({ currentPlan = 'Basic' }) => {
   const activeConfig = config[plan] || config.default;
 
   useEffect(() => {
+    if (isPaidPlan) return;
     const interval = setInterval(() => {
       setHighlight(true);
       setTimeout(() => setHighlight(false), 2000);
     }, 6000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaidPlan]);
+
+  if (isPaidPlan) return null;
 
   return (
     <motion.div

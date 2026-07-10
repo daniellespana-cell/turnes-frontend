@@ -95,7 +95,7 @@ export default defineConfig({
   // 🟢 Optimización de build y Arquitectura de Chunks (Anti-TBT)
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: false, // 🔒 SECURIDAD: Evita filtrar código fuente y falsos "secrets" al cliente final
     // ⚡ Senior Move: Forzar la división del AST (Abstract Syntax Tree) para paralelizar descarga y reducir Script Evaluation en móviles
     rollupOptions: {
       output: {
