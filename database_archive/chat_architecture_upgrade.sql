@@ -110,4 +110,10 @@ CREATE POLICY "Mensajes actualizables por el receptor"
             WHERE empresa_id = auth.uid() OR postulante_id = auth.uid()
         )
     )
-    WITH CHECK (true); -- Permitimos setear leido = true
+    WITH CHECK (
+        sender_id != auth.uid() AND
+        conversacion_id IN (
+            SELECT id FROM public.turnes_chats 
+            WHERE empresa_id = auth.uid() OR postulante_id = auth.uid()
+        )
+    );

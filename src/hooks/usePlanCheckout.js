@@ -7,6 +7,18 @@ import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import { logger } from '../utils/logger';
 
+const fetchWithTimeout = async (promise, ms = 15000) => {
+    let timerId;
+    const timeout = new Promise((_, reject) => {
+        timerId = setTimeout(() => reject(new Error('TIMEOUT_EXCEEDED')), ms);
+    });
+    try {
+        return await Promise.race([promise, timeout]);
+    } finally {
+        clearTimeout(timerId);
+    }
+};
+
 export const usePlanCheckout = (planSlug) => {
     const navigate = useNavigate();
     const { showToast } = useToast();
@@ -22,18 +34,6 @@ export const usePlanCheckout = (planSlug) => {
     const [walletError, setWalletError] = useState(null);
 
     useEffect(() => {
-        const fetchWithTimeout = async (promise, ms = 15000) => {
-            let timerId;
-            const timeout = new Promise((_, reject) => {
-                timerId = setTimeout(() => reject(new Error('TIMEOUT_EXCEEDED')), ms);
-            });
-            try {
-                return await Promise.race([promise, timeout]);
-            } finally {
-                clearTimeout(timerId);
-            }
-        };
-
         const fetchItem = async () => {
             setLoading(true);
             setError(false);

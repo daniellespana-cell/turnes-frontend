@@ -9,7 +9,7 @@ class NotificationObserver {
         /** @type {Map<string, Set<Function>>} */
         this._subscribers = new Map();
         this._channel = null;
-        this._userId = null;
+        this._subscriberId = null;
     }
 
     // --- OBSERVER API ---
@@ -35,10 +35,10 @@ class NotificationObserver {
     // --- REALTIME ---
 
     /** Conecta el canal Supabase Realtime para el usuario autenticado. */
-    connect(userId) {
-        if (this._channel && this._userId === userId) return;
+    connect(subscriberId) {
+        if (this._channel && this._subscriberId === subscriberId) return;
         this.disconnect();
-        this._userId = userId;
+        this._subscriberId = subscriberId;
 
         const onChange = (event) => (payload) => {
             const rowData = event === 'DELETE' ? payload.old : payload.new;
@@ -46,7 +46,7 @@ class NotificationObserver {
         };
 
         this._channel = supabase
-            .channel(`${CHANNEL_NAME}-${userId}`)
+            .channel(`${CHANNEL_NAME}-${subscriberId}`)
             .on('postgres_changes', { 
                 event: '*', 
                 schema: 'public', 
@@ -58,7 +58,7 @@ class NotificationObserver {
             })
             .subscribe((status, err) => {
                 if (status === 'SUBSCRIBED') {
-                    logger.info('✅ [Observer] Realtime conectado:', userId);
+                    logger.info('✅ [Observer] Realtime conectado:', subscriberId);
                 } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
                     console.warn(`[Observer] Aviso Realtime (${status}): La conexión podría estar inestable.`);
                 }
@@ -70,13 +70,13 @@ class NotificationObserver {
         if (!this._channel) return;
         supabase.removeChannel(this._channel);
         this._channel = null;
-        this._userId = null;
+        this._subscriberId = null;
     }
 
     // --- DATA ACCESS ---
 
-    async fetchHistory(userId, limit = PAGE_SIZE) {
-        if (!userId) return [];
+    async fetchHistory(subscriberId, limit = PAGE_SIZE) {
+        if (!subscriberId) return [];
         const { data, error } = await supabase
             .from('notificaciones')
             .select('*')
@@ -92,7 +92,7 @@ class NotificationObserver {
         return !error;
     }
 
-    async markAllAsRead(userId) {
+    async markAllAsRead(subscriberId) {
         const { error } = await supabase.from('notificaciones').update({ leida: true }).eq('leida', false);
         if (error) console.error('[Observer] markAllAsRead error:', error);
         return !error;
@@ -116,15 +116,15 @@ class NotificationObserver {
 
     /**
      * Inserta una notificación para otro usuario vía RPC SECURITY DEFINER.
-     * @param {string} targetUserId - UUID del destinatario
+     * @param {string} targetId - UUID del destinatario
      * @param {string} tipo - Tipo de evento ('PAYMENT_SUCCESS', etc.)
      * @param {string|null} referenceId - UUID de la postulación asociada
      * @param {object} metadata - Tokens para interpolación de strings
      */
-    async dispatch(targetUserId, tipo, referenceId = null, metadata = {}) {
-        if (!targetUserId || !tipo) { console.warn('[Observer] dispatch() sin targetUserId o tipo'); return; }
+    async dispatch(targetId, tipo, referenceId = null, metadata = {}) {
+        if (!targetId || !tipo) { console.warn('[Observer] dispatch() sin targetId o tipo'); return; }
         const { error } = await supabase.rpc('rpc_create_notification', {
-            p_user_id: targetUserId,
+            p_user_id: targetId,
             p_tipo: tipo,
             p_reference_id: referenceId,
             p_metadata: metadata
