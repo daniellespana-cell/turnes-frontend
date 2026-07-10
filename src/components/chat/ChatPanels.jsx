@@ -59,7 +59,9 @@ const ChatPanels = ({
           <div
             className="absolute inset-0 bg-black/90 backdrop-blur-md"
             onClick={() => setIsPanelOpen(false)}
-          />
+            role="button"
+            tabIndex={0}
+            onKeyDown={() => setIsPanelOpen(false)} />
 
           <div className="absolute top-0 bottom-0 right-0 w-[85vw] max-w-sm bg-[#0a0a0a] border-l border-white/10 z-[110] flex flex-col animate-in slide-in-from-right duration-300 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
             <div className="py-4 border-b border-white/5 flex items-center justify-between px-6 bg-zinc-900/80 backdrop-blur-xl shrink-0">
@@ -68,7 +70,8 @@ const ChatPanels = ({
                 onClick={() => setIsPanelOpen(false)}
                 className="w-8 h-8 flex items-center justify-center bg-white/5 border border-transparent rounded-full text-white hover:bg-white/10 transition-colors"
                 title="Cerrar Panel"
-                type="button">
+                type="button"
+                aria-label="Acción">
                 ✕
               </button>
             </div>

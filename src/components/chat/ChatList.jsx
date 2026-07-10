@@ -88,7 +88,8 @@ export const ChatList = ({ chats: initialChats, isDirectoryMode = false, backPat
                         onClick={() => navigate(backPath)}
                         className="p-1.5 -ml-1 text-zinc-400 hover:text-white hover:bg-white/5 rounded-full transition-all"
                         title="Volver"
-                        type="button">
+                        type="button"
+                        aria-label="Acción">
                         <ChevronLeft size={22} className="stroke-[2.5px]" />
                     </button>
                     <h1 className={`${typography.entityName} text-[22px] tracking-tight font-extrabold text-white/90`}>Mensajes</h1>
@@ -125,7 +126,9 @@ export const ChatList = ({ chats: initialChats, isDirectoryMode = false, backPat
                             isActive={String(chat.id) === String(activeChatId)}
                             onClick={() => navigate(`/dashboard/chat/${chat.id}`)}
                             onActionClick={handleActionClick}
-                        />
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={() => navigate(`/dashboard/chat/${chat.id}`)} />
                     ))
                 )}
             </div>

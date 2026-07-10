@@ -21,7 +21,8 @@ export const LocationControls = ({ isResolving, address, onUseMyLocation, isLoca
             onClick={onUseMyLocation}
             className="p-2 md:p-2.5 bg-[#0a0a0a]/80 backdrop-blur-md border border-transparent rounded-xl text-zinc-400 shadow-lg hover:bg-zinc-800 hover:text-white transition-all pointer-events-auto group active:scale-90"
             title="Mi ubicación actual"
-            type="button">
+            type="button"
+            aria-label="Acción">
             <Navigation size={14} className={`${isLocating ? 'animate-pulse text-emerald-400' : 'group-hover:text-emerald-400'}`} />
         </button>
     </div>

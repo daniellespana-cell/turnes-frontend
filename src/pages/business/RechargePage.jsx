@@ -70,7 +70,12 @@ const RechargePage = () => {
             Recargar <span className={typography.gradient}>Saldo</span>
           </h1>
           <nav className="flex items-center gap-2 mt-1 md:mt-2 opacity-60">
-            <span className={typography.sectionTitle + " cursor-pointer hover:text-white transition-colors text-[9px]"} onClick={() => navigate('/dashboard/finanzas')}>Finanzas</span>
+            <span
+              className={typography.sectionTitle + " cursor-pointer hover:text-white transition-colors text-[9px]"}
+              onClick={() => navigate('/dashboard/finanzas')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={() => navigate('/dashboard/finanzas')}>Finanzas</span>
             <ChevronRight size={10} className="text-zinc-600" />
             <span className={typography.sectionTitle + " text-emerald-500 text-[9px]"}>Fondos</span>
           </nav>

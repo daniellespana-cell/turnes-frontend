@@ -87,10 +87,12 @@ const ProfileTab = () => {
             </div>
             {/* Avatar Section */}
             <div className="flex items-center gap-6 p-6 bg-white/5 rounded-2xl border border-transparent shadow-sm transition-all ">
-                <div 
+                <div
                     className={`relative group cursor-pointer ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}
                     onClick={() => fileInputRef.current?.click()}
-                >
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={() => fileInputRef.current?.click()}>
                     <img
                         src={avatarPreview?.startsWith('blob') ? avatarPreview : AssetResolver.getAvatar(avatarPreview) || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}`}
                         alt="Avatar"

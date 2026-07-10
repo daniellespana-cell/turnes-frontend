@@ -66,7 +66,9 @@ const HowItWorksModal = ({ isOpen, onClose }) => {
                         onClick={onClose}
                         className="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"
                         aria-hidden="true"
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={onClose} />
 
                     {/* Modal Content */}
                     <motion.div
@@ -81,8 +83,11 @@ const HowItWorksModal = ({ isOpen, onClose }) => {
                  overflow-hidden 
                 max-h-[90vh] flex flex-col
             "
-                        onClick={(e) => e.stopPropagation()} // Evita cerrar al clickear dentro
-                    >
+                        // Evita cerrar al clickear dentro
+                        onClick={(e) => e.stopPropagation()}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => e.stopPropagation()}>
 
                         {/* Header con botón de cierre pegajoso */}
                         <div className="sticky top-0 z-50 flex justify-end p-4 bg-gradient-to-b from-zinc-900 via-zinc-900/90 to-transparent">

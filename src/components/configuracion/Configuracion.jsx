@@ -105,7 +105,9 @@ const DesktopSidebar = ({ activeTabId, onTabChange, tabs }) => {
                         tab={tab}
                         isActive={activeTabId === tab.id}
                         onClick={() => onTabChange(tab.id)}
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={() => onTabChange(tab.id)} />
                 ))}
             </nav>
         </aside>

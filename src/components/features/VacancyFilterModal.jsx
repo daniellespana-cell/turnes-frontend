@@ -11,7 +11,9 @@ const CheckboxItem = ({ label, isChecked, onClick, disabled }) => (
     <div
         onClick={!disabled ? onClick : undefined}
         className={`flex items-center gap-2 py-2 group transition-opacity ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:opacity-70'}`}
-    >
+        role="button"
+        tabIndex={0}
+        onKeyDown={!disabled ? onClick : undefined}>
         <div className={`
             w-5 h-5 rounded border flex items-center justify-center transition-all shrink-0
             ${isChecked
@@ -73,10 +75,14 @@ const VacancyFilterModal = ({
                 <>
                     {/* BACKDROP */}
                     <motion.div
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         onClick={onClose}
                         className="fixed inset-0 bg-black/80 z-[99998] backdrop-blur-[2px]"
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={onClose} />
 
                     {/* CONTAINER */}
                     <div className="fixed inset-0 z-[99999] flex flex-col justify-end md:justify-center items-center pointer-events-none p-0 md:p-4">
@@ -126,12 +132,16 @@ const VacancyFilterModal = ({
                                         label="Jornada Completa"
                                         isChecked={filters.types.includes('Fijo')}
                                         onClick={() => toggleFilter('types', 'Fijo')}
-                                    />
+                                        role="button"
+                                        tabIndex={0}
+                                        onKeyDown={() => toggleFilter('types', 'Fijo')} />
                                     <CheckboxItem
                                         label="Medio Tiempo"
                                         isChecked={filters.types.includes('Temporal')}
                                         onClick={() => toggleFilter('types', 'Temporal')}
-                                    />
+                                        role="button"
+                                        tabIndex={0}
+                                        onKeyDown={() => toggleFilter('types', 'Temporal')} />
                                 </div>
 
                                 <div className={`transition-all duration-300 ${isFullTime ? 'opacity-30 grayscale pointer-events-none' : 'opacity-100'}`}>
@@ -144,7 +154,9 @@ const VacancyFilterModal = ({
                                                 isChecked={filters.schedules.includes(turno.id)}
                                                 onClick={() => toggleFilter('schedules', turno.id)}
                                                 disabled={isFullTime}
-                                            />
+                                                role="button"
+                                                tabIndex={0}
+                                                onKeyDown={() => toggleFilter('schedules', turno.id)} />
                                         ))}
                                     </div>
                                 </div>
@@ -159,7 +171,9 @@ const VacancyFilterModal = ({
                                                     label={skill.label}
                                                     isChecked={filters.skills.includes(skill.id)}
                                                     onClick={() => toggleFilter('skills', skill.id)}
-                                                />
+                                                    role="button"
+                                                    tabIndex={0}
+                                                    onKeyDown={() => toggleFilter('skills', skill.id)} />
                                             ))}
                                         </div>
                                     </>

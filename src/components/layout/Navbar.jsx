@@ -36,7 +36,9 @@ const NavItem = ({ to, label, isMobile = false, onClick, isButton = false }) => 
       to={to}
       onClick={onClick}
       className={baseClasses}
-    >
+      role="button"
+      tabIndex={0}
+      onKeyDown={onClick}>
       {label}
       <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-brand-success transition-all duration-300 transform -translate-x-1/2 group-hover:w-full"></span>
     </Link>
@@ -59,7 +61,9 @@ const AnimatedButton = ({ to, label, isMobile = false, isHeaderMobile = false, o
         ${isHeaderMobile ? "px-4 py-2 text-sm ml-1 font-bold shadow-md" : ""}
         ${!isMobile && !isHeaderMobile ? "px-5 py-2" : ""}
       `}
-    >
+      role="button"
+      tabIndex={0}
+      onKeyDown={onClick}>
       <span className="relative z-10">{label}</span>
     </Link>
   );
@@ -102,8 +106,11 @@ const Navbar = () => {
                 to="#"
                 label="Cómo funciona"
                 isButton={true}
-                onClick={() => setIsHowItWorksOpen(true)} // Open Modal
-              />
+                // Open Modal
+                onClick={() => setIsHowItWorksOpen(true)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={() => setIsHowItWorksOpen(true)} />
               <NavItem to="/explorar" label="Características" />
               <NavItem to="/precios" label="Precios" />
               <NavItem to="/contacto" label="Contacto" />
@@ -140,17 +147,47 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden bg-[#0a0a0a] border-t border-zinc-800 overflow-hidden">
             <div className="flex flex-col space-y-1 px-4 py-6">
-              <NavItem to="/" label="Inicio" isMobile={true} onClick={toggleMenu} />
+              <NavItem
+                to="/"
+                label="Inicio"
+                isMobile={true}
+                onClick={toggleMenu}
+                role="button"
+                tabIndex={0}
+                onKeyDown={toggleMenu} />
               <NavItem
                 to="#"
                 label="Cómo funciona"
                 isMobile={true}
                 isButton={true}
                 onClick={() => { setIsHowItWorksOpen(true); toggleMenu(); }}
-              />
-              <NavItem to="/explorar" label="Características" isMobile={true} onClick={toggleMenu} />
-              <NavItem to="/precios" label="Precios" isMobile={true} onClick={toggleMenu} />
-              <NavItem to="/contacto" label="Contacto" isMobile={true} onClick={toggleMenu} />
+                role="button"
+                tabIndex={0}
+                onKeyDown={() => { setIsHowItWorksOpen(true); toggleMenu(); }} />
+              <NavItem
+                to="/explorar"
+                label="Características"
+                isMobile={true}
+                onClick={toggleMenu}
+                role="button"
+                tabIndex={0}
+                onKeyDown={toggleMenu} />
+              <NavItem
+                to="/precios"
+                label="Precios"
+                isMobile={true}
+                onClick={toggleMenu}
+                role="button"
+                tabIndex={0}
+                onKeyDown={toggleMenu} />
+              <NavItem
+                to="/contacto"
+                label="Contacto"
+                isMobile={true}
+                onClick={toggleMenu}
+                role="button"
+                tabIndex={0}
+                onKeyDown={toggleMenu} />
             </div>
           </div>
         )}

@@ -102,7 +102,9 @@ const NotificationsMenu = () => {
                                                 onClick={() => handleNotificationClick(note)}
                                                 onDelete={() => deleteNotification(note.id)}
                                                 isUnread={!note.leida}
-                                            />
+                                                role="button"
+                                                tabIndex={0}
+                                                onKeyDown={() => handleNotificationClick(note)} />
                                         ))}
                                     </React.Fragment>
                                 );
@@ -164,11 +166,11 @@ const NotificationItem = ({ note, onClick, onDelete, isUnread }) => {
             className={`w-full text-left px-4 py-3 border-b border-white/[0.02] hover:bg-white/5 transition-colors group flex gap-3 items-start relative ${isUnread ? 'bg-purple-500/[0.04]' : ''}`}
             role="menuitem"
         >
-            <div 
-                className="flex-1 min-w-0 flex gap-3 items-start cursor-pointer focus:outline-none focus:bg-white/10"
+            <button
+                type="button"
+                className="flex-1 min-w-0 flex gap-3 items-start cursor-pointer text-left focus:outline-none focus:bg-white/10"
                 onClick={onClick}
-                tabIndex={0}
-            >
+                aria-label="Acción">
                 {/* Indicador de Tipo */}
                 <div className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${typeStyle}`} />
 
@@ -187,13 +189,14 @@ const NotificationItem = ({ note, onClick, onDelete, isUnread }) => {
                         <Clock size={10} /> {note.timeLabel}
                     </span>
                 </div>
-            </div>
+            </button>
             {/* Acciones Rápidas Ocultas (Delete) */}
             <button
                 onClick={(e) => { e.stopPropagation(); onDelete(); }}
                 className="absolute top-1/2 -translate-y-1/2 right-3 p-1.5 bg-zinc-900 border border-transparent text-zinc-500 hover:text-red-400 hover:border-red-500/30 rounded-lg  opacity-70 md:opacity-0 scale-90 md:scale-75 group-hover:opacity-100 group-hover:scale-100 focus:opacity-100 focus:scale-100 transition-all z-10"
                 title="Eliminar"
-                type="button">
+                type="button"
+                aria-label="Acción">
                 <Trash2 size={13} />
             </button>
         </motion.div>

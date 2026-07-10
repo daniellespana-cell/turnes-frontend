@@ -91,7 +91,9 @@ export const QuickStart = ({ walletActive = false, vacancyPublished = false, isL
                                     : 'bg-zinc-900/50 border-white/5  hover:bg-zinc-900 shadow-inner cursor-pointer hover:shadow-[0_4px_20px_rgba(99,102,241,0.1)]'
                                 }
                             `}
-                        >
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={!step.isCompleted ? step.action : undefined}>
                             {!step.isCompleted && (
                                 <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/0 via-indigo-500/5 to-purple-500/0 opacity-0 hover:opacity-100 transition-opacity" />
                             )}

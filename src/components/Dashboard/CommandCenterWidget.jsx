@@ -13,7 +13,6 @@ const CommandCenterWidget = ({ activeProcess, hasUrgentAction, onNavigate }) => 
       {hasUrgentAction && (
         <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full animate-pulse z-0" />
       )}
-
       <motion.div
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
@@ -23,7 +22,9 @@ const CommandCenterWidget = ({ activeProcess, hasUrgentAction, onNavigate }) => 
             : 'bg-gradient-to-br from-emerald-600/10 to-teal-600/5 border-emerald-500/20 shadow-[0_10px_40px_rgba(52,211,153,0.1)]'
           }`}
         onClick={onNavigate}
-      >
+        role="button"
+        tabIndex={0}
+        onKeyDown={onNavigate}>
         <div className={`absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl transition-all ${hasUrgentAction ? 'bg-indigo-500/30' : 'bg-emerald-500/20'}`} />
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 sm:gap-4 relative z-10">

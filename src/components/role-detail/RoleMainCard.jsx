@@ -21,11 +21,9 @@ const RoleMainCard = ({ rol, shortSummary }) => {
                 </div>
                 <span className="text-xl font-bold text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-xl">{rol.job.salary}</span>
             </div>
-
             <p className="text-base text-zinc-400 mb-8 leading-relaxed font-light">
                 {shortSummary}
             </p>
-
             {/* Detalles del Rol */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-zinc-400 mb-8 text-sm">
                 <div className="flex items-center gap-4 bg-white/5 p-3 rounded-xl border border-transparent">
@@ -45,7 +43,6 @@ const RoleMainCard = ({ rol, shortSummary }) => {
                     <div><span className="block text-xs text-zinc-500 uppercase">Calificación</span><span className="text-white font-medium">4.8/5.0</span></div>
                 </div>
             </div>
-
             {/* Requisitos (Opcional) */}
             {rol.job.reqs && rol.job.reqs.length > 0 && (
                 <>
@@ -60,7 +57,6 @@ const RoleMainCard = ({ rol, shortSummary }) => {
                     </ul>
                 </>
             )}
-
             {/* CTA Postúlate */}
             <div className="mt-10 pt-8">
                 <TurnesButton
@@ -69,7 +65,9 @@ const RoleMainCard = ({ rol, shortSummary }) => {
                     size="lg"
                     icon={ArrowRight}
                     className="w-full md:w-fit"
-                >
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={() => navigate('/register?role=jobseeker')}>
                     Aplicar a Turnos Como Este
                 </TurnesButton>
                 <p className="text-xs text-zinc-500 mt-3 text-center md:text-left">

@@ -54,10 +54,14 @@ const RateEmployerModal = ({ isOpen, onClose, application, onRatingSuccess }) =>
                 <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center p-0 md:p-4">
                     {/* Backdrop */}
                     <motion.div
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         onClick={!isSubmitting ? onClose : undefined}
                         className="absolute inset-0 bg-black/70 backdrop-blur-md"
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={!isSubmitting ? onClose : undefined} />
 
                     {/* Modal Panel Orchestrator */}
                     <motion.div

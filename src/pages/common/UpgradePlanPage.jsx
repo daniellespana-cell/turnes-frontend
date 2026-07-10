@@ -85,7 +85,8 @@ const UpgradePlanPage = () => {
             onClick={() => navigate(-1)}
             className="p-3 text-zinc-400 hover:text-white bg-transparent hover:bg-white/5 rounded-full transition-all group flex items-center justify-center backdrop-blur-sm"
             title="Volver"
-            type="button">
+            type="button"
+            aria-label="Acción">
             <ArrowRight className="rotate-180 group-hover:-translate-x-1 transition-transform drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" size={24} />
           </button>
         </div>

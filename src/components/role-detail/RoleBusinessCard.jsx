@@ -21,7 +21,6 @@ const RoleBusinessCard = ({ rol }) => {
             <p className="text-sm text-zinc-400 mb-8 leading-relaxed">
                 ¿Necesitas un <strong>{rol.title}</strong> para este fin de semana? Publícalo ya y recibe candidatos verificados en minutos.
             </p>
-
             <div className="space-y-4 mb-8">
                 <div className="flex items-center gap-3 text-sm text-zinc-300">
                     <div className="w-2 h-2 bg-indigo-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)]"></div>
@@ -36,14 +35,15 @@ const RoleBusinessCard = ({ rol }) => {
                     <span>Garantía de cumplimiento.</span>
                 </div>
             </div>
-
             <TurnesButton
                 onClick={() => navigate('/precios')}
                 variant="secondary"
                 size="md"
                 className="w-full"
                 icon={ArrowRight}
-            >
+                role="button"
+                tabIndex={0}
+                onKeyDown={() => navigate('/precios')}>
                 Ver Planes de Empresa
             </TurnesButton>
         </motion.div>

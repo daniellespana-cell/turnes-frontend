@@ -46,24 +46,23 @@ const EmptyState = ({
           <Icon size={40} className="text-zinc-500 group-hover:text-purple-400 transition-colors duration-500" />
         </div>
       </div>
-
       <h3 className="text-zinc-300 font-bold text-lg uppercase tracking-widest text-center max-w-md mx-auto">
         {title}
       </h3>
-
       {description && (
         <p className="text-zinc-500 text-sm text-center max-w-sm mx-auto mt-3 leading-relaxed">
           {description}
         </p>
       )}
-
       {actionLabel && onAction && (
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onAction}
           className="mt-8 px-6 py-2.5 rounded-full bg-zinc-100 text-black font-bold text-xs uppercase tracking-[0.15em] hover:bg-white hover:shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] transition-all duration-300"
-        >
+          role="button"
+          tabIndex={0}
+          onKeyDown={onAction}>
           {actionLabel}
         </motion.button>
       )}

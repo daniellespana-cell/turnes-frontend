@@ -29,7 +29,9 @@ const VerificationBanner = ({ verifyPrice = null }) => {
             transition={{ delay: 0.1 }}
             className="w-full relative overflow-hidden rounded-2xl p-[1px] group cursor-pointer"
             onClick={() => navigate(route)}
-        >
+            role="button"
+            tabIndex={0}
+            onKeyDown={() => navigate(route)}>
             {/* Borde Gradiente Animado */}
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-emerald-400 to-purple-500 opacity-50 group-hover:opacity-100 transition-opacity duration-500 bg-[length:200%_auto] animate-gradient" />
             <div className="relative bg-[#09090b] rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden">

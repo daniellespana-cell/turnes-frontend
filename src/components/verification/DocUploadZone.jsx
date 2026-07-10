@@ -23,7 +23,9 @@ const DocUploadZone = ({ docType, file, progress, onFileSelect, onRemoveFile, on
                   'border-zinc-800 bg-zinc-950 hover:border-zinc-600 hover:bg-zinc-900/30 cursor-pointer'}
                 ${disabled ? 'pointer-events-none opacity-60' : ''}
             `}
-        >
+            role="button"
+            tabIndex={0}
+            onKeyDown={() => !disabled && !file && inputRef.current?.click()}>
             <input
                 ref={inputRef}
                 type="file"
@@ -51,7 +53,8 @@ const DocUploadZone = ({ docType, file, progress, onFileSelect, onRemoveFile, on
                                     onClick={(e) => onRemoveFile(e, docType.id)}
                                     className="p-1 rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-400/80 hover:text-red-400 transition-colors z-10 focus:outline-none"
                                     title="Remover documento"
-                                    type="button">
+                                    type="button"
+                                    aria-label="Acción">
                                     <X size={12} strokeWidth={3} />
                                 </button>
                             )}

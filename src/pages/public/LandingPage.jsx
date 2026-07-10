@@ -22,7 +22,7 @@ const LandingPage = () => {
         description="Conectamos a los mejores profesionales de hospitalidad y construcción con empresas que exigen excelencia. Turnos rápidos, seguros y verificados." 
       />
       <Navbar />
-      <main className="lp-main-content flex-grow" role="main">
+      <main className="lp-main-content flex-grow">
         <Hero />
         <ValueProps />
         <Suspense fallback={<LoadingSpinner />}>

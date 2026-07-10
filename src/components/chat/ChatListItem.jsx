@@ -52,7 +52,9 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                     : 'bg-transparent border-transparent hover:bg-zinc-900/50 hover:border-white/5'
                 }
             `}
-        >
+            role="button"
+            tabIndex={0}
+            onKeyDown={onClick}>
             {/* Avatar Sutil (40px) */}
             <div className="relative shrink-0">
                 <img
@@ -137,7 +139,12 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                                 e.stopPropagation();
                                 setIsMenuOpen(false);
                             }}
-                        />
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                            }} />
                         <div className="absolute right-0 top-full mt-1 w-48 bg-[#0a0a09]/95 backdrop-blur-xl border border-transparent rounded-xl  py-1 z-50 overflow-hidden text-left origin-top-right animate-in fade-in zoom-in duration-200">
                             <button
                                 onClick={(e) => {

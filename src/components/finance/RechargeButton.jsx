@@ -20,7 +20,8 @@ const RechargeButton = ({ className = '' }) => {
         w-9 h-9 rounded-full bg-zinc-900/80 border border-brand-success/40 shadow-[0_0_16px_rgba(16,185,129,0.15)] md:w-auto
         ${className}`}
       title="Recargar Saldo"
-      type="button">
+      type="button"
+      aria-label="Acción">
       <PlusCircle size={18} className="relative z-10 text-brand-success md:text-white" strokeWidth={2.5} />
       <span className="hidden md:block relative z-10">Recargar Saldo</span>
       <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1s_infinite] z-0" />

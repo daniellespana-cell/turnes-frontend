@@ -78,10 +78,12 @@ const ModalidadSelector = ({ selectedType, onChange, userPlan = 'Plan Básico', 
       </div>
       {/* Upgrade: Menos banner, más invitación sutil */}
       {!isMaxPlan ? (
-        <div 
+        <div
           className="flex items-center justify-between px-2 py-1 cursor-pointer group opacity-60 hover:opacity-100 transition-opacity"
           onClick={() => navigate('/dashboard/upgrade')}
-        >
+          role="button"
+          tabIndex={0}
+          onKeyDown={() => navigate('/dashboard/upgrade')}>
           <div className="flex items-center gap-3">
             <Sparkles size={14} className="text-purple-400" />
             <p className="text-xs font-medium text-zinc-400">

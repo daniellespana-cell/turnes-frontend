@@ -100,7 +100,7 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
           onClick={() => setShowTips(!showTips)}
           className={`p-1.5 transition-all duration-300 rounded-full ${showTips ? 'bg-zinc-800/80' : 'hover:bg-zinc-800/40'} ${isInputDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           title="Sugerencias rápidas"
-        >
+          aria-label="Acción">
           <Lightbulb size={14} className={showTips ? 'fill-yellow-500/20 text-yellow-500' : 'text-zinc-500'} strokeWidth={2} />
         </button>
 

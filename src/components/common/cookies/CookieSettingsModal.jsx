@@ -45,7 +45,9 @@ export const CookieSettingsModal = ({ isOpen, onClose }) => {
                         exit={{ opacity: 0 }}
                         onClick={onClose}
                         className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={onClose} />
 
                     {/* Side Panel (Ultra-Light & Fixed Width) */}
                     <motion.div
@@ -120,10 +122,12 @@ export const CookieSettingsModal = ({ isOpen, onClose }) => {
 };
 
 const CookieOption = ({ icon, title, description, checked, onChange, disabled = false }) => (
-    <div 
+    <div
         onClick={!disabled ? onChange : undefined}
         className={`group cursor-pointer transition-all ${disabled ? 'opacity-50' : 'hover:translate-x-1'}`}
-    >
+        role="button"
+        tabIndex={0}
+        onKeyDown={!disabled ? onChange : undefined}>
         <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${checked ? 'bg-emerald-500/10 text-emerald-500' : 'bg-zinc-900 text-zinc-600'}`}>
                 {icon}

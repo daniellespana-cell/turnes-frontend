@@ -107,7 +107,9 @@ const ExploreHeader = ({
                             cat={cat}
                             isActive={activeCategory === cat.id}
                             onClick={() => setActiveCategory(activeCategory === cat.id && cat.id !== 'TODOS' ? 'TODOS' : cat.id)}
-                        />
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={() => setActiveCategory(activeCategory === cat.id && cat.id !== 'TODOS' ? 'TODOS' : cat.id)} />
                     ))}
                 </div>
             </div>

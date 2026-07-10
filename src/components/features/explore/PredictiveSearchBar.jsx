@@ -34,7 +34,8 @@ const PredictiveSearchBar = ({ value, onChange, onSelectSuggestion, onClear }) =
                     }`}
                     disabled={!value.trim()}
                     title="Buscar"
-                    type="button">
+                    type="button"
+                    aria-label="Acción">
                     <Search size={14} strokeWidth={3} />
                 </button>
                 <input

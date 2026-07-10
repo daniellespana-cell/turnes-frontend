@@ -31,9 +31,9 @@ const ExploreSectionedList = ({ sections, setActiveCategory, onApply, onOpenDeta
                     </button>
                 </div>
 
-                <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 pt-6 px-1 no-scrollbar scroll-smooth snap-x" role="list" aria-label={`Vacantes de ${section.label}`}>
+                <ul className="flex overflow-x-auto gap-4 md:gap-6 pb-4 pt-6 px-1 no-scrollbar scroll-smooth snap-x" aria-label={`Vacantes de ${section.label}`}>
                     {section.vacancies.map(vacancy => (
-                        <div key={vacancy.id} className="w-[280px] md:w-[320px] shrink-0 snap-start" role="listitem">
+                        <li key={vacancy.id} className="w-[280px] md:w-[320px] shrink-0 snap-start">
                             <VacancyCard
                                 vacancy={vacancy}
                                 onApply={onApply}
@@ -42,9 +42,9 @@ const ExploreSectionedList = ({ sections, setActiveCategory, onApply, onOpenDeta
                                 isApplying={isApplying === vacancy.id}
                                 isApplied={appliedIds.has(vacancy.id)}
                             />
-                        </div>
+                        </li>
                     ))}
-                </div>
+                </ul>
             </section>
         ))}
     </motion.div>

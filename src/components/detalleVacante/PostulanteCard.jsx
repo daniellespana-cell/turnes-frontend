@@ -32,7 +32,9 @@ export const PostulanteCard = ({ cand, isSelected, isAnyHired, isProcessing, onC
           <div
             onClick={onViewProfile}
             className="flex items-center gap-2 cursor-pointer group flex-1 min-w-0"
-          >
+            role="button"
+            tabIndex={0}
+            onKeyDown={onViewProfile}>
             <div className="relative shrink-0">
               <img src={AssetResolver.getAvatar(cand.avatar_url || cand.avatar, cand.name || 'Candidato')} className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-transparent bg-zinc-800 group-hover:border-white/30 transition-colors" alt="" />
               {/* VERIFIED BADGE (Standardized) */}

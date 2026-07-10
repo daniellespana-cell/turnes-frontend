@@ -72,7 +72,9 @@ const ChatActionModal = ({ isOpen, onClose, onConfirm, actionType, candidateName
                 className={`fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300 ${isAnimating ? 'opacity-100' : 'opacity-0'
                     }`}
                 onClick={!isLoading ? onClose : undefined}
-            />
+                role="button"
+                tabIndex={0}
+                onKeyDown={!isLoading ? onClose : undefined} />
 
             {/* Contenedor Modal Modal Glassmorphism */}
             <div

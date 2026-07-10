@@ -102,7 +102,9 @@ const CompanyProfileModal = ({ isOpen, onClose, companyId }) => {
                         onClick={onClose}
                         className="fixed inset-0 bg-black/90 backdrop-blur-md cursor-pointer"
                         style={{ zIndex: 1000000 }}
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={onClose} />
 
                     {/* Panel del Perfil (Slide desde la derecha) */}
                     <motion.div

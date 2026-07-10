@@ -121,7 +121,8 @@ const ProfileBanner = () => {
                                 onClick={() => setIsVisible(false)}
                                 className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-500 hover:text-white transition-all active:scale-95"
                                 title="Descartar"
-                                type="button">
+                                type="button"
+                                aria-label="Acción">
                                 <X size={24} />
                             </button>
                         </div>

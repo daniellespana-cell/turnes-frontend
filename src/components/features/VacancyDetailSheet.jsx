@@ -40,11 +40,15 @@ const VacancyDetailSheet = ({ vacancy, isOpen, onClose, onApply, onCompanyClick,
                     {/* Backdrop */}
                     <motion.div
                         key="sheet-backdrop"
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm"
                         onClick={onClose}
                         aria-hidden="true"
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={onClose} />
 
                     {/* Wrapper Flex para centrado perfecto */}
                     <div className="fixed inset-0 z-[9999] flex justify-center items-end md:items-center pointer-events-none sm:p-4">

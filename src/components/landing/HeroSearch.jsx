@@ -48,7 +48,7 @@ const HeroSearch = () => {
                 ¿Qué talento buscas hoy?
             </h3>
 
-            <form onSubmit={handleSearch} className="relative group cursor-pointer" onClick={handleSearch}>
+            <form onSubmit={handleSearch} className="relative group">
                 <input
                     type="text"
                     readOnly

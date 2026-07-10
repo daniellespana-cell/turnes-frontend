@@ -63,7 +63,12 @@ export const CardFooter = ({
                         ? '!bg-zinc-800 !text-zinc-500' 
                         : 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-[0_4px_15px_rgba(16,185,129,0.3)] hover:shadow-emerald-500/40 active:scale-95'}
                 `}
-            >
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                    e.stopPropagation();
+                    if (!isApplied) onApply?.(vacancy.id);
+                }}>
                 {isApplying ? '...' : isApplied ? (
                     <span className="flex items-center justify-center gap-1">
                         <Check size={12} strokeWidth={3} aria-hidden="true" /> Postulado

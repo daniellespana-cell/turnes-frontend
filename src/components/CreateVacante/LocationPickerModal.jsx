@@ -38,7 +38,9 @@ const LocationPickerModal = (props) => {
                         transition={{ duration: 0.2 }}
                         className="absolute inset-0 bg-black/80 backdrop-blur-md"
                         onClick={onClose}
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={onClose} />
 
                     {/* MODAL — opacity-only animation para no interferir con Leaflet */}
                     <motion.div

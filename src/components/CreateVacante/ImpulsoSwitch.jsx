@@ -30,7 +30,9 @@ const ImpulsoSwitch = ({ isUrgent, onChange, precio = 7000 }) => {
               ? 'bg-gradient-to-r from-blue-600 to-purple-600'
               : 'bg-zinc-800'
           }`}
-        >
+          role="button"
+          tabIndex={0}
+          onKeyDown={() => onChange(!isUrgent)}>
           <div
             className={`w-6 h-6 bg-white rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.3)] transition-all duration-500 cubic-bezier(0.68, -0.55, 0.27, 1.55) transform ${
               isUrgent ? 'translate-x-8 scale-110' : 'translate-x-0'
@@ -38,7 +40,6 @@ const ImpulsoSwitch = ({ isUrgent, onChange, precio = 7000 }) => {
           />
         </div>
       </div>
-
       <div className="space-y-2">
         <p className="text-sm text-zinc-400 leading-snug font-medium">
           Prioridad máxima: tu vacante aparecerá en el top de búsquedas durante 24 horas.

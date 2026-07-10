@@ -67,7 +67,9 @@ const IndustrialProfileSection = ({
                                                 }
                                                 ${!isEditing ? 'cursor-default opacity-80' : ''}
                                             `}
-                                        >
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={() => isEditing && handleSkillToggle(role.label)}>
                                             <div className={`
                                                 w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 transition-all
                                                 ${isSelected ? 'bg-emerald-500 border-emerald-400' : 'border-zinc-700 bg-zinc-800'}
@@ -103,7 +105,9 @@ const IndustrialProfileSection = ({
                                                 }
                                                 ${!isEditing ? 'cursor-default opacity-80' : ''}
                                             `}
-                                        >
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={() => isEditing && handleSkillToggle(skill.label)}>
                                             <div className={`
                                                 w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 transition-all
                                                 ${isSelected ? 'bg-emerald-500 border-emerald-400' : 'border-zinc-700 bg-zinc-800'}

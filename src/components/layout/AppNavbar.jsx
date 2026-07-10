@@ -62,7 +62,8 @@ const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
               onClick={() => navigate('/dashboard/chats')}
               className={iconBtnClass}
               title="Mensajes"
-              type="button">
+              type="button"
+              aria-label="Acción">
               <MessageCircle
                 className={iconSvgClass}
                 strokeWidth={2.5}
@@ -93,7 +94,8 @@ const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
                 onClick={() => navigate("/dashboard/upgrade")}
                 title="Hazte Premium"
                 className="shrink-0 group relative flex items-center justify-center focus:outline-none active:scale-90 transition-transform duration-200"
-                type="button">
+                type="button"
+                aria-label="Acción">
                 {/* Mobile: icono solo */}
                 <span className="md:hidden relative flex items-center justify-center w-9 h-9 rounded-full">
                   <span className="absolute inset-0 rounded-full bg-amber-500/20 animate-ping opacity-60" style={{ animationDuration: '2.5s' }} />

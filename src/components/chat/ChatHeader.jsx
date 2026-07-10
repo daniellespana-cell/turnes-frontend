@@ -16,7 +16,8 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
           onClick={() => navigate('/dashboard/chats')}
           className="p-2 -ml-2 text-zinc-600 hover:text-white transition-all active:scale-90 group relative"
           title="Volver"
-          type="button">
+          type="button"
+          aria-label="Acción">
           <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
         </button>
 
@@ -55,7 +56,8 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
             onClick={onVideoInvite}
             className="p-2 text-zinc-600 hover:text-emerald-500 transition-all group active:scale-90"
             title="Iniciar Cita por Video"
-            type="button">
+            type="button"
+            aria-label="Acción">
             <Video size={16} className="group-hover:scale-110 transition-transform" />
           </button>
         ) : (

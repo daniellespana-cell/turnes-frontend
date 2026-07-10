@@ -45,7 +45,7 @@ const EliteVerifiedCard = ({ note, onClick, onDelete }) => (
             onClick={() => onClick(note)}
             role="button"
             tabIndex={0}
-        >
+            onKeyDown={() => onClick(note)}>
             {/* Glow decorativo */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-2xl rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
@@ -99,7 +99,15 @@ const EliteVerifiedCard = ({ note, onClick, onDelete }) => (
 const NotificationItem = ({ note, isLast, onClick, onDelete }) => {
     // Render especial para verificación Elite
     if (note.tipo === 'VERIFICATION_APPROVED') {
-        return <EliteVerifiedCard note={note} onClick={onClick} onDelete={onDelete} />;
+        return (
+            <EliteVerifiedCard
+                note={note}
+                onClick={onClick}
+                onDelete={onDelete}
+                role="button"
+                tabIndex={0}
+                onKeyDown={onClick} />
+        );
     }
 
     const unread = !note.leida;
@@ -126,7 +134,7 @@ const NotificationItem = ({ note, isLast, onClick, onDelete }) => {
                 onClick={() => onClick(note)}
                 role="button"
                 tabIndex={0}
-            >
+                onKeyDown={() => onClick(note)}>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 mb-1.5">
                     <h3 className={`text-sm font-bold leading-snug ${unread ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-200'}`}>
                         <span className="mr-1.5">{note.icon}</span>{note.title}
@@ -149,7 +157,8 @@ const NotificationItem = ({ note, isLast, onClick, onDelete }) => {
                         onClick={(e) => { e.stopPropagation(); onDelete(note.id); }}
                         className="p-1.5 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors opacity-60 sm:opacity-0 group-hover:opacity-100 focus:opacity-100"
                         title="Eliminar notificación"
-                        type="button">
+                        type="button"
+                        aria-label="Acción">
                         <Trash2 size={16} />
                     </button>
                 )}

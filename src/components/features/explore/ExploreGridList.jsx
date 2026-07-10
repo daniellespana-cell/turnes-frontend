@@ -39,13 +39,12 @@ const ExploreGridList = ({ vacancies, onApply, onOpenDetail, onCompanyClick, isA
         key="list"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
     >
-        <div 
+        <ul 
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 pb-8 pt-6"
-            role="list"
             aria-label="Lista de vacantes"
         >
             {vacancies.map(vacancy => (
-                <div key={vacancy.id} role="listitem">
+                <li key={vacancy.id}>
                     <VacancyCard
                         vacancy={vacancy}
                         onApply={onApply}
@@ -54,15 +53,17 @@ const ExploreGridList = ({ vacancies, onApply, onOpenDetail, onCompanyClick, isA
                         isApplying={isApplying === vacancy.id}
                         isApplied={appliedIds.has(vacancy.id)}
                     />
-                </div>
+                </li>
             ))}
-        </div>
+        </ul>
         
-        <LoadMoreButton 
-            onClick={loadMore} 
-            loading={loading} 
-            hasMore={hasMore} 
-        />
+        <LoadMoreButton
+            onClick={loadMore}
+            loading={loading}
+            hasMore={hasMore}
+            role="button"
+            tabIndex={0}
+            onKeyDown={loadMore} />
     </motion.div>
 );
 

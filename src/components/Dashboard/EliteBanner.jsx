@@ -83,7 +83,8 @@ const EliteBanner = ({ userName }) => {
                         onClick={handleDismiss}
                         className="absolute top-4 right-4 p-1.5 text-zinc-500 hover:text-zinc-200 hover:bg-white/8 rounded-lg transition-colors z-10"
                         title="Entendido, no mostrar de nuevo"
-                        type="button">
+                        type="button"
+                        aria-label="Acción">
                         <X size={14} />
                     </button>
 

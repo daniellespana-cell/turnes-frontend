@@ -27,7 +27,8 @@ const PendingRatingsList = ({ pendingRatings = [], onRate, onDismiss }) => {
                             }}
                             className="absolute top-4 right-4 p-1.5 text-zinc-700 hover:text-white hover:bg-white/5 rounded-full transition-all"
                             title="Descartar esta calificación"
-                            type="button">
+                            type="button"
+                            aria-label="Acción">
                             <X size={14} />
                         </button>
 

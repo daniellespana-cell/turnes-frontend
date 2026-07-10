@@ -125,7 +125,9 @@ const RadarCard = ({ candidate, idx, onView }) => {
             onMouseLeave={() => setIsHovered(false)}
             onClick={onView}
             className="group relative min-w-[290px] md:min-w-[340px] snap-center cursor-pointer select-none"
-        >
+            role="button"
+            tabIndex={0}
+            onKeyDown={onView}>
             {/* Card Body */}
             <div className={`
                 relative rounded-3xl p-5 md:p-6 overflow-hidden transition-all duration-500

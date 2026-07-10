@@ -64,14 +64,18 @@ const NavAccount = () => {
               to="/dashboard/perfil"
               className="block px-4 py-2 text-sm text-white/80 hover:bg-brand-success/10 hover:text-brand-success transition-colors"
               onClick={() => setIsOpen(false)}
-            >
+              role="button"
+              tabIndex={0}
+              onKeyDown={() => setIsOpen(false)}>
               Mi Perfil
             </Link>
             <Link
               to="/configuracion"
               className="block px-4 py-2 text-sm text-white/80 hover:bg-brand-success/10 transition-colors"
               onClick={() => setIsOpen(false)}
-            >
+              role="button"
+              tabIndex={0}
+              onKeyDown={() => setIsOpen(false)}>
               Configuración
             </Link>
           </div>

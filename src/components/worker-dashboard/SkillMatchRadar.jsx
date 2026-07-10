@@ -53,7 +53,6 @@ const SkillMatchRadar = ({ companies, loading }) => {
         >
             {/* Background glow */}
             <div className="absolute -top-12 -left-12 w-48 h-48 bg-cyan-500/5 blur-[60px] rounded-full pointer-events-none" />
-
             <div className="flex items-center justify-between relative z-10">
                 <div className="flex items-center gap-2">
                     <Sparkles size={14} className="text-cyan-400" />
@@ -62,7 +61,6 @@ const SkillMatchRadar = ({ companies, loading }) => {
                     </h3>
                 </div>
             </div>
-
             <div className="space-y-2.5 relative z-10">
                 {companies.map((company, i) => (
                     <motion.div
@@ -72,7 +70,9 @@ const SkillMatchRadar = ({ companies, loading }) => {
                         transition={{ delay: 0.4 + i * 0.12 }}
                         onClick={() => navigate('/dashboard/explorar')}
                         className="group flex items-center gap-3.5 p-3 rounded-2xl bg-zinc-800/30 hover:bg-zinc-800/60 border border-transparent hover:border-cyan-500/10 transition-all duration-300 cursor-pointer"
-                    >
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={() => navigate('/dashboard/explorar')}>
                         {/* Logo */}
                         <div className="relative shrink-0">
                             <div className="w-11 h-11 rounded-xl overflow-hidden bg-zinc-800 ring-1 ring-white/5">

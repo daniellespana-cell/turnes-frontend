@@ -139,7 +139,12 @@ const LoginForm = () => {
                 <div className="flex-grow border-t border-zinc-800"></div>
             </div>
             {/* SOCIAL */}
-            <GoogleButton onClick={handleGoogleLogin} disabled={isLoading} />
+            <GoogleButton
+                onClick={handleGoogleLogin}
+                disabled={isLoading}
+                role="button"
+                tabIndex={0}
+                onKeyDown={handleGoogleLogin} />
         </div>
     );
 };

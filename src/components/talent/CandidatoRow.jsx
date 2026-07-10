@@ -71,7 +71,8 @@ const CandidatoRow = ({ can, onDismiss }) => {
             onClick={() => navigate(`/dashboard/chat/${can.id}`, { state: { candidato: can } })}
             className="p-2 text-zinc-800 hover:text-blue-500 transition-colors"
             title="Ir al Chat"
-            type="button">
+            type="button"
+            aria-label="Acción">
             <MessageSquare size={16} />
           </button>
           {onDismiss && (
@@ -82,7 +83,8 @@ const CandidatoRow = ({ can, onDismiss }) => {
               }}
               className="p-2 text-zinc-600 hover:text-red-400 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100"
               title="Archivar registro"
-              type="button">
+              type="button"
+              aria-label="Acción">
               <X size={18} />
             </button>
           )}

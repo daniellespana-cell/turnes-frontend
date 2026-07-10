@@ -89,7 +89,16 @@ const VerificationQueuePage = () => {
                                 ) : filteredQueue.map((req, idx) => {
                                     const { sc, StatusIcon, name, role, docs } = renderRow(req);
                                     return (
-                                        <motion.tr key={req.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} onClick={() => navigate(`/admin/verificaciones/${req.id}`)} className="border-b border-white/5 hover:bg-white/[0.02] cursor-pointer group">
+                                        <motion.tr
+                                            key={req.id}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: idx * 0.05 }}
+                                            onClick={() => navigate(`/admin/verificaciones/${req.id}`)}
+                                            className="border-b border-white/5 hover:bg-white/[0.02] cursor-pointer group"
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={() => navigate(`/admin/verificaciones/${req.id}`)}>
                                             <td className="px-6 py-4"><div className="flex items-center gap-3"><div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center shrink-0">{req.perfiles?.avatar_url ? <img src={AssetResolver.getAvatar(req.perfiles.avatar_url)} className="w-full h-full object-cover rounded-lg" alt={name} /> : <span className="text-xs">{role === 'empresa' ? '🏢' : '👤'}</span>}</div><div><p className="text-sm font-bold text-white">{name}</p><p className="text-[10px] text-zinc-500 mt-0.5">ID: {req.id.split('-')[0]}</p></div></div></td>
                                             <td className="px-6 py-4"><span className="text-xs font-bold text-zinc-300 capitalize">{role}</span></td>
                                             <td className="px-6 py-4"><p className="text-xs text-white">{new Date(req.created_at).toLocaleDateString('es-CO')}</p><p className="text-[10px] text-zinc-500">{new Date(req.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</p></td>
@@ -110,7 +119,15 @@ const VerificationQueuePage = () => {
                         : <div className="divide-y divide-white/5">{filteredQueue.map(req => {
                             const { sc, StatusIcon, name, role, docs } = renderRow(req);
                             return (
-                                <motion.div key={req.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => navigate(`/admin/verificaciones/${req.id}`)} className="p-5 flex flex-col gap-4 cursor-pointer hover:bg-white/[0.02]">
+                                <motion.div
+                                    key={req.id}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    onClick={() => navigate(`/admin/verificaciones/${req.id}`)}
+                                    className="p-5 flex flex-col gap-4 cursor-pointer hover:bg-white/[0.02]"
+                                    role="button"
+                                    tabIndex={0}
+                                    onKeyDown={() => navigate(`/admin/verificaciones/${req.id}`)}>
                                     <div className="flex justify-between items-start">
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center shrink-0">{req.perfiles?.avatar_url ? <img src={AssetResolver.getAvatar(req.perfiles.avatar_url)} className="w-full h-full object-cover rounded-lg" alt={name} /> : <span>{role === 'empresa' ? '🏢' : '👤'}</span>}</div>

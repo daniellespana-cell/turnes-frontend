@@ -103,7 +103,8 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate, onCancel }) => 
                         onClick={(e) => { e.stopPropagation(); onCancel?.(app.id); }}
                         className="text-zinc-500/70 md:text-zinc-500/0 md:group-hover:text-red-500/70 p-2 bg-transparent hover:bg-red-500/10 rounded-lg hover:scale-105 active:scale-95 transition-all hover:text-red-500"
                         title="Cancelar postulación"
-                        type="button">
+                        type="button"
+                        aria-label="Acción">
                         <X size={16} strokeWidth={2.5} />
                     </button>
                 </div>
@@ -176,7 +177,8 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate, onCancel }) => 
                             onClick={onChat}
                             className="text-brand-primary p-2 hover:bg-brand-primary/10 rounded-lg hover:scale-105 active:scale-95 transition-all"
                             title="Ir al chat con la empresa"
-                            type="button">
+                            type="button"
+                            aria-label="Acción">
                             <MessageCircle size={16} strokeWidth={2.5} />
                         </button>
                     )}

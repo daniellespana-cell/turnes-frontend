@@ -29,7 +29,9 @@ const BaseSidebar = ({ menuItems, isExpanded, setIsExpanded, isMobileOpen, setIs
                 <div
                     className="md:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[110] animate-in fade-in duration-300"
                     onClick={() => setIsMobileOpen(false)}
-                />
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={() => setIsMobileOpen(false)} />
             )}
             {/* SIDEBAR CORE: Borde Brillante Estilo Gemini */}
             <aside
@@ -66,78 +68,80 @@ const BaseSidebar = ({ menuItems, isExpanded, setIsExpanded, isMobileOpen, setIs
                         const count = item.badgeId ? getBadgeCount(item.badgeId) : null;
                         
                         return (
-                        <NavLink
-                            key={item.path}
-                            to={item.path}
-                            end={item.exact || item.path === PATHS.BUSINESS.DASHBOARD || item.path === PATHS.BUSINESS.VACANCIES}
-                            onClick={() => setIsMobileOpen(false)}
-                            className={({ isActive }) => `
-                                flex items-center rounded-xl transition-all duration-500 group relative overflow-hidden mb-1
-                                ${(isExpanded || isMobileOpen) ? 'px-4 py-3.5 md:py-4 space-x-4' : 'p-3 md:p-3.5 justify-center'}
-                                ${isActive
-                                    ? 'bg-white/5 text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] ring-1 ring-white/10'
-                                    : 'text-zinc-500 hover:bg-white/[0.02] hover:text-zinc-200'
-                                } 
-                            `}
-                        >
-                            {({ isActive }) => (
-                                <>
-                                    {/* Sutil Borde de Luz en Activo */}
-                                    {isActive && (
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent pointer-events-none" />
-                                    )}
-
-                                    <div className="relative">
-                                        <item.icon
-                                            size={20}
-                                            className={`shrink-0 transition-all duration-500 relative z-10 ${isActive ? 'text-emerald-400' : 'text-zinc-600 group-hover:text-zinc-300 group-hover:scale-110'}`}
-                                            style={{
-                                                filter: isActive
-                                                    ? 'drop-shadow(0 0 10px rgba(16,185,129,0.4))'
-                                                    : 'none'
-                                            }}
-                                        />
-                                        {/* Badge Móvil/Contraído */}
-                                        {count > 0 && !(isExpanded || isMobileOpen) && (
-                                            <span className="absolute -top-1.5 -right-1.5 flex h-3.5 w-3.5">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-[#07080a]"></span>
-                                            </span>
+                            <NavLink
+                                key={item.path}
+                                to={item.path}
+                                end={item.exact || item.path === PATHS.BUSINESS.DASHBOARD || item.path === PATHS.BUSINESS.VACANCIES}
+                                onClick={() => setIsMobileOpen(false)}
+                                className={({ isActive }) => `
+                                    flex items-center rounded-xl transition-all duration-500 group relative overflow-hidden mb-1
+                                    ${(isExpanded || isMobileOpen) ? 'px-4 py-3.5 md:py-4 space-x-4' : 'p-3 md:p-3.5 justify-center'}
+                                    ${isActive
+                                        ? 'bg-white/5 text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] ring-1 ring-white/10'
+                                        : 'text-zinc-500 hover:bg-white/[0.02] hover:text-zinc-200'
+                                    } 
+                                `}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={() => setIsMobileOpen(false)}>
+                                {({ isActive }) => (
+                                    <>
+                                        {/* Sutil Borde de Luz en Activo */}
+                                        {isActive && (
+                                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent pointer-events-none" />
                                         )}
-                                    </div>
 
-                                    {(isExpanded || isMobileOpen) && (
-                                        <span className={`flex-1 text-[14px] font-sans font-medium tracking-normal truncate animate-in slide-in-from-left-4 relative z-10 flex items-center justify-between ${isActive ? 'text-white font-semibold' : 'text-zinc-400 group-hover:text-zinc-200'}`} style={{ fontFamily: "'Google Sans', 'Inter', system-ui, sans-serif" }}>
-                                            <span className="truncate capitalize">{item.name.toLowerCase()}</span>
-                                            {/* Badge Extendido */}
-                                            {count > 0 && (
-                                                 <span className="bg-emerald-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-lg ml-2 shrink-0">
-                                                    {count > 99 ? '99+' : count}
-                                                </span>
-                                            )}
-                                        </span>
-                                    )}
-
-                                    {/* INDICADOR ACTIVO ESTILO GEMINI */}
-                                    {isActive && (
-                                        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-emerald-400 to-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
-                                    )}
-
-                                    {/* TOOLTIP COLAPSADO (SOLO DESKTOP) */}
-                                    {!isExpanded && !isMobileOpen && (
-                                        <div className="hidden md:flex fixed left-[5.5rem] px-4 py-2.5 bg-[#0a0a0a] backdrop-blur-2xl text-white text-[13px] font-sans font-medium rounded-xl opacity-0 group-hover:opacity-100 border border-white/10 shadow-2xl transition-all duration-300 translate-x-[-10px] group-hover:translate-x-0 pointer-events-none whitespace-nowrap z-[130] items-center gap-3 capitalize" style={{ fontFamily: "'Google Sans', 'Inter', system-ui, sans-serif" }}>
-                                            {item.name.toLowerCase()}
-                                            {count > 0 && (
-                                                <span className="bg-emerald-500 text-black px-1.5 rounded-md">
-                                                    {count}
+                                        <div className="relative">
+                                            <item.icon
+                                                size={20}
+                                                className={`shrink-0 transition-all duration-500 relative z-10 ${isActive ? 'text-emerald-400' : 'text-zinc-600 group-hover:text-zinc-300 group-hover:scale-110'}`}
+                                                style={{
+                                                    filter: isActive
+                                                        ? 'drop-shadow(0 0 10px rgba(16,185,129,0.4))'
+                                                        : 'none'
+                                                }}
+                                            />
+                                            {/* Badge Móvil/Contraído */}
+                                            {count > 0 && !(isExpanded || isMobileOpen) && (
+                                                <span className="absolute -top-1.5 -right-1.5 flex h-3.5 w-3.5">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                                    <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-[#07080a]"></span>
                                                 </span>
                                             )}
                                         </div>
-                                    )}
-                                </>
-                            )}
-                        </NavLink>
-                    )})}
+
+                                        {(isExpanded || isMobileOpen) && (
+                                            <span className={`flex-1 text-[14px] font-sans font-medium tracking-normal truncate animate-in slide-in-from-left-4 relative z-10 flex items-center justify-between ${isActive ? 'text-white font-semibold' : 'text-zinc-400 group-hover:text-zinc-200'}`} style={{ fontFamily: "'Google Sans', 'Inter', system-ui, sans-serif" }}>
+                                                <span className="truncate capitalize">{item.name.toLowerCase()}</span>
+                                                {/* Badge Extendido */}
+                                                {count > 0 && (
+                                                     <span className="bg-emerald-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-lg ml-2 shrink-0">
+                                                        {count > 99 ? '99+' : count}
+                                                    </span>
+                                                )}
+                                            </span>
+                                        )}
+
+                                        {/* INDICADOR ACTIVO ESTILO GEMINI */}
+                                        {isActive && (
+                                            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-emerald-400 to-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
+                                        )}
+
+                                        {/* TOOLTIP COLAPSADO (SOLO DESKTOP) */}
+                                        {!isExpanded && !isMobileOpen && (
+                                            <div className="hidden md:flex fixed left-[5.5rem] px-4 py-2.5 bg-[#0a0a0a] backdrop-blur-2xl text-white text-[13px] font-sans font-medium rounded-xl opacity-0 group-hover:opacity-100 border border-white/10 shadow-2xl transition-all duration-300 translate-x-[-10px] group-hover:translate-x-0 pointer-events-none whitespace-nowrap z-[130] items-center gap-3 capitalize" style={{ fontFamily: "'Google Sans', 'Inter', system-ui, sans-serif" }}>
+                                                {item.name.toLowerCase()}
+                                                {count > 0 && (
+                                                    <span className="bg-emerald-500 text-black px-1.5 rounded-md">
+                                                        {count}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </NavLink>
+                        );})}
                 </nav>
 
                 {/* FOOTER: CONFIGURACIÓN Y CERRAR SESIÓN */}

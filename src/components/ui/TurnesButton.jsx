@@ -42,15 +42,15 @@ const TurnesButton = ({
                 ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'}
                 ${className}
             `}
-        >
+            role="button"
+            tabIndex={0}
+            onKeyDown={onClick}>
             {/* Efecto de Brillo (Glassmorphism Shine) */}
             {!disabled && variant !== 'ghost' && (
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-[800ms] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0 ease-in-out"></div>
             )}
-
             {/* Icono (Opcional) */}
             {Icon && <Icon size={size === 'sm' ? 12 : 16} className="relative z-10" />}
-
             {/* Texto */}
             <span className="relative z-10">{children}</span>
         </motion.button>

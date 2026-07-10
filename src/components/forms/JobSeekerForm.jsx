@@ -81,7 +81,11 @@ const JobSeekerForm = () => {
 
     return (
         <div className="w-full animate-fade-in">
-            <GoogleButton onClick={handleGoogleLogin} />
+            <GoogleButton
+                onClick={handleGoogleLogin}
+                role="button"
+                tabIndex={0}
+                onKeyDown={handleGoogleLogin} />
             <Divider text="o crea tu cuenta" />
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <div className={FormClasses.inputGroup}>

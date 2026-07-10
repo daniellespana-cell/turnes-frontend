@@ -87,7 +87,12 @@ const CompanyForm = () => {
     return (
         <div className="w-full animate-fade-in">
             {/* SOCIAL TOP */}
-            <GoogleButton onClick={handleGoogleLogin} label="Regístrate con Google" />
+            <GoogleButton
+                onClick={handleGoogleLogin}
+                label="Regístrate con Google"
+                role="button"
+                tabIndex={0}
+                onKeyDown={handleGoogleLogin} />
             <Divider text="o registra tu empresa" />
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
 

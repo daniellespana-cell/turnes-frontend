@@ -74,7 +74,9 @@ const IndustrialProfileSection = ({ formData, handleInputChange, handleSkillTogg
                                             }
                                             ${!isEditing ? 'cursor-default opacity-80' : ''}
                                         `}
-                                    >
+                                        role="button"
+                                        tabIndex={0}
+                                        onKeyDown={() => isEditing && handleSkillToggle(skill.label)}>
                                         <div className="flex items-center gap-2 overflow-hidden">
                                             <div className={`
                                                 w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-all

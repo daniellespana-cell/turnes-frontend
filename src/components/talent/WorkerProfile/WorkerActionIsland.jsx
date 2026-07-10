@@ -72,7 +72,9 @@ const WorkerActionIsland = ({ isEditing, setIsEditing, loading, handleSave, hand
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 className="flex items-center gap-3 px-4 py-2 rounded-full group overflow-hidden relative"
-                            >
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={() => setIsEditing(true)}>
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_4s_infinite]" />
 
                                 <div className="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center border border-transparent transition-transform duration-700">

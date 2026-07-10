@@ -32,7 +32,9 @@ const ForgotPasswordPage = () => {
                 transition={{ delay: 0.2 }}
                 onClick={() => navigate('/login')}
                 className="absolute top-8 left-8 flex items-center gap-2 text-zinc-500 hover:text-white transition-all group z-20 text-xs font-medium tracking-wide uppercase"
-            >
+                role="button"
+                tabIndex={0}
+                onKeyDown={() => navigate('/login')}>
                 <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors border border-transparent">
                     <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform text-zinc-400 group-hover:text-white" />
                 </div>

@@ -17,10 +17,11 @@ const SolutionCard = ({ serv, index, onClick }) => {
             transition={{ type: "spring", stiffness: 400, damping: 17, delay: index * 0.1 }}
             onClick={() => onClick(serv)}
             className={`group relative bg-[#050505] border border-transparent p-6 rounded-[2rem] hover:${serv.borderColor} transition-colors flex flex-col justify-between h-full overflow-hidden cursor-pointer shadow-lg`}
-        >
+            role="button"
+            tabIndex={0}
+            onKeyDown={() => onClick(serv)}>
             {/* Super Vibrant Glow (JobToday Style) */}
             <div className={`absolute -top-24 -right-24 w-56 h-56 ${serv.bgColor} blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`} />
-
             <div className="relative z-10 pointer-events-none">
                 <motion.div
                     whileHover={{ rotate: 10, scale: 1.1 }}
@@ -37,7 +38,6 @@ const SolutionCard = ({ serv, index, onClick }) => {
                     {serv.desc}
                 </p>
             </div>
-
             <div className="space-y-4 relative z-10">
                 <div className="flex items-center justify-between border-t border-white/5 pt-4">
                     <div className="flex flex-col">

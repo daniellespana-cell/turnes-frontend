@@ -36,14 +36,16 @@ const AdminLayout = () => {
             {/* Backdrop Mobile Overlay */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
-                    <motion.div 
+                    <motion.div
                         key="mobile-overlay-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden"
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={() => setIsMobileMenuOpen(false)} />
                 )}
             </AnimatePresence>
             {/* Sidebar Superior (Logo & Title) */}

@@ -21,7 +21,15 @@ const Section = ({ label, items, onClick, onDelete }) => {
             <p className="px-6 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-600 border-b border-white/5">{label}</p>
             <AnimatePresence>
                 {items.map((n, i) => (
-                    <NotificationItem key={n.id} note={n} isLast={i === items.length - 1} onClick={onClick} onDelete={onDelete} />
+                    <NotificationItem
+                        key={n.id}
+                        note={n}
+                        isLast={i === items.length - 1}
+                        onClick={onClick}
+                        onDelete={onDelete}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={onClick} />
                 ))}
             </AnimatePresence>
         </div>
@@ -116,8 +124,22 @@ const NotificationsPage = () => {
                 {!loading && notifications.length > 0 && (
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                         className="flex flex-col">
-                        <Section label="Hoy" items={today} onClick={handleClick} onDelete={handleDelete} />
-                        <Section label="Anteriores" items={earlier} onClick={handleClick} onDelete={handleDelete} />
+                        <Section
+                            label="Hoy"
+                            items={today}
+                            onClick={handleClick}
+                            onDelete={handleDelete}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={handleClick} />
+                        <Section
+                            label="Anteriores"
+                            items={earlier}
+                            onClick={handleClick}
+                            onDelete={handleDelete}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={handleClick} />
                     </motion.div>
                 )}
             </div>

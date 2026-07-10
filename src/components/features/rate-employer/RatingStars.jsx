@@ -21,7 +21,9 @@ export const RatingStars = ({ rating, onChange }) => {
                         onMouseEnter={() => setHover(star)}
                         onMouseLeave={() => setHover(0)}
                         className="p-1 group focus:outline-none"
-                    >
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={() => onChange(star)}>
                         <Star
                             size={38}
                             strokeWidth={1.5}
@@ -34,7 +36,6 @@ export const RatingStars = ({ rating, onChange }) => {
                     </motion.button>
                 ))}
             </div>
-            
             <div className="h-4 flex items-center justify-center">
                 <AnimatePresence mode="wait">
                     <motion.span 

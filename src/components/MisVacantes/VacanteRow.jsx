@@ -29,12 +29,16 @@ const VacanteRow = ({ data, onAction }) => {
             icon={<Edit3 size={14} />}
             label="Editar"
             onClick={() => { onAction?.(data.id, 'edit'); setShowMenu(false); }}
-          />
+            role="button"
+            tabIndex={0}
+            onKeyDown={() => { onAction?.(data.id, 'edit'); setShowMenu(false); }} />
           <MenuBtn
             icon={<Copy size={14} />}
             label="Duplicar"
             onClick={() => { onAction?.(data.id, 'duplicate'); setShowMenu(false); }}
-          />
+            role="button"
+            tabIndex={0}
+            onKeyDown={() => { onAction?.(data.id, 'duplicate'); setShowMenu(false); }} />
           <div className="h-px bg-white/5 my-1 mx-2" />
         </>
       )}
@@ -43,7 +47,9 @@ const VacanteRow = ({ data, onAction }) => {
         label="Eliminar"
         danger
         onClick={() => { onAction?.(data.id, 'delete-confirm'); setShowMenu(false); }}
-      />
+        role="button"
+        tabIndex={0}
+        onKeyDown={() => { onAction?.(data.id, 'delete-confirm'); setShowMenu(false); }} />
     </div>
   );
 

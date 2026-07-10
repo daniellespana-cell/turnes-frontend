@@ -18,7 +18,9 @@ export const VacancyDetailFooter = ({ vacancy, onApply, isApplying, isApplied })
                     disabled={isApplying}
                     className="w-full !rounded-2xl !py-3.5 !text-sm !font-bold shadow-[0_8px_24px_rgba(16,185,129,0.25)]"
                     aria-label={`Postularse a ${vacancy.title} en ${vacancy.business}`}
-                >
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={() => onApply(vacancy.id)}>
                     {isApplying ? (
                         <span className="flex items-center gap-2">
                             <Spinner size="sm" variant="white" />

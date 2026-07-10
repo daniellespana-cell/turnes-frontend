@@ -32,7 +32,9 @@ const TalentCard = ({ candidate, onOpenProfile, onDirectInvite }) => {
             onMouseLeave={() => setIsHovered(false)}
             onClick={onOpenProfile}
             className="group relative cursor-pointer"
-        >
+            role="button"
+            tabIndex={0}
+            onKeyDown={onOpenProfile}>
             {/* Card Body */}
             <div className={`
                 relative rounded-[2.5rem] p-6 overflow-hidden transition-all duration-500

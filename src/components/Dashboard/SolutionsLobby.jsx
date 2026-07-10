@@ -30,7 +30,6 @@ export const SolutionsLobby = ({ onCreate }) => {
         price={boostProps.price} 
         isSubmitting={boostProps.isSubmitting}
       />
-
       {/* Header Visual */}
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-2.5">
@@ -46,16 +45,17 @@ export const SolutionsLobby = ({ onCreate }) => {
           </span>
         </div>
       </div>
-
       {/* Grid de Tarjetas Atómicas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {services.map((serv, index) => (
-          <SolutionCard 
-            key={serv.id} 
-            serv={serv} 
-            index={index} 
-            onClick={handleAction} 
-          />
+          <SolutionCard
+            key={serv.id}
+            serv={serv}
+            index={index}
+            onClick={handleAction}
+            role="button"
+            tabIndex={0}
+            onKeyDown={handleAction} />
         ))}
       </div>
     </section>

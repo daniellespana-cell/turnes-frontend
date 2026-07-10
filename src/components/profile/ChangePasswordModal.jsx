@@ -35,7 +35,9 @@ const ChangePasswordModal = ({ isOpen, onClose, onChangePassword, loading }) => 
                     exit={{ opacity: 0 }}
                     className="absolute inset-0 bg-black/80 backdrop-blur-sm"
                     onClick={onClose}
-                />
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={onClose} />
                 <motion.div
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}

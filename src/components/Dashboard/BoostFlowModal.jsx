@@ -52,14 +52,15 @@ const BoostFlowModal = ({
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
       {/* Overlay */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={!isSubmitting ? onClose : undefined}
         className="absolute inset-0 bg-black/90 backdrop-blur-md"
-      />
-
+        role="button"
+        tabIndex={0}
+        onKeyDown={!isSubmitting ? onClose : undefined} />
       <AnimatePresence mode="wait">
         {step === 'details' ? (
           <DetailsView 
@@ -217,7 +218,7 @@ const PickerView = ({ onClose, onConfirm, vacancies, selectedId, setSelectedId, 
             const isAlreadyBoosted = v.es_urgente && new Date(v.urgente_expiracion) > new Date();
             
             return (
-              <div 
+              <div
                 key={v.id}
                 onClick={() => !isSubmitting && !isAlreadyBoosted && setSelectedId(v.id)}
                 className={`p-4 rounded-2xl border transition-all group ${
@@ -227,7 +228,9 @@ const PickerView = ({ onClose, onConfirm, vacancies, selectedId, setSelectedId, 
                       ? 'bg-orange-500/10 border-orange-500/40 cursor-pointer' 
                       : 'bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/[0.04] cursor-pointer'
                 }`}
-              >
+                role="button"
+                tabIndex={0}
+                onKeyDown={() => !isSubmitting && !isAlreadyBoosted && setSelectedId(v.id)}>
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col">
                     <span className="text-sm font-bold text-white group-hover:text-orange-400 transition-colors truncate max-w-[220px]">

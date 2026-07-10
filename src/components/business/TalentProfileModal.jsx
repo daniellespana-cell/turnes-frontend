@@ -75,10 +75,14 @@ const TalentProfileModal = ({
                 <div className="fixed inset-0 z-[100] flex justify-end">
                     {/* Backdrop */}
                     <motion.div
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         onClick={onClose}
                         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-                    />
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={onClose} />
 
                     {/* Modal Panel Orchestrator */}
                     <motion.div

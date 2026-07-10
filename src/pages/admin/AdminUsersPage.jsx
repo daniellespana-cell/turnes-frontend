@@ -135,8 +135,18 @@ const AdminUsersPage = () => {
 
                 {/* Ban Modal */}
                 {banTarget && (
-                    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setBanTarget(null)}>
-                        <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
+                    <div
+                        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+                        onClick={() => setBanTarget(null)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={() => setBanTarget(null)}>
+                        <div
+                            className="bg-zinc-900 border border-white/10 rounded-2xl p-6 max-w-sm w-full space-y-4"
+                            onClick={e => e.stopPropagation()}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={e => e.stopPropagation()}>
                             <h3 className="text-sm font-black text-white">⚠️ Suspender a {banTarget.name}</h3>
                             <p className="text-xs text-zinc-400">Escribe <span className="font-mono text-red-400">BAN</span> para confirmar.</p>
                             <input type="text" value={banInput} onChange={e => setBanInput(e.target.value)} placeholder="BAN" className="w-full bg-black/40 border border-red-500/30 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-500/50" autoFocus />
