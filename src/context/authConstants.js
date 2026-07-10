@@ -4,7 +4,7 @@
  * 🛡️ Global Singleton: Deduplicates concurrent boot calls across re-mounts.
  * Outside the component to survive React.StrictMode and HMR re-renders.
  */
-export const _authGlobal = {
+const _authGlobal = {
     activeProfilePromise: null,
 };
 

@@ -2,5 +2,8 @@
   "rules": {
     "socket/low-supply-chain-score": "off",
     "artifact-baas-authority-surface": "off"
-  }
+  },
+  "ignore": [
+    "supabase/**"
+  ]
 }

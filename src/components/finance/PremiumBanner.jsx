@@ -4,6 +4,23 @@ import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+const config = {
+  basic: {
+    savings: "$24.500",
+    text: "Tu plan Básico es bueno, pero Pro desbloquea más.",
+    target: "Pro"
+  },
+  micro: {
+    savings: "$45.000",
+    text: "Estás creciendo. Pásate a Pro para eliminar límites.",
+    target: "Pro"
+  },
+  default: {
+    savings: "$24.500",
+    text: "Mejora tu plan para desbloquear funciones premium.",
+    target: "Premium"
+  }
+};
 
 const PremiumBanner = ({ currentPlan = 'Basic' }) => {
   const navigate = useNavigate();
@@ -11,24 +28,6 @@ const PremiumBanner = ({ currentPlan = 'Basic' }) => {
 
   const plan = (currentPlan || 'Basic').toLowerCase();
   const isPaidPlan = ['pro', 'enterprise'].some(p => plan.startsWith(p));
-
-  const config = {
-    basic: {
-      savings: "$24.500",
-      text: "Tu plan Básico es bueno, pero Pro desbloquea más.",
-      target: "Pro"
-    },
-    micro: {
-      savings: "$45.000",
-      text: "Estás creciendo. Pásate a Pro para eliminar límites.",
-      target: "Pro"
-    },
-    default: {
-      savings: "$24.500",
-      text: "Mejora tu plan para desbloquear funciones premium.",
-      target: "Premium"
-    }
-  };
 
   const activeConfig = config[plan] || config.default;
 

@@ -3,7 +3,6 @@ import { redirect } from 'react-router-dom';
 import { getSessionCache, setSessionCache, clearSessionCache } from '../utils/sessionCache';
 
 // Re-export so AuthContext can clear the cache on logout without importing from router
-export { clearSessionCache };
 
 // --------------------------------------------------------------------------
 // safeGetSession
@@ -53,7 +52,7 @@ export const rootLoader = async () => {
 // --------------------------------------------------------------------------
 // PROTECTED LOADER  (not currently wired into the router, kept for future use)
 // --------------------------------------------------------------------------
-export const protectedLoader = async ({ request }) => {
+const protectedLoader = async ({ request }) => {
   const { data: { session } } = await safeGetSession(500);
   const cache = getSessionCache();
   if (!session && cache.fetched) {

@@ -38,6 +38,6 @@ export const WORKER_MENU = [
   { name: 'Mi Perfil', icon: User, path: PATHS.WORKER.PROFILE },
 ];
 
-export const SHARED_BOTTOM_MENU = [
+const SHARED_BOTTOM_MENU = [
   // Defined in the Sidebar component directly to handle interactions like Logout
 ];

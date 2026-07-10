@@ -1,11 +1,10 @@
 import React from 'react';
 import { CreditCard, AlertCircle } from 'lucide-react';
+const MIN_AMOUNT = 15000;
+const QUICK_AMOUNTS = [15000, 25000, 50000, 75000, 100000];
 
 
 const RechargeAmount = ({ amount, setAmount, onAmountChange }) => {
-  const MIN_AMOUNT = 15000;
-  const QUICK_AMOUNTS = [15000, 25000, 50000, 75000, 100000];
-
   // Validación de error: monto mayor a 0 pero menor al mínimo
   const isInvalid = amount > 0 && amount < MIN_AMOUNT;
 

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+const activeRoles = ["Mesero", "Bartender", "Seguridad", "Logística", "Protocolo"];
 
 const HeroSearch = () => {
     const navigate = useNavigate();
@@ -11,9 +12,6 @@ const HeroSearch = () => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [loopNum, setLoopNum] = useState(0);
     const [typingSpeed, setTypingSpeed] = useState(150);
-
-    const activeRoles = ["Mesero", "Bartender", "Seguridad", "Logística", "Protocolo"];
-
     // TYPEWRITER EFFECT
     useEffect(() => {
         const handleType = () => {

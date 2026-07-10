@@ -8,6 +8,23 @@ import React from 'react';
  * - Tres puntos que pulsan en secuencia.
  * - Sin ruido visual. Sutil y profesional.
  */
+
+const sizeMap = { sm: 4, md: 6, lg: 8, xl: 10 };
+const palette = {
+    emerald: '#10b981',
+    blue:    '#3b82f6',
+    white:   '#ffffff',
+    muted:   '#52525b',
+    danger:  '#ef4444',
+};
+const textColorMap = {
+    emerald: 'text-emerald-500',
+    blue:    'text-blue-500',
+    white:   'text-white',
+    muted:   'text-zinc-500',
+    danger:  'text-red-500',
+};
+
 export const Spinner = ({ 
     size = 'md', 
     variant = 'emerald', 
@@ -15,26 +32,9 @@ export const Spinner = ({
     text = null,
     className = ""
 }) => {
-    const sizeMap = { sm: 4, md: 6, lg: 8, xl: 10 };
     const dotSize = typeof size === 'number' ? Math.max(4, size / 6) : sizeMap[size] || sizeMap.md;
     const gap = dotSize * 0.8;
-
-    const palette = {
-        emerald: '#10b981',
-        blue:    '#3b82f6',
-        white:   '#ffffff',
-        muted:   '#52525b',
-        danger:  '#ef4444',
-    };
     const color = palette[variant] || palette.emerald;
-
-    const textColorMap = {
-        emerald: 'text-emerald-500',
-        blue:    'text-blue-500',
-        white:   'text-white',
-        muted:   'text-zinc-500',
-        danger:  'text-red-500',
-    };
 
     const spinnerContent = (
         <div className={`flex flex-col items-center justify-center gap-4 ${className}`}>

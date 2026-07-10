@@ -3,6 +3,21 @@ import { CheckCircle, XCircle, Info, AlertTriangle } from 'lucide-react';
 
 import { useEffect } from 'react';
 
+// Colores ajustados para resaltar sobre el fondo negro de Turnes
+const styles = {
+  success: 'border-emerald-500/30 text-emerald-400 bg-zinc-950/90 shadow-emerald-500/10',
+  error: 'border-red-500/30 text-red-400 bg-zinc-950/90 shadow-red-500/10',
+  info: 'border-blue-500/30 text-blue-400 bg-zinc-950/90 shadow-blue-500/10',
+  warning: 'border-amber-500/30 text-amber-400 bg-zinc-950/90 shadow-amber-500/10'
+};
+
+const icons = {
+  success: <CheckCircle size={16} strokeWidth={3} />,
+  error: <XCircle size={16} strokeWidth={3} />,
+  info: <Info size={16} strokeWidth={3} />,
+  warning: <AlertTriangle size={16} strokeWidth={3} />
+};
+
 const Toast = ({ data, onClose }) => {
   const { type, message } = data || {};
 
@@ -14,21 +29,6 @@ const Toast = ({ data, onClose }) => {
 
   // Guard clause para evitar renders nulos
   if (!data) return null;
-
-  // Colores ajustados para resaltar sobre el fondo negro de Turnes
-  const styles = {
-    success: 'border-emerald-500/30 text-emerald-400 bg-zinc-950/90 shadow-emerald-500/10',
-    error: 'border-red-500/30 text-red-400 bg-zinc-950/90 shadow-red-500/10',
-    info: 'border-blue-500/30 text-blue-400 bg-zinc-950/90 shadow-blue-500/10',
-    warning: 'border-amber-500/30 text-amber-400 bg-zinc-950/90 shadow-amber-500/10'
-  };
-
-  const icons = {
-    success: <CheckCircle size={16} strokeWidth={3} />,
-    error: <XCircle size={16} strokeWidth={3} />,
-    info: <Info size={16} strokeWidth={3} />,
-    warning: <AlertTriangle size={16} strokeWidth={3} />
-  };
 
   return (
     /* z-[9999] + env(safe-area-inset-bottom): garantiza visibilidad en iPhone con home bar */

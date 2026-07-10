@@ -2,6 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { AssetResolver } from "../../utils/assetHelper";
+const planNames = {
+  'basic': 'Plan Básico',
+  'micro': 'Plan Micro',
+  'pro': 'Pro Business'
+};
 
 const NavAccount = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,12 +26,6 @@ const NavAccount = () => {
   if (!user) return null;
 
   // Lógica Senior: Mapeo estético para mostrar el nombre del plan correctamente
-  const planNames = {
-    'basic': 'Plan Básico',
-    'micro': 'Plan Micro',
-    'pro': 'Pro Business'
-  };
-
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Botón del Perfil */}

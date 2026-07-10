@@ -22,21 +22,19 @@ const jobRoles = [
 ];
 
 const carouselItems = [...jobRoles, ...jobRoles, ...jobRoles]; // Triple duplication for smoother infinite loop
+const marqueeAnimation = {
+    x: ['0%', '-33.33%'], // Move 1/3 of the total width (since we tripled the data)
+    transition: {
+        duration: 30, // Slower, more elegant
+        ease: 'linear',
+        repeat: Infinity,
+        repeatType: 'loop',
+    },
+};
 
 const JobCarousel = () => {
     const controls = useAnimation();
     const [isHovered, setIsHovered] = useState(false);
-
-    const marqueeAnimation = {
-        x: ['0%', '-33.33%'], // Move 1/3 of the total width (since we tripled the data)
-        transition: {
-            duration: 30, // Slower, more elegant
-            ease: 'linear',
-            repeat: Infinity,
-            repeatType: 'loop',
-        },
-    };
-
     useEffect(() => {
         if (!isHovered) {
             controls.start(marqueeAnimation);

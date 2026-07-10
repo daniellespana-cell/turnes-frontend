@@ -334,7 +334,7 @@ export const getCiudadCoords = (nombre) =>
   CIUDADES_COORDS[nombre] ?? null;
 
 /** Helper: lista de ciudades por departamento */
-export const getCiudadesByDepartamento = (departamento) =>
+const getCiudadesByDepartamento = (departamento) =>
   Object.entries(CIUDADES_COORDS)
     .filter(([, v]) => v.departamento === departamento)
     .map(([nombre]) => nombre);

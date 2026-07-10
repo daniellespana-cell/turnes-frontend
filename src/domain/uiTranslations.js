@@ -109,6 +109,6 @@ export const UI_STRINGS = {
  * @param {string} path - Ruta en el objeto UI_STRINGS (ej. 'PRICING.FREE')
  * @returns {string}
  */
-export const getUIString = (path) => {
+const getUIString = (path) => {
     return path.split('.').reduce((obj, key) => obj?.[key], UI_STRINGS) || `[${path}]`;
 };

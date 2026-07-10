@@ -1,8 +1,8 @@
 import React from 'react';
 
+const tabs = ['Activa', 'Completada'];
 
 const VacantesTabs = ({ activeTab, setActiveTab, counts }) => {
-  const tabs = ['Activa', 'Completada'];
 
   return (
     <div className="flex items-center gap-6 md:gap-8 pb-4 border-b border-white/5 overflow-x-auto no-scrollbar font-manrope">
