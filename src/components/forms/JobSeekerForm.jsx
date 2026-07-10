@@ -83,7 +83,6 @@ const JobSeekerForm = () => {
         <div className="w-full animate-fade-in">
             <GoogleButton onClick={handleGoogleLogin} />
             <Divider text="o crea tu cuenta" />
-
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <div className={FormClasses.inputGroup}>
                     <label htmlFor="name" className={FormClasses.label}>Nombre Completo</label>
@@ -101,11 +100,10 @@ const JobSeekerForm = () => {
                     type="submit"
                     disabled={isLoading}
                     className="w-full bg-brand-primary hover:bg-emerald-500 text-white font-medium text-sm py-2.5 rounded-md transition duration-200 shadow-none border-none disabled:opacity-70 mt-2"
-                >
+                    aria-label="Acción">
                     {isLoading ? "Creando..." : "Crear Cuenta"}
                 </button>
             </form>
-
             {status.message && <MessageBox message={status.message} type={status.type} />}
         </div>
     );

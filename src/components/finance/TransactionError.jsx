@@ -5,7 +5,6 @@ import { XCircle, RefreshCw, ArrowLeft } from 'lucide-react';
 const TransactionError = ({ onRetry, onCancel, errorMessage = "Hubo un problema procesando tu solicitud." }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 space-y-8 animate-in fade-in zoom-in duration-500 font-manrope">
-
       {/* ICONO MINIMALISTA */}
       <div className="relative">
         <div className="absolute inset-0 bg-red-500/20 blur-2xl rounded-full" />
@@ -13,7 +12,6 @@ const TransactionError = ({ onRetry, onCancel, errorMessage = "Hubo un problema 
           <XCircle size={40} className="text-red-500" />
         </div>
       </div>
-
       {/* TEXTOS */}
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold text-white tracking-tight">
@@ -23,13 +21,13 @@ const TransactionError = ({ onRetry, onCancel, errorMessage = "Hubo un problema 
           {errorMessage}
         </p>
       </div>
-
       {/* ACCIONES */}
       <div className="flex flex-col gap-3 w-full max-w-[280px]">
         <button
           onClick={onRetry}
           className="group w-full bg-white text-black py-3 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all hover:bg-zinc-200 active:scale-95 flex items-center justify-center gap-2"
-        >
+          type="button"
+          aria-label="Acción">
           <RefreshCw size={14} className="opacity-60" />
           Intentar Nuevamente
         </button>
@@ -37,7 +35,8 @@ const TransactionError = ({ onRetry, onCancel, errorMessage = "Hubo un problema 
         <button
           onClick={onCancel}
           className="w-full bg-transparent text-zinc-500 hover:text-white py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all border border-transparent  flex items-center justify-center gap-2"
-        >
+          type="button"
+          aria-label="Acción">
           <ArrowLeft size={14} />
           Cancelar y Volver
         </button>

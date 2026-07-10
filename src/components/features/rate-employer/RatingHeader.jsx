@@ -8,7 +8,8 @@ export const RatingHeader = ({ companyName, displayName, onClose, isSubmitting }
             onClick={onClose}
             disabled={isSubmitting}
             className="hidden md:flex absolute -top-2 -right-2 p-2 text-zinc-600 hover:text-white transition-colors"
-        >
+            type="button"
+            aria-label="Acción">
             <X size={18} />
         </button>
         

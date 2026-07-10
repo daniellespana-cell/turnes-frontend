@@ -50,7 +50,11 @@ const PlanActionPage = () => {
             <div className="min-h-screen bg-[#060606] flex flex-col items-center justify-center p-6 text-center">
                 <LockIcon className="text-red-500 mb-6" size={32} />
                 <h2 className="text-xl font-bold text-white mb-2">Error de Sincronización</h2>
-                <button onClick={() => navigate(-1)} className="px-8 py-3 bg-white text-black font-bold rounded-xl mt-8">Volver</button>
+                <button
+                    onClick={() => navigate(-1)}
+                    className="px-8 py-3 bg-white text-black font-bold rounded-xl mt-8"
+                    type="button"
+                    aria-label="Acción">Volver</button>
             </div>
         );
     }
@@ -58,10 +62,13 @@ const PlanActionPage = () => {
     return (
         <>
             <PaymentSuccessOverlay show={paymentSuccess} />
-
             <div className="w-full max-w-6xl mx-auto px-6 py-12 md:pl-20">
                 <div className="mb-6">
-                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-zinc-500 hover:text-white transition-all">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="p-2 -ml-2 text-zinc-500 hover:text-white transition-all"
+                        type="button"
+                        aria-label="Acción">
                         <ArrowLeft size={24} />
                     </button>
                 </div>
@@ -85,7 +92,11 @@ const PlanActionPage = () => {
                             <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
                                 <CheckCircle size={32} className="text-emerald-500 mb-6" />
                                 <h3 className="text-2xl font-black text-white mb-2">Producto Adquirido</h3>
-                                <button onClick={() => navigate('/dashboard')} className="px-8 py-3 rounded-xl bg-white text-black font-bold mt-8">Volver al Tablero</button>
+                                <button
+                                    onClick={() => navigate('/dashboard')}
+                                    className="px-8 py-3 rounded-xl bg-white text-black font-bold mt-8"
+                                    type="button"
+                                    aria-label="Acción">Volver al Tablero</button>
                             </div>
                         ) : (
                             <div className="md:pl-8 space-y-10">

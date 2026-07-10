@@ -59,7 +59,6 @@ const RadarEmptyState = () => {
             <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity pointer-events-none">
                 <Radar size={120} />
             </div>
-
             <div className="relative z-10 space-y-5 max-w-lg">
                 
                 {/* Header */}
@@ -86,7 +85,8 @@ const RadarEmptyState = () => {
                             onClick={subscribe}
                             disabled={pushLoading}
                             className="bg-emerald-500 hover:bg-emerald-400 text-black px-6 py-3 rounded-2xl font-bold uppercase text-[11px] tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)] disabled:opacity-50"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             <Bell size={16} /> 
                             {pushLoading ? 'Activando...' : 'Activar Alertas Inmediatas'}
                         </button>
@@ -117,7 +117,7 @@ const RadarEmptyState = () => {
                                 type="submit"
                                 disabled={savingPhone || !phone}
                                 className="bg-emerald-500 hover:bg-emerald-400 text-black px-6 py-3 rounded-2xl font-bold uppercase text-[11px] tracking-widest transition-all active:scale-95 disabled:opacity-50"
-                            >
+                                aria-label="Acción">
                                 {savingPhone ? '...' : 'Guardar'}
                             </button>
                         </form>
@@ -132,10 +132,11 @@ const RadarEmptyState = () => {
                             <p className="text-zinc-400 text-sm">
                                 Las empresas invitan primero a los perfiles que están al 100%. Te avisaremos apenas publiquen un turno en tu zona.
                             </p>
-                            <button 
+                            <button
                                 onClick={() => navigate('/dashboard/perfil')}
                                 className="text-emerald-400 text-[11px] font-bold uppercase tracking-widest hover:text-emerald-300 flex items-center gap-1 pt-2"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 Editar mi perfil →
                             </button>
                         </div>

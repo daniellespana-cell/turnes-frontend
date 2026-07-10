@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import Spinner from '../../ui/Spinner';
 import AdminEmptyState from '../shared/AdminEmptyState';

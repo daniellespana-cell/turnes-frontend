@@ -19,7 +19,6 @@ const RoleSelection = ({ setRole, isGoogleOnboarding, isRoleLoading }) => {
             ) : (
                 <h2 className="text-lg font-bold text-white mb-4 text-center tracking-tight">Selecciona tu perfil</h2>
             )}
-
             <div className="grid grid-cols-2 gap-3">
 
                 {/* Micro-Card Talento */}
@@ -27,7 +26,8 @@ const RoleSelection = ({ setRole, isGoogleOnboarding, isRoleLoading }) => {
                     onClick={() => setRole && setRole('jobseeker')}
                     disabled={isRoleLoading}
                     className={`group relative flex flex-col items-center justify-center py-4 px-2 rounded-xl transition-all duration-300 border border-emerald-500/10 bg-emerald-500/5 hover:bg-emerald-500/10 ${isRoleLoading ? 'opacity-50 cursor-not-allowed' : 'hover:-translate-y-0.5 active:scale-95'}`}
-                >
+                    type="button"
+                    aria-label="Acción">
                     <div className="mb-2 text-emerald-400 group-hover:text-emerald-300 group-hover:scale-110 transition-transform duration-300">
                         {isRoleLoading ? (
                             <Spinner size="sm" variant="emerald" />
@@ -45,7 +45,8 @@ const RoleSelection = ({ setRole, isGoogleOnboarding, isRoleLoading }) => {
                     onClick={() => setRole && setRole('company')}
                     disabled={isRoleLoading}
                     className={`group relative flex flex-col items-center justify-center py-4 px-2 rounded-xl transition-all duration-300 border border-indigo-500/10 bg-indigo-500/5 hover:bg-indigo-500/10 ${isRoleLoading ? 'opacity-50 cursor-not-allowed' : 'hover:-translate-y-0.5 active:scale-95'}`}
-                >
+                    type="button"
+                    aria-label="Acción">
                     <div className="mb-2 text-indigo-400 group-hover:text-indigo-300 group-hover:scale-110 transition-transform duration-300">
                         {isRoleLoading ? (
                             <Spinner size="sm" variant="blue" />
@@ -59,7 +60,6 @@ const RoleSelection = ({ setRole, isGoogleOnboarding, isRoleLoading }) => {
                 </button>
 
             </div>
-
             <p className="text-zinc-500 text-[10px] text-center mt-3">
                 {isRoleLoading ? "Sincronizando perfil..." : "Continúa para acceder a Turnes"}
             </p>

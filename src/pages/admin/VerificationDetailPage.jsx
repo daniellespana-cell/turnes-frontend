@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Shield, CheckCircle, XCircle, ExternalLink, FileText, User, AlertTriangle } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 
@@ -42,7 +42,11 @@ const VerificationDetailPage = () => {
             <p className="text-zinc-500 text-sm mb-8 max-w-sm">
                 {actionDone === 'approved' ? `El sello KYC fue emitido. ${userName} ya cuenta con rango de visibilidad.` : `El usuario ${userName} fue notificado.`}
             </p>
-            <button onClick={() => navigate('/admin/verificaciones')} className="px-8 py-3 rounded-xl bg-white text-black font-black hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]">← RETORNAR A LA COLA</button>
+            <button
+                onClick={() => navigate('/admin/verificaciones')}
+                className="px-8 py-3 rounded-xl bg-white text-black font-black hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                type="button"
+                aria-label="Acción">← RETORNAR A LA COLA</button>
         </div>
     );
 
@@ -59,11 +63,14 @@ const VerificationDetailPage = () => {
                     </div>
                 </div>
             )}
-
             <div className={`max-w-4xl mx-auto space-y-8 ${actionLoading ? 'pointer-events-none opacity-50 blur-sm' : ''} transition-all duration-500`}>
                 {/* Header */}
                 <div className="flex items-center gap-4">
-                    <button onClick={() => navigate('/admin/verificaciones')} className="p-3 bg-zinc-900/50 border border-white/5 text-zinc-500 hover:text-white rounded-xl hover:bg-zinc-800/80 transition-colors"><ArrowLeft size={18} /></button>
+                    <button
+                        onClick={() => navigate('/admin/verificaciones')}
+                        className="p-3 bg-zinc-900/50 border border-white/5 text-zinc-500 hover:text-white rounded-xl hover:bg-zinc-800/80 transition-colors"
+                        type="button"
+                        aria-label="Acción"><ArrowLeft size={18} /></button>
                     <div>
                         <h1 className="text-2xl font-black text-white">Inspección de <span className="text-blue-400">Identidad</span></h1>
                         <p className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest mt-1">Auditoría ID: <span className="text-zinc-400">{id?.slice(0,18)}</span></p>
@@ -123,8 +130,18 @@ const VerificationDetailPage = () => {
                     <div className="bg-black/40 border border-white/5 rounded-3xl p-6 space-y-6">
                         <div><h3 className="text-sm font-black text-white">Veredicto Operativo</h3><p className="text-xs text-zinc-500">Confirma la decisión. Esta acción es inmutable.</p></div>
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <button onClick={handleApprove} disabled={!!actionLoading} className="flex-1 h-14 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 shadow-[0_0_20px_rgba(16,185,129,0.3)]"><CheckCircle size={18} /> Otorgar Status KYC</button>
-                            <button onClick={() => setShowRejectForm(!showRejectForm)} disabled={!!actionLoading} className="flex-1 h-14 rounded-2xl bg-zinc-900 border border-white/10 hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50"><XCircle size={18} /> Rechazar Identidad</button>
+                            <button
+                                onClick={handleApprove}
+                                disabled={!!actionLoading}
+                                className="flex-1 h-14 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                                type="button"
+                                aria-label="Acción"><CheckCircle size={18} /> Otorgar Status KYC</button>
+                            <button
+                                onClick={() => setShowRejectForm(!showRejectForm)}
+                                disabled={!!actionLoading}
+                                className="flex-1 h-14 rounded-2xl bg-zinc-900 border border-white/10 hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50"
+                                type="button"
+                                aria-label="Acción"><XCircle size={18} /> Rechazar Identidad</button>
                         </div>
                         <AnimatePresence>
                             {showRejectForm && (
@@ -133,7 +150,12 @@ const VerificationDetailPage = () => {
                                         <div><label htmlFor="rejectionInput" className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Justificación Legal</label>
                                             <textarea id="rejectionInput" value={rejectionReason} onChange={e => setRejectionReason(e.target.value)} placeholder="Ejemplo: El documento provisto se encuentra ilegible..." className="w-full h-24 bg-red-500/5 border border-red-500/20 focus:border-red-500/50 rounded-2xl p-4 text-sm text-white placeholder:text-zinc-600 focus:outline-none resize-none transition-all" />
                                         </div>
-                                        <button onClick={handleReject} disabled={!rejectionReason.trim() || !!actionLoading} className="w-full py-4 rounded-xl bg-red-500 hover:bg-red-600 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50 shadow-[0_0_20px_rgba(239,68,68,0.3)]"><AlertTriangle size={16} /> Emitir Rechazo y Reembolsar</button>
+                                        <button
+                                            onClick={handleReject}
+                                            disabled={!rejectionReason.trim() || !!actionLoading}
+                                            className="w-full py-4 rounded-xl bg-red-500 hover:bg-red-600 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+                                            type="button"
+                                            aria-label="Acción"><AlertTriangle size={16} /> Emitir Rechazo y Reembolsar</button>
                                     </div>
                                 </motion.div>
                             )}

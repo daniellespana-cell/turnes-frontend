@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Info, Shield, Clock } from 'lucide-react';
 import CtaSection from '../../components/common/CtaSection';
 
@@ -53,7 +53,6 @@ const PoliticaPrivacidad = () => {
     return (
         // Fondo general NEGRO TOTAL (bg-black)
         <div className="min-h-screen flex flex-col bg-black text-white font-sans">
-
             <div className="flex-grow pt-8 pb-20">
                 {/* Adjusted padding to pt-10. See TerminosServicio rationale. */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

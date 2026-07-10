@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import VacancyCard from '../VacancyCard';
 import Spinner from '../../ui/Spinner';
@@ -13,7 +13,8 @@ const LoadMoreButton = ({ onClick, loading, hasMore }) => {
                 onClick={onClick}
                 disabled={loading}
                 className="group relative px-8 py-3 bg-zinc-900 border border-transparent rounded-2xl overflow-hidden hover:border-brand-primary/30 transition-all duration-300 disabled:opacity-50"
-            >
+                type="button"
+                aria-label="Acción">
                 <div className="absolute inset-0 bg-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <span className="relative text-xs font-black uppercase tracking-widest text-zinc-400 group-hover:text-brand-primary transition-colors flex items-center gap-2">
                     {loading ? (

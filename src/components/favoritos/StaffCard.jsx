@@ -27,16 +27,15 @@ const StaffCard = ({ staff, onOffer }) => {
           </div>
         </div>
       </div>
-
       <div className="mb-6">
         <h4 className="text-base font-black text-white uppercase italic tracking-tight">{staff.name}</h4>
         <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1.5">{staff.role || 'Staff Validado'}</p>
       </div>
-
       <button
         onClick={() => onOffer(staff)}
         className="w-full py-3 bg-white text-black rounded-xl text-xs font-black uppercase tracking-wider hover:!bg-emerald-500 hover:!text-white transition-all flex items-center justify-center gap-2"
-      >
+        type="button"
+        aria-label="Acción">
         <Zap size={14} /> Contratar Ahora
       </button>
     </div>

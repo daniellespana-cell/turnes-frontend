@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ShieldCheck, Building2, ChevronRight, Sparkles } from 'lucide-react';
 import { AssetResolver } from '../../utils/assetHelper';
 
@@ -36,7 +36,8 @@ const SkillMatchRadar = ({ companies, loading }) => {
                 <button
                     onClick={() => navigate('/perfil')}
                     className="text-[11px] text-purple-400 font-bold uppercase tracking-widest hover:text-purple-300 transition-colors"
-                >
+                    type="button"
+                    aria-label="Acción">
                     Completar Perfil →
                 </button>
             </div>

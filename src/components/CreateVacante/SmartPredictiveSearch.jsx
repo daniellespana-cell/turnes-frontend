@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapPin, Briefcase, Sparkles, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { getAllSearchTags } from '../../domain/vacantes.taxonomy';
@@ -119,14 +119,17 @@ const SmartPredictiveSearch = ({
                 </div>
 
                 {value && type !== 'date' ? (
-                    <button onClick={() => selectSuggestion('')} className="text-zinc-600 hover:text-white transition-colors p-1" type="button">
+                    <button
+                        onClick={() => selectSuggestion('')}
+                        className="text-zinc-600 hover:text-white transition-colors p-1"
+                        type="button"
+                        aria-label="Acción">
                         <X size={14} />
                     </button>
                 ) : (
                     type !== 'date' && <Sparkles size={12} className="text-zinc-700 opacity-0 group-focus-within:opacity-100 transition-opacity" />
                 )}
             </div>
-
             {/* Dropdown Predictivo */}
             <AnimatePresence>
                 {isOpen && filteredSpecs.length > 0 && (
@@ -151,7 +154,7 @@ const SmartPredictiveSearch = ({
                                         type="button"
                                         onClick={() => selectSuggestion(item)}
                                         className="w-full text-left px-4 py-3 text-[13px] text-zinc-300 hover:bg-white/5 hover:text-white transition-all flex items-center gap-3 group/item border-l-2 border-transparent hover:border-brand-primary"
-                                    >
+                                        aria-label="Acción">
                                         {mode === 'cargo' ? <Briefcase size={14} className="text-zinc-600 group-hover/item:text-brand-primary" /> : <MapPin size={14} className="text-zinc-600 group-hover/item:text-brand-primary" />}
 
                                         <span>

@@ -66,7 +66,6 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                     <div className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-[2px] border-[#0a0a09] bg-emerald-500 shadow-sm" />
                 )}
             </div>
-
             {/* Contenido (Textos fluidos y pequeños) */}
             <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
                 {/* Primera Línea: Nombre y Tiempo */}
@@ -116,7 +115,6 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                     )}
                 </div>
             </div>
-
             {/* Menú de Acciones (Triple Dot) */}
             <div className="relative shrink-0 flex items-center">
                 <button
@@ -125,7 +123,8 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                         setIsMenuOpen(!isMenuOpen);
                     }}
                     className={`p-1.5 rounded-full transition-colors ${isMenuOpen ? 'bg-white/10 text-white' : 'text-zinc-500 hover:text-white hover:bg-white/5'}`}
-                >
+                    type="button"
+                    aria-label="Acción">
                     <MoreVertical size={16} />
                 </button>
 
@@ -147,7 +146,8 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                                     if (onActionClick) onActionClick(chat, 'archive');
                                 }}
                                 className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 <Archive size={14} className="text-zinc-400" />
                                 Archivar
                             </button>
@@ -158,7 +158,8 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                                     if (onActionClick) onActionClick(chat, 'block');
                                 }}
                                 className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 transition-colors"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 <ShieldAlert size={14} />
                                 Bloquear
                             </button>
@@ -169,7 +170,8 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                                     if (onActionClick) onActionClick(chat, 'delete');
                                 }}
                                 className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 <Trash2 size={14} />
                                 Eliminar
                             </button>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Edit2, Check, X as CloseIcon } from 'lucide-react';
 import Spinner from '../../ui/Spinner';
 
@@ -45,13 +45,15 @@ const WorkerActionIsland = ({ isEditing, setIsEditing, loading, handleSave, hand
                                 <button
                                     onClick={handleCancel}
                                     className="w-8 h-8 flex items-center justify-center rounded-full text-zinc-500 hover:text-white hover:bg-white/5 transition-all active:scale-90"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     <CloseIcon size={14} />
                                 </button>
                                 <button
                                     onClick={handleSave}
                                     className="h-8 px-4 bg-emerald-500 text-black border border-emerald-600/50 rounded-full font-black text-[8px] uppercase tracking-[0.25em] flex items-center gap-1.5 transition-all active:scale-95 whitespace-nowrap shadow-[0_4px_12px_rgba(16,185,129,0.2)]"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     {loading ? (
                                         <Spinner size={8} variant="muted" />
                                     ) : (

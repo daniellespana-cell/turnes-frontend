@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { MessageSquare, Clock } from 'lucide-react';
 import PageHeader from '../../components/common/PageHeader';
 import RateEmployerModal from '../../components/features/RateEmployerModal';
@@ -44,7 +44,6 @@ const WorkerRatings = () => {
                 highlight="Calificaciones"
                 subtitle="Gestiona tu reputación y califica tus experiencias en Turnes."
             />
-
             <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
 
                 {/* 🌟 Reputación Global (Single Source of Truth) */}
@@ -73,7 +72,8 @@ const WorkerRatings = () => {
                                 <button
                                     onClick={loadMoreRatings}
                                     className="group flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/5 px-6 py-3 rounded-2xl transition-all active:scale-95"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     <span className="text-xs font-black uppercase tracking-widest text-zinc-400 group-hover:text-white">Cargar más reseñas</span>
                                 </button>
                             </motion.div>
@@ -94,7 +94,6 @@ const WorkerRatings = () => {
                     </aside>
                 </div>
             </main>
-
             <RateEmployerModal
                 isOpen={!!ratingApp}
                 onClose={() => setRatingApp(null)}

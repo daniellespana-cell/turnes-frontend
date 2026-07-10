@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Search, Calendar, FileText, Download } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import AdminPagination from '../../components/admin/shared/AdminPagination';
@@ -39,7 +39,10 @@ const VerificationQueuePage = () => {
                         <h1 className="text-2xl font-black text-white">Cola de <span className="text-blue-400">Verificaciones</span></h1>
                         <p className="text-zinc-500 text-xs mt-1">Revisión de identidades KYC y Onboarding corporativo</p>
                     </div>
-                    <button className="hidden md:flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-white/5 hover:border-white/20 rounded-xl text-xs font-bold text-zinc-400 hover:text-white transition-colors">
+                    <button
+                        className="hidden md:flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-white/5 hover:border-white/20 rounded-xl text-xs font-bold text-zinc-400 hover:text-white transition-colors"
+                        type="button"
+                        aria-label="Acción">
                         <Download size={14} /> Exportar Reporte CSV
                     </button>
                 </div>
@@ -48,7 +51,12 @@ const VerificationQueuePage = () => {
                 <div className="bg-zinc-900/40 border border-white/5 rounded-2xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between overflow-hidden">
                     <div className="flex bg-black/40 p-1 rounded-xl w-full md:w-auto overflow-x-auto whitespace-nowrap scrollbar-hide flex-nowrap border border-white/5">
                         {['pending', 'in_review', 'approved', 'rejected', 'all'].map(tab => (
-                            <button key={tab} onClick={() => { setStatusFilter(tab); setPage(0); }} className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap flex-shrink-0 ${statusFilter === tab ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}>
+                            <button
+                                key={tab}
+                                onClick={() => { setStatusFilter(tab); setPage(0); }}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap flex-shrink-0 ${statusFilter === tab ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}
+                                type="button"
+                                aria-label="Acción">
                                 {tab === 'all' ? 'Todas' : STATUS_CONFIG[tab]?.label}
                             </button>
                         ))}

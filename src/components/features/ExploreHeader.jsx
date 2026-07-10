@@ -29,7 +29,6 @@ const ExploreHeader = ({
 
     return (
         <div className="flex flex-col pt-4 md:pt-8 pb-2 shrink-0 max-w-7xl mx-auto w-full px-4 md:px-6">
-
             {/* ── ROW 1 MOBILE: Título + Vista toggle ── */}
             <div className="flex items-center justify-between mb-3 md:mb-5">
                 <div>
@@ -56,14 +55,14 @@ const ExploreHeader = ({
                                     ? 'bg-zinc-700 text-white'
                                     : 'text-zinc-500 hover:text-zinc-300'}
                             `}
-                        >
+                            type="button"
+                            aria-label="Acción">
                             <Icon size={12} strokeWidth={2.5} />
                             <span className="hidden sm:inline">{label}</span>
                         </button>
                     ))}
                 </div>
             </div>
-
             {/* ── ROW 2: Search + Filter button (always full width) ── */}
             <div className="flex items-center gap-2.5 mb-3">
                 <PredictiveSearchBar
@@ -82,7 +81,8 @@ const ExploreHeader = ({
                             ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
                             : 'bg-zinc-900/60 border-white/8 text-zinc-500 hover:text-zinc-300 hover:border-white/15'}
                     `}
-                >
+                    type="button"
+                    aria-label="Acción">
                     <SlidersHorizontal size={16} strokeWidth={2.5} />
                     {activeFilterCount > 0 && (
                         <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 text-white text-[8px] font-black flex items-center justify-center ring-2 ring-[#09090b]">
@@ -91,7 +91,6 @@ const ExploreHeader = ({
                     )}
                 </button>
             </div>
-
             {/* ── ROW 3: Category chips — horizontal scroll, edge-to-edge ── */}
             <div className="relative -mx-4 md:-mx-6">
                 {/* Left/right fade hints */}
@@ -112,7 +111,6 @@ const ExploreHeader = ({
                     ))}
                 </div>
             </div>
-
             <VacancyFilterModal
                 isOpen={isFilterOpen}
                 onClose={() => setIsFilterOpen(false)}

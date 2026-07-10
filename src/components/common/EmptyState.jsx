@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 
 
 const EmptyState = ({
@@ -24,7 +24,8 @@ const EmptyState = ({
           <button
             onClick={onAction}
             className="mt-2 text-[10px] font-bold text-purple-400 hover:text-purple-300 transition-colors uppercase tracking-widest"
-          >
+            type="button"
+            aria-label="Acción">
             {actionLabel}
           </button>
         )}

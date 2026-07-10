@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Star, ShieldCheck, MapPin, MessageCircle, ChevronRight } from 'lucide-react';
 import Spinner from '../ui/Spinner';
 
@@ -25,7 +25,6 @@ export const PostulanteCard = ({ cand, isSelected, isAnyHired, isProcessing, onC
           : 'bg-[#0a0a0a] border-white/5'
       }`}
     >
-
       <div className="p-4 md:p-5 flex flex-col gap-4">
 
         {/* IDENTIDAD COMPACTA & CLICKABLE PERFIL NAV */}
@@ -84,7 +83,8 @@ export const PostulanteCard = ({ cand, isSelected, isAnyHired, isProcessing, onC
                   ? 'bg-zinc-800 border-zinc-700 text-zinc-400'
                   : 'bg-transparent border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:border-blue-400'
               }`}
-            >
+              type="button"
+              aria-label="Acción">
               {isProcessing ? (
                 <>
                   <Spinner size={8} variant="muted" />
@@ -98,14 +98,16 @@ export const PostulanteCard = ({ cand, isSelected, isAnyHired, isProcessing, onC
             <button
               onClick={() => onChatMatch?.()}
               className={`flex-1 py-2.5 md:py-3 bg-emerald-500 text-black rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all ${typography.action} text-[10px] md:text-xs font-bold`}
-            >
+              type="button"
+              aria-label="Acción">
               <MessageCircle size={16} strokeWidth={3} /> {isSelected || cand.status === 'contratado' ? 'Chat Match 🎉' : 'Ir al Chat'}
             </button>
           ) : (
             <button
               disabled
               className={`flex-1 py-2.5 md:py-3 bg-zinc-800/50 text-zinc-500 rounded-lg border border-zinc-800 flex items-center justify-center gap-2 ${typography.action} text-[10px] md:text-xs cursor-not-allowed`}
-            >
+              type="button"
+              aria-label="Acción">
               {cand.status === 'rechazado' ? 'Rechazado' : 'Finalizado'}
             </button>
           )}

@@ -15,7 +15,6 @@ const PreferencesTab = () => {
                 <h2 className="text-2xl font-bold text-white mb-2">Preferencias Generales</h2>
                 <p className="text-zinc-400 text-sm">Personaliza tu experiencia y gestiona tu privacidad.</p>
             </div>
-
             {/* Privacidad */}
             <div className="space-y-4">
                 <h3 className="text-lg font-bold text-white px-1">Privacidad</h3>
@@ -51,16 +50,16 @@ const PreferencesTab = () => {
                                 <p className="text-zinc-500 text-xs">Gestiona tus preferencias de rastreo y cookies.</p>
                             </div>
                         </div>
-                        <button 
-                            onClick={() => setIsCookieModalOpen(true)} 
+                        <button
+                            onClick={() => setIsCookieModalOpen(true)}
                             className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-lg text-sm text-white font-medium transition-colors"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Configurar
                         </button>
                     </div>
                 </div>
             </div>
-
             <CookieSettingsModal isOpen={isCookieModalOpen} onClose={() => setIsCookieModalOpen(false)} />
         </div>
     );

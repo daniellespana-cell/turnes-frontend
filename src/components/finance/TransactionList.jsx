@@ -10,7 +10,6 @@ const TransactionList = ({ history, hasMore, loadMore, isLoadingMore }) => {
                 <h2 className="text-xs font-black text-zinc-400 uppercase tracking-widest">Movimientos Recientes</h2>
                 <span className="text-[10px] font-bold text-emerald-500/60 bg-emerald-500/5 px-2 py-1 rounded-full">{history.length} TRANSACCIONES</span>
             </div>
-            
             {history.length === 0 ? (
                 <div className="py-16 text-center border border-dashed border-white/5 rounded-[2rem]">
                     <p className="text-zinc-600 text-sm italic">Aún no hay movimientos registrados en tu historial.</p>
@@ -50,7 +49,8 @@ const TransactionList = ({ history, hasMore, loadMore, isLoadingMore }) => {
                             onClick={loadMore}
                             disabled={isLoadingMore}
                             className="w-full mt-6 py-4 bg-zinc-900/50 border border-transparent rounded-2xl text-zinc-500 text-xs font-black uppercase tracking-widest hover:text-white hover:bg-zinc-800 transition-all flex items-center justify-center gap-2"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             {isLoadingMore ? (
                                 <>
                                     <Spinner size="sm" variant="white" />

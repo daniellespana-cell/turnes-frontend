@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, AlertCircle } from 'lucide-react';
 import Spinner from '../ui/Spinner';
 
@@ -99,14 +99,16 @@ const DetailsView = ({ onClose, onContinue, userBalance, price }) => {
       className="relative w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-[2.5rem] p-8 overflow-hidden shadow-2xl"
     >
       <div className="absolute top-0 right-0 p-6">
-        <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
+        <button
+          onClick={onClose}
+          className="text-zinc-500 hover:text-white transition-colors"
+          type="button"
+          aria-label="Acción">
           <X size={20} />
         </button>
       </div>
-
       {/* Glow Effect */}
       <div className="absolute -top-24 -left-24 w-64 h-64 bg-orange-500/10 blur-[80px] pointer-events-none" />
-
       <div className="relative z-10 flex flex-col items-center text-center">
         <div className="w-16 h-16 bg-orange-500/20 border border-orange-500/30 rounded-[1.5rem] flex items-center justify-center mb-6 shadow-lg shadow-orange-500/5">
           <Rocket className="text-orange-400" size={32} />
@@ -150,7 +152,8 @@ const DetailsView = ({ onClose, onContinue, userBalance, price }) => {
               ? 'bg-orange-500 text-white hover:bg-orange-600 shadow-orange-500/20' 
               : 'bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50'
           }`}
-        >
+          type="button"
+          aria-label="Acción">
           {canAfford ? (
             <>
               Continuar <ChevronRight size={16} />
@@ -182,18 +185,21 @@ const PickerView = ({ onClose, onConfirm, vacancies, selectedId, setSelectedId, 
       className="relative w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-[2.5rem] p-8 overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
     >
       <div className="absolute top-0 right-0 p-6">
-        <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors" disabled={isSubmitting}>
+        <button
+          onClick={onClose}
+          className="text-zinc-500 hover:text-white transition-colors"
+          disabled={isSubmitting}
+          type="button"
+          aria-label="Acción">
           <X size={20} />
         </button>
       </div>
-
       <div className="mb-6">
         <h3 className="text-lg font-black text-white uppercase tracking-wider">Elegir Vacante</h3>
         <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">
           Aplica el impulso a una de tus ofertas activas
         </p>
       </div>
-
       <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-3 mb-6">
         {isLoading ? (
           <div className="h-40 flex items-center justify-center">
@@ -250,7 +256,6 @@ const PickerView = ({ onClose, onConfirm, vacancies, selectedId, setSelectedId, 
           })
         )}
       </div>
-
       <button
         onClick={() => onConfirm(selectedId)}
         disabled={!selectedId || isSubmitting}
@@ -259,7 +264,8 @@ const PickerView = ({ onClose, onConfirm, vacancies, selectedId, setSelectedId, 
             ? 'bg-orange-500 text-white hover:bg-orange-600 shadow-orange-500/20' 
             : 'bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50'
         }`}
-      >
+        type="button"
+        aria-label="Acción">
         {isSubmitting ? (
           <>
             <Spinner size="sm" variant="white" /> Procesando Pago...

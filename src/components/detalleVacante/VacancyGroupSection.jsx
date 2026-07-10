@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import PostulanteCard from './PostulanteCard';
 import { Archive, ArrowUpAz } from 'lucide-react';
 import Spinner from '../ui/Spinner';
@@ -56,11 +56,12 @@ export const VacancyGroupSection = ({
               </span>
 
               {/* Cerrar Vacante */}
-              <button 
+              <button
                 onClick={handleClose}
                 disabled={isClosing}
                 className="flex items-center gap-1 text-[9px] uppercase font-black text-zinc-500 hover:text-red-400 transition-colors ml-2 group"
-              >
+                type="button"
+                aria-label="Acción">
                 {isClosing 
                   ? <Spinner size={8} variant="muted" /> 
                   : <Archive size={10} className="group-hover:scale-110 transition-transform" />
@@ -75,14 +76,15 @@ export const VacancyGroupSection = ({
         <div className="flex flex-wrap items-center gap-2 md:gap-3">
           
           {/* Toggle Ordenar */}
-          <button 
+          <button
             onClick={onToggleSort}
             className={`flex items-center gap-2 text-[10px] uppercase font-bold py-1.5 px-3 rounded-lg border transition-all ${
               sortByRating 
                 ? 'bg-blue-500/20 border-blue-500/50 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]' 
                 : 'bg-white/5 border-white/5 text-zinc-500 hover:border-white/20'
             }`}
-          >
+            type="button"
+            aria-label="Acción">
             <ArrowUpAz size={12} />
             Rating
           </button>
@@ -111,7 +113,6 @@ export const VacancyGroupSection = ({
           </div>
         </div>
       </div>
-
       {/* 📌 Candidate Grid */}
       <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
         <AnimatePresence>

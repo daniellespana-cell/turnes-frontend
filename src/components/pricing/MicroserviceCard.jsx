@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ArrowRight, Check } from 'lucide-react';
 
 import { formatCurrency } from '../../services/financeService';
@@ -20,19 +20,23 @@ const MicroserviceCard = ({ service, handleUpgrade }) => {
                 <span className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded border border-transparent uppercase tracking-wider">{service.target_audience}</span>
             </div>
             <p className="text-xs text-zinc-400 mb-6 h-10 line-clamp-2">{service.description}</p>
-
             <div className="flex items-center justify-between pt-4 border-t border-white/5">
                 <span className="text-lg font-black text-white">{service.price == 0 ? "Variable" : formatCurrency(service.price).replace(',00', '')}</span>
 
                 {isAcquired ? (
-                    <button disabled className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20 text-[10px] uppercase tracking-wider flex items-center gap-1.5 opacity-80 cursor-not-allowed">
+                    <button
+                        disabled
+                        className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20 text-[10px] uppercase tracking-wider flex items-center gap-1.5 opacity-80 cursor-not-allowed"
+                        type="button"
+                        aria-label="Acción">
                         <Check size={14} /> Adquirido
                     </button>
                 ) : (
                     <button
                         onClick={() => handleUpgrade(service.id)}
                         className="p-2 rounded-lg bg-white/5 hover:bg-emerald-500 hover:text-white text-zinc-400 transition-all shadow-[0_4px_14px_0_rgba(16,185,129,0.2)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.23)]"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <ArrowRight size={16} />
                     </button>
                 )}

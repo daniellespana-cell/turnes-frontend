@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { PickerHeader, PickerFooter } from './LocationPicker/MapParts';
 import LocationControls from './LocationPicker/LocationControls';
 import LocationMap from './LocationPicker/LocationMap';

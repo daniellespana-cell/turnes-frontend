@@ -46,13 +46,15 @@ const TodayMission = ({ priorityAction, loading }) => {
                         <button
                             onClick={() => navigate('/dashboard/chats')}
                             className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black px-6 py-3.5 rounded-2xl font-bold uppercase text-[11px] tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             <Ticket size={16} /> {actionLabel}
                         </button>
                         <button
                             onClick={() => navigate('/dashboard/chats')}
                             className="px-6 py-3.5 rounded-2xl border border-zinc-800 hover:bg-white/5 text-zinc-300 font-bold uppercase text-[10px] tracking-widest transition-colors"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Contactar
                         </button>
                     </div>

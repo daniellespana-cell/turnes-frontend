@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Send } from 'lucide-react';
 import Spinner from '../ui/Spinner';
 import InviteToVacancyHeader from './invite-to-vacancy/InviteToVacancyHeader';
@@ -108,7 +108,8 @@ const InviteToVacancyModal = ({ isOpen, onClose, candidate }) => {
                                 <button
                                     onClick={() => navigate('/dashboard/vacantes/nueva')}
                                     className="px-6 py-3 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     Crear Primera Vacante
                                 </button>
                             </div>
@@ -129,7 +130,8 @@ const InviteToVacancyModal = ({ isOpen, onClose, candidate }) => {
                                             ? 'bg-emerald-500 text-white hover:bg-emerald-400 active:scale-95 shadow-xl shadow-emerald-500/10' 
                                             : 'bg-zinc-900 text-zinc-700 cursor-not-allowed'}
                                     `}
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     {isInviting ? (
                                         <Spinner size="sm" variant="white" />
                                     ) : (

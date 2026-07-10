@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronDown, Check } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useState, useRef, useEffect } from 'react';
 
@@ -25,7 +25,6 @@ const CustomSelect = ({ label, value, options, onChange, disabled, placeholder, 
             <label className="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-widest pl-1 flex items-center gap-2">
                 {label}
             </label>
-
             <button
                 type="button"
                 disabled={disabled}
@@ -38,7 +37,7 @@ const CustomSelect = ({ label, value, options, onChange, disabled, placeholder, 
                     ${isOpen ? 'border-emerald-500/30 bg-emerald-500/5' : 'hover:border-white/20 hover:bg-white/10'}
                     ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                 `}
-            >
+                aria-label="Acción">
                 <div className="flex items-center gap-3 truncate">
                     {icon && <span className="text-zinc-500">{icon}</span>}
                     <span className={selectedOption ? 'text-white font-bold' : 'text-zinc-600'}>
@@ -47,7 +46,6 @@ const CustomSelect = ({ label, value, options, onChange, disabled, placeholder, 
                 </div>
                 <ChevronDown size={16} className={`text-zinc-500 transition-transform duration-500 ${isOpen ? 'rotate-180 text-emerald-400' : ''}`} />
             </button>
-
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -72,7 +70,7 @@ const CustomSelect = ({ label, value, options, onChange, disabled, placeholder, 
                                     transition-all flex items-center justify-between
                                     ${value === opt.value ? 'bg-emerald-500/10 text-emerald-400 font-bold' : 'text-zinc-400 hover:bg-white/5 hover:text-white'}
                                 `}
-                            >
+                                aria-label="Acción">
                                 <span className="flex-1">{opt.label}</span>
                                 {value === opt.value && <Check size={16} className="text-emerald-400" />}
                             </button>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Camera, Check, Edit2 } from 'lucide-react';
 import Spinner from '../ui/Spinner';
 
@@ -71,7 +71,6 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
             <div className="h-24 w-full bg-gradient-to-r from-zinc-900 via-[#0a0a0a] to-zinc-900 rounded-[1.5rem] border border-transparent overflow-hidden relative shadow-lg z-0">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
             </div>
-
             {/* Info del Usuario (Layout Compacto) */}
             <div className="px-6 flex items-end gap-4 -mt-8 relative z-10 w-full max-w-full">
 
@@ -96,7 +95,8 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
                         onClick={() => fileInputRef.current?.click()}
                         className="absolute -bottom-1 -right-1 p-2 bg-zinc-900 border border-zinc-700 text-white rounded-lg shadow-md hover:scale-110 transition-all z-40"
                         disabled={isProcessing}
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <Camera size={16} />
                     </button>
                     {/* Input Oculto */}
@@ -137,14 +137,16 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
                             <button
                                 onClick={() => setIsEditing(false)}
                                 className="px-4 py-2 rounded-lg border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-900 transition-colors text-sm font-medium"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 Cancelar
                             </button>
                             <button
                                 onClick={handleSave}
                                 disabled={loading}
                                 className="px-4 py-2 rounded-lg bg-white text-black font-bold text-sm hover:bg-zinc-200 transition-colors"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 {loading ? '...' : 'Guardar'}
                             </button>
                         </div>
@@ -152,7 +154,8 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
                         <button
                             onClick={() => setIsEditing(true)}
                             className="px-4 py-2 rounded-lg bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all text-sm flex items-center gap-1.5"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             <Edit2 size={16} /> Editar
                         </button>
                     )}

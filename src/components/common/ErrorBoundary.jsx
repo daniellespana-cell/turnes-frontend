@@ -65,7 +65,8 @@ class ErrorBoundary extends React.Component {
                 <button
                     onClick={this.handleReset}
                     className="px-5 py-2.5 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 rounded-xl text-sm font-bold hover:bg-brand-primary/20 transition-colors"
-                >
+                    type="button"
+                    aria-label="Acción">
                     Intentar de nuevo
                 </button>
             </div>

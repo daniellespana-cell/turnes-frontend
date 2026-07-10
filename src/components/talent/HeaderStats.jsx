@@ -10,13 +10,13 @@ const HeaderStats = ({ score = "5.0" }) => {
 
   return (
     <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center max-w-7xl mx-auto gap-6 border-b border-white/5 pb-8">
-
       <div className="flex items-center gap-3">
         {/* BOTÓN ATRÁS - Más pequeño y sutil */}
         <button
           onClick={() => navigate(-1)}
           className="p-1.5 text-zinc-500 hover:text-white transition-all active:scale-95 group shrink-0 rounded-full hover:bg-white/5"
-        >
+          type="button"
+          aria-label="Acción">
           <ArrowLeft size={20} />
         </button>
 
@@ -36,7 +36,6 @@ const HeaderStats = ({ score = "5.0" }) => {
           </div>
         </div>
       </div>
-
       {/* BADGE DE RATING - Más compacto */}
       <div className="flex items-center gap-3 bg-zinc-900/40 p-2 rounded-lg border border-transparent relative group overflow-hidden transition-all">
         <div className="p-1.5 bg-blue-500/10 rounded-md">
@@ -55,7 +54,6 @@ const HeaderStats = ({ score = "5.0" }) => {
           </div>
         </div>
       </div>
-
     </header>
   );
 };

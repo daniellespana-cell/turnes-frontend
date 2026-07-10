@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { BadgeCheck, Sparkles, ChevronRight } from 'lucide-react';
 
 import { useNavigate } from 'react-router-dom';
@@ -32,7 +32,6 @@ const VerificationBanner = ({ verifyPrice = null }) => {
         >
             {/* Borde Gradiente Animado */}
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-emerald-400 to-purple-500 opacity-50 group-hover:opacity-100 transition-opacity duration-500 bg-[length:200%_auto] animate-gradient" />
-
             <div className="relative bg-[#09090b] rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden">
 
                 {/* Fondo Decorativo */}
@@ -70,7 +69,8 @@ const VerificationBanner = ({ verifyPrice = null }) => {
 
                     <button
                         className="flex-1 sm:flex-none py-2.5 px-6 rounded-xl bg-white text-black font-bold text-sm hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 group/btn shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)]"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         Validar Perfil
                         <ChevronRight size={16} className="text-black/60 group-hover/btn:translate-x-1 transition-transform" />
                     </button>

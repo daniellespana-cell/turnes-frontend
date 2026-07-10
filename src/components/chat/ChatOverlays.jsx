@@ -67,13 +67,16 @@ const ChatOverlays = ({
               <h4 className="text-[12px] font-black uppercase tracking-wider">Pago Exitoso</h4>
               <p className="text-[10px] text-zinc-400">Paso 2 desbloqueado. Puedes invitar a video.</p>
             </div>
-            <button onClick={() => setShowSuccessToast(false)} className="pl-4 text-zinc-600 hover:text-white">
+            <button
+              onClick={() => setShowSuccessToast(false)}
+              className="pl-4 text-zinc-600 hover:text-white"
+              type="button"
+              aria-label="Acción">
               <X size={14} />
             </button>
           </div>
         </div>
       )}
-
       {/* PASO 2: VIDEO */}
       {isInVideoCall && !isClosed && (
         <VideoCallOverlay

@@ -31,7 +31,6 @@ const BaseSidebar = ({ menuItems, isExpanded, setIsExpanded, isMobileOpen, setIs
                     onClick={() => setIsMobileOpen(false)}
                 />
             )}
-
             {/* SIDEBAR CORE: Borde Brillante Estilo Gemini */}
             <aside
                 className={`
@@ -55,7 +54,8 @@ const BaseSidebar = ({ menuItems, isExpanded, setIsExpanded, isMobileOpen, setIs
                     <button
                         onClick={() => setIsExpanded(!isExpanded)}
                         className="hidden md:flex p-1.5 rounded-lg text-zinc-400 hover:bg-white/5 hover:text-white transition-all items-center justify-center"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <ChevronLeft size={16} className={`transition-transform duration-500 ${!isExpanded && 'rotate-180'}`} />
                     </button>
                 </div>
@@ -167,7 +167,8 @@ const BaseSidebar = ({ menuItems, isExpanded, setIsExpanded, isMobileOpen, setIs
                           flex items-center rounded-xl transition-all duration-300 group relative overflow-hidden w-full
                           ${(isExpanded || isMobileOpen) ? 'px-3 py-2.5 md:py-3 space-x-3 border border-red-500/10 bg-red-500/5 hover:bg-red-500/10' : 'p-2.5 md:p-3 justify-center hover:bg-white/5'}
                         `}
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <LogOut size={18} className="shrink-0 md:w-5 md:h-5 text-red-500/70 group-hover:text-red-500 transition-colors" />
 
                         {(isExpanded || isMobileOpen) && (

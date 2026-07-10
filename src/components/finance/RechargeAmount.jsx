@@ -48,7 +48,6 @@ const RechargeAmount = ({ amount, setAmount, onAmountChange }) => {
           </span>
         )}
       </div>
-
       {/* Contenedor del Input con estado de error visual */}
       <div className={`relative bg-zinc-900/30 border rounded-xl px-4 py-3 transition-all duration-300 ${isInvalid
         ? 'border-red-500/30 bg-red-500/5'
@@ -68,7 +67,6 @@ const RechargeAmount = ({ amount, setAmount, onAmountChange }) => {
           />
         </div>
       </div>
-
       {/* Botones de acceso rápido */}
       <div className="flex flex-wrap gap-2">
         {QUICK_AMOUNTS.map((val) => (
@@ -79,12 +77,12 @@ const RechargeAmount = ({ amount, setAmount, onAmountChange }) => {
               ? 'bg-white text-black border-white shadow-lg shadow-white/10'
               : 'bg-transparent text-zinc-500 border-white/5  hover:text-zinc-300'
               }`}
-          >
+            type="button"
+            aria-label="Acción">
             ${(val / 1000)}k
           </button>
         ))}
       </div>
-
       {/* Info adicional sutil */}
       <p className="text-[9px] text-zinc-700 font-medium text-center pt-1">
         Acreditación inmediata

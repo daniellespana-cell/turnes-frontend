@@ -1,6 +1,6 @@
 import React from 'react';
 import { Clock, Trash2, Zap } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 
 import { ShieldCheck, Search, Star, TrendingUp } from 'lucide-react';
 
@@ -62,7 +62,8 @@ const EliteVerifiedCard = ({ note, onClick, onDelete }) => (
                     <button
                         onClick={(e) => { e.stopPropagation(); onDelete(note.id); }}
                         className="p-1.5 text-zinc-600 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors opacity-0 group-hover:opacity-100"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <Trash2 size={14} />
                     </button>
                 )}
@@ -112,7 +113,6 @@ const NotificationItem = ({ note, isLast, onClick, onDelete }) => {
                 ${unread ? 'bg-purple-900/10 hover:bg-purple-900/20' : 'hover:bg-white/5'}`}
         >
             <div className={`mt-2 w-2.5 h-2.5 rounded-full shrink-0 ${dot}`} />
-
             <div
                 className="flex-1 min-w-0 cursor-pointer focus:outline-none"
                 onClick={() => onClick(note)}
@@ -132,7 +132,6 @@ const NotificationItem = ({ note, isLast, onClick, onDelete }) => {
                     {note.body}
                 </p>
             </div>
-
             <div className="-mt-1 -mr-2 flex flex-col items-end gap-2 shrink-0">
                 {unread && (
                     <span className="shrink-0 mt-3 mr-2 w-2 h-2 rounded-full bg-purple-500 border-2 border-[#0a0a0a] shadow-[0_0_10px_rgba(168,85,247,0.8)] animate-pulse" />
@@ -142,7 +141,7 @@ const NotificationItem = ({ note, isLast, onClick, onDelete }) => {
                         onClick={(e) => { e.stopPropagation(); onDelete(note.id); }}
                         className="p-1.5 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors opacity-60 sm:opacity-0 group-hover:opacity-100 focus:opacity-100"
                         title="Eliminar notificación"
-                    >
+                        type="button">
                         <Trash2 size={16} />
                     </button>
                 )}

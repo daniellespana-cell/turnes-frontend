@@ -25,7 +25,6 @@ const LandingFooter = () => {
     <footer className="bg-[#09090b] border-t border-zinc-800/50 text-white pt-12 pb-6 relative overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent"></div>
-      
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* GRID PRINCIPAL */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-8 py-8">
@@ -79,10 +78,11 @@ const LandingFooter = () => {
               <FooterLink to="/politicas" label="Políticas de Usuario" />
               <FooterLink to="/politica-pagos" label="Política de Pagos" />
               <li>
-                <button 
-                  onClick={() => setIsCookieModalOpen(true)} 
+                <button
+                  onClick={() => setIsCookieModalOpen(true)}
                   className="inline-block py-1.5 text-sm text-zinc-400 hover:text-emerald-400 hover:translate-x-1 transition-all duration-300"
-                >
+                  type="button"
+                  aria-label="Acción">
                   Preferencias de Cookies
                 </button>
               </li>
@@ -113,7 +113,6 @@ const LandingFooter = () => {
           </div>
         </div>
       </div>
-
       <CookieSettingsModal isOpen={isCookieModalOpen} onClose={() => setIsCookieModalOpen(false)} />
     </footer>
   );

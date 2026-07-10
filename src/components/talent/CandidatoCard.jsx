@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Star, Send, X, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AssetResolver } from '../../utils/assetHelper';
@@ -25,7 +25,6 @@ const CandidatoCard = ({ can, onUpdate, onSellar }) => {
     >
       {/* Indicador sutil de proceso */}
       {can.justSent && <div className="absolute inset-0 bg-emerald-500/[0.02] z-0" />}
-
       <div className="p-6 relative z-10 flex flex-col h-full space-y-6">
         {/* --- 1. HEADER (Upscaled) --- */}
         <div className="flex items-center gap-5">
@@ -63,7 +62,7 @@ const CandidatoCard = ({ can, onUpdate, onSellar }) => {
                       type="button"
                       onClick={() => onUpdate(can.id, { rating: star })}
                       className="focus:outline-none transition-all hover:scale-125 active:scale-90"
-                    >
+                      aria-label="Acción">
                       <Star
                         size={24}
                         fill={star <= (can.rating || 0) ? "#fbbf24" : "none"}
@@ -84,7 +83,8 @@ const CandidatoCard = ({ can, onUpdate, onSellar }) => {
                   ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.05)]'
                   : 'bg-zinc-900/50 border-white/5 text-zinc-600 hover:border-zinc-700'
                   }`}
-              >
+                type="button"
+                aria-label="Acción">
                 {can.asistio ? <CheckCircle2 size={16} /> : <X size={16} />}
                 {can.asistio ? 'Asistencia Confirmada' : 'Confirmar Asistencia'}
               </button>
@@ -116,7 +116,8 @@ const CandidatoCard = ({ can, onUpdate, onSellar }) => {
                     ? 'bg-white text-black border-transparent hover:bg-zinc-200 active:scale-[0.98]'
                     : 'bg-zinc-900/50 text-zinc-700 border-zinc-800 cursor-not-allowed opacity-40'
                     }`}
-                >
+                  type="button"
+                  aria-label="Acción">
                   <Send size={16} />
                   Sellar y Calificar
                 </button>
@@ -125,7 +126,7 @@ const CandidatoCard = ({ can, onUpdate, onSellar }) => {
           </>
         ) : (
           /* 🛡️ Estado Seguro: Candidato aún en proceso, no calificable */
-          <div className="py-6 flex flex-col items-center gap-3 text-center">
+          (<div className="py-6 flex flex-col items-center gap-3 text-center">
             <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center">
               <ShieldCheck size={16} className="text-zinc-600" />
             </div>
@@ -135,7 +136,7 @@ const CandidatoCard = ({ can, onUpdate, onSellar }) => {
             <p className="text-[10px] text-zinc-600">
               Este candidato aún está en el flujo de contratación. La calificación se habilitará cuando el acuerdo sea confirmado.
             </p>
-          </div>
+          </div>)
         )}
       </div>
     </motion.div>

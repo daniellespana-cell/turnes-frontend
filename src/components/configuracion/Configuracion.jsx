@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
 
 import React, { useState } from 'react';
@@ -88,7 +88,8 @@ const DesktopSidebar = ({ activeTabId, onTabChange, tabs }) => {
                 <button
                     onClick={() => navigate(-1)}
                     className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors mb-4 text-xs font-bold uppercase tracking-wider group"
-                >
+                    type="button"
+                    aria-label="Acción">
                     <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
                     Volver
                 </button>
@@ -97,7 +98,6 @@ const DesktopSidebar = ({ activeTabId, onTabChange, tabs }) => {
                 </h1>
                 <p className="text-sm text-zinc-500 mt-2 font-medium">Administra tu cuenta y preferencias</p>
             </div>
-
             <nav className="flex-1 p-6 space-y-2">
                 {tabs.map((tab) => (
                     <SidebarItem
@@ -121,7 +121,8 @@ const SidebarItem = ({ tab, isActive, onClick }) => {
                 ? 'bg-white/5 text-white shadow-sm ring-1 ring-white/10'
                 : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-200'
                 }`}
-        >
+            type="button"
+            aria-label="Acción">
             {isActive && (
                 <motion.div
                     layoutId="activeTabIndicator"
@@ -143,12 +144,15 @@ const MobileNavigation = ({ activeTabId, onTabChange, tabs }) => {
     return (
         <div className="md:hidden sticky top-0 bg-[#0a0a0a]/90 backdrop-blur-xl z-20 border-b border-white/5 shadow-sm">
             <div className="p-4 flex items-center gap-4">
-                <button onClick={() => navigate(-1)} className="text-zinc-400 hover:text-white">
+                <button
+                    onClick={() => navigate(-1)}
+                    className="text-zinc-400 hover:text-white"
+                    type="button"
+                    aria-label="Acción">
                     <ArrowLeft size={20} />
                 </button>
                 <h1 className="text-lg font-bold text-white">Configuración</h1>
             </div>
-
             <div className="flex overflow-x-auto px-2 pb-0 gap-2 no-scrollbar scroll-smooth">
                 {tabs.map((tab) => {
                     const isActive = activeTabId === tab.id;
@@ -160,7 +164,8 @@ const MobileNavigation = ({ activeTabId, onTabChange, tabs }) => {
                                 ? 'border-emerald-500 text-emerald-400 translate-y-[1px]'
                                 : 'border-transparent text-zinc-400 hover:text-zinc-200'
                                 }`}
-                        >
+                            type="button"
+                            aria-label="Acción">
                             <tab.icon size={22} className={isActive ? 'animate-pulse-slow' : ''} />
                             <span className={`text-[10px] font-bold whitespace-nowrap ${isActive ? 'opacity-100' : 'opacity-70'}`}>
                                 {tab.label}

@@ -21,7 +21,7 @@ const AdminPagination = ({ page, setPage, total, limit, label }) => (
                 onClick={() => setPage(p => Math.max(0, p - 1))}
                 aria-label="Página anterior"
                 className="px-3 py-1 bg-black/40 border border-white/5 rounded-lg text-xs font-bold text-zinc-400 hover:text-white disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
-            >
+                type="button">
                 Anterior
             </button>
             <button
@@ -29,7 +29,7 @@ const AdminPagination = ({ page, setPage, total, limit, label }) => (
                 onClick={() => setPage(p => p + 1)}
                 aria-label="Página siguiente"
                 className="px-3 py-1 bg-black/40 border border-white/5 rounded-lg text-xs font-bold text-zinc-400 hover:text-white disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
-            >
+                type="button">
                 Siguiente
             </button>
         </div>

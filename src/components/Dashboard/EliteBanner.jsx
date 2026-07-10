@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight } from 'lucide-react';
 
 import { ShieldCheck, Search, TrendingUp, Users } from 'lucide-react';
@@ -80,7 +80,7 @@ const EliteBanner = ({ userName }) => {
                         onClick={handleDismiss}
                         className="absolute top-4 right-4 p-1.5 text-zinc-500 hover:text-zinc-200 hover:bg-white/8 rounded-lg transition-colors z-10"
                         title="Entendido, no mostrar de nuevo"
-                    >
+                        type="button">
                         <X size={14} />
                     </button>
 
@@ -133,7 +133,8 @@ const EliteBanner = ({ userName }) => {
                         <button
                             onClick={() => { handleDismiss(); navigate('/dashboard/perfil'); }}
                             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-300 text-[11px] font-black hover:bg-blue-500/30 transition-colors whitespace-nowrap ml-4"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Ver perfil <ChevronRight size={12} />
                         </button>
                     </div>

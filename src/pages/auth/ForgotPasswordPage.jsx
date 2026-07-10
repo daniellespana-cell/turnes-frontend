@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowLeft, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import AuthBackground from '../../components/ui/auth/AuthBackground';
 import TurnesButton from '../../components/ui/TurnesButton';
 
@@ -23,10 +23,8 @@ const ForgotPasswordPage = () => {
 
     return (
         <div className="min-h-screen w-full bg-[#050505] flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans selection:bg-emerald-500/30">
-
             {/* --- ALIVE BACKGROUND (Extracted to component) --- */}
             <AuthBackground />
-
             {/* --- BACK NAVIGATION (Floating) --- */}
             <motion.button
                 initial={{ opacity: 0, x: -20 }}
@@ -40,7 +38,6 @@ const ForgotPasswordPage = () => {
                 </div>
                 <span>Volver</span>
             </motion.button>
-
             {/* --- CORE INTERFACE --- */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -123,7 +120,8 @@ const ForgotPasswordPage = () => {
                             <button
                                 onClick={() => navigate('/login')}
                                 className="text-xs font-medium text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-wide"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 Volver al Login
                             </button>
                         </motion.div>

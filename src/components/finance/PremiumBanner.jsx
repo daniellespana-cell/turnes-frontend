@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Crown } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -63,7 +63,6 @@ const PremiumBanner = ({ currentPlan = 'Basic' }) => {
           />
         )}
       </AnimatePresence>
-
       <div className="flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2.5">
           <div className={`p-2 rounded-xl transition-all duration-700 ${highlight ? 'bg-amber-500 text-black' : 'bg-amber-500/10 text-amber-500'}`}>
@@ -79,7 +78,6 @@ const PremiumBanner = ({ currentPlan = 'Basic' }) => {
           ))}
         </div>
       </div>
-
       <div className="space-y-2 relative z-10">
         <h3 className="text-white text-lg font-black leading-tight tracking-tight">
           Ahorros potenciales: <span className="text-amber-500">{activeConfig.savings}</span>
@@ -88,18 +86,17 @@ const PremiumBanner = ({ currentPlan = 'Basic' }) => {
           {activeConfig.text}
         </p>
       </div>
-
       <button
         onClick={() => navigate("/dashboard/upgrade")}
         className={`w-full relative z-10 flex items-center justify-center gap-3 py-3 rounded-full text-[11px] font-bold tracking-wide transition-all duration-500 active:scale-[0.98] overflow-hidden group/btn ${highlight
           ? 'bg-amber-500 text-black shadow-[0_0_30px_rgba(245,158,11,0.5)]'
           : 'bg-zinc-900 text-zinc-400 hover:text-white border border-transparent hover:border-amber-500/30 font-manrope'
           }`}
-      >
+        type="button"
+        aria-label="Acción">
         <span className="relative z-10">Actualizar a {activeConfig.target}</span>
         <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
       </button>
-
       {/* Decorative Orbs */}
       <div className={`absolute -bottom-12 -right-12 w-32 h-32 bg-amber-500/10 blur-[60px] rounded-full transition-opacity duration-1000 ${highlight ? 'opacity-100' : 'opacity-0'}`} />
     </motion.div>

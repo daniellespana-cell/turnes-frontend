@@ -33,7 +33,8 @@ const CategoryChip = ({ cat, isActive, onClick }) => {
                 background: 'transparent',
                 border: '1px solid transparent',
             }}
-        >
+            type="button"
+            aria-label="Acción">
             {label}
             {isActive && (
                 <span

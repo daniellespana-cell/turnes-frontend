@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { Shield, LogOut, Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -33,7 +33,6 @@ const AdminLayout = () => {
 
     return (
         <div className="flex h-screen bg-[#040404] font-manrope text-white overflow-hidden">
-            
             {/* Backdrop Mobile Overlay */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
@@ -47,7 +46,6 @@ const AdminLayout = () => {
                     />
                 )}
             </AnimatePresence>
-
             {/* Sidebar Superior (Logo & Title) */}
             <aside className={`fixed md:relative top-0 left-0 w-72 md:w-64 h-full bg-[#0a0a0a] border-r border-white/5 flex flex-col z-50 transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
                 <div className="h-20 flex items-center justify-between px-6 border-b border-white/5 shadow-sm shrink-0">
@@ -61,11 +59,11 @@ const AdminLayout = () => {
                         </div>
                     </div>
                     {/* Botón para cerrar en móvil */}
-                    <button 
+                    <button
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="md:hidden p-2 text-zinc-500 hover:text-white bg-white/5 rounded-lg"
                         aria-label="Cerrar Menú"
-                    >
+                        type="button">
                         <X size={16} />
                     </button>
                 </div>
@@ -106,13 +104,13 @@ const AdminLayout = () => {
                     <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500/80 hover:text-red-400 hover:bg-red-500/10 transition-all font-bold text-sm"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <LogOut size={18} />
                         Cerrar Sesión
                     </button>
                 </div>
             </aside>
-
             {/* Main Content Area */}
             <main className="flex-1 relative flex flex-col overflow-hidden bg-[#040404]">
                 
@@ -137,7 +135,6 @@ const AdminLayout = () => {
                     <Outlet />
                 </div>
             </main>
-            
         </div>
     );
 };

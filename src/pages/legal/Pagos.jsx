@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Percent, Shield, Zap } from 'lucide-react';
 
 // 🛠️ CORRECCIÓN: Se agrega Clock a la lista de importaciones de lucide-react.
@@ -55,7 +55,6 @@ const PoliticaPagos = () => {
     return (
         // Fondo general NEGRO TOTAL (bg-black)
         <div className="min-h-screen flex flex-col bg-black text-white font-sans">
-
             <div className="flex-grow pt-8 pb-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 

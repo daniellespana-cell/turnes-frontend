@@ -43,19 +43,20 @@ const WelcomeBonusBanner = () => {
                         <button
                             onClick={() => navigate('/dashboard/perfil')}
                             className="px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-[11px] transition-all shadow-lg bg-emerald-500 hover:bg-emerald-400 text-white shadow-emerald-500/20 hover:scale-105"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Completar Perfil
                         </button>
                     )}
                     <button
                         onClick={() => setShowLegalModal(true)}
                         className="px-6 py-2 rounded-xl font-bold uppercase tracking-widest text-[10px] text-zinc-400 hover:text-white transition-colors flex items-center justify-center gap-1"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <Info size={12} /> Ver Condiciones
                     </button>
                 </div>
             </div>
-
             {/* Legal Modal */}
             {showLegalModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
@@ -80,7 +81,8 @@ const WelcomeBonusBanner = () => {
                             <button
                                 onClick={() => setShowLegalModal(false)}
                                 className="w-full py-3 px-4 rounded-xl font-bold uppercase text-[11px] tracking-widest text-zinc-400 bg-zinc-900 hover:bg-zinc-800 transition-colors"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 Entendido
                             </button>
                         </div>

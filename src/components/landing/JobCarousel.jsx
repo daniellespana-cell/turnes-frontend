@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
-import { useAnimation, motion } from 'framer-motion';
+import { useAnimation, m as motion } from 'framer-motion';
 
 import repImg from '../../assets/roles/rep.webp';
 import baristaImg from '../../assets/roles/barista.webp';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Cookie } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CookieSettingsModal from './CookieSettingsModal';
@@ -48,16 +48,18 @@ export const CookieBanner = () => {
 
                                 {/* Acciones Derecha */}
                                 <div className="flex items-center gap-6 shrink-0 border-t md:border-t-0 border-white/5 pt-4 md:pt-0 w-full md:w-auto justify-between md:justify-end">
-                                    <button 
+                                    <button
                                         onClick={() => setShowSettings(true)}
                                         className="text-[11px] font-black uppercase tracking-[0.15em] text-zinc-500 hover:text-white transition-all active:scale-95"
-                                    >
+                                        type="button"
+                                        aria-label="Acción">
                                         Gestionar
                                     </button>
                                     <button
                                         onClick={acceptAll}
                                         className="bg-emerald-500 hover:bg-emerald-400 text-black px-10 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.15em] transition-all active:scale-95 shadow-[0_10px_20px_rgba(16,185,129,0.15)] hover:shadow-[0_10px_25px_rgba(16,185,129,0.25)]"
-                                    >
+                                        type="button"
+                                        aria-label="Acción">
                                         Aceptar todas
                                     </button>
                                 </div>
@@ -66,7 +68,6 @@ export const CookieBanner = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-
             <CookieSettingsModal 
                 isOpen={showSettings} 
                 onClose={() => setShowSettings(false)} 

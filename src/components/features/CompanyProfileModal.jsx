@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { X, Building2, ShieldCheck } from 'lucide-react';
 import Spinner from '../ui/Spinner';
 import ProfileView from '../profile/ProfileView';
@@ -124,10 +124,11 @@ const CompanyProfileModal = ({ isOpen, onClose, companyId }) => {
                                     <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Perfil Verificado por Turnes</p>
                                 </div>
                             </div>
-                            <button 
+                            <button
                                 onClick={onClose}
                                 className="p-2 hover:bg-white/5 rounded-full text-zinc-500 hover:text-white transition-all"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 <X size={24} />
                             </button>
                         </div>
@@ -145,7 +146,11 @@ const CompanyProfileModal = ({ isOpen, onClose, companyId }) => {
                                         <Building2 size={32} />
                                     </div>
                                     <p className="text-white font-bold">{error}</p>
-                                    <button onClick={onClose} className="mt-4 text-emerald-500 text-xs font-bold uppercase">Cerrar</button>
+                                    <button
+                                        onClick={onClose}
+                                        className="mt-4 text-emerald-500 text-xs font-bold uppercase"
+                                        type="button"
+                                        aria-label="Acción">Cerrar</button>
                                 </div>
                             ) : profile && (
                                 <div className="animate-in fade-in duration-500">

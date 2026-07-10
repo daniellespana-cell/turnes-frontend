@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Search } from 'lucide-react';
 
 
@@ -15,7 +15,8 @@ const ErrorView = ({ message }) => (
         <button
             onClick={() => window.location.reload()}
             className="px-6 py-2.5 bg-zinc-800 text-white text-xs font-bold rounded-xl hover:bg-zinc-700 transition-colors"
-        >
+            type="button"
+            aria-label="Acción">
             Reintentar
         </button>
     </motion.div>

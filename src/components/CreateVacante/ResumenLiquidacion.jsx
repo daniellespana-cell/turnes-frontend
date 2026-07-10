@@ -8,7 +8,6 @@ import Spinner from '../ui/Spinner';
 const ResumenLiquidacion = ({ data, ui, walletBalance, onPublish, formatCurrency, isSubmitting, userPlan }) => {
   return (
     <div className="md:bg-zinc-900/40 md:rounded-[2.5rem] md:p-6 sticky top-8 font-manrope">
-
       {/* HEADER: MEMBRESÍA - Ajustado para evitar desborde */}
       <div className="flex justify-between items-center mb-8 gap-4">
         <div className="flex items-center gap-2 min-w-0">
@@ -24,7 +23,6 @@ const ResumenLiquidacion = ({ data, ui, walletBalance, onPublish, formatCurrency
           </span>
         </div>
       </div>
-
       <div className="space-y-4 mb-8">
         {/* INDICADOR DE VOLUMEN */}
         <div className="flex justify-between items-center p-4 bg-white/[0.02] rounded-2xl border border-white/5">
@@ -85,7 +83,6 @@ const ResumenLiquidacion = ({ data, ui, walletBalance, onPublish, formatCurrency
           <div className="text-right opacity-50 text-xs font-bold uppercase shrink-0 pb-1">COP</div>
         </div>
       </div>
-
       {/* ALERTAS DE SEGURIDAD */}
       {ui.showSensitiveAlert && (
         <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex gap-3 items-center animate-in zoom-in-95">
@@ -95,14 +92,12 @@ const ResumenLiquidacion = ({ data, ui, walletBalance, onPublish, formatCurrency
           </p>
         </div>
       )}
-
       {/* STATUS BILLETERA */}
       <WalletStatus
         balance={walletBalance}
         hasFunds={ui.hasFunds}
         formatCurrency={formatCurrency}
       />
-
       {/* BOTÓN DE ACCIÓN FINAL */}
       {/* 🚀 SENIOR FIX: Cero 'Fake Disabled States'.
           Si el botón arroja Toasts explicativos de error al ser tocado, 
@@ -117,7 +112,7 @@ const ResumenLiquidacion = ({ data, ui, walletBalance, onPublish, formatCurrency
             : 'bg-white text-black hover:bg-blue-500 hover:text-white shadow-lg active:scale-[0.98]'
           }
         `}
-      >
+        aria-label="Acción">
         {isSubmitting && (
           <div className="absolute inset-0 bg-zinc-800/80 backdrop-blur-sm z-10 flex items-center justify-center pointer-events-none">
             <Spinner size="sm" variant="white" />

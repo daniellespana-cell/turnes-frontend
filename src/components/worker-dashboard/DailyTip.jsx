@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 
 import { useMemo } from 'react';
 import { UserCircle, Zap, Star, TrendingUp } from 'lucide-react';
@@ -44,7 +44,8 @@ const DailyTip = ({ stats, loading }) => {
                     <button
                         onClick={() => navigate(tip.route)}
                         className={`mt-2 text-[10px] font-bold uppercase tracking-widest ${tip.color} hover:opacity-80 transition-opacity`}
-                    >
+                        type="button"
+                        aria-label="Acción">
                         {tip.cta} →
                     </button>
                 )}

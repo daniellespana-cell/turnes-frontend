@@ -8,10 +8,11 @@ export const InviteToVacancyHeader = ({ candidateName, onClose }) => (
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
                 <UserPlus size={20} />
             </div>
-            <button 
+            <button
                 onClick={onClose}
                 className="p-2 text-zinc-500 hover:text-white hover:bg-white/5 rounded-full transition-all"
-            >
+                type="button"
+                aria-label="Acción">
                 <X size={18} />
             </button>
         </div>

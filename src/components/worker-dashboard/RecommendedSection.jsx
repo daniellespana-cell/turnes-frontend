@@ -49,12 +49,12 @@ const RecommendedSection = ({ priorityAction, appliedIds, loading }) => {
                     <button
                         onClick={() => navigate('/dashboard/explorar')}
                         className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest hover:text-emerald-300 flex items-center gap-1"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         Ver Todo <ChevronRight size={12} />
                     </button>
                 )}
             </div>
-
             {hasData ? (
                 <div className="flex overflow-x-auto pb-4 gap-4 md:grid md:grid-cols-3 md:overflow-visible custom-scrollbar snap-x px-1">
                     {priorityAction.data.map((vacancy) => (

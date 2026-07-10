@@ -97,7 +97,8 @@ const ChatActionModal = ({ isOpen, onClose, onConfirm, actionType, candidateName
                         onClick={onClose}
                         disabled={isLoading}
                         className="p-2 rounded-full hover:bg-white/10 text-zinc-400 hover:text-white transition-colors disabled:opacity-50"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
@@ -124,7 +125,8 @@ const ChatActionModal = ({ isOpen, onClose, onConfirm, actionType, candidateName
                             onClick={onClose}
                             disabled={isLoading}
                             className="flex-1 py-3 px-4 rounded-xl border border-transparent text-white font-bold text-[14px] hover:bg-white/5 transition-colors disabled:opacity-50 active:scale-95"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Cancelar
                         </button>
                         <button
@@ -136,7 +138,8 @@ const ChatActionModal = ({ isOpen, onClose, onConfirm, actionType, candidateName
                                         'bg-orange-500 hover:bg-orange-600 text-white  shadow-orange-500/20'
                                 }
                             `}
-                        >
+                            type="button"
+                            aria-label="Acción">
                             <div className="relative z-10 flex items-center justify-center gap-2">
                                 {isLoading ? (
                                     <Spinner size="sm" variant="white" />

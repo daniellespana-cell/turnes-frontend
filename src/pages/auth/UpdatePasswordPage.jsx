@@ -1,6 +1,6 @@
 import React from 'react';
 import { Lock, CheckCircle2, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import TurnesButton from '../../components/ui/TurnesButton';
 import AuthBackground from '../../components/ui/auth/AuthBackground';
 import PasswordInput from '../../components/ui/auth/PasswordInput';

@@ -32,7 +32,8 @@ const TabSelector = ({ activeTab, setActiveTab, stats }) => {
                 : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.03]'
               }
             `}
-          >
+            type="button"
+            aria-label="Acción">
             {/* Indicador de Punto Activo */}
             <div className="relative flex items-center justify-center">
               <div className={`
@@ -49,11 +50,9 @@ const TabSelector = ({ activeTab, setActiveTab, stats }) => {
                 </span>
               )}
             </div>
-            
             <span className="font-black uppercase tracking-[0.12em] text-[10px] md:text-[11px]">
               {tab.label}
             </span>
-            
             {/* Contador */}
             <span className={`
               px-2 py-0.5 rounded-lg text-[9px] font-black transition-all duration-300
@@ -64,7 +63,6 @@ const TabSelector = ({ activeTab, setActiveTab, stats }) => {
             `}>
               {tab.count}
             </span>
-
             {/* Punto de rebote si hay novedades en el historial */}
             {hasDiscovery && (
               <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-blue-500 rounded-full border border-black animate-bounce shadow-[0_0_5px_rgba(59,130,246,0.8)]" />

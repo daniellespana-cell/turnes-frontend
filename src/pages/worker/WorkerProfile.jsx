@@ -36,7 +36,6 @@ const WorkerProfile = () => {
 
     return (
         <div className="max-w-5xl mx-auto pb-24 px-4 md:px-8 pt-6">
-
             {/* 1. HEADER HERO (Reused) */}
             <ProfileHeader
                 user={user}
@@ -47,7 +46,6 @@ const WorkerProfile = () => {
                 handleSave={handleSave}
                 loading={loading}
             />
-
             {/* 3. MAIN GRID */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -76,7 +74,8 @@ const WorkerProfile = () => {
                         <button
                             onClick={() => setPasswordModalOpen(true)}
                             className="w-full py-3 border border-zinc-800 rounded-xl text-xs text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all flex items-center justify-between px-4 group"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Cambiar Contraseña
                             <Lock size={12} className="group-hover:text-white transition-colors" />
                         </button>
@@ -99,7 +98,6 @@ const WorkerProfile = () => {
                     currentSectorData={currentSectorData}
                 />
             </div>
-
             {/* Modal Compartido de Cambio de Contraseña */}
             <ChangePasswordModal
                 isOpen={isPasswordModalOpen}

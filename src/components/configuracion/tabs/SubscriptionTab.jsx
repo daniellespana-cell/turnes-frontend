@@ -47,7 +47,6 @@ const SubscriptionTab = () => {
                 <h2 className="text-2xl font-bold text-white mb-2">Facturación y Suscripción</h2>
                 <p className="text-zinc-400 text-sm">Gestiona la renovación de tu plan actual.</p>
             </div>
-
             <div className="bg-white/5 border border-transparent rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
                 
                 {/* Cabecera del Plan Actual */}
@@ -96,7 +95,8 @@ const SubscriptionTab = () => {
                                     onClick={toggleRenewal}
                                     disabled={isToggling}
                                     className={`flex items-center justify-center px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${isToggling ? 'opacity-50' : 'active:scale-95'} ${isCanceled ? 'bg-emerald-500 text-black' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     {isToggling ? '...' : isCanceled ? 'Reactivar' : 'Desactivar auto-renovación'}
                                 </button>
                             </div>
@@ -125,7 +125,8 @@ const SubscriptionTab = () => {
                                             }}
                                             disabled={isToggling}
                                             className="px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-widest border border-white/10 transition-all active:scale-95"
-                                        >
+                                            type="button"
+                                            aria-label="Acción">
                                             {isToggling && downgradeTarget === 'micro' ? 'Cambiando...' : 'Bajar a Micro'}
                                         </button>
                                     </div>
@@ -147,7 +148,8 @@ const SubscriptionTab = () => {
                                         }}
                                         disabled={isToggling}
                                         className="px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-widest border border-white/10 transition-all active:scale-95"
-                                    >
+                                        type="button"
+                                        aria-label="Acción">
                                         {isToggling && downgradeTarget === 'basic' ? 'Cambiando...' : 'Bajar a Básico'}
                                     </button>
                                 </div>
@@ -163,7 +165,6 @@ const SubscriptionTab = () => {
                     </div>
                 )}
             </div>
-
             {/* Modal de Confirmación Premium */}
             <ConfirmationModal 
                 isOpen={isModalOpen}

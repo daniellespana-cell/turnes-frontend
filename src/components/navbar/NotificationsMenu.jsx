@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bell, CheckCircle, Clock, Trash2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useNotificationsMenu } from '../../hooks/useNotificationsMenu';
 
@@ -31,7 +31,7 @@ const NotificationsMenu = () => {
                 aria-haspopup="true"
                 aria-label={`Notificaciones ${unreadCount > 0 ? `(${unreadCount} nuevas)` : ''}`}
                 className="relative flex items-center justify-center transition-all duration-500 group active:scale-[0.85] focus:outline-none p-2 z-50"
-            >
+                type="button">
                 {/* Bell Icon — Alto Relieve (Embossed) */}
                 <Bell 
                     className={`w-6 h-6 transition-all duration-500 transform group-hover:-translate-y-0.5 relative z-10 ${
@@ -54,7 +54,6 @@ const NotificationsMenu = () => {
                     </span>
                 )}
             </button>
-
             {/* Dropdown Menu */}
             <AnimatePresence>
                 {isOpen && (
@@ -75,7 +74,7 @@ const NotificationsMenu = () => {
                                 onClick={handleMarkAll}
                                 className="text-xs text-zinc-500 hover:text-emerald-400 transition-colors flex items-center gap-1.5 font-medium hover:bg-white/5 px-2 py-1 rounded focus:outline-none focus:bg-white/10"
                                 aria-label="Marcar todas como leídas"
-                            >
+                                type="button">
                                 <CheckCircle size={14} />
                                 Leídas
                             </button>
@@ -122,7 +121,8 @@ const NotificationsMenu = () => {
                         <button
                             onClick={handleViewAll}
                             className="border-t border-white/5 px-4 py-3 bg-zinc-900/30 text-center hover:bg-zinc-900/50 cursor-pointer transition-colors shrink-0 w-full focus:outline-none focus:bg-zinc-800"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             <span className="text-xs font-bold text-zinc-400 hover:text-white transition-colors">
                                 Ver todas las notificaciones
                             </span>
@@ -185,13 +185,12 @@ const NotificationItem = ({ note, onClick, onDelete, isUnread }) => {
                     </span>
                 </div>
             </div>
-
             {/* Acciones Rápidas Ocultas (Delete) */}
             <button
                 onClick={(e) => { e.stopPropagation(); onDelete(); }}
                 className="absolute top-1/2 -translate-y-1/2 right-3 p-1.5 bg-zinc-900 border border-transparent text-zinc-500 hover:text-red-400 hover:border-red-500/30 rounded-lg  opacity-70 md:opacity-0 scale-90 md:scale-75 group-hover:opacity-100 group-hover:scale-100 focus:opacity-100 focus:scale-100 transition-all z-10"
                 title="Eliminar"
-            >
+                type="button">
                 <Trash2 size={13} />
             </button>
         </motion.div>

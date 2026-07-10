@@ -14,12 +14,8 @@ ALTER TABLE IF EXISTS public.debug_roles ENABLE ROW LEVEL SECURITY;
 -- pero es buena práctica activarlo si el Advisor lo pide.
 -- ALTER TABLE IF EXISTS public.spatial_ref_sys ENABLE ROW LEVEL SECURITY; -- ⚠️ Requires Superuser
 
--- 2. POLÍTICAS DE ACCESO MÍNIMAS (Solo para Admin/Service Role)
--- Para debug_logs, permitimos que el sistema inserte, pero nadie lea públicamente.
-DO $$ BEGIN
-    CREATE POLICY "System insert debug_logs" ON public.debug_logs FOR INSERT WITH CHECK (true);
-EXCEPTION WHEN duplicate_object THEN null; END $$;
--- Nadie lee debug_logs vía API (Solo Dashboard).
+-- 2. POLÍTICAS DE ACCESO MÍNIMAS
+-- Removido para prevenir inserciones públicas.
 
 -- 3. HARDENING DE FUNCIONES (Fix: Function Search Path Mutable)
 -- Un atacante podría crear un objeto malicioso en un esquema prioritario e interceptar llamadas.

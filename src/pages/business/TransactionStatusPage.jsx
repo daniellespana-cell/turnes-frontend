@@ -111,7 +111,8 @@ const TransactionStatusPage = () => {
                         <button
                             onClick={verifyTransaction}
                             className="w-full py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition-colors flex items-center justify-center gap-2"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Reintentar Verificación Ahora
                         </button>
                     )}
@@ -125,7 +126,8 @@ const TransactionStatusPage = () => {
                             }
                         }}
                         className={`w-full py-3 ${status === 'approved' ? 'bg-white text-black' : 'bg-zinc-800 text-white'} font-bold rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2`}
-                    >
+                        type="button"
+                        aria-label="Acción">
                         {(status === 'approved' && itemType === 'service' && itemId === 'verify') 
                             ? 'Siguiente paso: Subir Documentos' 
                             : 'Ir al Tablero de Finanzas'} <ArrowRight size={16} />
@@ -135,7 +137,8 @@ const TransactionStatusPage = () => {
                         <button
                             onClick={() => window.print()}
                             className="mt-2 text-xs text-zinc-500 hover:text-zinc-300 underline"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Descargar Comprobante
                         </button>
                     )}

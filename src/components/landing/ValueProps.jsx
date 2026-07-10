@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 
 import { Zap, ShieldCheck, Globe, Trophy } from 'lucide-react';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { KeyRound, X } from 'lucide-react';
 
 import { useState } from 'react';
@@ -46,7 +46,11 @@ const ChangePasswordModal = ({ isOpen, onClose, onChangePassword, loading }) => 
                         <h3 className="text-xl font-bold text-white flex items-center gap-2">
                             <KeyRound size={20} className="text-purple-500" /> Cambiar Contraseña
                         </h3>
-                        <button onClick={onClose} className="text-zinc-500 hover:text-white">
+                        <button
+                            onClick={onClose}
+                            className="text-zinc-500 hover:text-white"
+                            type="button"
+                            aria-label="Acción">
                             <X size={20} />
                         </button>
                     </div>
@@ -93,7 +97,7 @@ const ChangePasswordModal = ({ isOpen, onClose, onChangePassword, loading }) => 
                             type="submit"
                             disabled={loading}
                             className="w-full py-3 mt-4 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition-colors disabled:opacity-50"
-                        >
+                            aria-label="Acción">
                             {loading ? 'Actualizando...' : 'Confirmar Cambio'}
                         </button>
                     </form>

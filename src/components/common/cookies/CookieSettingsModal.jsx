@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { X, Shield, BarChart3, Target, Check } from 'lucide-react';
 
 import { useState, useEffect } from 'react';
@@ -62,7 +62,11 @@ export const CookieSettingsModal = ({ isOpen, onClose }) => {
                                     <h2 className="text-sm font-black text-white uppercase tracking-widest">Privacidad</h2>
                                     <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Configuración</p>
                                 </div>
-                                <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-xl text-zinc-600 hover:text-white transition-all">
+                                <button
+                                    onClick={onClose}
+                                    className="p-2 hover:bg-white/5 rounded-xl text-zinc-600 hover:text-white transition-all"
+                                    type="button"
+                                    aria-label="Acción">
                                     <X size={18} />
                                 </button>
                             </div>
@@ -102,7 +106,8 @@ export const CookieSettingsModal = ({ isOpen, onClose }) => {
                                 <button
                                     onClick={handleSave}
                                     className="w-full bg-white text-black font-black py-3.5 rounded-xl text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all active:scale-95 shadow-lg shadow-white/5"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     Guardar Cambios
                                 </button>
                             </div>

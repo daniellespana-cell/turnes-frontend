@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m as motion } from 'framer-motion';
 import ErrorBoundary from '../../components/common/ErrorBoundary';
 import ExploreHeader from '../../components/features/ExploreHeader';
 import ExploreContent from '../../components/features/ExploreContent';

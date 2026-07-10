@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapPin, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useState, useRef, useEffect } from 'react';
 import { useCiudades } from '../../../hooks/useCiudades';
@@ -103,7 +103,7 @@ const LocationSelector = ({ label, value, onChange, disabled }) => {
                                     type="button"
                                     onClick={() => selectSuggestion(item)}
                                     className="w-full text-left px-4 py-3 rounded-xl text-sm text-zinc-400 hover:bg-emerald-500/10 hover:text-emerald-400 transition-all flex items-center justify-between group"
-                                >
+                                    aria-label="Acción">
                                     <span className="capitalize font-bold">{item}</span>
                                     <span className="text-[9px] uppercase font-black text-zinc-600 group-hover:text-emerald-500/50 italic">Seleccionar</span>
                                 </button>

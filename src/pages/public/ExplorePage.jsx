@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import FeatureCard from '../../components/features/FeatureCard';
 import SEO from '../../components/common/SEO';

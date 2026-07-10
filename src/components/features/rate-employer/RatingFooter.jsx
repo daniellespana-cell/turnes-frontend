@@ -21,7 +21,8 @@ export const RatingFooter = ({ rating, isSubmitting, onSubmit, onOmit }) => (
                 onClick={onOmit}
                 disabled={isSubmitting}
                 className="flex-1 h-14 rounded-2xl text-zinc-500 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors border border-transparent hover:bg-white/5"
-            >
+                type="button"
+                aria-label="Acción">
                 Omitir
             </button>
             <button
@@ -32,7 +33,8 @@ export const RatingFooter = ({ rating, isSubmitting, onSubmit, onOmit }) => (
                         ? 'bg-white text-black hover:bg-zinc-200 active:scale-95 shadow-xl shadow-white/5' 
                         : 'bg-zinc-900 text-zinc-700 cursor-not-allowed'}
                 `}
-            >
+                type="button"
+                aria-label="Acción">
                 {isSubmitting ? (
                     <Spinner size="sm" variant="emerald" />
                 ) : (

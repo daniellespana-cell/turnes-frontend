@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 
 import { Shield, Zap, Crown } from 'lucide-react';
@@ -44,7 +44,6 @@ const SubscriptionPlanCard = ({ plan, isCurrent, isDowngrade, handleUpgrade, car
         >
             <div className={`absolute inset-0 bg-gradient-to-br ${styles.gradient} opacity-20 group-hover:opacity-30 transition-opacity duration-500`} />
             <div className="absolute inset-0 -translate-x-full animate-[shimmer_4s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] pointer-events-none z-0" />
-
             <div className="relative p-5 md:p-6 flex flex-col h-full">
                 <div className="flex justify-between items-start mb-4">
                     <div className={`p-2.5 rounded-xl bg-white/5 border border-transparent ${styles.iconColor}`}>
@@ -114,7 +113,8 @@ const SubscriptionPlanCard = ({ plan, isCurrent, isDowngrade, handleUpgrade, car
                                 ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20'
                                 : `bg-gradient-to-r ${styles.buttonGradient} text-white border border-transparent`
                     }`}
-                >
+                    type="button"
+                    aria-label="Acción">
                     <span className="relative z-10 drop-shadow-md">
                         {isCurrent ? "Plan Actual" : isDowngrade ? "Bajar a este plan" : "Seleccionar"}
                     </span>

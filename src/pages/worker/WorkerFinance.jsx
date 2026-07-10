@@ -44,10 +44,11 @@ const WorkerFinance = () => {
                     <h3 className="text-white font-bold text-lg">Huston, tenemos un problema</h3>
                     <p className="text-zinc-500 text-sm max-w-[250px] mx-auto">No pudimos conectar con los registros de turnos. Revisa tu conexión.</p>
                 </div>
-                <button 
+                <button
                     onClick={() => refetch()}
                     className="px-8 py-3 bg-white text-black font-bold rounded-2xl hover:bg-zinc-200 transition-colors flex items-center gap-2"
-                >
+                    type="button"
+                    aria-label="Acción">
                     Reintentar Conexión
                 </button>
             </div>

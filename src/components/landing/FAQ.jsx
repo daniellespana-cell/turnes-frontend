@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 import { useState } from 'react';
@@ -51,7 +51,8 @@ const FAQ = () => {
               <button
                 onClick={() => setOpenIndex(prev => prev === index ? null : index)}
                 className="w-full flex items-center justify-between py-3 text-left focus:outline-none hover:bg-zinc-900/30 transition-colors px-2 rounded-lg"
-              >
+                type="button"
+                aria-label="Acción">
                 <span className={`text-sm font-medium transition-colors ${openIndex === index ? 'text-emerald-400' : 'text-zinc-400 group-hover:text-zinc-200'}`}>
                   {item.question}
                 </span>

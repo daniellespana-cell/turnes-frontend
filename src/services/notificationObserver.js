@@ -50,8 +50,7 @@ class NotificationObserver {
             .on('postgres_changes', { 
                 event: '*', 
                 schema: 'public', 
-                table: 'notificaciones',
-                filter: `user_id=eq.${userId}`
+                table: 'notificaciones'
             }, (payload) => {
                 const event = payload.eventType; // INSERT, UPDATE, DELETE
                 const rowData = event === 'DELETE' ? payload.old : payload.new;
@@ -81,7 +80,6 @@ class NotificationObserver {
         const { data, error } = await supabase
             .from('notificaciones')
             .select('*')
-            .eq('user_id', userId)
             .order('created_at', { ascending: false })
             .limit(limit);
         if (error) { console.error('[Observer] fetchHistory error:', error); return []; }
@@ -95,7 +93,7 @@ class NotificationObserver {
     }
 
     async markAllAsRead(userId) {
-        const { error } = await supabase.from('notificaciones').update({ leida: true }).eq('user_id', userId).eq('leida', false);
+        const { error } = await supabase.from('notificaciones').update({ leida: true }).eq('leida', false);
         if (error) console.error('[Observer] markAllAsRead error:', error);
         return !error;
     }

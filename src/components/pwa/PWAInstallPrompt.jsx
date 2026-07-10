@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Share, PlusSquare } from 'lucide-react';
 
 const PWAInstallPrompt = () => {
@@ -79,10 +79,11 @@ const PWAInstallPrompt = () => {
         <div className="bg-zinc-900 border border-zinc-800 shadow-2xl shadow-black/50 rounded-2xl p-5 overflow-hidden relative">
           
           {/* Close Button */}
-          <button 
+          <button
             onClick={handleDismiss}
             className="absolute top-3 right-3 text-zinc-500 hover:text-white transition-colors bg-zinc-800/50 rounded-full p-1.5"
-          >
+            type="button"
+            aria-label="Acción">
             <X size={16} />
           </button>
 
@@ -117,10 +118,11 @@ const PWAInstallPrompt = () => {
                 </p>
               </div>
             ) : (
-              <button 
+              <button
                 onClick={handleInstallClick}
                 className="w-full bg-white text-black font-bold py-2.5 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-zinc-200 active:scale-95 transition-all"
-              >
+                type="button"
+                aria-label="Acción">
                 <Download size={16} />
                 Instalar App Nativa
               </button>

@@ -85,7 +85,6 @@ const ProfileTab = () => {
                 <h2 className="text-2xl font-bold text-white mb-2">Perfil Público</h2>
                 <p className="text-zinc-400 text-sm">Esta información será visible para otras empresas y talentos.</p>
             </div>
-
             {/* Avatar Section */}
             <div className="flex items-center gap-6 p-6 bg-white/5 rounded-2xl border border-transparent shadow-sm transition-all ">
                 <div 
@@ -104,11 +103,12 @@ const ProfileTab = () => {
                 <div>
                     <h3 className="font-bold text-white">Foto de Perfil</h3>
                     <p className="text-xs text-zinc-500 mb-3">Recomendado: 400x400px, PNG o JPG.</p>
-                    <button 
+                    <button
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isUploading}
                         className="text-xs font-bold bg-white text-black px-3 py-1.5 rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-50"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         {isUploading ? 'Subiendo...' : 'Cambiar Foto'}
                     </button>
                     <input 
@@ -120,7 +120,6 @@ const ProfileTab = () => {
                     />
                 </div>
             </div>
-
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -149,7 +148,7 @@ const ProfileTab = () => {
                         type="submit"
                         disabled={loading}
                         className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black px-6 py-2.5 rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-0.5"
-                    >
+                        aria-label="Acción">
                         {loading ? <Spinner size="sm" variant="white" /> : <Save size={16} />}
                         Guardar Cambios
                     </button>

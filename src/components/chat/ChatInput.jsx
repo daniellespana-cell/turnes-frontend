@@ -69,7 +69,6 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
   // INTERFAZ ACTIVA (PASOS 1, 2, 3 y 4)
   return (
     <div className="shrink-0 px-3 py-2 bg-zinc-900/90 backdrop-blur-xl border-t border-white/5" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
-
       {/* SUGERENCIAS (SCROLL HORIZONTAL 2026 UX) */}
       <div className={`max-w-4xl mx-auto flex items-center gap-2 transition-all duration-700 overflow-hidden ${(!text && showTips && !isContracted) ? 'max-h-20 mb-3 opacity-100' : 'max-h-0 mb-0 opacity-0'}`}>
         <div className="flex overflow-x-auto gap-2 flex-1 pb-2 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -80,17 +79,19 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
             userRole={userRole}
           />
         </div>
-        <button type="button" onClick={() => setShowTips(false)} className="shrink-0 p-1.5 text-zinc-600 hover:text-white transition-colors bg-white/5 rounded-full hidden md:block">
+        <button
+          type="button"
+          onClick={() => setShowTips(false)}
+          className="shrink-0 p-1.5 text-zinc-600 hover:text-white transition-colors bg-white/5 rounded-full hidden md:block"
+          aria-label="Acción">
           <X size={12} />
         </button>
       </div>
-
       {isWarning && (
         <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[8px] font-black uppercase px-6 py-2 rounded-full flex items-center gap-2 z-50 tracking-widest">
           <ShieldAlert size={12} /> Protocolo Anti-Fuga
         </div>
       )}
-
       {/* 🍎 iOS FIX: Cambiado de <form> a <div> para ELIMINAR el "Form Accessory Bar" (flechas y botón Done) en Safari */}
       <div className="max-w-4xl mx-auto flex items-center gap-2">
         <button
@@ -134,7 +135,7 @@ export const ChatInput = ({ onSend, isPaid, isClosed, canWrite, userRole, isCont
               : 'bg-zinc-800 text-zinc-600 opacity-60 scale-95'
             }
           `}
-        >
+          aria-label="Acción">
           <Send size={18} strokeWidth={2.5} />
         </button>
       </div>

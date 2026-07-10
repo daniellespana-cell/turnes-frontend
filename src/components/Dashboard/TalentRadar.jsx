@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sparkles, ShieldCheck, Star, ChevronRight, MapPin, Briefcase } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -76,11 +76,11 @@ const TalentRadar = () => {
                 <button
                     onClick={() => navigate('/dashboard/buscar-talento')}
                     className="text-xs text-zinc-500 hover:text-emerald-400 transition-colors font-black uppercase tracking-widest no-select"
-                >
+                    type="button"
+                    aria-label="Acción">
                     Ver Mapa completo
                 </button>
             </div>
-
             <div className="overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide flex gap-5 snap-x snap-mandatory">
                 <AnimatePresence mode="popLayout">
                     {loading ? (
@@ -103,7 +103,6 @@ const TalentRadar = () => {
                     )}
                 </AnimatePresence>
             </div>
-
             <style>{`.scrollbar-hide::-webkit-scrollbar { display: none; } .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }`}</style>
         </div>
     );
@@ -216,7 +215,8 @@ const RadarCard = ({ candidate, idx, onView }) => {
                         }
                     `}
                     style={{ fontFamily: "'Google Sans', 'Inter', system-ui, sans-serif" }}
-                >
+                    type="button"
+                    aria-label="Acción">
                     <Briefcase size={14} />
                     <span>Ver Perfil</span>
                     <ChevronRight size={14} className={`transition-transform duration-300 ${isHovered ? 'translate-x-0.5' : ''}`} />

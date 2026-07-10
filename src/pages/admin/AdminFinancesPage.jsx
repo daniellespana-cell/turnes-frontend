@@ -63,7 +63,8 @@ const AdminFinancesPage = () => {
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     className={`flex-1 lg:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0 ${activeTab === tab.id ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-zinc-300'}`}
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     <TabIcon size={16} className={activeTab === tab.id ? activeColors[tab.id] : ''} />
                                     {tab.label}
                                 </button>
@@ -100,12 +101,16 @@ const AdminFinancesPage = () => {
                                                 ? `bg-zinc-800 ${tab.id === 'in' ? 'text-emerald-400' : tab.id === 'out' ? 'text-red-400' : 'text-white'}`
                                                 : 'text-zinc-500 hover:text-white'
                                         }`}
-                                    >
+                                        type="button">
                                         {tab.label}
                                     </button>
                                 ))}
                             </div>
-                            <button onClick={handleExport} aria-label="Exportar a CSV Local" className="w-full md:w-auto justify-center flex items-center gap-2 px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-black uppercase tracking-widest transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50">
+                            <button
+                                onClick={handleExport}
+                                aria-label="Exportar a CSV Local"
+                                className="w-full md:w-auto justify-center flex items-center gap-2 px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-black uppercase tracking-widest transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50"
+                                type="button">
                                 <Download size={14} /> Exportar CSV
                             </button>
                         </div>

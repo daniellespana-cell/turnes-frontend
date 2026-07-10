@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Layers, CheckCircle2 } from 'lucide-react';
 import CandidatoCard from './CandidatoCard';
 import CandidatoRow from './CandidatoRow';

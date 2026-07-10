@@ -19,7 +19,8 @@ export const VacancySelector = ({ vacancies, selectedId, onSelect, onCreateNew }
                             ? 'bg-emerald-500/5 border-emerald-500/30' 
                             : 'bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/[0.04]'}
                     `}
-                >
+                    type="button"
+                    aria-label="Acción">
                     <div className="flex items-center gap-4 min-w-0">
                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors
                             ${selectedId === v.id ? 'bg-emerald-500/20 text-emerald-500' : 'bg-zinc-900 text-zinc-500 group-hover:text-zinc-400'}
@@ -52,7 +53,8 @@ export const VacancySelector = ({ vacancies, selectedId, onSelect, onCreateNew }
             <button
                 onClick={onCreateNew}
                 className="w-full py-4 rounded-2xl bg-white/[0.02] border border-dashed border-white/10 text-zinc-500 hover:text-white hover:border-white/20 transition-all flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest"
-            >
+                type="button"
+                aria-label="Acción">
                 <PlusCircle size={14} /> Crear Nueva Vacante
             </button>
         </div>

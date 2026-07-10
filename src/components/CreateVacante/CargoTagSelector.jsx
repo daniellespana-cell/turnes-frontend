@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Briefcase, Sparkles, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { getAllSearchTags } from '../../domain/vacantes.taxonomy';
@@ -101,7 +101,6 @@ const CargoTagSelector = ({
                     />
                 </div>
             </div>
-
             {/* Renderización de Tags Seleccionados (Hashtags) */}
             {selectedTags.length > 0 && (
                 <div className="flex flex-wrap gap-2 px-1">
@@ -118,7 +117,8 @@ const CargoTagSelector = ({
                                 <button
                                     onClick={() => removeTag(tag)}
                                     className="p-0.5 hover:bg-brand-primary/20 rounded-md transition-colors text-brand-primary/70 hover:text-brand-primary"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     <X size={12} strokeWidth={3} />
                                 </button>
                             </motion.span>
@@ -126,9 +126,7 @@ const CargoTagSelector = ({
                     </AnimatePresence>
                 </div>
             )}
-
             <p className="px-2 text-[10px] text-emerald-500/50 font-medium">Ayuda al algoritmo de Match. {selectedTags.length}/{maxTags} hashtags seleccionados.</p>
-
             {/* Dropdown Predictivo */}
             <AnimatePresence>
                 {isOpen && filteredSpecs.length > 0 && selectedTags.length < maxTags && (
@@ -153,7 +151,7 @@ const CargoTagSelector = ({
                                         type="button"
                                         onClick={() => addTag(item)}
                                         className="w-full text-left px-4 py-3 text-[13px] text-zinc-300 hover:bg-white/5 hover:text-brand-primary transition-all flex items-center gap-3 group/item border-l-2 border-transparent hover:border-brand-primary"
-                                    >
+                                        aria-label="Acción">
                                         <Briefcase size={14} className="text-zinc-600 group-hover/item:text-brand-primary" />
                                         <span>
                                             {item.split(new RegExp(`(${inputValue})`, 'gi')).map((part, index) =>

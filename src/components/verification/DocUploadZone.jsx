@@ -31,7 +31,6 @@ const DocUploadZone = ({ docType, file, progress, onFileSelect, onRemoveFile, on
                 className="hidden"
                 onChange={e => onFileSelect(docType.id, e.target.files[0])}
             />
-
             <div className="flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0
                     ${isDone ? 'bg-emerald-500/10' : 'bg-zinc-900'}`}>
@@ -52,7 +51,7 @@ const DocUploadZone = ({ docType, file, progress, onFileSelect, onRemoveFile, on
                                     onClick={(e) => onRemoveFile(e, docType.id)}
                                     className="p-1 rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-400/80 hover:text-red-400 transition-colors z-10 focus:outline-none"
                                     title="Remover documento"
-                                >
+                                    type="button">
                                     <X size={12} strokeWidth={3} />
                                 </button>
                             )}

@@ -76,13 +76,13 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
           <button
             onClick={downloadInvoice}
             className="flex items-center gap-1.5 text-zinc-500 hover:text-white py-1.5 px-2.5 rounded-lg hover:bg-white/5 transition-all group"
-          >
+            type="button"
+            aria-label="Acción">
             <Download size={13} className="text-zinc-600 group-hover:text-zinc-300 transition-colors" strokeWidth={2} />
             <span className="text-[10px] font-bold uppercase tracking-widest">Exportar</span>
           </button>
         </div>
       </div>
-
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead className="bg-zinc-900/30">
@@ -95,13 +95,13 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
           <tbody className="divide-y divide-white/[0.02]">
             {isLoading ? (
               // SKELETON ROWS
-              [1, 2, 3, 4, 5].map((i) => (
+              ([1, 2, 3, 4, 5].map((i) => (
                 <tr key={i} className="animate-pulse">
                   <td className="px-5 py-3.5"><div className="h-4 w-32 bg-zinc-800 rounded"></div></td>
                   <td className="px-5 py-3.5"><div className="h-4 w-20 bg-zinc-800 rounded"></div></td>
                   <td className="px-5 py-3.5 text-right"><div className="h-4 w-16 bg-zinc-800 rounded ml-auto"></div></td>
                 </tr>
-              ))
+              )))
             ) : (
               currentTransactions.map((tx) => {
                 const isIncome = tx.type === 'deposit';
@@ -133,7 +133,6 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
           </tbody>
         </table>
       </div>
-
       {/* PAGINACIÓN */}
       {!isLoading && totalPages > 1 && (
         <div className="px-5 py-4 border-t border-white/5 flex items-center justify-between">
@@ -145,14 +144,16 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
+              type="button"
+              aria-label="Acción">
               Anterior
             </button>
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
               className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
+              type="button"
+              aria-label="Acción">
               Siguiente
             </button>
           </div>

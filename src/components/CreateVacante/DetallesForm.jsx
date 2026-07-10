@@ -30,7 +30,6 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
       <header className="flex items-center gap-2 mb-2 text-zinc-400">
         <label className="text-sm font-semibold tracking-wide">Configuración del turno</label>
       </header>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* ETIQUETAS DEL CARGO: Max 2 */}
         <CargoTagSelector
@@ -64,7 +63,7 @@ const DetallesForm = ({ formData, setFormData, ui, onQuantityChange, onPaymentCh
                   : 'bg-white/[0.02] border border-white/10 hover:border-white/20 shadow-sm'
                 }
               `}
-            >
+              aria-label="Acción">
               {/* Indicador de estado */}
               <div className={`
                 shrink-0 w-6 h-6 rounded-lg flex items-center justify-center transition-colors

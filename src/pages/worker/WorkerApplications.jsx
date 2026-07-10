@@ -1,5 +1,5 @@
 import { AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import EmptyState from '../../components/common/EmptyState';
 import RateEmployerModal from '../../components/features/RateEmployerModal';
 import PageHeader from '../../components/common/PageHeader';
@@ -54,7 +54,8 @@ const WorkerApplications = () => {
                                     ? 'bg-zinc-800 text-white shadow-sm'
                                     : 'text-zinc-500 hover:text-white'
                             }`}
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Activas
                         </button>
                         <button
@@ -64,14 +65,13 @@ const WorkerApplications = () => {
                                     ? 'bg-zinc-800 text-white shadow-sm'
                                     : 'text-zinc-500 hover:text-white'
                             }`}
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Histórico
                         </button>
                     </div>
                 }
             />
-
-
             {/* ─── Main Content ───────────────────────────────────────────── */}
             <main className="flex-1 max-w-4xl mx-auto w-full px-4 md:px-8 py-10">
                 <AnimatePresence mode="wait">
@@ -96,7 +96,11 @@ const WorkerApplications = () => {
                             </div>
                             <h3 className="text-white font-black mb-2 uppercase tracking-tighter text-xl">Error de Sincronización</h3>
                             <p className="text-zinc-500 text-sm mb-8 max-w-[280px]">No pudimos recuperar tus postulaciones. Verifica tu conexión a internet.</p>
-                            <button onClick={refetch} className="px-10 py-4 bg-white text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-transform active:scale-95  shadow-white/5">
+                            <button
+                                onClick={refetch}
+                                className="px-10 py-4 bg-white text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-transform active:scale-95  shadow-white/5"
+                                type="button"
+                                aria-label="Acción">
                                 Reintentar Conexión
                             </button>
                         </motion.div>
@@ -123,7 +127,8 @@ const WorkerApplications = () => {
                                         onClick={loadMore}
                                         disabled={isRefreshing}
                                         className="px-12 py-5 bg-zinc-900 border border-transparent rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-white hover:bg-zinc-800 transition-all disabled:opacity-50"
-                                    >
+                                        type="button"
+                                        aria-label="Acción">
                                         {isRefreshing ? "Cargando..." : "Cargar más postulaciones"}
                                     </button>
                                 </div>
@@ -146,7 +151,6 @@ const WorkerApplications = () => {
                     )}
                 </AnimatePresence>
             </main>
-
             {/* Modal de Calificación */}
             <RateEmployerModal
                 isOpen={!!ratingApp}
@@ -156,7 +160,6 @@ const WorkerApplications = () => {
                     refetch();
                 }}
             />
-
             {/* Modal de Confirmación para Cancelar */}
             <ConfirmationModal
                 isOpen={cancelModal.isOpen}

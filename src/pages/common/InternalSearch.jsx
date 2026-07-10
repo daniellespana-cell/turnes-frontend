@@ -1,7 +1,7 @@
 import React from 'react';
 import { Filter, Frown, Send, Star, MapPin } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useInternalSearch } from '../../hooks/useInternalSearch';
 
@@ -17,7 +17,6 @@ const InternalSearch = () => {
 
     return (
         <div className="space-y-8 animate-fade-in pb-12">
-
             {/* ── Cabecera Contextual ── */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/5 pb-6">
                 <div>
@@ -32,11 +31,13 @@ const InternalSearch = () => {
                         {locationStr && <span className="bg-purple-500/10 text-purple-500 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">{locationStr}</span>}
                     </div>
                 </div>
-                <button className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 px-5 py-2.5 rounded-xl text-zinc-300 font-bold transition-all text-sm">
+                <button
+                    className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 px-5 py-2.5 rounded-xl text-zinc-300 font-bold transition-all text-sm"
+                    type="button"
+                    aria-label="Acción">
                     <Filter size={18} /> Refinar Búsqueda
                 </button>
             </div>
-
             {/* ── Estados: Loading / Error / Results / Empty ── */}
             {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 space-y-4">
@@ -47,7 +48,11 @@ const InternalSearch = () => {
             ) : error ? (
                 <div className="text-center py-24 text-zinc-500">
                     <p>{error}</p>
-                    <button onClick={() => navigate('/dashboard')} className="mt-4 px-6 py-2.5 bg-zinc-800 text-white rounded-xl font-bold hover:bg-zinc-700 transition-all">
+                    <button
+                        onClick={() => navigate('/dashboard')}
+                        className="mt-4 px-6 py-2.5 bg-zinc-800 text-white rounded-xl font-bold hover:bg-zinc-700 transition-all"
+                        type="button"
+                        aria-label="Acción">
                         Volver al Dashboard
                     </button>
                 </div>
@@ -93,7 +98,8 @@ const InternalSearch = () => {
                                     <button
                                         onClick={() => navigate(isBusiness ? `/dashboard/candidatos/${item.id}` : `/vacante/${item.id}`)}
                                         className="w-full py-3.5 bg-brand-success text-black font-black rounded-xl hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
-                                    >
+                                        type="button"
+                                        aria-label="Acción">
                                         <Send size={18} />
                                         {isBusiness ? 'Ver Perfil' : 'Ver Detalles'}
                                     </button>
@@ -118,7 +124,11 @@ const InternalSearch = () => {
                             No encontramos {isBusiness ? 'candidatos' : 'vacantes'} que coincidan con tu búsqueda en {locationStr || 'tu área'}.
                         </p>
                     </div>
-                    <button onClick={() => navigate('/dashboard')} className="px-6 py-2.5 bg-zinc-800 text-white rounded-xl font-bold hover:bg-zinc-700 transition-all">
+                    <button
+                        onClick={() => navigate('/dashboard')}
+                        className="px-6 py-2.5 bg-zinc-800 text-white rounded-xl font-bold hover:bg-zinc-700 transition-all"
+                        type="button"
+                        aria-label="Acción">
                         Volver al Dashboard
                     </button>
                 </motion.div>

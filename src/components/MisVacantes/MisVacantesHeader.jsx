@@ -11,7 +11,8 @@ const MisVacantesHeader = ({ userPlan, filteredCount, onBack, onCreate }) => (
       <button
         onClick={onBack}
         className="p-2 -ml-2 text-zinc-500 hover:text-white transition-all active:scale-95 group rounded-full hover:bg-white/5"
-      >
+        type="button"
+        aria-label="Acción">
         <ArrowLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
       </button>
 
@@ -47,7 +48,8 @@ const MisVacantesHeader = ({ userPlan, filteredCount, onBack, onCreate }) => (
       <button
         onClick={onCreate}
         className="group relative flex items-center gap-2 bg-brand-primary/90 hover:bg-brand-primary border border-brand-success/50 hover:border-brand-success text-white px-5 py-2.5 rounded-lg font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 overflow-hidden shadow-lg shadow-brand-primary/20"
-      >
+        type="button"
+        aria-label="Acción">
         <Plus size={14} strokeWidth={3} className="relative z-10" />
         <span className="relative z-10">Crear Vacante</span>
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1s_infinite] z-0" />

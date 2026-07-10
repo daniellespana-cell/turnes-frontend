@@ -21,13 +21,14 @@ const NavItem = ({ to, label, isMobile = false, onClick, isButton = false }) => 
         onClick={onClick}
         style={{ fontFamily: 'inherit' }}
         className={`${baseClasses} text-left border-none bg-transparent cursor-pointer p-0 md:px-3 md:py-2 ${isMobile ? "w-full" : ""}`}
-      >
+        type="button"
+        aria-label="Acción">
         {label}
         {!isMobile && (
           <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-brand-success transition-all duration-300 transform -translate-x-1/2 group-hover:w-full"></span>
         )}
       </button>
-    )
+    );
   }
 
   return (
@@ -128,7 +129,7 @@ const Navbar = () => {
                 aria-label="Menú principal"
                 aria-expanded={isOpen}
                 className="md:hidden text-white p-1 rounded-md hover:text-brand-success focus:outline-none"
-              >
+                type="button">
                 {isOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
@@ -154,7 +155,6 @@ const Navbar = () => {
           </div>
         )}
       </nav>
-
       {/* MODAL "CÓMO FUNCIONA" */}
       <HowItWorksModal isOpen={isHowItWorksOpen} onClose={() => setIsHowItWorksOpen(false)} />
     </>

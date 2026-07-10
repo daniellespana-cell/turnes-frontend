@@ -35,7 +35,8 @@ const WalletPage = () => {
         <button
           onClick={() => fetchData()}
           className="flex items-center gap-2 bg-brand-primary/90 hover:bg-brand-primary border border-brand-success hover:border-white/70 shadow-md shadow-brand-primary/30 text-white px-8 py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all active:scale-95 relative overflow-hidden group"
-        >
+          type="button"
+          aria-label="Acción">
           <RefreshCcw size={14} className="relative z-10" /> <span className="relative z-10">Reintentar ahora</span>
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1s_infinite] z-0" />
         </button>

@@ -16,7 +16,11 @@ export const PickerHeader = ({ onClose }) => (
                 Arrastra el pin al punto exacto
             </p>
         </div>
-        <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-zinc-500 hover:text-white transition-colors">
+        <button
+            onClick={onClose}
+            className="p-2 hover:bg-white/5 rounded-full text-zinc-500 hover:text-white transition-colors"
+            type="button"
+            aria-label="Acción">
             <X size={20} />
         </button>
     </div>
@@ -39,7 +43,8 @@ export const PickerFooter = ({ onConfirm, isConfirmed }) => (
                     : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_4px_12px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.4)] active:scale-95'
                 }
             `}
-        >
+            type="button"
+            aria-label="Acción">
             {isConfirmed ? (
                 <>
                     <Check size={16} strokeWidth={3} className="animate-in zoom-in duration-300" />

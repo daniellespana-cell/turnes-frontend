@@ -1,6 +1,6 @@
 import React from 'react';
 import { Star, MapPin, UserPlus, Eye, ShieldCheck } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 
 import { useState } from 'react';
 import { AssetResolver } from '../../utils/assetHelper';
@@ -107,7 +107,8 @@ const TalentCard = ({ candidate, onOpenProfile, onDirectInvite }) => {
                     <button
                         onClick={(e) => { e.stopPropagation(); onDirectInvite?.(); }}
                         className="w-full sm:flex-1 h-12 bg-emerald-500 text-black rounded-full flex items-center justify-center gap-2 active:scale-95 transition-all shadow-[0_5px_15px_rgba(16,185,129,0.2)] hover:shadow-[0_8px_25px_rgba(16,185,129,0.4)] shrink-0"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <UserPlus size={14} strokeWidth={3} />
                         <span className="text-[11px] font-black uppercase tracking-widest">Invitar</span>
                     </button>
@@ -115,7 +116,8 @@ const TalentCard = ({ candidate, onOpenProfile, onDirectInvite }) => {
                     <button
                         onClick={(e) => { e.stopPropagation(); onOpenProfile?.(); }}
                         className="w-full sm:flex-1 h-12 bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/5 rounded-full flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <Eye size={14} />
                         <span className="text-[11px] font-black uppercase tracking-widest">Ver Perfil</span>
                     </button>

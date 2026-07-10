@@ -7,11 +7,19 @@ const QuantitySelector = ({ quantity, onQuantityChange }) => (
     <Users size={15} className="text-zinc-800 shrink-0" />
     <span className="text-zinc-500 text-[11px] uppercase font-bold tracking-wider flex-1">Personas</span>
     <div className="flex items-center gap-3 bg-white/5 rounded-lg px-2 py-1">
-      <button type="button" onClick={() => onQuantityChange(-1)} className="text-zinc-500 hover:text-white transition-colors">
+      <button
+        type="button"
+        onClick={() => onQuantityChange(-1)}
+        className="text-zinc-500 hover:text-white transition-colors"
+        aria-label="Acción">
         <Minus size={11}/>
       </button>
       <span className="text-[13px] font-black text-white w-4 text-center leading-none">{quantity}</span>
-      <button type="button" onClick={() => onQuantityChange(1)} className="text-zinc-500 hover:text-white transition-colors">
+      <button
+        type="button"
+        onClick={() => onQuantityChange(1)}
+        className="text-zinc-500 hover:text-white transition-colors"
+        aria-label="Acción">
         <Plus size={11}/>
       </button>
     </div>

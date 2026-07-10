@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import VacancyCard from '../VacancyCard';
 
@@ -26,7 +26,7 @@ const ExploreSectionedList = ({ sections, setActiveCategory, onApply, onOpenDeta
                         onClick={() => setActiveCategory(section.id)}
                         aria-label={`Ver todas las vacantes de ${section.label}`}
                         className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-brand-primary transition-colors flex items-center gap-1.5 group"
-                    >
+                        type="button">
                         Ver todo <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </button>
                 </div>

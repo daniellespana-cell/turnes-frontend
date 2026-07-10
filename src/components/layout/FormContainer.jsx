@@ -10,7 +10,7 @@ const FormContainer = ({ children, onBack, title, subtitle }) => (
                 onClick={onBack}
                 className="p-2 -ml-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all active:scale-95 group"
                 aria-label="Volver"
-            >
+                type="button">
                 <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             </button>
 

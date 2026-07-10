@@ -40,7 +40,6 @@ const RegisterPageContent = () => {
             {/* Background & Nav */}
             <AntigravityBackground role={role} />
             <AuthNavbar />
-
             {/* Main Content */}
             <div className="w-full max-w-2xl relative z-10 p-4 transform transition-all duration-500">
                 {!role && (
@@ -62,13 +61,16 @@ const RegisterPageContent = () => {
                     )}
                 </div>
             </div>
-
             {/* Footer / Emergency Exit */}
             <div className="absolute bottom-4 text-center w-full z-10 font-medium">
                 {isOnboardingTrapped ? (
                     <div className="flex flex-col items-center justify-center gap-1 animate-fade-in-up">
                         <p className="text-xs text-zinc-400">¿Entraste con la cuenta equivocada?</p>
-                        <button onClick={emergencyLogout} className="text-xs text-brand-primary hover:text-emerald-400 underline underline-offset-2 transition-colors">
+                        <button
+                            onClick={emergencyLogout}
+                            className="text-xs text-brand-primary hover:text-emerald-400 underline underline-offset-2 transition-colors"
+                            type="button"
+                            aria-label="Acción">
                             Cerrar sesión y volver al inicio
                         </button>
                     </div>

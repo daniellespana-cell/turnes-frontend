@@ -9,6 +9,8 @@ import GlobalErrorBoundary from './components/error/GlobalErrorBoundary';
 import './index.css';
 import 'leaflet/dist/leaflet.css';
 
+import { LazyMotion, domAnimation } from 'framer-motion';
+
 // 🚀 Inicializar Sentinel Error Tracking (Sentry)
 initSentry();
 
@@ -22,11 +24,13 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <GlobalErrorBoundary>
-      <AuthProvider>
-        <ToastProvider>
-          <App />
-        </ToastProvider>
-      </AuthProvider>
+      <LazyMotion features={domAnimation} strict>
+        <AuthProvider>
+          <ToastProvider>
+            <App />
+          </ToastProvider>
+        </AuthProvider>
+      </LazyMotion>
     </GlobalErrorBoundary>
   </React.StrictMode>
 );

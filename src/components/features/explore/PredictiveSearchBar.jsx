@@ -34,7 +34,7 @@ const PredictiveSearchBar = ({ value, onChange, onSelectSuggestion, onClear }) =
                     }`}
                     disabled={!value.trim()}
                     title="Buscar"
-                >
+                    type="button">
                     <Search size={14} strokeWidth={3} />
                 </button>
                 <input
@@ -55,12 +55,12 @@ const PredictiveSearchBar = ({ value, onChange, onSelectSuggestion, onClear }) =
                     <button
                         onClick={onClear}
                         className="shrink-0 text-zinc-600 hover:text-zinc-300 transition-colors mr-1"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <X size={14} strokeWidth={2.5} />
                     </button>
                 )}
             </div>
-
             {/* Dropdown */}
             {show && (
                 <div className="absolute top-full left-0 right-0 mt-1.5 z-50 bg-zinc-900/95 backdrop-blur-xl border border-transparent rounded-2xl overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.8)]">
@@ -69,7 +69,8 @@ const PredictiveSearchBar = ({ value, onChange, onSelectSuggestion, onClear }) =
                             key={i}
                             onMouseDown={() => handleSelect(s)}
                             className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-white/5 transition-colors"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             <Search size={12} className="text-zinc-600 shrink-0" strokeWidth={2.5} />
                             <span className="text-[12px] text-zinc-300 font-medium truncate">
                                 {s}

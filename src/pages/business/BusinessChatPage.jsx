@@ -79,11 +79,12 @@ const BusinessChatPage = () => {
 
         if (isMatchIntent && hasNoMessages && user?.id) {
             hasInjectedGreeting.current = true;
-            setTimeout(() => {
+            const timer = setTimeout(() => {
                 if (chat.inyectarMensajeBienvenida) {
                     chat.inyectarMensajeBienvenida();
                 }
             }, 300);
+            return () => clearTimeout(timer);
         }
     }, [chat, activeEntity, location.state, user]);
 

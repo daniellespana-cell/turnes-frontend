@@ -100,7 +100,8 @@ const VacanteRow = ({ data, onAction }) => {
             <button
               onClick={() => navigate(`/dashboard/vacantes/${data.id}`)}
               className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 hover:text-blue-300 transition-all group/btn"
-            >
+              type="button"
+              aria-label="Acción">
               <span className="text-[10px] font-bold uppercase tracking-widest">Ver {data.applicants} Postulantes</span>
             </button>
           ) : (
@@ -113,14 +114,14 @@ const VacanteRow = ({ data, onAction }) => {
             <button
               onClick={() => setShowMenu(!showMenu)}
               className={`p-2 rounded-full transition-all ${showMenu ? 'text-white bg-white/10' : 'text-zinc-700 hover:text-white hover:bg-white/5'}`}
-            >
+              type="button"
+              aria-label="Acción">
               <MoreHorizontal size={16} />
             </button>
             {showMenu && <DropdownMenu />}
           </div>
         </div>
       </div>
-
       {/* ---------------------------------------------------------------------------
           MOBILE VIEW (Visible < md)
          --------------------------------------------------------------------------- */}
@@ -142,7 +143,8 @@ const VacanteRow = ({ data, onAction }) => {
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="p-2 text-zinc-500 hover:text-white bg-white/5 rounded-lg active:scale-95 transition-all"
-              >
+                type="button"
+                aria-label="Acción">
                 <MoreHorizontal size={18} />
               </button>
               {showMenu && <DropdownMenu />}
@@ -180,7 +182,8 @@ const VacanteRow = ({ data, onAction }) => {
           <button
             onClick={() => navigate(`/dashboard/vacantes/${data.id}`)}
             className="w-full relative group overflow-hidden flex justify-center items-center gap-2 py-3 rounded-xl bg-gradient-to-r from-blue-600/10 to-blue-500/10 border border-blue-500/20 text-blue-400 active:scale-[0.98] transition-all"
-          >
+            type="button"
+            aria-label="Acción">
             <div className="absolute inset-0 bg-blue-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             <Users size={14} />
             <span className="relative z-10 text-[11px] font-black uppercase tracking-widest">Ver {data.applicants} Postulantes</span>
@@ -200,7 +203,8 @@ const MenuBtn = ({ icon, label, onClick, danger }) => (
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     className={`w-full flex items-center gap-3 px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest transition-all text-left ${danger ? 'text-red-500 hover:bg-red-500/10' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
       }`}
-  >
+    type="button"
+    aria-label="Acción">
     {icon} <span>{label}</span>
   </button>
 );

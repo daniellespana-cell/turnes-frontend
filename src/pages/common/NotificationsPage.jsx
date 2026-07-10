@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Bell, CheckCircle } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import NotificationItem from '../../components/notifications/NotificationItem';
@@ -73,7 +73,11 @@ const NotificationsPage = () => {
 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <div className="flex items-center gap-4">
-                        <button onClick={() => navigate(-1)} className="p-2.5 rounded-full bg-zinc-900/60 border border-transparent hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95">
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="p-2.5 rounded-full bg-zinc-900/60 border border-transparent hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95"
+                            type="button"
+                            aria-label="Acción">
                             <ArrowLeft size={20} />
                         </button>
                         <div>
@@ -84,7 +88,11 @@ const NotificationsPage = () => {
                         </div>
                     </div>
                     {unreadCount > 0 && (
-                        <button onClick={markAllAsRead} className="text-purple-400 hover:text-purple-300 font-semibold text-sm transition-colors active:scale-95 self-start md:self-auto flex items-center gap-1.5 pt-1">
+                        <button
+                            onClick={markAllAsRead}
+                            className="text-purple-400 hover:text-purple-300 font-semibold text-sm transition-colors active:scale-95 self-start md:self-auto flex items-center gap-1.5 pt-1"
+                            type="button"
+                            aria-label="Acción">
                             <CheckCircle size={16} /><span className="hidden sm:inline">Marcar todas como leídas</span>
                         </button>
                     )}

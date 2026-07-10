@@ -55,9 +55,7 @@ const ProfilePage = () => {
 
     return (
         <div className="max-w-6xl mx-auto pb-32 px-4 md:px-8 pt-8 space-y-8">
-            
             <WelcomeBonusBanner />
-
             {/* --- HEADER HERO --- */}
             <ProfileHeader
                 user={user}
@@ -69,14 +67,10 @@ const ProfilePage = () => {
                 handleCancel={handleCancel}
                 loading={loading}
             />
-
             <GlowDivider />
-
             {/* --- BANNER VERIFICACIÓN ELITE (Precio inyectado desde SSOT) --- */}
             <VerificationBanner verifyPrice={verifyPrice} />
-
             <GlowDivider />
-
             {/* --- GRID PRINCIPAL --- */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
@@ -110,7 +104,8 @@ const ProfilePage = () => {
                         <button
                             onClick={() => setPasswordModalOpen(true)}
                             className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl text-xs md:text-sm font-black text-zinc-400 hover:text-white hover:bg-white/10 transition-all flex items-center justify-between px-6 group no-select"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             <span>Cambiar Contraseña</span>
                             <Lock size={16} className="text-zinc-600 group-hover:text-emerald-400 transition-colors" />
                         </button>
@@ -132,7 +127,6 @@ const ProfilePage = () => {
                     />
                 </div>
             </div>
-
             <ChangePasswordModal
                 isOpen={isPasswordModalOpen}
                 onClose={() => setPasswordModalOpen(false)}

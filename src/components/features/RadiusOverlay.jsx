@@ -30,13 +30,13 @@ const RadiusOverlay = ({ value, onChange, onRecenter }) => {
                     <span className="text-[8px] text-zinc-700">20km</span>
                 </div>
             </div>
-
             {/* QUICK RECENTER BUTTON */}
             {onRecenter && (
                 <button
                     onClick={onRecenter}
                     className="self-end bg-emerald-500 hover:bg-emerald-400 text-black p-2.5 rounded-xl  transition-all active:scale-95 pointer-events-auto flex items-center gap-2 group"
-                >
+                    type="button"
+                    aria-label="Acción">
                     <Navigation size={14} strokeWidth={3} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     <span className="text-[10px] font-black uppercase tracking-wider pr-1">Mi GPS</span>
                 </button>

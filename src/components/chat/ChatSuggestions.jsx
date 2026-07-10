@@ -41,7 +41,7 @@ export const ChatSuggestions = ({ onSend, isContracted, isRehire, userRole }) =>
                     type="button"
                     onClick={() => onSend(s)}
                     className="shrink-0 flex items-center gap-2 px-3.5 py-2 bg-zinc-900/60 border border-transparent rounded-full  hover:bg-emerald-500/10 transition-all duration-300 group shadow-md"
-                >
+                    aria-label="Acción">
                     <Zap size={10} className="text-zinc-600 group-hover:text-emerald-400 transition-colors" fill="currentColor" />
                     <span className="text-[11px] font-bold text-zinc-400 group-hover:text-zinc-200 tracking-wide">
                         {s}

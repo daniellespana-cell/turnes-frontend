@@ -62,7 +62,8 @@ const SecurityRow = ({ icon: Icon, title, value, badge, actionLabel, onAction })
             <button
                 onClick={onAction}
                 className="text-xs font-bold text-white bg-zinc-800 border border-zinc-700 px-3 py-1.5 rounded-lg hover:bg-zinc-700 transition-all hover:scale-105"
-            >
+                type="button"
+                aria-label="Acción">
                 {actionLabel}
             </button>
         )}
@@ -88,7 +89,8 @@ const VerificationCard = ({ verified, onVerify }) => (
                     <button
                         onClick={onVerify}
                         className="mt-4 text-xs font-bold bg-amber-500 text-black px-4 py-2 rounded-lg hover:bg-amber-400 transition-all shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 hover:-translate-y-0.5"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         Verificar Ahora →
                     </button>
                 )}

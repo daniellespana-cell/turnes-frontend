@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Hash } from 'lucide-react';
 import AdminEmptyState from '../shared/AdminEmptyState';
 
@@ -53,7 +53,6 @@ const ConceptBadge = ({ concepto }) => {
 const WompiGateway = ({ wompiLedger, wompiKPIs, wompiFilter, setWompiFilter }) => {
     return (
         <div className="space-y-6">
-
             {/* Hero Banner */}
             <div className="relative bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-emerald-500/5 border border-purple-500/20 rounded-3xl p-6 md:p-8 overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl" />
@@ -80,7 +79,6 @@ const WompiGateway = ({ wompiLedger, wompiKPIs, wompiFilter, setWompiFilter }) =
                     </div>
                 </div>
             </div>
-
             {/* Category KPI Cards */}
             {wompiKPIs.byCategory.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -103,7 +101,6 @@ const WompiGateway = ({ wompiLedger, wompiKPIs, wompiFilter, setWompiFilter }) =
                     ))}
                 </div>
             )}
-
             {/* Filter Tabs */}
             <div className="flex bg-black/40 p-1 rounded-xl border border-white/5 overflow-x-auto whitespace-nowrap scrollbar-hide flex-nowrap w-full md:w-auto">
                 {WOMPI_FILTER_TABS.map(tab => (
@@ -115,12 +112,12 @@ const WompiGateway = ({ wompiLedger, wompiKPIs, wompiFilter, setWompiFilter }) =
                                 ? 'bg-purple-500/20 text-purple-300 shadow-sm border border-purple-500/30'
                                 : 'text-zinc-500 hover:text-white'
                         }`}
-                    >
+                        type="button"
+                        aria-label="Acción">
                         {tab.label}
                     </button>
                 ))}
             </div>
-
             {/* Transactions Table */}
             <div className="bg-zinc-900/20 border border-white/5 rounded-2xl overflow-hidden">
 

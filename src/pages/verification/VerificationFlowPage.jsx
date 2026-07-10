@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import VerificationDocUpload from '../../components/verification/VerificationDocUpload';
 
 import React, { useState } from 'react';
@@ -129,13 +129,15 @@ const VerificationFlowPage = () => {
                         <button
                             onClick={() => window.location.reload()}
                             className="w-full h-13 py-4 rounded-2xl bg-white text-black font-black uppercase text-[10px] tracking-widest hover:bg-zinc-200 active:scale-95 transition-all"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Reintentar Validación
                         </button>
                         <button
                             onClick={() => navigate('/dashboard')}
                             className="w-full h-13 py-4 rounded-2xl bg-white/5 text-zinc-500 font-bold uppercase text-[10px] tracking-widest hover:bg-white/10 hover:text-white transition-all"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Volver al Dashboard
                         </button>
                     </div>
@@ -192,7 +194,8 @@ const VerificationFlowPage = () => {
                     <button
                         onClick={() => navigate('/dashboard')}
                         className="w-full h-13 py-4 rounded-2xl bg-white text-black font-black uppercase text-xs tracking-widest hover:bg-zinc-200 active:scale-95 transition-all"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         Volver al Dashboard
                     </button>
                 </div>

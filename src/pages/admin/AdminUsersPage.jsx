@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Search, RefreshCw, Ban } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import KycBadge from '../../components/admin/shared/KycBadge';
@@ -44,7 +44,12 @@ const AdminUsersPage = () => {
                 <div className="bg-zinc-900/40 border border-white/5 rounded-2xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between overflow-hidden">
                     <div className="flex bg-black/40 p-1 rounded-xl border border-white/5 w-full md:w-auto overflow-x-auto whitespace-nowrap scrollbar-hide flex-nowrap">
                         {ROLE_TABS.map(tab => (
-                            <button key={tab.id} onClick={() => { setRoleFilter(tab.id); setPage(0); }} className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap flex-shrink-0 ${roleFilter === tab.id ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}>{tab.label}</button>
+                            <button
+                                key={tab.id}
+                                onClick={() => { setRoleFilter(tab.id); setPage(0); }}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap flex-shrink-0 ${roleFilter === tab.id ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}
+                                type="button"
+                                aria-label="Acción">{tab.label}</button>
                         ))}
                     </div>
                     <div className="relative w-full md:w-72">
@@ -79,8 +84,16 @@ const AdminUsersPage = () => {
                                         <td className="px-6 py-4"><KycBadge verified={user.verificado} /></td>
                                         <td className="px-6 py-4"><p className="text-xs text-white">{new Date(user.created_at).toLocaleDateString('es-CO')}</p></td>
                                         <td className="px-6 py-4 text-right"><div className="flex items-center justify-end gap-2">
-                                            <button onClick={() => handleResetPassword(user.email, getName(user))} className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg"><RefreshCw size={14} /></button>
-                                            <button onClick={() => setBanTarget({ id: user.id, name: getName(user) })} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg"><Ban size={14} /></button>
+                                            <button
+                                                onClick={() => handleResetPassword(user.email, getName(user))}
+                                                className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg"
+                                                type="button"
+                                                aria-label="Acción"><RefreshCw size={14} /></button>
+                                            <button
+                                                onClick={() => setBanTarget({ id: user.id, name: getName(user) })}
+                                                className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg"
+                                                type="button"
+                                                aria-label="Acción"><Ban size={14} /></button>
                                         </div></td>
                                     </motion.tr>
                                 ))}
@@ -103,8 +116,16 @@ const AdminUsersPage = () => {
                                 </div>
                                 <div className="flex items-center justify-between"><KycBadge verified={user.verificado} /><p className="text-[10px] text-zinc-500">{new Date(user.created_at).toLocaleDateString('es-CO')}</p></div>
                                 <div className="flex items-center justify-end gap-2 border-t border-white/5 pt-3">
-                                    <button onClick={() => handleResetPassword(user.email, getName(user))} className="px-3 py-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase text-blue-400 bg-blue-500/10 rounded border border-blue-500/20"><RefreshCw size={12} /> Reset</button>
-                                    <button onClick={() => setBanTarget({ id: user.id, name: getName(user) })} className="px-3 py-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase text-red-400 bg-red-500/10 rounded border border-red-500/20"><Ban size={12} /> Suspender</button>
+                                    <button
+                                        onClick={() => handleResetPassword(user.email, getName(user))}
+                                        className="px-3 py-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase text-blue-400 bg-blue-500/10 rounded border border-blue-500/20"
+                                        type="button"
+                                        aria-label="Acción"><RefreshCw size={12} /> Reset</button>
+                                    <button
+                                        onClick={() => setBanTarget({ id: user.id, name: getName(user) })}
+                                        className="px-3 py-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase text-red-400 bg-red-500/10 rounded border border-red-500/20"
+                                        type="button"
+                                        aria-label="Acción"><Ban size={12} /> Suspender</button>
                                 </div>
                             </div>
                         ))}</div>}
@@ -120,8 +141,17 @@ const AdminUsersPage = () => {
                             <p className="text-xs text-zinc-400">Escribe <span className="font-mono text-red-400">BAN</span> para confirmar.</p>
                             <input type="text" value={banInput} onChange={e => setBanInput(e.target.value)} placeholder="BAN" className="w-full bg-black/40 border border-red-500/30 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-500/50" autoFocus />
                             <div className="flex gap-3">
-                                <button onClick={() => { setBanTarget(null); setBanInput(''); }} className="flex-1 py-2 rounded-xl bg-zinc-800 text-zinc-400 text-xs font-bold">Cancelar</button>
-                                <button onClick={confirmBan} disabled={banInput !== 'BAN'} className="flex-1 py-2 rounded-xl bg-red-500 text-white text-xs font-black uppercase disabled:opacity-50">Suspender</button>
+                                <button
+                                    onClick={() => { setBanTarget(null); setBanInput(''); }}
+                                    className="flex-1 py-2 rounded-xl bg-zinc-800 text-zinc-400 text-xs font-bold"
+                                    type="button"
+                                    aria-label="Acción">Cancelar</button>
+                                <button
+                                    onClick={confirmBan}
+                                    disabled={banInput !== 'BAN'}
+                                    className="flex-1 py-2 rounded-xl bg-red-500 text-white text-xs font-black uppercase disabled:opacity-50"
+                                    type="button"
+                                    aria-label="Acción">Suspender</button>
                             </div>
                         </div>
                     </div>

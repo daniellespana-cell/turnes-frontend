@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { MapPin } from 'lucide-react';
 import VacancyMap from '../VacancyMap';
 import RadiusOverlay from '../RadiusOverlay';
@@ -29,7 +29,6 @@ const ExploreMapView = ({ mapProps, radius, setRadius, userLocation, setExplorat
                 onChange={setRadius}
                 onRecenter={() => setExplorationCenter({ lat: userLocation.lat, lng: userLocation.lng })}
             />
-
             <AnimatePresence>
                 {selectedVacancy && (
                     <motion.div
@@ -53,7 +52,7 @@ const ExploreMapView = ({ mapProps, radius, setRadius, userLocation, setExplorat
                                 onClick={onClearSelection}
                                 aria-label="Cerrar vista previa"
                                 className="w-full mt-2 py-2.5 text-zinc-500 text-[10px] font-black uppercase tracking-widest bg-zinc-900/90 backdrop-blur-md rounded-xl border border-transparent hover:text-white transition-colors"
-                            >
+                                type="button">
                                 Cerrar Preview
                             </button>
                         </div>

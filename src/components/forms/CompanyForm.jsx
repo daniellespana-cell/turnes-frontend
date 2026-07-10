@@ -89,7 +89,6 @@ const CompanyForm = () => {
             {/* SOCIAL TOP */}
             <GoogleButton onClick={handleGoogleLogin} label="Regístrate con Google" />
             <Divider text="o registra tu empresa" />
-
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
 
                 {/* COMPANY NAME */}
@@ -126,11 +125,10 @@ const CompanyForm = () => {
                     type="submit"
                     disabled={isLoading}
                     className="w-full bg-brand-primary hover:bg-emerald-500 text-white font-medium text-sm py-2.5 rounded-md transition duration-200 shadow-none border-none disabled:opacity-70 mt-2"
-                >
+                    aria-label="Acción">
                     {isLoading ? "Creando..." : "Registrar Empresa"}
                 </button>
             </form>
-
             {status.message && <MessageBox message={status.message} type={status.type} />}
         </div>
     );

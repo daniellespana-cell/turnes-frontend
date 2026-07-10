@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, X, ChevronRight } from 'lucide-react';
 
 import { useState, useMemo } from 'react';
@@ -102,7 +102,8 @@ const ProfileBanner = () => {
                                     navigate(targetPath);
                                 }}
                                 className="flex-1 lg:flex-none h-14 px-8 bg-white text-black font-black text-base rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 group/btn shadow-xl active:scale-95 no-select"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 Completar Perfil
                                 <ChevronRight size={20} className="text-black/60 group-hover/btn:translate-x-1 transition-transform" />
                             </button>
@@ -111,7 +112,7 @@ const ProfileBanner = () => {
                                 onClick={() => setIsVisible(false)}
                                 className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-500 hover:text-white transition-all active:scale-95"
                                 title="Descartar"
-                            >
+                                type="button">
                                 <X size={24} />
                             </button>
                         </div>

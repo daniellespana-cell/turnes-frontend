@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 
 import { useEffect, useState } from 'react';
 import { AssetResolver } from '../../utils/assetHelper';

@@ -70,10 +70,11 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
           Los navegadores móviles bloquean la cámara en conexiones <span className="text-red-400 font-bold">HTTP</span>. 
           Para probar en móvil necesitas <span className="text-emerald-400 font-bold">HTTPS</span> o usar un túnel (ngrok).
         </p>
-        <button 
-          onClick={() => onClose()} 
+        <button
+          onClick={() => onClose()}
           className="mt-10 px-8 py-3 bg-zinc-900 border border-white/5 rounded-2xl text-[10px] font-black text-zinc-400 hover:text-white uppercase tracking-[.3em] transition-all"
-        >
+          type="button"
+          aria-label="Acción">
           Cerrar
         </button>
       </div>
@@ -82,7 +83,6 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
 
   return (
     <div className="fixed inset-0 z-[200] bg-[#050505] animate-in fade-in duration-500 flex flex-col font-manrope overflow-hidden select-none">
-      
       {/* 1. HUD SUPERIOR */}
       <div className="shrink-0 p-6 md:p-8 flex justify-between items-start z-20 w-full bg-gradient-to-b from-black/90 to-transparent">
         <div className="flex flex-col gap-2 min-w-0 max-w-[65%]">
@@ -112,7 +112,6 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
           <span className="text-[9px] font-mono font-black text-white tabular-nums">{formatTime(seconds)}</span>
         </div>
       </div>
-
       {/* 2. ÁREA DE VIDEO (Layout Full Height Blindado) */}
       <div className="flex-1 relative w-full overflow-hidden flex flex-col bg-black">
         
@@ -142,13 +141,13 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
           </div>
         )}
       </div>
-
       {/* 3. CONTROLES FLOTANTES */}
       <div className="shrink-0 p-8 flex flex-col items-center gap-5 bg-gradient-to-t from-black to-transparent z-20">
         <button
           onClick={handleHangup}
           className="group relative px-10 py-3 bg-red-600 hover:bg-red-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all active:scale-95 shadow-[0_0_40px_rgba(220,38,38,0.2)] flex items-center gap-3"
-        >
+          type="button"
+          aria-label="Acción">
           Colgar
         </button>
 
@@ -157,7 +156,6 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
           <span className="text-[6px] font-black uppercase tracking-[0.4em] text-zinc-500 text-center">Encrypted Peer-to-Peer Validation Protocol</span>
         </div>
       </div>
-
       {/* Efecto Scanline */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none opacity-5 z-10" />
     </div>

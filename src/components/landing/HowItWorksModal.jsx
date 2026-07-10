@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
 import { useEffect } from 'react';
@@ -90,7 +90,7 @@ const HowItWorksModal = ({ isOpen, onClose }) => {
                                 onClick={onClose}
                                 className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-md"
                                 aria-label="Cerrar modal"
-                            >
+                                type="button">
                                 <X size={24} />
                             </button>
                         </div>
@@ -135,7 +135,8 @@ const HowItWorksModal = ({ isOpen, onClose }) => {
                                 <button
                                     onClick={onClose}
                                     className="px-8 py-3 rounded-lg bg-white text-zinc-950 font-bold text-sm tracking-wide hover:bg-zinc-200 transition-colors shadow-lg active:scale-95 transform duration-100"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     ¡Entendido!
                                 </button>
                             </div>

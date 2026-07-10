@@ -24,7 +24,6 @@ const CandidatoRow = ({ can, onDismiss }) => {
 
   return (
     <div key={can.id} className="flex flex-col bg-[#050505] border border-transparent rounded-2xl p-3 md:p-4 group animate-in slide-in-from-right-2  transition-all overflow-hidden relative">
-
       {/* CONTENIDO PRINCIPAL DE LA FILA */}
       <div className="flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4 relative z-10">
 
@@ -41,7 +40,8 @@ const CandidatoRow = ({ can, onDismiss }) => {
               ? "bg-purple-600 border-purple-400 scale-110"
               : "bg-zinc-900 border-white/10 group-hover/avatar:border-purple-500/50"
               }`}
-          >
+            type="button"
+            aria-label="Acción">
             <Heart
               size={16}
               className={`${isFavorite ? "text-white fill-white" : "text-zinc-600 group-hover/avatar:text-purple-400"}`}
@@ -71,7 +71,7 @@ const CandidatoRow = ({ can, onDismiss }) => {
             onClick={() => navigate(`/dashboard/chat/${can.id}`, { state: { candidato: can } })}
             className="p-2 text-zinc-800 hover:text-blue-500 transition-colors"
             title="Ir al Chat"
-          >
+            type="button">
             <MessageSquare size={16} />
           </button>
           {onDismiss && (
@@ -82,7 +82,7 @@ const CandidatoRow = ({ can, onDismiss }) => {
               }}
               className="p-2 text-zinc-600 hover:text-red-400 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100"
               title="Archivar registro"
-            >
+              type="button">
               <X size={18} />
             </button>
           )}
@@ -106,7 +106,8 @@ const CandidatoRow = ({ can, onDismiss }) => {
                     }
                   }}
                   className={`transition-all ${!(can.cicloCerrado || can.justSent) ? 'hover:scale-125 cursor-pointer' : 'cursor-default'}`}
-                >
+                  type="button"
+                  aria-label="Acción">
                   <Star
                     size={20}
                     className={star <= (can.rating || 0) ? "text-yellow-400 fill-yellow-400" : "text-zinc-800"} 
@@ -137,7 +138,6 @@ const CandidatoRow = ({ can, onDismiss }) => {
         </div>
 
       </div>
-
       {/* ÁREA DE COMENTARIOS (Solo si no está sellado) */}
       {!can.cicloCerrado && !can.justSent && (
         <div className="mt-6 space-y-3 animate-in fade-in slide-in-from-top-2">
@@ -153,13 +153,13 @@ const CandidatoRow = ({ can, onDismiss }) => {
           <button
             onClick={() => onSeal(can.id, can.vacanteId)}
             className="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-zinc-200 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-[0_10px_20px_rgba(255,255,255,0.05)]"
-          >
+            type="button"
+            aria-label="Acción">
             <ShieldCheck size={16} />
             Sellar Turno y Calificar
           </button>
         </div>
       )}
-
       {/* SUBTÍTULO EXPLICATIVO (Storytelling de Favoritos) */}
       {isFavorite && (
         <div className="mt-4 flex items-start gap-3 px-4 py-3 bg-purple-500/5 border border-purple-500/10 rounded-2xl">
@@ -169,7 +169,6 @@ const CandidatoRow = ({ can, onDismiss }) => {
           </p>
         </div>
       )}
-
       {/* --- ESTADOS DE PROTOCOLO --- */}
       {can.justSent && (
         <div className="mt-4 p-4 bg-amber-500/[0.03] border border-amber-500/20 rounded-2xl flex items-center gap-4 animate-pulse">
@@ -179,7 +178,6 @@ const CandidatoRow = ({ can, onDismiss }) => {
           </p>
         </div>
       )}
-
       {can.cicloCerrado && !can.justSent && (
         <div className="mt-4 p-3 bg-blue-500/5 border border-blue-500/10 rounded-2xl flex items-center justify-center gap-3">
           <CheckCircle2 size={16} className="text-blue-400" />
@@ -188,7 +186,6 @@ const CandidatoRow = ({ can, onDismiss }) => {
           </p>
         </div>
       )}
-
     </div>
   );
 };

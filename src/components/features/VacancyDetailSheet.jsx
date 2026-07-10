@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle } from 'lucide-react';
 import VacancyDetailHeader from './vacancy-detail/VacancyDetailHeader';
 import VacancyDetailBadges from './vacancy-detail/VacancyDetailBadges';

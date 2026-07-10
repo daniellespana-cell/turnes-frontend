@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import TalentProfileHeader from './talent-profile/TalentProfileHeader';
 import TalentProfileContent from './talent-profile/TalentProfileContent';
 import TalentProfileFooter from './talent-profile/TalentProfileFooter';

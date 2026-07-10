@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { LogOut } from 'lucide-react';
 import PersonalInfoSection from './ProfileForm/PersonalInfoSection';
 import IndustrialProfileSection from './ProfileForm/IndustrialProfileSection';
@@ -55,12 +55,12 @@ const ProfileForm = ({
                 <button
                     onClick={logout}
                     className="w-full mt-4 p-3 rounded-xl border border-red-500/10 bg-red-500/5 hover:bg-red-500/10 text-red-500 flex items-center justify-center gap-2 transition-all group"
-                >
+                    type="button"
+                    aria-label="Acción">
                     <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
                     <span className="font-bold text-sm tracking-wider">Cerrar Sesión</span>
                 </button>
             </motion.div>
-
             {/* 4. ACCIÓN FLOTANTE */}
             <ProfileActionIsland
                 isEditing={isEditing}

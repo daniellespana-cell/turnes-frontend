@@ -7,10 +7,11 @@ export const TalentProfileHeader = ({ onClose }) => (
         <h2 className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
             Perfil del Talento
         </h2>
-        <button 
+        <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
-        >
+            type="button"
+            aria-label="Acción">
             <X size={16} className="text-zinc-400 hover:text-white" />
         </button>
     </div>

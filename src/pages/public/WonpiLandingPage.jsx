@@ -15,7 +15,6 @@ const WonpiLandingPage = () => {
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 font-sans selection:bg-emerald-500/30">
-
             {/* --- NAVBAR --- */}
             <nav className="fixed top-0 w-full z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -27,16 +26,18 @@ const WonpiLandingPage = () => {
                         <a href="#features" className="hover:text-white transition-colors">Características</a>
                         <a href="#pricing" className="hover:text-white transition-colors">Planes</a>
                         <a href="#contact" className="hover:text-white transition-colors">Contacto</a>
-                        <button className="px-5 py-2 bg-white text-black rounded-full font-bold hover:bg-zinc-200 transition-all">
+                        <button
+                            className="px-5 py-2 bg-white text-black rounded-full font-bold hover:bg-zinc-200 transition-all"
+                            type="button"
+                            aria-label="Acción">
                             Próximamente
                         </button>
                     </div>
-                    <button className="md:hidden text-zinc-400">
+                    <button className="md:hidden text-zinc-400" type="button" aria-label="Acción">
                         <MenuIcon />
                     </button>
                 </div>
             </nav>
-
             {/* --- HERO --- */}
             <section className="pt-32 pb-20 px-6 max-w-7xl mx-auto flex flex-col items-center text-center">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-8">
@@ -61,12 +62,14 @@ const WonpiLandingPage = () => {
                         placeholder="Tu correo electrónico"
                         className="flex-1 bg-white/5 border border-transparent rounded-xl px-5 py-4 focus:ring-2 focus:ring-emerald-500/50 outline-none transition-all placeholder:text-zinc-600"
                     />
-                    <button className="bg-emerald-500 text-black font-bold text-lg px-8 py-4 rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_-5px_#10b98150]">
+                    <button
+                        className="bg-emerald-500 text-black font-bold text-lg px-8 py-4 rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_-5px_#10b98150]"
+                        type="button"
+                        aria-label="Acción">
                         Notificarme
                     </button>
                 </div>
             </section>
-
             {/* --- FEATURE GRID --- */}
             <section id="features" className="py-20 px-6 border-t border-white/5 bg-zinc-900/20">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -82,7 +85,6 @@ const WonpiLandingPage = () => {
                     ))}
                 </div>
             </section>
-
             {/* --- PRICING (REQUIRED FOR WOMPI) --- */}
             <section id="pricing" className="py-24 px-6 max-w-7xl mx-auto">
                 <div className="text-center mb-16">
@@ -112,20 +114,30 @@ const WonpiLandingPage = () => {
                             <li className="flex gap-3"><CheckIcon /> Comisión reducida: 6%</li>
                             <li className="flex gap-3"><CheckIcon /> Soporte Prioritario</li>
                         </ul>
-                        <button className="w-full py-3 rounded-xl bg-white text-black font-bold opacity-50 cursor-not-allowed">
+                        <button
+                            className="w-full py-3 rounded-xl bg-white text-black font-bold opacity-50 cursor-not-allowed"
+                            type="button"
+                            aria-label="Acción">
                             Lista de Espera
                         </button>
                     </div>
                 </div>
             </section>
-
             {/* --- FOOTER & LEGAL --- */}
             <footer className="py-12 px-6 border-t border-white/5 text-center text-zinc-500 text-sm">
                 <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-6">
                     <div>© 2026 Turnes App S.A.S. Todos los derechos reservados.</div>
                     <div className="flex gap-6">
-                        <button onClick={() => setShowTerms(true)} className="hover:text-white transition-colors">Términos y Condiciones</button>
-                        <button onClick={() => setShowTerms(true)} className="hover:text-white transition-colors">Política de Privacidad</button>
+                        <button
+                            onClick={() => setShowTerms(true)}
+                            className="hover:text-white transition-colors"
+                            type="button"
+                            aria-label="Acción">Términos y Condiciones</button>
+                        <button
+                            onClick={() => setShowTerms(true)}
+                            className="hover:text-white transition-colors"
+                            type="button"
+                            aria-label="Acción">Política de Privacidad</button>
                         <a href="mailto:legal@turnes.co" className="hover:text-white transition-colors">legal@turnes.co</a>
                     </div>
                 </div>
@@ -133,12 +145,15 @@ const WonpiLandingPage = () => {
                     Pagos procesados de forma segura por Wompi.
                 </div>
             </footer>
-
             {/* --- TERMS MODAL --- */}
             {showTerms && (
                 <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-[#111] border border-transparent rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 text-white relative">
-                        <button onClick={() => setShowTerms(false)} className="absolute top-4 right-4 text-zinc-400 hover:text-white">✕</button>
+                        <button
+                            onClick={() => setShowTerms(false)}
+                            className="absolute top-4 right-4 text-zinc-400 hover:text-white"
+                            type="button"
+                            aria-label="Acción">✕</button>
                         <h2 className="text-2xl font-bold mb-6">Términos y Condiciones</h2>
                         <div className="space-y-4 text-zinc-400 leading-relaxed">
                             <p>Ultima actualización: Febrero 2026</p>
@@ -151,7 +166,6 @@ const WonpiLandingPage = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 }

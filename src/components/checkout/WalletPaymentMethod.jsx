@@ -35,7 +35,8 @@ const WalletPaymentMethod = ({ user, item, payWithWallet, isProcessingWallet, wa
                     className={`group relative overflow-hidden w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] text-white transition-all active:scale-[0.98]
                         ${isProcessingWallet ? 'bg-zinc-800 text-zinc-500' : 'bg-emerald-500 hover:bg-emerald-400 shadow-[0_10px_30px_rgba(16,185,129,0.2)]'}
                     `}
-                >
+                    type="button"
+                    aria-label="Acción">
                     <span className="relative z-10 flex items-center justify-center gap-2">
                         {isProcessingWallet ? "Procesando Cobro..." : (item.type === 'plan' ? `Pagar mes con mi saldo` : `Pagar servicio con mi saldo`)}
                     </span>
@@ -47,7 +48,6 @@ const WalletPaymentMethod = ({ user, item, payWithWallet, isProcessingWallet, wa
                     }
                 </p>
             </div>
-
             {/* DIVISOR CON ESTILO */}
             <div className="relative py-8">
                 <div className="absolute inset-0 flex items-center">

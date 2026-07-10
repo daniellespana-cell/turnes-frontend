@@ -59,14 +59,14 @@ const TalentSearchPage = () => {
 
     return (
         <div className="max-w-7xl mx-auto pb-20 pt-4 md:pt-8 px-4 md:px-6 min-h-screen text-zinc-300 antialiased font-manrope w-full min-w-0">
-
             {/* HEADER */}
             <header className="flex flex-col gap-6 mb-8">
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => navigate('/dashboard')}
                         className="w-10 h-10 flex items-center justify-center bg-zinc-900 rounded-full border border-transparent hover:bg-white/5 transition-all"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <ArrowLeft size={18} />
                     </button>
                     <div>
@@ -98,7 +98,8 @@ const TalentSearchPage = () => {
                         onClick={handleSearchClick}
                         style={{ borderRadius: '9999px' }}
                         className="bg-emerald-600 hover:bg-emerald-500 text-white shrink-0 px-5 py-1.5 m-0.5 rounded-full font-bold text-[12px] tracking-wide transition-all shadow-[0_4px_10px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_15px_rgba(16,185,129,0.5)] active:scale-95 flex items-center justify-center"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         Buscar
                     </button>
                 </div>
@@ -110,7 +111,8 @@ const TalentSearchPage = () => {
                         style={{ borderRadius: '9999px' }}
                         className={`px-4 py-1.5 rounded-full text-[10px] font-bold border transition-all whitespace-nowrap
                         ${activeSector === 'TODOS' ? 'bg-white text-black border-white' : 'bg-transparent border-white/10 text-zinc-400  hover:text-white'}`}
-                    >
+                        type="button"
+                        aria-label="Acción">
                         Todos
                     </button>
                     {taxonomyOptions.map(cat => (
@@ -120,13 +122,13 @@ const TalentSearchPage = () => {
                             style={{ borderRadius: '9999px' }}
                             className={`px-4 py-1.5 rounded-full text-[10px] font-bold border transition-all whitespace-nowrap
                             ${activeSector === cat.id ? 'bg-white text-black border-white' : 'bg-transparent border-white/10 text-zinc-400  hover:text-white'}`}
-                        >
+                            type="button"
+                            aria-label="Acción">
                             {cat.label.split(' ')[0]}
                         </button>
                     ))}
                 </div>
             </header>
-
             {/* RESULTADOS GRID */}
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-pulse">
@@ -169,7 +171,6 @@ const TalentSearchPage = () => {
                     onAction={handleClearSearch}
                 />
             )}
-
             {/* MODAL 360° DEL PERFIL */}
             <TalentProfileModal 
                 isOpen={isProfileModalOpen}
@@ -182,14 +183,12 @@ const TalentSearchPage = () => {
                     setIsInviteModalOpen(true);
                 }}
             />
-
             {/* MODAL PARA INVITAR A VACANTES ACTIVAS Y CREAR TICKET EN EL CHAT */}
             <InviteToVacancyModal
                 isOpen={isInviteModalOpen}
                 onClose={() => setIsInviteModalOpen(false)}
                 candidate={selectedProfileForInvite}
             />
-
         </div>
     );
 };

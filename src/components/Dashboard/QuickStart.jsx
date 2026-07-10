@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, CheckCircle2, Circle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 
 import { useNavigate } from 'react-router-dom';
 import { Wallet, UserPlus } from 'lucide-react';

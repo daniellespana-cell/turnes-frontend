@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Briefcase, Sparkles, Check } from 'lucide-react';
 import SectionCard from '../shared/SectionCard';
 import CustomSelect from '../shared/CustomSelect';

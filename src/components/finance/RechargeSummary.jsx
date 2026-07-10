@@ -13,7 +13,6 @@ const RechargeSummary = ({ amount, isProcessing, onPay }) => {
   return (
     <div className="bg-[#0f0f10] border border-transparent rounded-2xl p-5 space-y-6 lg:sticky lg:top-24 h-fit">
       <h2 className="text-zinc-400 text-xs font-bold uppercase tracking-widest">Resumen</h2>
-
       <div className="space-y-3">
         <div className="flex justify-between items-center text-sm">
           <span className="text-zinc-500 font-medium">Recarga</span>
@@ -26,14 +25,12 @@ const RechargeSummary = ({ amount, isProcessing, onPay }) => {
           </span>
         </div>
       </div>
-
       <div className="pt-4 border-t border-white/5 flex justify-between items-end">
         <span className="text-zinc-400 text-sm font-medium">Total</span>
         <span className="text-white text-2xl font-bold font-manrope tracking-tight">
           ${amount.toLocaleString()}
         </span>
       </div>
-
       {/* TÉRMINOS Y CONDICIONES (Check Obligatorio) */}
       <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-transparent">
         <input
@@ -47,7 +44,6 @@ const RechargeSummary = ({ amount, isProcessing, onPay }) => {
           Acepto que esta recarga es para <span className="text-white font-bold">consumo digital</span> y <span className="text-red-400 font-bold">no tiene reembolso</span>.
         </label>
       </div>
-
       {/* BOTÓN CON ESTADO DE CARGA */}
       <button
         onClick={onPay}
@@ -57,7 +53,8 @@ const RechargeSummary = ({ amount, isProcessing, onPay }) => {
             ? 'bg-zinc-900 border-white/5 text-zinc-600 cursor-not-allowed opacity-50'
             : 'bg-white text-black border-white hover:bg-zinc-200 active:scale-[0.98]'
           }`}
-      >
+        type="button"
+        aria-label="Acción">
         {isProcessing ? (
           <>
             <Spinner size="sm" variant="white" />
@@ -67,7 +64,6 @@ const RechargeSummary = ({ amount, isProcessing, onPay }) => {
           `Pagar $${amount.toLocaleString()}`
         )}
       </button>
-
       <div className="flex gap-2 items-center justify-center text-zinc-600 opacity-60">
         <ShieldCheck size={12} />
         <span className="text-[9px] font-medium tracking-wide">

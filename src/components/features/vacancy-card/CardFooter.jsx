@@ -24,7 +24,8 @@ export const CardFooter = ({
                         onOpenDetail?.(vacancy);
                     }}
                     className="w-full flex items-center justify-center gap-2 h-11 rounded-2xl text-[11px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-500/5 border border-emerald-500/10 hover:bg-emerald-500/10 hover:border-emerald-500/20 transition-all active:scale-95"
-                >
+                    type="button"
+                    aria-label="Acción">
                     Explorar vacante
                     <ArrowRight size={14} strokeWidth={3} />
                 </button>
@@ -43,12 +44,12 @@ export const CardFooter = ({
                         onCompanyClick?.(id || vacancy);
                     }}
                     className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl text-[10px] md:text-[11px] font-bold text-zinc-400 bg-white/5 border border-white/5 hover:text-white hover:bg-white/10 hover:border-white/10 transition-all active:scale-95"
-                >
+                    type="button"
+                    aria-label="Acción">
                     <User size={12} strokeWidth={2.5} className="text-emerald-500/70" />
                     Ver Perfil
                 </button>
             )}
-
             <TurnesButton
                 onClick={(e) => {
                     e.stopPropagation();

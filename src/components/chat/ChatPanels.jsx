@@ -53,7 +53,6 @@ const ChatPanels = ({
         }`}>
         {isPanelOpen && <ContractSidebar {...sidebarProps} />}
       </aside>
-
       {/* VERSIÓN MÓVIL (Bottom Sheet) - PORTAL PARA EVITAR Z-INDEX TRAP */}
       {isPanelOpen && createPortal(
         <div className="lg:hidden fixed inset-0 z-[9999] animate-in fade-in duration-300 font-manrope">
@@ -69,7 +68,7 @@ const ChatPanels = ({
                 onClick={() => setIsPanelOpen(false)}
                 className="w-8 h-8 flex items-center justify-center bg-white/5 border border-transparent rounded-full text-white hover:bg-white/10 transition-colors"
                 title="Cerrar Panel"
-              >
+                type="button">
                 ✕
               </button>
             </div>

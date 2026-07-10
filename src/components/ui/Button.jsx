@@ -44,7 +44,7 @@ const Button = ({
         ${className}
       `}
       {...props}
-    >
+      aria-label="Acción">
       {children}
     </button>
   );

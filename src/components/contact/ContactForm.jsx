@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import Spinner from '../ui/Spinner';
 
@@ -25,7 +25,8 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
                     <button
                         onClick={resetForm}
                         className="mt-8 px-6 py-2 bg-white/5 hover:bg-white/10 border border-transparent  rounded-lg text-white text-sm font-medium transition-all duration-300"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         Enviar otro mensaje
                     </button>
                 </motion.div>
@@ -37,7 +38,6 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
     return (
         <div className="lg:col-span-2 p-8 md:p-10 bg-white/5 backdrop-blur-md border border-transparent rounded-2xl  relative overflow-hidden">
             <h2 className="text-3xl font-black text-white mb-8 tracking-tight">Envíanos un Mensaje</h2>
-
             <form onSubmit={handleSubmit} className="space-y-6">
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -138,7 +138,7 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
                         type="submit"
                         disabled={status === 'loading'}
                         className="group w-full flex items-center justify-center px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium text-sm rounded-lg shadow-md hover:shadow-emerald-500/20 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
+                        aria-label="Acción">
                         {status === 'loading' ? (
                             <>
                                 <Spinner size="sm" variant="white" />

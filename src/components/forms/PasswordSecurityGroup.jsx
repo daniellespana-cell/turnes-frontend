@@ -48,11 +48,10 @@ const PasswordSecurityGroup = () => {
                     onClick={toggleVisibility}
                     className="absolute right-3 top-3.5 text-zinc-500 hover:text-white transition-colors focus:outline-none"
                     tabIndex="-1"
-                >
+                    aria-label="Acción">
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
             </div>
-
             {/* Live Feedback Checklist */}
             <div className="grid grid-cols-2 gap-y-1.5 ml-1 mt-0.5">
                 <Requirement met={hasMinLength} text="Mín. 8 caracteres" />
@@ -60,7 +59,6 @@ const PasswordSecurityGroup = () => {
                 <Requirement met={hasNumber} text="1 número" />
                 <Requirement met={hasSymbol} text="1 símbolo" />
             </div>
-
             {/* Confirm Password */}
             <div className="group relative mt-1">
                 <input
@@ -86,7 +84,6 @@ const PasswordSecurityGroup = () => {
                     </div>
                 )}
             </div>
-            
             {/* Error text if confirmation doesn't match */}
             {confirm.length > 0 && !isMatch && (
                 <p className="text-[10px] text-red-400 ml-1 mt-0.5">Las contraseñas no coinciden.</p>

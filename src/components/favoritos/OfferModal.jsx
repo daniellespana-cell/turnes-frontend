@@ -34,7 +34,11 @@ const OfferModal = ({
         <div className="p-6 space-y-6">
           <div className="flex justify-between items-center">
             <span className="text-[8px] font-black uppercase tracking-[0.3em] text-zinc-500">Oferta Directa</span>
-            <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors"><X size={16} /></button>
+            <button
+              onClick={onClose}
+              className="text-zinc-500 hover:text-white transition-colors"
+              type="button"
+              aria-label="Acción"><X size={16} /></button>
           </div>
 
           <div className="text-center space-y-2">
@@ -51,7 +55,11 @@ const OfferModal = ({
               ) : (
                 <h2 className="text-4xl font-black text-white italic tracking-tighter">${amount.toLocaleString()}</h2>
               )}
-              <button onClick={() => setIsEditing(true)} className="p-2 bg-white/5 rounded-full text-zinc-400 hover:text-white transition-colors">
+              <button
+                onClick={() => setIsEditing(true)}
+                className="p-2 bg-white/5 rounded-full text-zinc-400 hover:text-white transition-colors"
+                type="button"
+                aria-label="Acción">
                 <Edit2 size={12} />
               </button>
             </div>
@@ -109,7 +117,8 @@ const OfferModal = ({
                 ? 'bg-white text-black hover:bg-emerald-500 hover:text-white active:scale-95'
                 : 'bg-zinc-800 text-zinc-600 cursor-not-allowed'
               }`}
-          >
+            type="button"
+            aria-label="Acción">
             <Zap size={12} fill={acceptedTerms ? "currentColor" : "none"} /> Lanzar Oferta
           </button>
 

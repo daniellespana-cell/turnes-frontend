@@ -56,12 +56,12 @@ const RechargePage = () => {
 
   return (
     <div className="max-w-6xl mx-auto pb-20 pt-4 md:pt-8 px-4 md:px-6 text-zinc-300 antialiased font-manrope min-h-screen">
-
       <header className="flex flex-row items-center gap-4 md:gap-6 mb-8 md:mb-12 pt-4">
         <button
           onClick={() => navigate(-1)}
           className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-zinc-900 rounded-full border border-transparent active:scale-95 transition-all shadow-lg shrink-0 group hover:bg-white/5"
-        >
+          type="button"
+          aria-label="Acción">
           <ArrowLeft size={20} className="md:size-5 group-hover:-translate-x-0.5 transition-transform" />
         </button>
 
@@ -76,7 +76,6 @@ const RechargePage = () => {
           </nav>
         </div>
       </header>
-
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-6 max-w-5xl mx-auto">
 
         <div className={`lg:col-span-8 space-y-6 transition-all duration-500 ${status === 'processing' ? 'opacity-30 pointer-events-none grayscale' : 'opacity-100'
@@ -105,9 +104,7 @@ const RechargePage = () => {
         </aside>
 
       </div>
-
       {toast && <Toast data={toast} onClose={() => setToast(null)} />}
-
       {blocker && blocker.state === "blocked" && (
         <ConfirmNavigationModal
           isOpen={true}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 import CardHeader from './vacancy-card/CardHeader';
 import CardFooter from './vacancy-card/CardFooter';

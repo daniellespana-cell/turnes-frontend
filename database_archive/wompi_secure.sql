@@ -23,11 +23,7 @@ CREATE TABLE IF NOT EXISTS system_logs (
 -- Habilitar RLS (Seguridad) para Logs
 ALTER TABLE system_logs ENABLE ROW LEVEL SECURITY;
 
--- Política: Solo admins ven logs (o nadie por defecto, aquí abierto para debug)
-CREATE POLICY "Enable read/insert for authenticated users only" ON system_logs
-    FOR ALL TO authenticated
-    USING (true)
-    WITH CHECK (true);
+-- Política removida para seguridad.
 
 -- 3. Función Segura para Generar Firma (RPC)
 -- Esta función vive en el servidor. El navegador NUNCA ve el secreto.

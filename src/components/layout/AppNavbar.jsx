@@ -43,7 +43,11 @@ const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
           <div className="flex items-center gap-2 md:gap-4">
             {/* 1. Mobile Menu Button - 3D Spherical */}
             <div className="md:hidden flex items-center text-white shrink-0">
-              <button onClick={onOpenMobileSidebar} className={iconBtnClass}>
+              <button
+                onClick={onOpenMobileSidebar}
+                className={iconBtnClass}
+                type="button"
+                aria-label="Acción">
                 <Menu className={iconSvgClass} strokeWidth={2.5} />
               </button>
             </div>
@@ -58,7 +62,7 @@ const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
               onClick={() => navigate('/dashboard/chats')}
               className={iconBtnClass}
               title="Mensajes"
-            >
+              type="button">
               <MessageCircle
                 className={iconSvgClass}
                 strokeWidth={2.5}
@@ -89,7 +93,7 @@ const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
                 onClick={() => navigate("/dashboard/upgrade")}
                 title="Hazte Premium"
                 className="shrink-0 group relative flex items-center justify-center focus:outline-none active:scale-90 transition-transform duration-200"
-              >
+                type="button">
                 {/* Mobile: icono solo */}
                 <span className="md:hidden relative flex items-center justify-center w-9 h-9 rounded-full">
                   <span className="absolute inset-0 rounded-full bg-amber-500/20 animate-ping opacity-60" style={{ animationDuration: '2.5s' }} />

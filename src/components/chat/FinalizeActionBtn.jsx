@@ -25,7 +25,8 @@ export const FinalizeActionBtn = ({
                 font-black uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed
                 ${className}
             `}
-        >
+            type="button"
+            aria-label="Acción">
             {isFinalizing ? (
                 <><Spinner size="sm" variant="white" /> Sellando...</>
             ) : (

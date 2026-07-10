@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Building2, X } from 'lucide-react';
 
 
@@ -20,14 +20,14 @@ const PendingRatingsList = ({ pendingRatings = [], onRate, onDismiss }) => {
                         className="bg-zinc-900/50 border border-transparent p-5 rounded-3xl space-y-4 shadow-lg group relative"
                     >
                         {/* 🚀 Senior Dismiss Button */}
-                        <button 
+                        <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 onDismiss(app.id);
                             }}
                             className="absolute top-4 right-4 p-1.5 text-zinc-700 hover:text-white hover:bg-white/5 rounded-full transition-all"
                             title="Descartar esta calificación"
-                        >
+                            type="button">
                             <X size={14} />
                         </button>
 
@@ -48,7 +48,8 @@ const PendingRatingsList = ({ pendingRatings = [], onRate, onDismiss }) => {
                         <button
                             onClick={() => onRate(app)}
                             className="w-full py-2.5 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-brand-primary hover:text-white transition-all  shadow-black/20 active:scale-95"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Calificar Empresa
                         </button>
                     </motion.div>

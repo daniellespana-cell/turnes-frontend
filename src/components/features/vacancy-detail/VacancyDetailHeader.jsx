@@ -27,13 +27,14 @@ export const VacancyDetailHeader = ({ vacancy, closeBtnRef, onClose, onCompanyCl
                         {vacancy.title}
                     </h2>
                     
-                    <button 
+                    <button
                         onClick={() => {
                             const id = vacancy.empresaId || vacancy.companyId || vacancy.empresa_id;
                             onCompanyClick?.(id || vacancy);
                         }}
                         className="flex items-center gap-1.5 mt-0.5 group/company text-left hover:opacity-80 transition-opacity"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         <span className="text-[11px] text-zinc-400 font-medium truncate max-w-[150px] md:max-w-[250px] group-hover/company:text-emerald-400 transition-colors">
                             {vacancy.business}
                         </span>
@@ -61,7 +62,7 @@ export const VacancyDetailHeader = ({ vacancy, closeBtnRef, onClose, onCompanyCl
                 onClick={onClose}
                 aria-label="Cerrar detalle de vacante"
                 className="shrink-0 w-8 h-8 flex items-center justify-center rounded-xl bg-zinc-800/60 border border-white/8 text-zinc-500 hover:text-white hover:bg-zinc-700 transition-all"
-            >
+                type="button">
                 <X size={16} strokeWidth={2.5} />
             </button>
         </div>

@@ -45,7 +45,8 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = 
                         <button
                             onClick={onClose}
                             className="flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-zinc-500 hover:bg-white/5 hover:text-white transition-all"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Cancelar
                         </button>
                         <button
@@ -54,7 +55,8 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = 
                                     ? 'bg-red-500 hover:bg-red-600 shadow-red-900/20'
                                     : 'bg-[#21c99a] hover:bg-[#1db389] shadow-emerald-900/20' // Brand primary
                                 }`}
-                        >
+                            type="button"
+                            aria-label="Acción">
                             {confirmText}
                         </button>
                     </div>

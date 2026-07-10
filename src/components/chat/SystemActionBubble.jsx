@@ -95,13 +95,15 @@ const SystemActionBubble = ({ message, userRole, isClosed }) => {
                                 <button
                                     onClick={onAccept}
                                     className="flex-1 py-2 bg-white text-black rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400 transition-all active:scale-95 flex items-center justify-center gap-2"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     <Check size={12} /> Aceptar
                                 </button>
                                 <button
                                     onClick={onDecline}
                                     className="flex-1 py-2 bg-zinc-900 border border-transparent text-zinc-400 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-zinc-800 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     <X size={12} /> Declinar
                                 </button>
                             </div>
@@ -113,13 +115,15 @@ const SystemActionBubble = ({ message, userRole, isClosed }) => {
                                 <button
                                     onClick={() => onAcceptRehire && onAcceptRehire(message)}
                                     className="flex-1 py-2 bg-emerald-500 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400 transition-all active:scale-95 flex items-center justify-center gap-2"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     <Check size={12} /> Aceptar
                                 </button>
                                 <button
                                     onClick={() => onDeclineRehire && onDeclineRehire(message)}
                                     className="flex-1 py-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-red-500/20 hover:text-red-300 transition-all active:scale-95 flex items-center justify-center gap-2"
-                                >
+                                    type="button"
+                                    aria-label="Acción">
                                     <X size={12} /> Declinar
                                 </button>
                             </div>
@@ -142,7 +146,8 @@ const SystemActionBubble = ({ message, userRole, isClosed }) => {
                                     <button
                                         onClick={onInviteAction}
                                         className="w-full py-2 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2"
-                                    >
+                                        type="button"
+                                        aria-label="Acción">
                                         <Video size={12} /> Invitar a Video
                                     </button>
                                 )}
@@ -150,7 +155,8 @@ const SystemActionBubble = ({ message, userRole, isClosed }) => {
                                     <button
                                         onClick={onContractAction}
                                         className="w-full py-2 bg-indigo-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2"
-                                    >
+                                        type="button"
+                                        aria-label="Acción">
                                         <FileSignature size={12} /> Emitir Acuerdo
                                     </button>
                                 )}

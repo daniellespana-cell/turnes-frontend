@@ -81,7 +81,6 @@ export const ChatList = ({ chats: initialChats, isDirectoryMode = false, backPat
 
     return (
         <div className={`flex flex-col h-full ${!isDirectoryMode && 'border-r border-white/5 w-full md:w-[26rem]'} shrink-0 bg-[#060606]`}>
-
             {/* Header: Title Left, Search Right (Inline Premium) */}
             <div className="flex flex-col gap-4 px-5 pt-6 pb-4 border-b border-white/5 bg-zinc-950/50 backdrop-blur-xl sticky top-0 z-10">
                 <div className="flex items-center gap-3">
@@ -89,7 +88,7 @@ export const ChatList = ({ chats: initialChats, isDirectoryMode = false, backPat
                         onClick={() => navigate(backPath)}
                         className="p-1.5 -ml-1 text-zinc-400 hover:text-white hover:bg-white/5 rounded-full transition-all"
                         title="Volver"
-                    >
+                        type="button">
                         <ChevronLeft size={22} className="stroke-[2.5px]" />
                     </button>
                     <h1 className={`${typography.entityName} text-[22px] tracking-tight font-extrabold text-white/90`}>Mensajes</h1>
@@ -109,7 +108,6 @@ export const ChatList = ({ chats: initialChats, isDirectoryMode = false, backPat
                     />
                 </div>
             </div>
-
             {/* Lista Scrollable */}
             <div className="flex-1 overflow-y-auto no-scrollbar py-2 space-y-0.5">
                 {filteredChats.length === 0 ? (
@@ -131,7 +129,6 @@ export const ChatList = ({ chats: initialChats, isDirectoryMode = false, backPat
                     ))
                 )}
             </div>
-
             {/* Portal Modal Actions */}
             <ChatActionModal
                 isOpen={isModalOpen}

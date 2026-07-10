@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Star, Building2 } from 'lucide-react';
 
 import { AssetResolver } from '../../../utils/assetHelper';

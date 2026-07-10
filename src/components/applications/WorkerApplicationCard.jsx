@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { MessageCircle, MapPin, DollarSign, Calendar, X } from 'lucide-react';
 
 import React from 'react';
@@ -94,10 +94,8 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate, onCancel }) => 
         >
             {/* Fondo Base en Móvil (muy oscuro), transparente en Desktop hasta Hover */}
             <div className="absolute inset-0 bg-[#09090b]/40 md:bg-transparent group-hover:bg-[#09090b]/60 transition-colors duration-300 rounded-2xl md:rounded-3xl" />
-
             {/* Mesh Gradient Sutil (casi invisible hasta hover) */}
             <div className={`absolute -top-10 -right-10 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br ${statusUI.mainTheme} opacity-0 group-hover:opacity-[0.08] blur-[20px] transition-opacity duration-700 pointer-events-none rounded-full`} />
-
             {/* Botón de Cancelar Postulación (Arriba a la derecha) */}
             {(app.status === 'pendiente' || app.status === 'pendiente_pago' || app.status === 'confirmado') && (
                 <div className="absolute top-3 right-3 md:top-5 md:right-5 z-20">
@@ -105,12 +103,11 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate, onCancel }) => 
                         onClick={(e) => { e.stopPropagation(); onCancel?.(app.id); }}
                         className="text-zinc-500/70 md:text-zinc-500/0 md:group-hover:text-red-500/70 p-2 bg-transparent hover:bg-red-500/10 rounded-lg hover:scale-105 active:scale-95 transition-all hover:text-red-500"
                         title="Cancelar postulación"
-                    >
+                        type="button">
                         <X size={16} strokeWidth={2.5} />
                     </button>
                 </div>
             )}
-
             <div className="relative p-3 md:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-5">
 
                 {/* ─── Izquierda: Avatar e Info ─── */}
@@ -179,7 +176,7 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate, onCancel }) => 
                             onClick={onChat}
                             className="text-brand-primary p-2 hover:bg-brand-primary/10 rounded-lg hover:scale-105 active:scale-95 transition-all"
                             title="Ir al chat con la empresa"
-                        >
+                            type="button">
                             <MessageCircle size={16} strokeWidth={2.5} />
                         </button>
                     )}
@@ -189,7 +186,8 @@ const WorkerApplicationCard = React.memo(({ app, onChat, onRate, onCancel }) => 
                         <button
                             onClick={() => onRate(app)}
                             className="flex-1 md:flex-none px-3 py-1.5 md:px-4 md:py-2 bg-transparent hover:bg-white/5 text-zinc-400 hover:text-white font-black uppercase tracking-widest text-[8px] md:text-[9px] border border-transparent md:border-transparent md: rounded-lg transition-all text-center"
-                        >
+                            type="button"
+                            aria-label="Acción">
                             Calificar
                         </button>
                     )}

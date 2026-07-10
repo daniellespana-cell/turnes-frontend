@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import SubscriptionPlanCard from '../../components/pricing/SubscriptionPlanCard';
 import MicroserviceCard from '../../components/pricing/MicroserviceCard';
@@ -73,13 +73,11 @@ const UpgradePlanPage = () => {
 
   return (
     <div className="py-8 md:py-12 px-4 min-h-full font-manrope">
-
       {/* Dynamic Background Hints */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen" />
         <div className="absolute bottom-[-10%] right-[10%] w-[400px] h-[400px] bg-emerald-600/10 rounded-full blur-[100px] mix-blend-screen" />
       </div>
-
       <header className="mb-8 md:mb-12 text-center relative z-10 pt-4">
         {/* Back Button - Visible on Mobile and Desktop */}
         <div className="absolute top-4 left-0 md:-left-4">
@@ -87,7 +85,7 @@ const UpgradePlanPage = () => {
             onClick={() => navigate(-1)}
             className="p-3 text-zinc-400 hover:text-white bg-transparent hover:bg-white/5 rounded-full transition-all group flex items-center justify-center backdrop-blur-sm"
             title="Volver"
-          >
+            type="button">
             <ArrowRight className="rotate-180 group-hover:-translate-x-1 transition-transform drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" size={24} />
           </button>
         </div>
@@ -101,7 +99,6 @@ const UpgradePlanPage = () => {
           </h2>
         </motion.div>
       </header>
-
       {loading ? (
         <UpgradeSkeleton />
       ) : (

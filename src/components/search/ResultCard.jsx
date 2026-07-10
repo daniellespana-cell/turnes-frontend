@@ -13,7 +13,6 @@ const ResultCard = ({ data }) => {
 
     return (
         <div className="bg-zinc-900 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col sm:flex-row group">
-
             {/* Imagen */}
             <div className="sm:w-48 h-48 sm:h-auto relative overflow-hidden shrink-0">
                 <img 
@@ -26,7 +25,6 @@ const ResultCard = ({ data }) => {
                     {data.rating}
                 </div>
             </div>
-
             {/* Contenido */}
             <div className="p-5 flex flex-col justify-between flex-1">
                 <div>
@@ -73,7 +71,8 @@ const ResultCard = ({ data }) => {
                     <button
                         onClick={handleClick}
                         className="bg-zinc-800 hover:bg-brand-primary text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors shadow-lg shadow-zinc-900/20"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         {data.type === 'job' ? 'Aplicar Ahora' : 'Contactar'}
                     </button>
                 </div>

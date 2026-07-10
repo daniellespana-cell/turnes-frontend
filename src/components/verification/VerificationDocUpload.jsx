@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle, Shield } from 'lucide-react';
 import Spinner from '../ui/Spinner';
 import DocUploadZone from './DocUploadZone';
@@ -10,16 +10,6 @@ import { useVerificationUpload } from '../../hooks/useVerificationUpload';
 
 const VerificationDocUpload = ({ onSuccess }) => {
     const { user } = useAuth();
-
-    // Guardia de Hidratación Temprana
-    if (!user || !user.role) {
-        return (
-            <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                <Spinner size="md" variant="blue" />
-                <p className="text-zinc-500 text-sm font-bold animate-pulse">Sincronizando perfil...</p>
-            </div>
-        );
-    }
 
     const {
         activeDocTypes,
@@ -35,6 +25,16 @@ const VerificationDocUpload = ({ onSuccess }) => {
         handleSubmit,
         canSubmit
     } = useVerificationUpload(user, onSuccess);
+
+    // Guardia de Hidratación Temprana
+    if (!user || !user.role) {
+        return (
+            <div className="flex flex-col items-center justify-center py-20 space-y-4">
+                <Spinner size="md" variant="blue" />
+                <p className="text-zinc-500 text-sm font-bold animate-pulse">Sincronizando perfil...</p>
+            </div>
+        );
+    }
 
     return (
         <motion.div
@@ -52,7 +52,6 @@ const VerificationDocUpload = ({ onSuccess }) => {
                     Sube los documentos para que nuestro equipo revise y active tu verificación en 24–48h.
                 </p>
             </div>
-
             {/* Document Upload Zones */}
             <div className="space-y-4">
                 {activeDocTypes.map(docType => (
@@ -68,7 +67,6 @@ const VerificationDocUpload = ({ onSuccess }) => {
                     />
                 ))}
             </div>
-
             {/* Error Display */}
             <AnimatePresence>
                 {error && (
@@ -83,7 +81,6 @@ const VerificationDocUpload = ({ onSuccess }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
-
             {/* Info Box */}
             <div className="bg-blue-500/5 border border-blue-500/10 rounded-2xl p-4 space-y-2">
                 <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">¿Qué pasa ahora?</p>
@@ -100,13 +97,11 @@ const VerificationDocUpload = ({ onSuccess }) => {
                     ))}
                 </ul>
             </div>
-
             {/* Legal Compliance */}
             <LegalComplianceCheckbox 
                 legalAccepted={legalAccepted} 
                 setLegalAccepted={setLegalAccepted} 
             />
-
             {/* CTA */}
             <button
                 onClick={handleSubmit}
@@ -116,7 +111,8 @@ const VerificationDocUpload = ({ onSuccess }) => {
                         ? 'bg-blue-500 text-white hover:bg-blue-400 active:scale-95 shadow-[0_0_30px_rgba(59,130,246,0.3)]'
                         : 'bg-white/5 text-zinc-600 cursor-not-allowed'
                     }`}
-            >
+                type="button"
+                aria-label="Acción">
                 {isSubmitting ? (
                     <><Spinner size="sm" variant="white" /> Enviando documentos...</>
                 ) : (

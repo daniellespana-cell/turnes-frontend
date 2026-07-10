@@ -39,7 +39,6 @@ const SearchPage = () => {
     return (
         <div className="min-h-screen bg-zinc-950 font-sans flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
             {/* Navbar is handled by MainLayout */}
-
             <main className="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-zinc-200">
 
                 {/* Static Background (No animation) */}
@@ -60,7 +59,10 @@ const SearchPage = () => {
                         </div>
 
                         {/* Botón visual de Filtros (Minimalist) */}
-                        <button className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-transparent px-4 py-2 rounded-lg text-zinc-300 font-medium transition-colors text-xs uppercase tracking-wide">
+                        <button
+                            className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-transparent px-4 py-2 rounded-lg text-zinc-300 font-medium transition-colors text-xs uppercase tracking-wide"
+                            type="button"
+                            aria-label="Acción">
                             <Filter size={14} />
                             Filtros
                         </button>
@@ -75,7 +77,7 @@ const SearchPage = () => {
                         </div>
                     ) : (
                         // Estado Vacío (Minimalist Static)
-                        <div className="text-center py-20 bg-white/5 rounded-xl border border-transparent">
+                        (<div className="text-center py-20 bg-white/5 rounded-xl border border-transparent">
                             <div className="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-3 border border-zinc-800">
                                 <Frown size={24} className="text-zinc-600" />
                             </div>
@@ -86,14 +88,14 @@ const SearchPage = () => {
                             <button
                                 onClick={() => window.location.href = '/buscar'}
                                 className="text-emerald-500 hover:text-emerald-400 font-semibold text-sm transition-colors"
-                            >
+                                type="button"
+                                aria-label="Acción">
                                 Limpiar filtros
                             </button>
-                        </div>
+                        </div>)
                     )}
                 </div>
             </main>
-
             {/* Footer is handled by MainLayout */}
         </div>
     );

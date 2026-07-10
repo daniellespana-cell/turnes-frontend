@@ -114,7 +114,7 @@ const LoginForm = () => {
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-zinc-300 transition-colors"
-                        >
+                            aria-label="Acción">
                             {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                         </button>
                     </div>
@@ -131,16 +131,13 @@ const LoginForm = () => {
                     {isLoading ? 'Iniciando...' : 'Iniciar sesión'}
                 </TurnesButton>
             </form>
-
             {message && <MessageBox message={message.text} type={message.type} />}
-
             {/* SEPARATOR */}
             <div className="relative flex items-center py-3">
                 <div className="flex-grow border-t border-zinc-800"></div>
                 <span className="flex-shrink-0 mx-4 text-zinc-500 text-[11px] font-medium lowercase">o ingresa con</span>
                 <div className="flex-grow border-t border-zinc-800"></div>
             </div>
-
             {/* SOCIAL */}
             <GoogleButton onClick={handleGoogleLogin} disabled={isLoading} />
         </div>

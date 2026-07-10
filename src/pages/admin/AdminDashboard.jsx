@@ -77,7 +77,12 @@ const AdminDashboard = () => {
                             const ActionIcon = ICON_MAP[action.iconName] || Shield;
                             const badge = action.badgeKey === 'pendingVerifications' ? metrics?.verifications?.pending : null;
                             return (
-                                <button key={action.path} onClick={() => navigate(action.path)} className="group text-left bg-zinc-900/40 border border-white/5 hover:border-white/20 rounded-2xl p-5 transition-all duration-300 relative overflow-hidden h-32 flex flex-col justify-between">
+                                <button
+                                    key={action.path}
+                                    onClick={() => navigate(action.path)}
+                                    className="group text-left bg-zinc-900/40 border border-white/5 hover:border-white/20 rounded-2xl p-5 transition-all duration-300 relative overflow-hidden h-32 flex flex-col justify-between"
+                                    type="button"
+                                    aria-label="Acción">
                                     <div className="flex items-center justify-between">
                                         <div className={`w-10 h-10 rounded-xl bg-${action.color}-500/10 flex items-center justify-center`}><ActionIcon size={20} className={`text-${action.color}-400`} /></div>
                                         {badge > 0 && <span className="bg-red-500 text-white text-[10px] font-black px-2 py-1 rounded-full animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]">{badge} EN COLA</span>}
@@ -93,14 +98,23 @@ const AdminDashboard = () => {
                     <div className="bg-zinc-900/40 border border-white/5 rounded-3xl p-6 flex flex-col">
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xs font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Clock size={14} className="text-amber-500" /> Acción Requerida</h2>
-                            <button onClick={() => navigate('/admin/verificaciones')} className="text-[10px] font-bold text-blue-400 hover:text-white transition-colors">VER TODO</button>
+                            <button
+                                onClick={() => navigate('/admin/verificaciones')}
+                                className="text-[10px] font-bold text-blue-400 hover:text-white transition-colors"
+                                type="button"
+                                aria-label="Acción">VER TODO</button>
                         </div>
                         {pendingQueue.length === 0 ? (
                             <div className="flex-1 flex flex-col items-center justify-center opacity-50 py-10"><Shield size={32} className="text-zinc-600 mb-2" /><p className="text-xs text-zinc-500 font-bold">Bandeja KYC Limpia</p></div>
                         ) : (
                             <div className="space-y-3">
                                 {pendingQueue.map(req => (
-                                    <button key={req.id} onClick={() => navigate(`/admin/verificaciones/${req.id}`)} className="w-full bg-black/40 hover:bg-zinc-800/80 border border-white/5 rounded-xl p-3 flex items-center gap-3 transition-colors text-left group">
+                                    <button
+                                        key={req.id}
+                                        onClick={() => navigate(`/admin/verificaciones/${req.id}`)}
+                                        className="w-full bg-black/40 hover:bg-zinc-800/80 border border-white/5 rounded-xl p-3 flex items-center gap-3 transition-colors text-left group"
+                                        type="button"
+                                        aria-label="Acción">
                                         <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0"><Shield size={14} className="text-blue-400" /></div>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-xs font-bold text-white truncate">{req.perfiles?.empresas?.nombre_comercial || req.perfiles?.nombre || 'Anónimo'}</p>

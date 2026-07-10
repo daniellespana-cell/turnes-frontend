@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 
 import { Briefcase, Star, Send, CalendarDays } from 'lucide-react';
 

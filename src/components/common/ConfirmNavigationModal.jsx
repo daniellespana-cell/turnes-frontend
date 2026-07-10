@@ -28,17 +28,19 @@ const ConfirmNavigationModal = ({ isOpen, onConfirm, onCancel }) => {
 
         {/* ACCIONES */}
         <div className="flex flex-col gap-3 pt-2">
-          <button 
+          <button
             onClick={onConfirm}
             className="w-full py-4 bg-white text-black hover:bg-red-500 hover:text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95 shadow-lg"
-          >
+            type="button"
+            aria-label="Acción">
             Confirmar Salida
           </button>
           
-          <button 
+          <button
             onClick={onCancel}
             className="w-full py-4 bg-zinc-900 text-zinc-500 hover:text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95"
-          >
+            type="button"
+            aria-label="Acción">
             Volver al pago
           </button>
         </div>

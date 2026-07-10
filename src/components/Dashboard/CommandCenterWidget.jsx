@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ChevronRight, CheckCircle2 } from 'lucide-react';
 
 const CommandCenterWidget = ({ activeProcess, hasUrgentAction, onNavigate }) => {

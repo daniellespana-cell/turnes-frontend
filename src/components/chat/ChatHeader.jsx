@@ -8,7 +8,6 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
 
   return (
     <header className="h-20 border-b border-white/5 bg-zinc-900/20 backdrop-blur-xl px-4 md:px-6 flex items-center justify-between sticky top-0 z-50">
-
       {/* IDENTIDAD DEL CONTACTO + NAVEGACIÓN */}
       <div className="flex items-center gap-2 md:gap-4 min-w-0">
 
@@ -17,7 +16,7 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
           onClick={() => navigate('/dashboard/chats')}
           className="p-2 -ml-2 text-zinc-600 hover:text-white transition-all active:scale-90 group relative"
           title="Volver"
-        >
+          type="button">
           <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
         </button>
 
@@ -47,7 +46,6 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
           </p>
         </div>
       </div>
-
       {/* ACCIONES MINIMALISTAS (SIN QUITAR NADA) */}
       <div className="flex items-center gap-1 md:gap-2">
 
@@ -57,7 +55,7 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
             onClick={onVideoInvite}
             className="p-2 text-zinc-600 hover:text-emerald-500 transition-all group active:scale-90"
             title="Iniciar Cita por Video"
-          >
+            type="button">
             <Video size={16} className="group-hover:scale-110 transition-transform" />
           </button>
         ) : (
@@ -75,18 +73,21 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
             ? 'bg-blue-500/5 border-blue-500/10 hover:bg-blue-500/10'
             : 'bg-zinc-900/50 hover:bg-zinc-800 border-white/5'
             }`}
-        >
+          type="button"
+          aria-label="Acción">
           <LayoutDashboard size={14} className={isClosed ? "text-blue-400" : "text-zinc-400"} />
           <span className={`hidden lg:block text-[9px] font-black uppercase tracking-widest ${isClosed ? "text-blue-400" : "text-zinc-400"}`}>
             {isClosed ? 'Resumen' : 'Detalles'}
           </span>
         </button>
 
-        <button className="p-2 text-zinc-600 hover:text-white transition-all">
+        <button
+          className="p-2 text-zinc-600 hover:text-white transition-all"
+          type="button"
+          aria-label="Acción">
           <MoreHorizontal size={18} />
         </button>
       </div>
-
     </header>
   );
 };

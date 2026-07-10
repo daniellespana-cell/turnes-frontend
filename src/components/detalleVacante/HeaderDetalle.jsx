@@ -14,13 +14,12 @@ export const HeaderDetalle = ({ id }) => {
         onClick={() => navigate(-1)}
         className="p-2 -ml-2 text-zinc-500 hover:text-white transition-colors group relative shrink-0 rounded-full hover:bg-white/5"
         title="Volver"
-      >
+        type="button">
         <ArrowLeft
           size={20}
           className="md:size-5 group-hover:-translate-x-0.5 transition-transform duration-300"
         />
       </button>
-
       <div className="flex-1 min-w-0">
         <h1 className={typography.pageTitle}>
           Mesa de <span className={typography.gradient}>Contratación</span>

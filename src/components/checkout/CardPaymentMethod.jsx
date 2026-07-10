@@ -79,7 +79,6 @@ const CardPaymentMethod = ({ user, item, handleSuccess }) => {
                     <span className="text-[9px] font-black bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-md uppercase tracking-widest">Recomendado</span>
                 )}
             </div>
-
             {user?.saldo > 0 && user.saldo < item.rawPrice && (
                 <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex justify-between items-center text-sm mb-6">
                     <div>
@@ -89,12 +88,12 @@ const CardPaymentMethod = ({ user, item, handleSuccess }) => {
                     <button
                         onClick={() => navigate('/dashboard/finanzas/recargar')}
                         className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-white text-[10px] font-black uppercase tracking-widest transition-colors"
-                    >
+                        type="button"
+                        aria-label="Acción">
                         Recargar
                     </button>
                 </div>
             )}
-
             <div className="bg-zinc-900/50 border border-transparent rounded-2xl p-6 text-center space-y-4">
                 <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-2 text-zinc-400">
                     <CreditCard size={24} />
@@ -108,7 +107,8 @@ const CardPaymentMethod = ({ user, item, handleSuccess }) => {
                     onClick={handleWompiPayment}
                     disabled={isProcessing}
                     className={`mt-4 group relative overflow-hidden w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-xs uppercase tracking-[0.2em] text-white transition-all shadow-lg ${isProcessing ? 'bg-zinc-800 text-zinc-500 cursor-wait' : 'bg-brand-primary active:scale-[0.98]'}`}
-                >
+                    type="button"
+                    aria-label="Acción">
                     {isProcessing ? (
                         <span>Procesando...</span>
                     ) : (
@@ -119,7 +119,6 @@ const CardPaymentMethod = ({ user, item, handleSuccess }) => {
                     )}
                 </button>
             </div>
-
             <p className="text-[10px] text-zinc-600 mt-6 text-center leading-relaxed font-medium">
                 {item.type === 'plan'
                     ? "Al usar tarjeta, tu suscripción se renovará automáticamente cada mes. Puedes cancelar cuando quieras desde tus ajustes."
