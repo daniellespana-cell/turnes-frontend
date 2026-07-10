@@ -159,8 +159,6 @@ const NotificationItem = ({ note, onClick, onDelete, isUnread }) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{
                 opacity: 0,
-                padding: 0,
-                margin: 0,
                 overflow: 'hidden'
             }}
             className={`w-full text-left px-4 py-3 border-b border-white/[0.02] hover:bg-white/5 transition-colors group flex gap-3 items-start relative ${isUnread ? 'bg-purple-500/[0.04]' : ''}`}

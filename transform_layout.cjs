@@ -3,7 +3,7 @@ module.exports = function(fileInfo, api) {
   const root = j(fileInfo.source);
   let dirty = false;
 
-  const layoutProps = ['height', 'width', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'top', 'bottom', 'left', 'right'];
+  const layoutProps = ['height', 'width', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'top', 'bottom', 'left', 'right', 'padding', 'margin', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'];
   const targetAttributes = ['initial', 'animate', 'exit', 'whileHover', 'whileTap'];
 
   root.find(j.JSXAttribute).forEach(attrPath => {

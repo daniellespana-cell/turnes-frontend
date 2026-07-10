@@ -113,8 +113,6 @@ const NotificationItem = ({ note, isLast, onClick, onDelete }) => {
             exit={{
                 opacity: 0,
                 scale: 0.95,
-                padding: 0,
-                margin: 0,
                 overflow: 'hidden'
             }}
             transition={{ duration: 0.2 }}
