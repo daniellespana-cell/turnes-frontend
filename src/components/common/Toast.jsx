@@ -4,15 +4,16 @@ import { CheckCircle, XCircle, Info, AlertTriangle } from 'lucide-react';
 import { useEffect } from 'react';
 
 const Toast = ({ data, onClose }) => {
-  // Guard clause para evitar renders nulos
-  if (!data) return null;
-
-  const { type, message } = data;
+  const { type, message } = data || {};
 
   useEffect(() => {
+    if (!data) return;
     const timer = setTimeout(onClose, 4000);
     return () => clearTimeout(timer);
   }, [onClose, data]);
+
+  // Guard clause para evitar renders nulos
+  if (!data) return null;
 
   // Colores ajustados para resaltar sobre el fondo negro de Turnes
   const styles = {

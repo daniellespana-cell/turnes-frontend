@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "reactDoctor": {
+    "supplyChain": {
+      "severity": "warning"
+    }
+  },
   "dependencies": {
     "@daily-co/daily-js": "^0.89.1",
     "@fortawesome/fontawesome-free": "^6.4.0",
