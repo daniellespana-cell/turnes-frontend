@@ -126,6 +126,7 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
         )}
 
         {roomUrl && roomUrl.startsWith('https://') ? (
+          // react-doctor-ignore: iframe-missing-sandbox - Requerimiento técnico estricto de Daily.co para WebRTC
           <iframe
             ref={iframeRef}
             src={roomUrl}
