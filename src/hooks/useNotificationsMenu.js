@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNotifications } from './useNotifications';
 import { useClickOutside } from './useClickOutside';
@@ -23,11 +23,13 @@ export const useNotificationsMenu = () => {
         deleteNotification
     } = useNotifications();
 
-    // Cierre al hacer click fuera
-    useClickOutside(menuRef, (e) => {
+    const handleClickOutside = useCallback((e) => {
         if (buttonRef.current && buttonRef.current.contains(e.target)) return;
         setIsOpen(false);
-    });
+    }, []);
+
+    // Cierre al hacer click fuera
+    useClickOutside(menuRef, handleClickOutside);
 
     /**
      * Verificación O(1) de si una notificación es no-leída.

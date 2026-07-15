@@ -24,7 +24,7 @@ describe('profile.mapper.js', () => {
             expect(result.name).toBe(P.DEFAULT_NAME);
             expect(result.role).toBe(P.DEFAULT_ROLE);
             expect(result.bio).toBe(P.NO_BIO);
-            expect(result.rating).toBe(5.0);
+            expect(result.rating).toBe('5.0');
             expect(result.verified).toBe(false);
         });
 

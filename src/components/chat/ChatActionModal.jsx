@@ -41,14 +41,21 @@ const ChatActionModal = ({ isOpen, onClose, onConfirm, actionType, candidateName
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        let timerIn;
+        let timerOut;
+
         if (isOpen) {
             setIsVisible(true);
-            setTimeout(() => setIsAnimating(true), 10);
+            timerIn = setTimeout(() => setIsAnimating(true), 10);
         } else {
             setIsAnimating(false);
-            const timer = setTimeout(() => setIsVisible(false), 300);
-            return () => clearTimeout(timer);
+            timerOut = setTimeout(() => setIsVisible(false), 300);
         }
+
+        return () => {
+            if (timerIn) clearTimeout(timerIn);
+            if (timerOut) clearTimeout(timerOut);
+        };
     }, [isOpen]);
 
     if (!isVisible || !actionType) return null;

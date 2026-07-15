@@ -33,8 +33,10 @@ const TalentSearchPage = () => {
         activeSector,
         setActiveSector,
         loading,
+        isFetching,
         loadingMore,
         hasMore,
+        error,
         filteredResults,
         handleSearchClick,
         handleClearSearch,
@@ -136,9 +138,17 @@ const TalentSearchPage = () => {
                         <div key={i} className="h-48 bg-zinc-900/50 rounded-2xl border border-transparent" />
                     ))}
                 </div>
+            ) : error ? (
+                <EmptyState
+                    icon={Search}
+                    title="Error de conexión"
+                    description={error}
+                    actionLabel="Reintentar"
+                    onAction={handleSearchClick}
+                />
             ) : filteredResults.length > 0 ? (
                 <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
+                    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-all duration-300 ${isFetching ? 'opacity-50 pointer-events-none grayscale-[30%]' : 'animate-fade-in'}`}>
                         {filteredResults.map((candidate, index) => {
                             const isLast = index === filteredResults.length - 1;
                             return (

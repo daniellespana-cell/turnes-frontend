@@ -1,9 +1,8 @@
-import { useCallback, useState, useRef } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../context/ToastContext';
 import { UI_STRINGS } from '../domain/uiTranslations';
 import { CandidateService } from '../services/candidateService';
-import { supabase } from '../services/supabaseClient';
 
 /**
  * 🕵️‍♂️ USE DETALLE VACANTE (SENIOR)
@@ -22,7 +21,11 @@ export const useDetalleVacante = () => {
   // 🚀 SENIOR FIX: Ref para guard check sin stale closure
   const [processingIds, setProcessingIds] = useState([]);
   const processingRef = useRef(processingIds);
-  processingRef.current = processingIds;
+
+  // Mover la mutación del Ref a la fase de commit (useEffect)
+  useEffect(() => {
+    processingRef.current = processingIds;
+  }, [processingIds]);
 
   const ejecutarAccion = useCallback(async (tipo, cand, vacanteId, vacanteActual = null, rachaActiva = 0, contratadosCount = 0) => {
     const targetAppId = cand.applicationId;
@@ -77,11 +80,8 @@ export const useDetalleVacante = () => {
         setProcessingIds(prev => [...prev, targetAppId]); // 🔒 Bloquea el botón
         
         if (tipo === 'MATCH') {
-          // 🚀 SENIOR FIX: Contratación Atómica con Notificaciones y Cierre
-          const { error: rpcError } = await supabase.rpc('rpc_hire_candidate_v2', {
-            p_application_id: targetAppId,
-            p_vacancy_id: vacanteId
-          });
+          // 🚀 SENIOR FIX: Contratación Atómica delegada al CandidateService (SSOT)
+          const { error: rpcError } = await CandidateService.executeMatch(targetAppId, vacanteId);
           if (rpcError) throw rpcError;
         } else {
           // Acciones menores (Cita, Interés) siguen el flujo estándar

@@ -20,38 +20,7 @@ const VacanteRow = ({ data, onAction }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [menuRef]);
 
-  // Shared Menu Component for consistency
-  const DropdownMenu = () => (
-    <div className="absolute right-0 top-full mt-2 w-48 bg-[#09090b] border border-transparent rounded-xl  z-50 overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
-      {data.status !== 'Completada' && (
-        <>
-          <MenuBtn
-            icon={<Edit3 size={14} />}
-            label="Editar"
-            onClick={() => { onAction?.(data.id, 'edit'); setShowMenu(false); }}
-            role="button"
-            tabIndex={0}
-            onKeyDown={() => { onAction?.(data.id, 'edit'); setShowMenu(false); }} />
-          <MenuBtn
-            icon={<Copy size={14} />}
-            label="Duplicar"
-            onClick={() => { onAction?.(data.id, 'duplicate'); setShowMenu(false); }}
-            role="button"
-            tabIndex={0}
-            onKeyDown={() => { onAction?.(data.id, 'duplicate'); setShowMenu(false); }} />
-          <div className="h-px bg-white/5 my-1 mx-2" />
-        </>
-      )}
-      <MenuBtn
-        icon={<Trash2 size={14} />}
-        label="Eliminar"
-        danger
-        onClick={() => { onAction?.(data.id, 'delete-confirm'); setShowMenu(false); }}
-        role="button"
-        tabIndex={0}
-        onKeyDown={() => { onAction?.(data.id, 'delete-confirm'); setShowMenu(false); }} />
-    </div>
-  );
+
 
   return (
     <div className="relative group/row" ref={menuRef}>
@@ -124,7 +93,7 @@ const VacanteRow = ({ data, onAction }) => {
               aria-label="Acción">
               <MoreHorizontal size={16} />
             </button>
-            {showMenu && <DropdownMenu />}
+            {showMenu && <DropdownMenu data={data} onAction={onAction} setShowMenu={setShowMenu} />}
           </div>
         </div>
       </div>
@@ -153,7 +122,7 @@ const VacanteRow = ({ data, onAction }) => {
                 aria-label="Acción">
                 <MoreHorizontal size={18} />
               </button>
-              {showMenu && <DropdownMenu />}
+              {showMenu && <DropdownMenu data={data} onAction={onAction} setShowMenu={setShowMenu} />}
             </div>
           </div>
         </div>
@@ -213,6 +182,38 @@ const MenuBtn = ({ icon, label, onClick, danger }) => (
     aria-label="Acción">
     {icon} <span>{label}</span>
   </button>
+);
+
+const DropdownMenu = ({ data, onAction, setShowMenu }) => (
+  <div className="absolute right-0 top-full mt-2 w-48 bg-[#09090b] border border-transparent rounded-xl z-50 overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
+    {data.status !== 'Completada' && (
+      <>
+        <MenuBtn
+          icon={<Edit3 size={14} />}
+          label="Editar"
+          onClick={() => { onAction?.(data.id, 'edit'); setShowMenu(false); }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={() => { onAction?.(data.id, 'edit'); setShowMenu(false); }} />
+        <MenuBtn
+          icon={<Copy size={14} />}
+          label="Duplicar"
+          onClick={() => { onAction?.(data.id, 'duplicate'); setShowMenu(false); }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={() => { onAction?.(data.id, 'duplicate'); setShowMenu(false); }} />
+        <div className="h-px bg-white/5 my-1 mx-2" />
+      </>
+    )}
+    <MenuBtn
+      icon={<Trash2 size={14} />}
+      label="Eliminar"
+      danger
+      onClick={() => { onAction?.(data.id, 'delete-confirm'); setShowMenu(false); }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={() => { onAction?.(data.id, 'delete-confirm'); setShowMenu(false); }} />
+  </div>
 );
 
 export default VacanteRow;

@@ -19,11 +19,14 @@ const PWAInstallPrompt = () => {
     const hasDismissed = localStorage.getItem('pwa_prompt_dismissed');
     const isDebug = window.location.search.includes('pwa=1');
 
+    let iosTimer;
+    let androidTimer;
+
     // iOS: show native instructions guide
     if (isIosDevice) {
       setIsIOS(true);
       if (!hasDismissed || isDebug) {
-        setTimeout(() => setShowPrompt(true), isDebug ? 1000 : 3000);
+        iosTimer = setTimeout(() => setShowPrompt(true), isDebug ? 1000 : 3000);
       }
     }
 
@@ -39,11 +42,13 @@ const PWAInstallPrompt = () => {
 
     // Debug mode: force show prompt even without native event
     if (isDebug && !isIosDevice) {
-      setTimeout(() => setShowPrompt(true), 1000);
+      androidTimer = setTimeout(() => setShowPrompt(true), 1000);
     }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      if (iosTimer) clearTimeout(iosTimer);
+      if (androidTimer) clearTimeout(androidTimer);
     };
   }, []);
 

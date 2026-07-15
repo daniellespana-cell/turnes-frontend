@@ -12,11 +12,14 @@ export const useTalentSearch = () => {
     // Core State
     const [query, setQuery] = useState(searchParams.get('q') || '');
     const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true); // Solo para el montaje inicial (Skeleton)
+    const [isFetching, setIsFetching] = useState(false); // SWR: Para recargas sin destruir UI
     const [loadingMore, setLoadingMore] = useState(false); // Para el spinner inferior
     const [activeSector, setActiveSector] = useState('TODOS');
     const [error, setError] = useState(null);
     const lastFetchedCoord = useRef({ lat: null, lng: null });
+    const abortControllerRef = useRef(null);
+    const searchTimeoutRef = useRef(null);
     
     // Pagination State
     const [page, setPage] = useState(0);
@@ -24,17 +27,21 @@ export const useTalentSearch = () => {
     const LIMIT = 15;
 
     // Business Logic: SENIOR PostGIS Search (Paginado)
-    const performSearch = useCallback(async (term, lat = null, lng = null, pageIndex = 0, isLoadMore = false) => {
-        if (!isLoadMore) setLoading(true);
+    const performSearch = useCallback(async (term, lat = null, lng = null, pageIndex = 0, isLoadMore = false, abortSignal = null) => {
+        if (!isLoadMore && pageIndex === 0 && results.length === 0) setLoading(true); // Initial load
+        if (!isLoadMore) setIsFetching(true); // Background refresh
         else setLoadingMore(true);
         
         setError(null);
         try {
             // Unificamos búsqueda a través del Servicio (SSOT) - Radio estricto de 5km
             const offset = pageIndex * LIMIT;
-            const { data, error: rpcError } = await talentService.searchTalent(lat, lng, term, 5, LIMIT, offset);
+            const { data, error: rpcError } = await talentService.searchTalent(lat, lng, term, 5, LIMIT, offset, activeSector, abortSignal);
 
-            if (rpcError) throw rpcError;
+            if (rpcError) {
+                if (rpcError.isAbort) return; // Silent return for aborted calls
+                throw rpcError;
+            }
             
             if (!isLoadMore) {
                 setResults(data || []);
@@ -54,21 +61,24 @@ export const useTalentSearch = () => {
 
         } catch (err) {
             console.error("Talent Search Error:", err);
-            setError(err.message);
+            setError(err.message || "Error de conexión");
         } finally {
-            setLoading(false);
-            setLoadingMore(false);
+            if (!abortSignal?.aborted) {
+                setLoading(false);
+                setIsFetching(false);
+                setLoadingMore(false);
+            }
         }
-    }, [setSearchParams]);
+    }, [setSearchParams, activeSector, results.length]);
 
     // Load More action (para el Intersection Observer)
     const loadMore = useCallback(() => {
-        if (!loading && !loadingMore && hasMore && !geo.loading) {
+        if (!loading && !loadingMore && !isFetching && hasMore && !geo.loading) {
             const nextPage = page + 1;
             setPage(nextPage);
             performSearch(query, geo.lat, geo.lng, nextPage, true);
         }
-    }, [loading, loadingMore, hasMore, geo, page, query, performSearch]);
+    }, [loading, loadingMore, isFetching, hasMore, geo, page, query, performSearch]);
 
     // Reactivity to Geo and Mount
     // 🛡️ REFUERZO ANTI-EGRESS: Evitamos el bucle infinito por fluctuación de GPS
@@ -100,30 +110,57 @@ export const useTalentSearch = () => {
         };
     }, [geo.loading, geo.lat, geo.lng]);
 
-    // Taxonomy Filtering (Client Side for refined UI feedback)
-    const filteredResults = useMemo(() => {
-        if (activeSector === 'TODOS') return results;
-        const sector = SECTOR_MAP.get(activeSector);
-        if (!sector) return results;
+    // 🛡️ REFUERZO DE ARQUITECTURA: 
+    // Se elimina el filtro del lado del cliente.
+    // Ahora 'results' es la fuente de la verdad, filtrada y paginada directamente desde la BD.
+    const filteredResults = results;
 
-        const sectorSkillIds = sector.skills.map(s => s.id);
-        return results.filter(profile => {
-            const candidateSkills = profile.skills || [];
-            return candidateSkills.some(s => sectorSkillIds.includes(s)) || profile.sector === activeSector;
-        });
-    }, [results, activeSector]);
+    // Internal function to trigger debounced search with AbortController
+    const triggerSearch = useCallback((searchTerm = query) => {
+        if (geo.loading) return;
+
+        // Cancel previous request
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+        
+        // Clear previous timeout for debounce
+        if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current);
+        }
+
+        abortControllerRef.current = new AbortController();
+        const signal = abortControllerRef.current.signal;
+
+        searchTimeoutRef.current = setTimeout(() => {
+            setPage(0);
+            setHasMore(true);
+            performSearch(searchTerm, geo.lat, geo.lng, 0, false, signal);
+        }, 300); // 300ms Debounce
+    }, [geo, performSearch, query]);
+
+    // Reactivity to Sector changes
+    useEffect(() => {
+        triggerSearch();
+        
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            if (searchTimeoutRef.current) {
+                clearTimeout(searchTimeoutRef.current);
+            }
+        };
+    }, [activeSector]); // Solo vigila activeSector, geo ya tiene su propio effect
 
     const handleSearchClick = () => {
-        setPage(0);
-        setHasMore(true);
-        performSearch(query, geo.lat, geo.lng, 0, false);
+        triggerSearch();
     };
 
     const handleClearSearch = () => {
         setQuery('');
-        setPage(0);
-        setHasMore(true);
-        performSearch('', geo.lat, geo.lng, 0, false);
+        setActiveSector('TODOS');
+        triggerSearch('');
     };
 
     return {
@@ -132,6 +169,7 @@ export const useTalentSearch = () => {
         activeSector,
         setActiveSector,
         loading,
+        isFetching,
         loadingMore,
         hasMore,
         error,

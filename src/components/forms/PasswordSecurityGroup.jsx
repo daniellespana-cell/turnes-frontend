@@ -21,12 +21,6 @@ const PasswordSecurityGroup = () => {
 
     const toggleVisibility = () => setShowPassword(!showPassword);
 
-    const Requirement = ({ met, text }) => (
-        <div className={`flex items-center gap-1.5 text-[10px] transition-colors duration-300 ${met ? 'text-emerald-400' : 'text-zinc-500'}`}>
-            {met ? <Check size={12} strokeWidth={3} /> : <div className="w-3 h-3 rounded-full border border-zinc-700 flex-shrink-0" />}
-            {text}
-        </div>
-    );
 
     return (
         <div className="flex flex-col gap-3">
@@ -91,5 +85,12 @@ const PasswordSecurityGroup = () => {
         </div>
     );
 };
+
+const Requirement = ({ met, text }) => (
+    <div className={`flex items-center gap-1.5 text-[10px] transition-colors duration-300 ${met ? 'text-emerald-400' : 'text-zinc-500'}`}>
+        {met ? <Check size={12} strokeWidth={3} /> : <div className="w-3 h-3 rounded-full border border-zinc-700 flex-shrink-0" />}
+        {text}
+    </div>
+);
 
 export default PasswordSecurityGroup;

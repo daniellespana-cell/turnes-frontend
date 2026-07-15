@@ -46,7 +46,7 @@ class TalentService {
     /**
      * Búsqueda general de talento (Soporta Paginación para Infinite Scroll)
      */
-    async searchTalent(lat, lng, query, radiusKm = 5, limit = 20, offset = 0) {
+    async searchTalent(lat, lng, query, radiusKm = 5, limit = 20, offset = 0, sector = 'TODOS', signal = null) {
         try {
             // 🛑 ZERO-TRUST: Si el usuario/empresa no tiene ubicación configurada ni GPS activo,
             // cancelamos la petición al instante. NO se inyectan coordenadas falsas.
@@ -54,18 +54,29 @@ class TalentService {
                 return { data: [], error: { message: "GPS_REQUIRED" } };
             }
 
-            const { data, error } = await supabase.rpc('buscar_talento_cercano', {
+            let queryBuilder = supabase.rpc('buscar_talento_cercano', {
                 user_lat: lat,
                 user_lng: lng,
                 radio_km: radiusKm,
                 search_query: query || '',
                 p_limit: limit,
-                p_offset: offset
+                p_offset: offset,
+                p_sector: sector
             });
+
+            if (signal) {
+                queryBuilder = queryBuilder.abortSignal(signal);
+            }
+
+            const { data, error } = await queryBuilder;
 
             if (error) throw error;
             return { data: this._formatTalent(data), error: null };
         } catch (e) {
+            // Ignoramos el error si fue por aborto provocado
+            if (e.name === 'AbortError' || (e.message && e.message.includes('aborted'))) {
+                return { data: [], error: { isAbort: true } };
+            }
             console.error("TalentService Critical Error:", e);
             return { data: [], error: e };
         }
@@ -97,8 +108,8 @@ class TalentService {
             const normalized = normalizeCandidateProfile(t);
             return {
                 ...normalized,
-                // 🛡️ REFUERZO DE DATOS: Aseguramos que rating y nombre_display sean los de la DB real
-                rating: t.rating, 
+                // 🛡️ REFUERZO DE DATOS: Aseguramos que nombre_display sea el de la DB real
+                // Se eliminó la sobreescritura de rating para que el mapper aplique el Beneficio de la duda (5.0)
                 nombre_display: t.nombre_display,
                 distancia_mts: t.distancia_mts,
                 display_distance: t.distancia_mts ? (t.distancia_mts / 1000).toFixed(1) : "0.0",

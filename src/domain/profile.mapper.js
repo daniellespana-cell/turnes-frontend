@@ -11,12 +11,13 @@ export const normalizeCandidateProfile = (raw) => {
     return {
         id: raw.id,
         nombre_display: raw.nombre_display || raw.name || P.DEFAULT_NAME,
+        name: raw.nombre_display || raw.name || P.DEFAULT_NAME,
         // Exponer el avatar en ambas llaves para tolerancia de consumidores distintos
         avatar_url: avatarUrl,
         avatar: avatarUrl,
         role: raw.skills?.[0] || raw.titulo_profesional || raw.rol || P.DEFAULT_ROLE,
-        // 🛡️ REFUERZO SSOT: La base de datos manda
-        rating: Number(raw.reputation_score ?? raw.rating ?? raw.calificacion ?? 0).toFixed(1),
+        // 🛡️ REFUERZO SSOT: Si es estrictamente nulo/indefinido, comienza en 5.0 (Beneficio de la duda)
+        rating: Number(raw.reputation_score ?? raw.rating ?? raw.calificacion ?? 5.0).toFixed(1),
         reviewsCount: raw.reputation_count ?? 0,
         exitos: raw.completed_shifts ?? raw.exitos ?? 0,
         verified: raw.verificado || raw.verified || false,

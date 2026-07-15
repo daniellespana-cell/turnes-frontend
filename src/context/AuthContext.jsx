@@ -75,6 +75,7 @@ export const AuthProvider = ({ children }) => {
   }, [loadUserProfile]);
 
   // 🔥 REAL-TIME SYNC: Profiles & Wallet
+  // eslint-disable-next-line react-doctor/effect-needs-cleanup
   useEffect(() => {
     let mounted = true;
 
@@ -126,9 +127,9 @@ export const AuthProvider = ({ children }) => {
 
     return () => {
       mounted = false;
-      subscription.unsubscribe();
-      if (profileSubscription) profileSubscription.unsubscribe();
-      if (walletSubscription) walletSubscription.unsubscribe();
+      subscription?.unsubscribe();
+      profileSubscription?.unsubscribe();
+      walletSubscription?.unsubscribe();
     };
   }, [loadUserProfile, authReady, user?.id, actualizarSaldo]);
 

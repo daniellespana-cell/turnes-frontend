@@ -10,16 +10,7 @@ const LandingFooter = () => {
   const currentYear = new Date().getFullYear();
   const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
 
-  const FooterLink = ({ to, label }) => (
-    <li>
-      <Link
-        to={to}
-        className="inline-block py-1.5 text-sm text-zinc-400 hover:text-emerald-400 hover:translate-x-1 transition-all duration-300"
-      >
-        {label}
-      </Link>
-    </li>
-  );
+
 
   return (
     <footer className="bg-[#09090b] border-t border-zinc-800/50 text-white pt-12 pb-6 relative overflow-hidden">
@@ -117,5 +108,16 @@ const LandingFooter = () => {
     </footer>
   );
 };
+
+const FooterLink = ({ to, label }) => (
+  <li>
+    <Link
+      to={to}
+      className="inline-block py-1.5 text-sm text-zinc-400 hover:text-emerald-400 hover:translate-x-1 transition-all duration-300"
+    >
+      {label}
+    </Link>
+  </li>
+);
 
 export default LandingFooter;

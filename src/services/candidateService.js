@@ -104,6 +104,21 @@ export const CandidateService = {
         return await BaseService.handle(query);
     },
 
+    /**
+     * 🤝 EJECUTAR MATCH (Contratación Atómica)
+     * Llama al RPC que aprueba el MATCH y cierra la vacante si corresponde.
+     */
+    async executeMatch(applicationId, vacancyId) {
+        if (!applicationId || !vacancyId) return { data: null, error: { message: "Faltan parámetros" } };
+
+        const query = supabase.rpc('rpc_hire_candidate_v2', {
+            p_application_id: applicationId,
+            p_vacancy_id: vacancyId
+        });
+
+        return await BaseService.handle(query);
+    },
+
 
     /**
      * 🌟 RED DE CONFIANZA: CALIFICAR Y SELLAR (ATOMIC)
