@@ -27,13 +27,13 @@ const WelcomeBonusBanner = () => {
                     </div>
                     <div>
                         <h3 className="text-white font-bold text-lg mb-1 flex items-center gap-2">
-                            Primer Turno Gratis
+                            Primer Turno Temporal Gratis
                             {isProfileComplete && <CheckCircle2 size={16} className="text-emerald-400" />}
                         </h3>
                         <p className="text-zinc-300 text-sm">
                             {isProfileComplete 
-                                ? "¡Felicidades! Tu perfil está al 100%. Tu primera contratación será totalmente gratuita (descuento automático al contratar)."
-                                : "Completa el 100% de tu perfil de empresa (incluyendo logo y NIT) para desbloquear tu primera contratación totalmente gratis."}
+                                ? "¡Felicidades! Tu perfil está al 100%. Tu primera contratación de un turno temporal será totalmente gratuita (descuento automático)."
+                                : "Completa el 100% de tu perfil de empresa (logo y NIT) para desbloquear tu primera contratación temporal gratis."}
                         </p>
                     </div>
                 </div>
@@ -75,7 +75,7 @@ const WelcomeBonusBanner = () => {
                             </div>
 
                             <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-xl p-4 text-sm text-zinc-300 leading-relaxed font-medium">
-                                "El beneficio de 5,000 COP es un descuento exclusivo aplicado automáticamente en la primera contratación dentro de Turnes, siempre que el perfil de la empresa esté al 100% completo. En ningún caso es canjeable por dinero en efectivo ni transferible a cuentas bancarias."
+                                "El beneficio de 'Primer Turno Gratis' aplica exclusivamente para el pago de comisión de la primera contratación de un Turno Temporal dentro de Turnes, siempre que el perfil de la empresa esté al 100% completo. No aplica para Turnos Fijos. En ningún caso es canjeable por dinero en efectivo ni transferible a cuentas bancarias."
                             </div>
                             
                             <button

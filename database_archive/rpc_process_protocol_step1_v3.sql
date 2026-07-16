@@ -22,6 +22,8 @@ DECLARE
     v_step_actual INTEGER;
     v_is_paid BOOLEAN;
     v_tx_id UUID;
+    v_tipo_turno TEXT;
+    v_concepto TEXT;
 BEGIN
     -- 1. Seguridad: Solo empresas pueden pagar
     v_empresa_id := auth.uid();
@@ -30,8 +32,8 @@ BEGIN
     END IF;
 
     -- 2. Bloqueo de Control y Autorización estricta (Zero-Trust)
-    SELECT p.step, p.is_paid, v.empresa_id 
-    INTO v_step_actual, v_is_paid, v_empresa_id_vacante
+    SELECT p.step, p.is_paid, v.empresa_id, v.tipo_turno
+    INTO v_step_actual, v_is_paid, v_empresa_id_vacante, v_tipo_turno
     FROM public.postulaciones p
     JOIN public.vacantes v ON v.id = p.vacante_id
     WHERE p.id = p_application_id
@@ -52,6 +54,7 @@ BEGIN
     DECLARE
         v_nit VARCHAR;
         v_tiene_logo BOOLEAN;
+        v_nit_limpio VARCHAR;
     BEGIN
         -- Extraer NIT y verificar si tiene logo desde la tabla empresas
         SELECT nit_rut, (logo_url IS NOT NULL AND btrim(logo_url) <> '')
@@ -60,15 +63,18 @@ BEGIN
         WHERE id = v_empresa_id
         LIMIT 1;
 
-        IF v_nit IS NOT NULL AND v_tiene_logo THEN
+        -- Limpiar el NIT de puntos, comas, guiones o espacios para Defensa Sybil
+        v_nit_limpio := regexp_replace(v_nit, '\D', '', 'g');
+
+        -- Solo aplica si tiene logo, nit, y el turno es TEMPORAL (no fijo)
+        IF v_nit_limpio IS NOT NULL AND v_nit_limpio <> '' AND v_tiene_logo AND TRIM(v_tipo_turno) NOT ILIKE '%fijo%' THEN
             -- Si no ha redimido el descuento, aplicarlo
-            IF NOT EXISTS (SELECT 1 FROM public.descuentos_bienvenida_redimidos WHERE nit = v_nit) THEN
-                v_monto_a_cobrar := v_monto_a_cobrar - 5000;
-                IF v_monto_a_cobrar < 0 THEN v_monto_a_cobrar := 0; END IF;
+            IF NOT EXISTS (SELECT 1 FROM public.descuentos_bienvenida_redimidos WHERE nit = v_nit_limpio) THEN
+                v_monto_a_cobrar := 0; -- 100% Gratis sin importar la comisión
                 
                 -- Marcar el NIT como redimido para evitar Sybil Attacks
                 INSERT INTO public.descuentos_bienvenida_redimidos (nit, billetera_id)
-                VALUES (v_nit, v_empresa_id);
+                VALUES (v_nit_limpio, v_empresa_id);
             END IF;
         END IF;
     END;
@@ -88,13 +94,18 @@ BEGIN
     WHERE id = v_empresa_id;
 
     -- B. Registrar Movimiento
+    v_concepto := 'Desbloqueo de contacto: ' || p_candidate_name;
+    IF v_monto_a_cobrar = 0 THEN
+        v_concepto := 'Desbloqueo de contacto (Bono Bienvenida Aplicado): ' || p_candidate_name;
+    END IF;
+
     INSERT INTO public.movimientos (billetera_id, tipo, monto, estado, concepto, referencia)
     VALUES (
         v_empresa_id, 
         'RETIRO', 
         v_monto_a_cobrar, 
         'completado', 
-        'Desbloqueo de contacto: ' || p_candidate_name, 
+        v_concepto, 
         'STEP1_PAY_' || p_application_id
     ) RETURNING id INTO v_tx_id;
 
