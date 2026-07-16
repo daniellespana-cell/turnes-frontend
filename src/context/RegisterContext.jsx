@@ -11,10 +11,18 @@ const RegisterContext = createContext(null);
 
 
 export const RegisterProvider = ({ children }) => {
-    // 🚀 ULTRA-PERFORMANCE: Usamos estado local en lugar de URL SearchParams.
-    // Esto evita que React Router vuelva a ejecutar el 'rootLoader' (y su timeout de 2s)
-    // cada vez que el usuario elige un perfil.
-    const [role, setRoleState] = useState(null);
+    // 🚀 ULTRA-PERFORMANCE: Usamos estado local en lugar de URL SearchParams para la navegación interna.
+    // Sin embargo, si recibimos un query param `?type=company` desde otra página (ej. Marketing),
+    // lo usamos como valor inicial para saltar la pantalla de selección.
+    const [role, setRoleState] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const type = params.get('type');
+            if (type === 'company' || type === 'empresa') return 'company';
+            if (type === 'jobseeker' || type === 'postulante') return 'jobseeker';
+        }
+        return null;
+    });
 
     // Función setter que actualiza el estado local (instantáneo)
     const setRole = useCallback((newRole) => {

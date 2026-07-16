@@ -29,7 +29,7 @@ const PublicWelcomeBonusBanner = () => {
                 </p>
                 
                 <button 
-                    onClick={() => navigate('/registro')}
+                    onClick={() => navigate('/register?type=empresa')}
                     className="bg-white text-black hover:bg-zinc-200 transition-colors duration-300 font-bold text-lg px-8 py-4 rounded-2xl flex items-center gap-3 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                 >
                     Publicar Turno Gratis

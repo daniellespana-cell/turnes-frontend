@@ -36,14 +36,14 @@ const RoleBusinessCard = ({ rol }) => {
                 </div>
             </div>
             <TurnesButton
-                onClick={() => navigate('/registro')}
+                onClick={() => navigate('/register?type=empresa')}
                 variant="secondary"
                 size="md"
                 className="w-full"
                 icon={ArrowRight}
                 role="button"
                 tabIndex={0}
-                onKeyDown={() => navigate('/registro')}>
+                onKeyDown={() => navigate('/register?type=empresa')}>
                 Publicar Turno Gratis
             </TurnesButton>
         </motion.div>
