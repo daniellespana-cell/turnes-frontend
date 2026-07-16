@@ -5,7 +5,7 @@ import { m as motion } from 'framer-motion';
 
 import NotFound from '../common/NotFound';
 import SEOHead from '../../components/seo/SEOHead';
-import RolPricingBlock from '../../components/sections/RolPricingBlock';
+import PublicWelcomeBonusBanner from '../../components/sections/PublicWelcomeBonusBanner';
 
 import RoleHeader from '../../components/role-detail/RoleHeader';
 import RoleMainCard from '../../components/role-detail/RoleMainCard';
@@ -95,7 +95,7 @@ const DetalleRolPage = () => {
                         </div>
 
                         <motion.div variants={fadeInUp}>
-                            <RolPricingBlock />
+                            <PublicWelcomeBonusBanner />
                         </motion.div>
                     </motion.div>
                 </div>
