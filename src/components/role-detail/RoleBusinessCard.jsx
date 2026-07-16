@@ -2,6 +2,7 @@ import React from 'react';
 import { m as motion } from 'framer-motion';
 import { Info, ArrowRight } from 'lucide-react';
 import TurnesButton from '../ui/TurnesButton';
+import { PATHS } from '../../config/routes.paths';
 import { useNavigate } from 'react-router-dom';
 
 const fadeInUp = {
@@ -36,14 +37,14 @@ const RoleBusinessCard = ({ rol }) => {
                 </div>
             </div>
             <TurnesButton
-                onClick={() => navigate('/register?type=empresa')}
+                onClick={() => navigate(PATHS.PUBLIC.REGISTER_COMPANY)}
                 variant="secondary"
                 size="md"
                 className="w-full"
                 icon={ArrowRight}
                 role="button"
                 tabIndex={0}
-                onKeyDown={() => navigate('/register?type=empresa')}>
+                onKeyDown={() => navigate(PATHS.PUBLIC.REGISTER_COMPANY)}>
                 Publicar Turno Gratis
             </TurnesButton>
         </motion.div>

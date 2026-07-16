@@ -10,6 +10,8 @@ export const PATHS = {
         HOME: '/',
         LOGIN: '/login',
         REGISTER: '/register',
+        REGISTER_COMPANY: '/register/empresa',
+        REGISTER_TALENT: '/register/talento',
         FORGOT_PASSWORD: '/forgot-password',
         UPDATE_PASSWORD: '/update-password',
         SEARCH: '/search',

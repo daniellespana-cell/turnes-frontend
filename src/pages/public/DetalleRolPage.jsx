@@ -89,14 +89,18 @@ const DetalleRolPage = () => {
                     <motion.div variants={staggerContainer} initial="hidden" animate="visible">
                         <RoleHeader rol={rol} />
 
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            <RoleMainCard rol={rol} shortSummary={shortSummary} />
-                            <RoleBusinessCard rol={rol} />
-                        </div>
-
-                        <motion.div variants={fadeInUp}>
+                        <motion.div variants={fadeInUp} className="mb-12">
                             <PublicWelcomeBonusBanner />
                         </motion.div>
+
+                        <div className="flex flex-nowrap overflow-x-auto lg:grid lg:grid-cols-3 gap-4 lg:gap-8 snap-x snap-mandatory pb-6 -mx-4 px-4 lg:mx-0 lg:px-0" style={{ scrollbarWidth: 'none' }}>
+                            <div className="min-w-[90vw] sm:min-w-[400px] lg:min-w-0 lg:col-span-2 snap-center">
+                                <RoleMainCard rol={rol} shortSummary={shortSummary} />
+                            </div>
+                            <div className="min-w-[90vw] sm:min-w-[400px] lg:min-w-0 lg:col-span-1 snap-center">
+                                <RoleBusinessCard rol={rol} />
+                            </div>
+                        </div>
                     </motion.div>
                 </div>
             </main>

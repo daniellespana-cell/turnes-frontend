@@ -27,11 +27,11 @@ const AuthNavbar = () => {
 
     return (
         <nav 
-            className="absolute top-0 left-0 w-full z-50 p-6 flex items-center justify-between"
+            className="absolute top-0 left-0 w-full z-50 p-6 flex items-center justify-between pointer-events-none"
             style={{ paddingTop: 'calc(1.5rem + env(safe-area-inset-top))' }}
         >
             {/* Logo Official */}
-            <Link to="/" className="flex items-center space-x-2 group">
+            <Link to="/" className="flex items-center space-x-2 group pointer-events-auto">
                 <img
                     src={turnesLogo}
                     alt="Turnes Logo"
@@ -40,7 +40,7 @@ const AuthNavbar = () => {
             </Link>
 
             {/* Auth Actions with Animated Buttons */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 pointer-events-auto">
                 {isLogin ? (
                     <>
                         <span className="text-sm md:text-base text-zinc-400 hidden sm:block font-medium">¿No tienes cuenta?</span>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, Briefcase } from 'lucide-react';
 
 import { Zap, Star, ShieldCheck, Clock } from 'lucide-react';
+import { PATHS } from '../../config/routes.paths';
 
 const Beneficios = () => {
   return (
@@ -55,7 +56,7 @@ const Beneficios = () => {
                 ))}
               </ul>
 
-              <Link to="/register?type=empresa" className="inline-flex w-full items-center justify-center px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm tracking-wide transition-all shadow-md shadow-indigo-500/20 group-hover:scale-[1.01]">
+              <Link to={PATHS.PUBLIC.REGISTER_COMPANY} className="inline-flex w-full items-center justify-center px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm tracking-wide transition-all shadow-md shadow-indigo-500/20 group-hover:scale-[1.01]">
                 EMPIEZA A CONTRATAR
               </Link>
             </div>
@@ -89,7 +90,7 @@ const Beneficios = () => {
                 ))}
               </ul>
 
-              <Link to="/register?type=jobseeker" className="inline-flex w-full items-center justify-center px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm tracking-wide transition-all shadow-md shadow-emerald-500/20 group-hover:scale-[1.01]">
+              <Link to={PATHS.PUBLIC.REGISTER_TALENT} className="inline-flex w-full items-center justify-center px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm tracking-wide transition-all shadow-md shadow-emerald-500/20 group-hover:scale-[1.01]">
                 ENCUENTRA TURNOS
               </Link>
             </div>

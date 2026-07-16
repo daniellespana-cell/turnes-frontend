@@ -242,6 +242,7 @@ export const router = createBrowserRouter([
                             { index: true, element: <LandingPage /> },
                             { path: PATHS.PUBLIC.LOGIN, element: <LoginPage /> },
                             { path: PATHS.PUBLIC.REGISTER, element: <RegisterPage /> },
+                            { path: `${PATHS.PUBLIC.REGISTER}/:roleUrl`, element: <RegisterPage /> },
                             { path: PATHS.PUBLIC.FORGOT_PASSWORD, element: <ForgotPasswordPage /> },
                         ]
                     },

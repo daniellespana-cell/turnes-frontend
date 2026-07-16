@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { m as motion } from 'framer-motion';
 import { Star, CheckCircle2, Zap, ArrowRight } from 'lucide-react';
+import { PATHS } from '../../config/routes.paths';
 
 const PublicWelcomeBonusBanner = () => {
     const navigate = useNavigate();
@@ -29,8 +30,8 @@ const PublicWelcomeBonusBanner = () => {
                 </p>
                 
                 <button 
-                    onClick={() => navigate('/register?type=empresa')}
-                    className="bg-white text-black hover:bg-zinc-200 transition-colors duration-300 font-bold text-lg px-8 py-4 rounded-2xl flex items-center gap-3 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                    onClick={() => navigate(PATHS.PUBLIC.REGISTER_COMPANY)}
+                    className="group relative px-6 sm:px-8 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] active:scale-95 flex items-center gap-3 w-full sm:w-auto justify-center mt-2"
                 >
                     Publicar Turno Gratis
                     <Zap size={20} className="text-yellow-500 fill-yellow-500" />

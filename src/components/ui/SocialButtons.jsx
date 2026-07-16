@@ -1,16 +1,24 @@
 import React from 'react';
 
 
-// Google Icon Button - Ultra Modern (Flat/Clean)
-export const GoogleButton = ({ onClick }) => (
+// --- Constantes de Estilo (Single Source of Truth para UI) ---
+const styles = {
+    buttonBase: "group relative flex items-center justify-center w-full h-12 rounded-xl transition-all duration-300 active:scale-95 shadow-sm hover:shadow-md",
+    buttonDark: "bg-zinc-900/50 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700",
+    iconContainer: "w-5 h-5 mr-3 opacity-90 group-hover:opacity-100 transition-opacity duration-300",
+    textLabel: "text-sm font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300"
+};
+
+// Google Icon Button - Full width with text
+export const GoogleButton = ({ onClick, label = "Continuar con Google" }) => (
     <div className="flex justify-center w-full">
         <button
             type="button"
             onClick={onClick}
-            className="group relative flex items-center justify-center w-10 h-10 bg-white/5 hover:bg-white/10 border border-transparent rounded-full transition-all duration-300 hover:scale-105 active:scale-95"
-            aria-label="Continuar con Google"
+            className={`${styles.buttonBase} ${styles.buttonDark}`}
+            aria-label={label}
         >
-            <svg className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity duration-300" viewBox="0 0 24 24">
+            <svg className={styles.iconContainer} viewBox="0 0 24 24">
                 <path
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                     fill="#4285F4"
@@ -28,6 +36,7 @@ export const GoogleButton = ({ onClick }) => (
                     fill="#EA4335"
                 />
             </svg>
+            <span className={styles.textLabel}>{label}</span>
         </button>
     </div>
 );

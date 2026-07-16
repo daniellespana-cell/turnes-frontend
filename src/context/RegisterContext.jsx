@@ -10,24 +10,18 @@ import { createContext, useContext, useState, useCallback } from 'react';
 const RegisterContext = createContext(null);
 
 
-export const RegisterProvider = ({ children }) => {
+export const RegisterProvider = ({ children, initialRole = null, onReset }) => {
     // 🚀 ULTRA-PERFORMANCE: Usamos estado local en lugar de URL SearchParams para la navegación interna.
-    // Sin embargo, si recibimos un query param `?type=company` o `?role=company` desde otra página (ej. Marketing),
-    // lo usamos como valor inicial para saltar la pantalla de selección.
-    const [role, setRoleState] = useState(() => {
-        if (typeof window !== 'undefined') {
-            const params = new URLSearchParams(window.location.search);
-            const type = params.get('type') || params.get('role');
-            if (type === 'company' || type === 'empresa') return 'company';
-            if (type === 'jobseeker' || type === 'postulante') return 'jobseeker';
-        }
-        return null;
-    });
+    // El initialRole se pasa desde RegisterPage usando useParams, manteniendo React Router como la "Single Source of Truth".
+    const [role, setRoleState] = useState(initialRole);
 
     // Función setter que actualiza el estado local (instantáneo)
     const setRole = useCallback((newRole) => {
+        if (newRole === null && onReset) {
+            onReset();
+        }
         setRoleState(newRole);
-    }, []);
+    }, [onReset]);
 
     const resetRegistration = useCallback(() => {
         setRoleState(null);

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PATHS } from '../../config/routes.paths';
 const activeRoles = ["Mesero", "Bartender", "Seguridad", "Logística", "Protocolo"];
 
 const HeroSearch = () => {
@@ -39,7 +40,7 @@ const HeroSearch = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        navigate('/register');
+        navigate(PATHS.PUBLIC.REGISTER_COMPANY);
     };
 
     return (
@@ -67,11 +68,11 @@ const HeroSearch = () => {
 
             {/* DUAL CTA (B2B vs B2C) */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 text-sm">
-                <Link to="/register" className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full font-bold transition-colors border border-zinc-700 hover:border-zinc-500 w-full sm:w-auto text-center">
+                <Link to={PATHS.PUBLIC.REGISTER_TALENT} className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full font-bold transition-colors border border-zinc-700 hover:border-zinc-500 w-full sm:w-auto text-center">
                     Soy Talento, busco turnos
                 </Link>
                 <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-zinc-700" />
-                <Link to="/register" className="px-6 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-full font-bold transition-colors border border-emerald-500/20 w-full sm:w-auto text-center">
+                <Link to={PATHS.PUBLIC.REGISTER_COMPANY} className="px-6 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-full font-bold transition-colors border border-emerald-500/20 w-full sm:w-auto text-center">
                     Soy Empresa, busco personal
                 </Link>
             </div>

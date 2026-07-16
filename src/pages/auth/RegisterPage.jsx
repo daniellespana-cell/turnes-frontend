@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { RegisterProvider } from '../../context/RegisterContext';
 import RoleSelection from '../../components/auth/RoleSelection';
 import AuthNavbar from '../../components/layout/AuthNavbar';
@@ -82,10 +83,27 @@ const RegisterPageContent = () => {
     );
 };
 
-const RegisterPage = () => (
-    <RegisterProvider>
-        <RegisterPageContent />
-    </RegisterProvider>
-);
+const RegisterPage = () => {
+    const { roleUrl } = useParams();
+    const navigate = useNavigate();
+    
+    // Map URL param to internal role type
+    let initialRole = null;
+    if (roleUrl === 'empresa' || roleUrl === 'company') initialRole = 'company';
+    if (roleUrl === 'talento' || roleUrl === 'jobseeker' || roleUrl === 'postulante') initialRole = 'jobseeker';
+
+    // Handle internal navigation for "onBack" clean URL
+    const handleReset = () => {
+        if (roleUrl) {
+            navigate('/register', { replace: true });
+        }
+    };
+
+    return (
+        <RegisterProvider initialRole={initialRole} onReset={handleReset}>
+            <RegisterPageContent />
+        </RegisterProvider>
+    );
+};
 
 export default RegisterPage;
