@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { m as motion } from 'framer-motion';
-import { Star, CheckCircle2, Zap } from 'lucide-react';
+import { Star, CheckCircle2, Zap, ArrowRight } from 'lucide-react';
 
 const PublicWelcomeBonusBanner = () => {
     const navigate = useNavigate();
