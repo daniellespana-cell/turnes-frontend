@@ -40,22 +40,43 @@ const PublicWelcomeBonusBanner = () => {
             {/* Right Visual Composition (CSS Mockup) */}
             <div className="w-full md:w-[45%] h-[300px] md:h-[400px] relative z-10 flex items-center justify-center pointer-events-none">
                 
-                {/* Floating Star 1 */}
+                {/* Floating Star 1 - Pulsante y Giratoria */}
                 <motion.div 
-                    animate={{ y: [-10, 10, -10], rotate: [-5, 5, -5] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-4 left-0 md:-left-8 text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.4)]"
+                    animate={{ 
+                        y: [-15, 15, -15], 
+                        rotate: [0, 15, -10, 0],
+                        scale: [1, 1.25, 0.95, 1]
+                    }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-4 left-0 md:-left-8 text-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.8)] z-30"
                 >
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
                 </motion.div>
 
-                {/* Floating Star 2 */}
+                {/* Floating Star 2 - Pulso Acelerado */}
                 <motion.div 
-                    animate={{ y: [10, -10, 10], rotate: [5, -5, 5] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    className="absolute bottom-12 right-0 md:-right-8 text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.4)]"
+                    animate={{ 
+                        y: [10, -20, 10], 
+                        rotate: [15, -15, 15],
+                        scale: [0.8, 1.1, 0.8]
+                    }}
+                    transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    className="absolute bottom-8 right-0 md:-right-10 text-amber-300 drop-shadow-[0_0_20px_rgba(251,191,36,0.7)] z-0"
                 >
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                    <svg width="42" height="42" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                </motion.div>
+
+                {/* Floating Star 3 - Mini destello lejano */}
+                <motion.div 
+                    animate={{ 
+                        scale: [0.5, 1, 0.5],
+                        opacity: [0.3, 1, 0.3],
+                        rotate: [0, 180]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
+                    className="absolute top-1/2 right-4 text-yellow-200 drop-shadow-[0_0_10px_rgba(253,230,138,0.9)] z-30"
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
                 </motion.div>
 
                 {/* Main Card (Candidate Profile) */}
