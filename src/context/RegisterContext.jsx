@@ -15,6 +15,15 @@ export const RegisterProvider = ({ children, initialRole = null, onReset }) => {
     // El initialRole se pasa desde RegisterPage usando useParams, manteniendo React Router como la "Single Source of Truth".
     const [role, setRoleState] = useState(initialRole);
 
+    // SINCRONIZACIÓN REACTIVA (Senior Practice): Si el usuario navega desde `/register/talento` a `/register/empresa`
+    // sin desmontar el componente (SPA navigation), useState ignorará el nuevo initialRole. 
+    // Este useEffect garantiza que la URL siempre mande sobre el estado local si cambia.
+    React.useEffect(() => {
+        if (initialRole !== null && initialRole !== role) {
+            setRoleState(initialRole);
+        }
+    }, [initialRole]);
+
     // Función setter que actualiza el estado local (instantáneo)
     const setRole = useCallback((newRole) => {
         if (newRole === null && onReset) {

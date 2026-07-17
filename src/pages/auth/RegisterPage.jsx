@@ -87,10 +87,12 @@ const RegisterPage = () => {
     const { roleUrl } = useParams();
     const navigate = useNavigate();
     
-    // Map URL param to internal role type
+    // Map URL param to internal role type (Case Insensitive - Senior Practice)
     let initialRole = null;
-    if (roleUrl === 'empresa' || roleUrl === 'company') initialRole = 'company';
-    if (roleUrl === 'talento' || roleUrl === 'jobseeker' || roleUrl === 'postulante') initialRole = 'jobseeker';
+    const normalizedRole = roleUrl?.toLowerCase();
+    
+    if (normalizedRole === 'empresa' || normalizedRole === 'company') initialRole = 'company';
+    if (normalizedRole === 'talento' || normalizedRole === 'jobseeker' || normalizedRole === 'postulante') initialRole = 'jobseeker';
 
     // Handle internal navigation for "onBack" clean URL
     const handleReset = () => {
