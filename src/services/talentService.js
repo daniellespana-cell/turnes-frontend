@@ -23,7 +23,8 @@ class TalentService {
                 user_lat: lat,
                 user_lng: lng,
                 radio_km: 5, // Radio máximo exigido
-                search_query: query
+                search_query: query,
+                p_limit: 50
             });
 
             if (error) throw error;
@@ -44,9 +45,9 @@ class TalentService {
     }
 
     /**
-     * Búsqueda general de talento (Soporta Paginación para Infinite Scroll)
+     * Búsqueda general de talento (Soporta Paginación Espacial Cursor-based)
      */
-    async searchTalent(lat, lng, query, radiusKm = 5, limit = 20, offset = 0, sector = 'TODOS', signal = null) {
+    async searchTalent(lat, lng, query, radiusKm = 5, limit = 20, cursor = null, sector = 'TODOS', signal = null) {
         try {
             // 🛑 ZERO-TRUST: Si el usuario/empresa no tiene ubicación configurada ni GPS activo,
             // cancelamos la petición al instante. NO se inyectan coordenadas falsas.
@@ -60,7 +61,8 @@ class TalentService {
                 radio_km: radiusKm,
                 search_query: query || '',
                 p_limit: limit,
-                p_offset: offset,
+                p_last_distance: cursor?.lastDistance ?? null,
+                p_last_id: cursor?.lastId ?? null,
                 p_sector: sector
             });
 

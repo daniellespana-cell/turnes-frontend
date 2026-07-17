@@ -5,9 +5,10 @@ import TalentProfileModal from '../../components/business/TalentProfileModal';
 import InviteToVacancyModal from '../../components/business/InviteToVacancyModal';
 import EmptyState from '../../components/common/EmptyState';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
+import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
 import { useTalentSearch } from '../../hooks/useTalentSearch';
 import { typography } from '../../styles/typography';
@@ -44,20 +45,47 @@ const TalentSearchPage = () => {
         taxonomyOptions
     } = useTalentSearch();
 
-    // Lógica nativa de Intersection Observer (Scroll Infinito sin librerías de terceros)
-    const observer = useRef();
-    const lastTalentElementRef = useCallback(node => {
-        if (loading || loadingMore) return;
-        if (observer.current) observer.current.disconnect();
-        
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
-                loadMore();
-            }
-        }, { rootMargin: '100px' }); // Gatilla 100px antes de llegar al final
-        
-        if (node) observer.current.observe(node);
-    }, [loading, loadingMore, hasMore, loadMore]);
+    const getColumnCount = () => {
+        if (typeof window === 'undefined') return 1;
+        if (window.innerWidth >= 1024) return 3;
+        if (window.innerWidth >= 768) return 2;
+        return 1;
+    };
+
+    const chunkArray = (arr, size) => {
+        const chunks = [];
+        for (let i = 0; i < arr.length; i += size) {
+            chunks.push(arr.slice(i, i + size));
+        }
+        return chunks;
+    };
+
+    const [columns, setColumns] = useState(getColumnCount());
+
+    useEffect(() => {
+        const handleResize = () => setColumns(getColumnCount());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const rows = chunkArray(filteredResults, columns);
+    const listRef = useRef(null);
+
+    const rowVirtualizer = useWindowVirtualizer({
+        count: rows.length,
+        estimateSize: () => 280,
+        overscan: 3,
+        scrollMargin: listRef.current?.offsetTop ?? 0,
+    });
+
+    useEffect(() => {
+        const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
+        if (!lastItem) return;
+
+        if (lastItem.index >= rows.length - 1 && hasMore && !loadingMore && !isFetching) {
+            loadMore();
+        }
+    }, [hasMore, loadingMore, isFetching, loadMore, rows.length, rowVirtualizer.getVirtualItems()]);
 
     return (
         <div className="max-w-7xl mx-auto pb-20 pt-4 md:pt-8 px-4 md:px-6 min-h-screen text-zinc-300 antialiased font-manrope w-full min-w-0">
@@ -148,23 +176,44 @@ const TalentSearchPage = () => {
                 />
             ) : filteredResults.length > 0 ? (
                 <>
-                    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-all duration-300 ${isFetching ? 'opacity-50 pointer-events-none grayscale-[30%]' : 'animate-fade-in'}`}>
-                        {filteredResults.map((candidate, index) => {
-                            const isLast = index === filteredResults.length - 1;
-                            return (
-                                <div key={candidate.id} ref={isLast ? lastTalentElementRef : null}>
-                                    <TalentCard
-                                        candidate={candidate}
-                                        onNavigate={navigate}
-                                        onOpenProfile={() => handleOpenProfile(candidate.id)}
-                                        onDirectInvite={() => {
-                                            setSelectedProfileForInvite(candidate);
-                                            setIsInviteModalOpen(true);
+                    <div ref={listRef} className={`transition-all duration-300 ${isFetching && !loadingMore ? 'opacity-50 grayscale-[30%]' : 'animate-fade-in'}`}>
+                        <div
+                            style={{
+                                height: `${rowVirtualizer.getTotalSize()}px`,
+                                width: '100%',
+                                position: 'relative',
+                            }}
+                        >
+                            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                                const rowCandidates = rows[virtualRow.index];
+                                return (
+                                    <div
+                                        key={virtualRow.index}
+                                        style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            transform: `translateY(${virtualRow.start}px)`,
                                         }}
-                                    />
-                                </div>
-                            );
-                        })}
+                                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                                    >
+                                        {rowCandidates.map(candidate => (
+                                            <TalentCard
+                                                key={candidate.id}
+                                                candidate={candidate}
+                                                onNavigate={navigate}
+                                                onOpenProfile={() => handleOpenProfile(candidate.id)}
+                                                onDirectInvite={() => {
+                                                    setSelectedProfileForInvite(candidate);
+                                                    setIsInviteModalOpen(true);
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                     {loadingMore && (
                         <div className="w-full flex justify-center py-8">
