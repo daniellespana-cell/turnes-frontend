@@ -34,16 +34,19 @@ export const GeoService = {
     },
 
     /**
-     * Vacantes cercanas via PostGIS (Server-Side).
+     * Vacantes cercanas via PostGIS (Server-Side) con paginación por cursores.
      */
-    async fetchNearby(lat, lng, radiusKm = 15, userId = null, timeout = 12000) {
+    async fetchNearby(lat, lng, radiusKm = 15, userId = null, limit = 15, lastDistance = null, lastId = null, timeout = 12000) {
         if (lat == null || lng == null) return { data: [], error: 'Coordenadas requeridas' };
 
         const query = supabase.rpc('buscar_vacantes_cercanas', {
             user_lat: lat,
             user_lng: lng,
             radio_km: radiusKm,
-            p_user_id: userId
+            p_user_id: userId,
+            p_last_distance: lastDistance,
+            p_last_id: lastId,
+            p_limit: limit
         });
 
         return BaseService.handle(query, timeout);

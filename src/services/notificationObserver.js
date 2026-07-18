@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient';
+import { BaseService } from './base/BaseService';
 import { logger } from '../utils/logger';
 
 const CHANNEL_NAME = 'turnes-notifications-realtime';
@@ -75,25 +76,33 @@ class NotificationObserver {
 
     // --- DATA ACCESS ---
 
-    async fetchHistory(subscriberId, limit = PAGE_SIZE) {
-        if (!subscriberId) return [];
-        const { data, error } = await supabase
+    async fetchHistory(subscriberId, page = 0, limit = PAGE_SIZE) {
+        if (!subscriberId) return { data: [], error: null };
+        
+        const from = page * limit;
+        const to = from + limit - 1;
+
+        const query = supabase
             .from('notificaciones')
             .select('*')
             .order('created_at', { ascending: false })
-            .limit(limit);
-        if (error) { console.error('[Observer] fetchHistory error:', error); return []; }
-        return data ?? [];
+            .range(from, to);
+            
+        const { data, error } = await BaseService.handle(query);
+        if (error) { console.error('[Observer] fetchHistory error:', error); return { data: [], error }; }
+        return { data: data ?? [], error: null };
     }
 
     async markAsRead(notificationId) {
-        const { error } = await supabase.from('notificaciones').update({ leida: true }).eq('id', notificationId);
+        const query = supabase.from('notificaciones').update({ leida: true }).eq('id', notificationId);
+        const { error } = await BaseService.handle(query);
         if (error) console.error('[Observer] markAsRead error:', error);
         return !error;
     }
 
     async markAllAsRead(subscriberId) {
-        const { error } = await supabase.from('notificaciones').update({ leida: true }).eq('leida', false);
+        const query = supabase.from('notificaciones').update({ leida: true }).eq('leida', false);
+        const { error } = await BaseService.handle(query);
         if (error) console.error('[Observer] markAllAsRead error:', error);
         return !error;
     }

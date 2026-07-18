@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { m as motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import VacancyCard from '../VacancyCard';
 import Spinner from '../../ui/Spinner';
 
@@ -34,37 +35,93 @@ const LoadMoreButton = ({ onClick, loading, hasMore }) => {
     );
 };
 
-const ExploreGridList = ({ vacancies, onApply, onOpenDetail, onCompanyClick, isApplying, appliedIds, hasMore, loadMore, loading }) => (
-    <motion.div
-        key="list"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-    >
-        <ul 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 pb-8 pt-6"
-            aria-label="Lista de vacantes"
+const getColumnCount = () => {
+    if (typeof window === 'undefined') return 1;
+    if (window.innerWidth >= 1280) return 4;
+    if (window.innerWidth >= 1024) return 3;
+    if (window.innerWidth >= 640) return 2;
+    return 1;
+};
+
+const chunkArray = (arr, size) => {
+    const chunks = [];
+    for (let i = 0; i < arr.length; i += size) {
+        chunks.push(arr.slice(i, i + size));
+    }
+    return chunks;
+};
+
+const ExploreGridList = ({ vacancies, onApply, onOpenDetail, onCompanyClick, isApplying, appliedIds, hasMore, loadMore, loading }) => {
+    const [columns, setColumns] = useState(getColumnCount());
+
+    useEffect(() => {
+        const handleResize = () => setColumns(getColumnCount());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const rows = chunkArray(vacancies, columns);
+    const listRef = useRef(null);
+
+    const rowVirtualizer = useWindowVirtualizer({
+        count: rows.length,
+        estimateSize: () => 320, // Estimated height of a vacancy card row
+        overscan: 3,
+        scrollMargin: listRef.current?.offsetTop ?? 0,
+    });
+
+    return (
+        <motion.div
+            key="list"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            ref={listRef}
         >
-            {vacancies.map(vacancy => (
-                <li key={vacancy.id}>
-                    <VacancyCard
-                        vacancy={vacancy}
-                        onApply={onApply}
-                        onOpenDetail={onOpenDetail}
-                        onCompanyClick={onCompanyClick}
-                        isApplying={isApplying === vacancy.id}
-                        isApplied={appliedIds.has(vacancy.id)}
-                    />
-                </li>
-            ))}
-        </ul>
-        
-        <LoadMoreButton
-            onClick={loadMore}
-            loading={loading}
-            hasMore={hasMore}
-            role="button"
-            tabIndex={0}
-            onKeyDown={loadMore} />
-    </motion.div>
-);
+            <div
+                style={{
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    width: '100%',
+                    position: 'relative',
+                }}
+                className="pb-8 pt-6"
+            >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                    const rowVacancies = rows[virtualRow.index];
+                    return (
+                        <ul
+                            key={virtualRow.index}
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                transform: `translateY(${virtualRow.start}px)`,
+                            }}
+                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
+                        >
+                            {rowVacancies.map(vacancy => (
+                                <li key={vacancy.id}>
+                                    <VacancyCard
+                                        vacancy={vacancy}
+                                        onApply={onApply}
+                                        onOpenDetail={onOpenDetail}
+                                        onCompanyClick={onCompanyClick}
+                                        isApplying={isApplying === vacancy.id}
+                                        isApplied={appliedIds.has(vacancy.id)}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    );
+                })}
+            </div>
+            
+            <LoadMoreButton
+                onClick={loadMore}
+                loading={loading}
+                hasMore={hasMore}
+            />
+        </motion.div>
+    );
+};
 
 export default ExploreGridList;

@@ -191,23 +191,53 @@ export const AdminService = {
         } catch (error) {
             console.error('🔥 Motor KPI Ledger Fallback. Intentando cálculo en cliente para los últimos registros...');
             try {
-                // VULN-FIX: Límite duro para evitar Out Of Memory (OOM) en el navegador
-                const { data, error: fbError } = await supabase.from('movimientos').select('monto').limit(1000).order('created_at', { ascending: false });
-                if (fbError) throw fbError;
-                
+                // VULN-FIX: Paginación segura para calcular el Ledger completo en el fallback
                 let inFlow = 0;
                 let outFlow = 0;
-                for (let i = 0; i < (data || []).length; i++) {
-                    const m = Number(data[i].monto) || 0;
-                    if (m > 0) inFlow += m;
-                    else outFlow += Math.abs(m);
+                let totalCount = 0;
+                
+                const pageSize = 5000;
+                let page = 0;
+                let hasMore = true;
+
+                while (hasMore) {
+                    const from = page * pageSize;
+                    const to = from + pageSize - 1;
+
+                    const { data, error: fbError } = await supabase
+                        .from('movimientos')
+                        .select('monto')
+                        .order('created_at', { ascending: false })
+                        .range(from, to);
+
+                    if (fbError) throw fbError;
+
+                    if (!data || data.length === 0) {
+                        hasMore = false;
+                        break;
+                    }
+
+                    for (let i = 0; i < data.length; i++) {
+                        const m = Number(data[i].monto) || 0;
+                        if (m > 0) inFlow += m;
+                        else outFlow += Math.abs(m);
+                    }
+
+                    totalCount += data.length;
+                    
+                    if (data.length < pageSize) {
+                        hasMore = false;
+                    } else {
+                        page++;
+                    }
                 }
+
                 return {
                     data: {
                         grossInflow: inFlow,
                         grossOutflow: outFlow,
                         netRevenue: inFlow - outFlow,
-                        count: (data || []).length
+                        count: totalCount
                     },
                     error: null
                 };

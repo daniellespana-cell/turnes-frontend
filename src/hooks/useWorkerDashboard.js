@@ -66,7 +66,8 @@ export const useWorkerDashboard = () => {
 
             try {
                 // 🚀 Optimized Fetch via PostGIS RPC (Bypasses RLS issues and filters by distance on DB)
-                const { data, error } = await GeoService.fetchNearby(lat, lng, 30, user.id);
+                // Se solicitan 100 para que el algoritmo de Match tenga suficientes vacantes para calificar
+                const { data, error } = await GeoService.fetchNearby(lat, lng, 30, user.id, 100);
 
                 if (!error && data && !isCancelled) {
                     lastFetchedCoord.current = { lat, lng };

@@ -15,6 +15,18 @@ import { router } from './router';
 
 // Components
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // Prevent refetching jitter on tab switch
+      retry: 1, // Only retry once to avoid spamming the DB
+    },
+  },
+});
+
 /**
  * APP ENTRY POINT (Principal Solution - No Tech Debt)
  * - Static Router Injection
@@ -34,19 +46,21 @@ function App() {
   }, []);
 
   return (
-    <div className="App font-manrope antialiased bg-[#0a0a0a] min-h-screen">
-      <GlobalErrorBoundary>
-        <HelmetProvider>
-          <NotificationsProvider>
-            <Toaster richColors position="top-center" />
-            <RouterProvider 
-              router={router} 
-              // Note: HydrateFallback is defined at route level in src/router/index.jsx
-            />
-          </NotificationsProvider>
-        </HelmetProvider>
-      </GlobalErrorBoundary>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="App font-manrope antialiased bg-[#0a0a0a] min-h-screen">
+        <GlobalErrorBoundary>
+          <HelmetProvider>
+            <NotificationsProvider>
+              <Toaster richColors position="top-center" />
+              <RouterProvider 
+                router={router} 
+                // Note: HydrateFallback is defined at route level in src/router/index.jsx
+              />
+            </NotificationsProvider>
+          </HelmetProvider>
+        </GlobalErrorBoundary>
+      </div>
+    </QueryClientProvider>
   );
 }
 

@@ -107,7 +107,8 @@ export const VacancyService = {
             .from('vacantes')
             .select('*, empresas(nombre_comercial, logo_url)')
             .eq('status', 'activa')
-            .textSearch('fts', term, { type: 'websearch', config: 'spanish' });
+            .textSearch('fts', term, { type: 'websearch', config: 'spanish' })
+            .limit(150);
 
         return BaseService.handle(query);
     },

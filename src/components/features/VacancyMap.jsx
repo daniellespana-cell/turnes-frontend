@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 
 import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
@@ -131,23 +132,29 @@ const VacancyMap = ({
                     </Marker>
                 )}
 
-                {/* Marcadores de vacantes */}
-                {vacancies.map(v => {
-                    const lat = parseFloat(v.lat);
-                    const lng = parseFloat(v.lng);
-                    // Skip vacancies without coordinates — they show in list view only
-                    if (!v.hasCoords || isNaN(lat) || isNaN(lng)) return null;
+                <MarkerClusterGroup 
+                    chunkedLoading 
+                    showCoverageOnHover={false} 
+                    maxClusterRadius={45}
+                >
+                    {/* Marcadores de vacantes */}
+                    {vacancies.map(v => {
+                        const lat = parseFloat(v.lat);
+                        const lng = parseFloat(v.lng);
+                        // Skip vacancies without coordinates — they show in list view only
+                        if (!v.hasCoords || isNaN(lat) || isNaN(lng)) return null;
 
-                    return (
-                        <Marker
-                            key={v.id}
-                            position={[lat, lng]}
-                            icon={MapMarkerFactory.createVacancyIcon(v.category)}
-                            opacity={selectedId && selectedId !== v.id ? 0.6 : 1}
-                            eventHandlers={{ click: () => handleVacancyClick(v) }}
-                        />
-                    );
-                })}
+                        return (
+                            <Marker
+                                key={v.id}
+                                position={[lat, lng]}
+                                icon={MapMarkerFactory.createVacancyIcon(v.category)}
+                                opacity={selectedId && selectedId !== v.id ? 0.6 : 1}
+                                eventHandlers={{ click: () => handleVacancyClick(v) }}
+                            />
+                        );
+                    })}
+                </MarkerClusterGroup>
             </MapContainer>
         </div>
     );

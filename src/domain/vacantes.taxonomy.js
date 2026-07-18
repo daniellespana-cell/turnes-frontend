@@ -8,7 +8,7 @@
  * Para agregar un sector o cargo: INSERT en las tablas de Supabase.
  * NO editar los datos aquí directamente.
  */
-import { supabase } from '../services/supabaseClient';
+import { TaxonomyService } from '../services/taxonomyService';
 import { logger } from '../utils/logger';
 
 // ── FALLBACK LOCAL MÍNIMO ────────────────────────────────────
@@ -65,9 +65,9 @@ buildTaxonomyCache(FALLBACK_TAXONOMY);
 export const syncTaxonomyWithDB = async () => {
   try {
     const [sectorsRes, rolesRes, skillsRes] = await Promise.all([
-      supabase.from('taxonomy_sectors').select('*').eq('is_active', true),
-      supabase.from('taxonomy_roles').select('*').eq('is_active', true).order('sort_order'),
-      supabase.from('taxonomy_skills').select('*').eq('is_active', true).order('sort_order'),
+      TaxonomyService.getSectors(),
+      TaxonomyService.getRoles(),
+      TaxonomyService.getSkills(),
     ]);
 
     if (sectorsRes.error || !sectorsRes.data?.length) {

@@ -118,8 +118,9 @@ export const useInternalSearch = () => {
 
             } else {
                 // ── MODO CANDIDATO: Buscar vacantes cercanas ──────────────────
+                // Limit=100 para replicar el comportamiento previo (falta paginación real aquí)
                 const { data, error: rpcError } = await GeoService.fetchNearby(
-                    lat, lng, SEARCH_RADIUS_KM
+                    lat, lng, SEARCH_RADIUS_KM, null, 100
                 );
                 if (rpcError) throw rpcError;
 

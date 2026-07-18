@@ -56,8 +56,8 @@ export const NotificationsProvider = ({ children }) => {
     useEffect(() => {
         if (!user?.id) { setNotifications([]); setLoading(false); return; }
         let cancelled = false;
-        notificationObserver.fetchHistory(user.id).then(rows => {
-            if (!cancelled) { 
+        notificationObserver.fetchHistory(user.id).then(({ data: rows, error }) => {
+            if (!cancelled && !error) { 
                 const normalized = rows.map(normalize);
                 const deduped = deduplicate(normalized);
                 // 🚀 Senior Fix: Sort explicitly to guarantee Newest First (Descending) order
