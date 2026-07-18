@@ -1,4 +1,13 @@
-# Reglas de Caché (Cloudflare Pages)
+# 🛡️ REGLAS DE SEGURIDAD (Cloudflare Pages)
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Permissions-Policy: geolocation=(self), camera=(), microphone=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.wompi.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.supabase.in https://*.sentry.io https://*.daily.co wss://*.daily.co; img-src 'self' data: blob: https://*.supabase.co https://*.supabase.in https://*.tile.openstreetmap.org https://unpkg.com https://*.basemaps.cartocdn.com https://ui-avatars.com https://api.dicebear.com https://placehold.co https://www.transparenttextures.com; style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; frame-src 'self' https://checkout.wompi.co https://*.daily.co; media-src 'self' blob:; worker-src 'self' blob:;
+
+# ⚡ Reglas de Caché (Cloudflare Pages)
 
 # 1. Los assets generados por Vite (JS, CSS) tienen hash.
 # ¡Nunca cambian! Se pueden cachear de forma agresiva por 1 año.
