@@ -14,10 +14,13 @@ import { authService } from '../services/authService';
 const buildFormData = (user) => ({
     name:            user?.name || '',
     email:           user?.email || '',
+    phone:           user?.telefono || user?.phone || '',
     bio:             user?.bio || '',
     sector:          user?.sector || '',
     skills:          user?.skills || [],
     location:        user?.direccion || user?.location || user?.address || '',
+    lat:             user?.lat ?? null,
+    lng:             user?.lng ?? null,
     availability:    user?.availability || 'full_time',
     experienceYears: user?.experienceYears || 0,
 });

@@ -1,27 +1,24 @@
 import React from 'react';
-import { User, Mail, Phone, MapPin } from 'lucide-react';
+import { User, Mail, Phone } from 'lucide-react';
 import SectionCard from '../shared/SectionCard';
 import InputField from '../shared/InputField';
-import TextAreaField from '../shared/TextAreaField';
-import { CIUDADES_COORDS, CIUDADES_PRINCIPALES } from '../../../domain/geography.config';
+import CityAutocomplete from '../shared/CityAutocomplete';
 
 /**
  * Sección de Información Personal — Perfil de Empresa (Business).
- * Incluye selector de ciudad con resolución automática de coordenadas
- * para alimentar el algoritmo de match geográfico de vacantes.
+ * Usa CityAutocomplete (componente compartido) con resolución automática
+ * de coordenadas para alimentar el algoritmo de match geográfico.
  */
 const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
-    // Al seleccionar ciudad resolvemos lat/lng automáticamente
-    const handleCityChange = (cityName) => {
+
+    // Resolución de coordenadas al seleccionar ciudad
+    // coords = { lat, lng } → match exacto, coords = null → campo borrado,
+    // coords = undefined → tipeando (no tocar las coords existentes)
+    const handleCityChange = (cityName, coords) => {
         handleInputChange('address', cityName);
-        const coords = CIUDADES_COORDS[cityName];
-        if (coords) {
-            handleInputChange('lat', coords.lat);
-            handleInputChange('lng', coords.lng);
-        } else {
-            // Ciudad tipada a mano que no está en el catálogo — limpiar coords
-            handleInputChange('lat', null);
-            handleInputChange('lng', null);
+        if (coords !== undefined) {
+            handleInputChange('lat', coords?.lat ?? null);
+            handleInputChange('lng', coords?.lng ?? null);
         }
     };
 
@@ -50,47 +47,14 @@ const PersonalInfoSection = ({ formData, handleInputChange, isEditing }) => {
                     icon={<Phone size={12} />}
                 />
 
-                {/* Ciudad — Combobox con resolución de coordenadas */}
-                <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
-                        <MapPin size={12} className="opacity-70" />
-                        Ciudad / Ubicación
-                    </label>
-                    <div className="relative">
-                        <input
-                            id="business-location-combobox"
-                            list="turnes-ciudades-biz"
-                            value={formData.address || ''}
-                            onChange={e => handleCityChange(e.target.value)}
-                            disabled={!isEditing}
-                            placeholder="Ej: Bucaramanga"
-                            autoComplete="off"
-                            className={`
-                                w-full bg-zinc-950 border rounded-xl px-4 py-3 min-h-[56px] text-base text-white
-                                placeholder:text-zinc-700 outline-none transition-all duration-200
-                                ${isEditing
-                                    ? 'border-zinc-700 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 cursor-text'
-                                    : 'border-zinc-800/50 opacity-60 cursor-default'}
-                            `}
-                        />
-                        <datalist id="turnes-ciudades-biz">
-                            {CIUDADES_PRINCIPALES.map(ciudad => (
-                                <option key={ciudad} value={ciudad} />
-                            ))}
-                        </datalist>
-                    </div>
-                    {isEditing && formData.lat && (
-                        <p className="text-xs text-emerald-500/80 mt-1 px-1 flex items-center gap-1">
-                            <MapPin size={10} />
-                            Coords: {Number(formData.lat).toFixed(4)}, {Number(formData.lng).toFixed(4)}
-                        </p>
-                    )}
-                    {isEditing && !formData.lat && formData.address && (
-                        <p className="text-xs text-amber-500/80 mt-1 px-1">
-                            Ciudad no reconocida — selecciona del listado para activar el match geográfico.
-                        </p>
-                    )}
-                </div>
+                {/* Ciudad — CityAutocomplete con resolución de coordenadas */}
+                <CityAutocomplete
+                    value={formData.address || ''}
+                    onChange={handleCityChange}
+                    disabled={!isEditing}
+                    label="Ciudad / Ubicación"
+                    id="business-location-combobox"
+                />
 
                 <div className="md:col-span-2 space-y-2 mt-4">
                     <div className="flex justify-between items-center">

@@ -63,39 +63,55 @@ const ProfileBanner = () => {
                 className="w-full mb-8"
             >
                 {/* Glassmorphism Container: Senior Hierarchy */}
-                <div className="relative overflow-hidden glass-card p-8 group shadow-2xl">
+                <div className="relative overflow-hidden glass-card p-5 lg:p-8 group shadow-2xl">
 
                     {/* Decorative Blob: More vivid and layered */}
                     <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-emerald-500/10 transition-all duration-700" />
 
-                    <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+                    {/* Close Button: Top Right without border */}
+                    <button
+                        onClick={() => setIsVisible(false)}
+                        className="absolute top-4 right-4 lg:top-6 lg:right-6 p-2 text-zinc-500 hover:text-white transition-colors z-20"
+                        title="Descartar"
+                        type="button"
+                        aria-label="Cerrar banner">
+                        <X className="w-5 h-5 lg:w-6 lg:h-6" />
+                    </button>
+
+                    <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-8">
 
                         {/* Left Content */}
-                        <div className="flex items-start gap-6">
-                            <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-purple-600/20 border border-white/10 flex items-center justify-center shadow-xl">
-                                <Sparkles className="text-emerald-400 drop-shadow-[0_0_8px_#10B981]" size={32} />
-                            </div>
-
-                            <div className="space-y-3">
-                                <div className="flex flex-wrap items-center gap-4">
-                                    <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                                        Perfil al <span className="text-emerald-400">{completeness}%</span>
-                                    </h3>
-                                    <span className="px-4 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[12px] font-black text-emerald-400 uppercase tracking-widest no-select">
-                                        Recomendado
-                                    </span>
+                        <div className="flex flex-col w-full lg:w-auto">
+                            {/* Header row */}
+                            <div className="flex items-center gap-4 lg:gap-6">
+                                <div className="flex-shrink-0 w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-purple-600/20 border border-white/10 flex items-center justify-center shadow-xl">
+                                    <Sparkles className="text-emerald-400 drop-shadow-[0_0_8px_#10B981] w-7 h-7 lg:w-8 lg:h-8" />
                                 </div>
 
-                                <p className="text-base md:text-lg text-zinc-400 max-w-2xl leading-relaxed font-medium">
+                                <div className="flex flex-col lg:flex-row lg:items-center gap-1.5 lg:gap-4">
+                                    <h3 className="text-xl lg:text-3xl font-black text-white tracking-tight leading-none lg:leading-normal">
+                                        Perfil al <span className="text-emerald-400">{completeness}%</span>
+                                    </h3>
+                                    <div className="w-fit">
+                                        <span className="px-2.5 py-0.5 lg:px-4 lg:py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[10px] lg:text-[12px] font-black text-emerald-400 uppercase tracking-widest no-select">
+                                            Recomendado
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Text & Progress */}
+                            <div className="mt-4 lg:mt-3 lg:ml-[88px] space-y-4 lg:space-y-3">
+                                <p className="text-sm lg:text-lg text-zinc-400 max-w-2xl leading-relaxed font-medium">
                                     Los perfiles completos reciben <span className="text-white font-bold">3x más visitas</span>. 
                                     Destaca en la <span className="text-emerald-500/80 italic font-black">Red de Confianza</span> hoy mismo.
                                 </p>
 
                                 {/* Progress Bar: High visibility */}
-                                <div className="w-full max-w-[320px] h-3 bg-zinc-900 rounded-full mt-4 overflow-hidden border border-white/5 p-0.5">
+                                <div className="w-full max-w-full lg:max-w-[320px] h-2.5 lg:h-3 bg-zinc-900 rounded-full overflow-hidden border border-white/5 p-0.5">
                                     <motion.div
-                                        initial={{}}
-                                        animate={{}}
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${completeness}%` }}
                                         transition={{ duration: 1.5, ease: "easeOut" }}
                                         className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 shadow-[0_0_15px_#10B981]"
                                     />
@@ -104,26 +120,17 @@ const ProfileBanner = () => {
                         </div>
 
                         {/* Right Actions: Large hit targets */}
-                        <div className="flex items-center gap-4 w-full lg:w-auto">
+                        <div className="flex w-full lg:w-auto mt-4 lg:mt-0">
                             <button
                                 onClick={() => {
                                     const targetPath = user?.role === 'empresa' ? '/dashboard/perfil' : '/perfil';
                                     navigate(targetPath);
                                 }}
-                                className="flex-1 lg:flex-none h-14 px-8 bg-white text-black font-black text-base rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 group/btn shadow-xl active:scale-95 no-select"
+                                className="flex-1 lg:flex-none h-12 lg:h-14 px-6 lg:px-8 bg-white text-black font-black text-sm lg:text-base rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-2 lg:gap-3 group/btn shadow-xl active:scale-95 no-select"
                                 type="button"
                                 aria-label="Acción">
                                 Completar Perfil
-                                <ChevronRight size={20} className="text-black/60 group-hover/btn:translate-x-1 transition-transform" />
-                            </button>
-
-                            <button
-                                onClick={() => setIsVisible(false)}
-                                className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-500 hover:text-white transition-all active:scale-95"
-                                title="Descartar"
-                                type="button"
-                                aria-label="Acción">
-                                <X size={24} />
+                                <ChevronRight className="w-5 h-5 text-black/60 group-hover/btn:translate-x-1 transition-transform" />
                             </button>
                         </div>
                     </div>

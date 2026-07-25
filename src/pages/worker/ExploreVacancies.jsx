@@ -6,7 +6,7 @@ import ExploreContent from '../../components/features/ExploreContent';
 import VacancyDetailSheet from '../../components/features/VacancyDetailSheet';
 import CompanyProfileModal from '../../components/features/CompanyProfileModal';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { MapPinOff, Info } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useExploreVacancies } from '../../hooks/useExploreVacancies';
@@ -41,12 +41,33 @@ const InfoBanner = ({ show, icon: Icon, color, children }) => (
 const ExploreVacancies = () => {
     const { showToast } = useToast();
     const location = useLocation();
+    const navigate = useNavigate();
     const [isApplying, setIsApplying] = useState(null);
-    const [selectedDetail, setSelectedDetail] = useState(null);
     const [selectedCompanyId, setSelectedCompanyId] = useState(null);
 
-    const openDetail  = useCallback((vacancy) => setSelectedDetail(vacancy), []);
-    const closeDetail = useCallback(() => setSelectedDetail(null), []);
+    // 🏗️ Arquitectura Senior: El URL es la única fuente de verdad (Single Source of Truth).
+    // Evitamos estados locales duplicados (useState) y sincronización con efectos secundarios (useEffect).
+    // Leemos directamente de la URL o del history state de forma 100% reactiva.
+    const queryParams = new URLSearchParams(location.search);
+    const targetId = queryParams.get('vacante') || location.state?.selectedVacancyId;
+
+    // Ref para leer location.state sin invalidar useCallback
+    const stateRef = useRef(location.state);
+    stateRef.current = location.state;
+
+    const openDetail = useCallback((vacancy) => {
+        const params = new URLSearchParams(window.location.search);
+        params.set('vacante', vacancy.id);
+        navigate(`?${params.toString()}`, { replace: true, state: stateRef.current });
+    }, [navigate]);
+
+    const closeDetail = useCallback(() => {
+        const params = new URLSearchParams(window.location.search);
+        params.delete('vacante');
+        const newSearch = params.toString() ? `?${params.toString()}` : '';
+        // Limpiamos el parámetro de la URL y también el state para eliminar el rastro
+        navigate(newSearch, { replace: true, state: {} });
+    }, [navigate]);
 
     const handleOpenCompanyProfile = useCallback(async (companyIdOrVacancy) => {
         if (!companyIdOrVacancy) return;
@@ -83,24 +104,11 @@ const ExploreVacancies = () => {
         applyToVacancy,
     } = useExploreVacancies();
 
-    const navigate = useNavigate();
-
-    // 🚀 Deep Link: Open vacancy from dashboard state or URL query
-    useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const queryId = queryParams.get('vacante');
-        const stateId = location.state?.selectedVacancyId;
-        const targetId = queryId || stateId;
-
-        if (targetId && vacancies.length > 0) {
-            const v = vacancies.find(v => v.id === targetId);
-            if (v) {
-                openDetail(v);
-                // 🛑 Senior Fix: Clear URL and state to prevent ghost re-opening
-                navigate(location.pathname, { replace: true, state: {} });
-            }
-        }
-    }, [vacancies, location.search, location.state, openDetail, navigate, location.pathname]);
+    // Derivamos el objeto de la vacante buscándolo en la lista cargada.
+    // Esto es instantáneo (O(N) sobre arrays pequeños) y elimina bugs de desincronización.
+    const selectedDetail = targetId && vacancies.length > 0 
+        ? vacancies.find(v => v.id === targetId) 
+        : null;
 
     const { selectedVacancy, handleClearSelection, mapProps } = useVacancyMap(
         vacancies, userLocation, explorationCenter, setExplorationCenter

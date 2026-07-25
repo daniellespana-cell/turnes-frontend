@@ -3,8 +3,20 @@ import { AssetResolver } from '../../../utils/assetHelper';
 
 
 export const VacancyDetailHeader = ({ vacancy, closeBtnRef, onClose, onCompanyClick }) => {
+    
+    const handleCompanyClick = (e) => {
+        if (e) e.stopPropagation();
+        const id = vacancy.empresaId || vacancy.companyId || vacancy.empresa_id;
+        onCompanyClick?.(id || vacancy);
+    };
+
+    const handleClose = (e) => {
+        if (e) e.stopPropagation();
+        if (onClose) onClose();
+    };
+
     return (
-        <div className="sticky top-0 z-10 bg-[#0f0f11]/95 backdrop-blur-xl px-4 py-3.5 border-b border-white/5 flex items-start justify-between gap-3">
+        <div className="sticky top-0 z-50 bg-[#0f0f11]/95 backdrop-blur-xl px-4 py-3.5 border-b border-white/5 flex items-start justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
                 {/* Company logo */}
                 <div className="relative shrink-0">
@@ -28,10 +40,7 @@ export const VacancyDetailHeader = ({ vacancy, closeBtnRef, onClose, onCompanyCl
                     </h2>
                     
                     <button
-                        onClick={() => {
-                            const id = vacancy.empresaId || vacancy.companyId || vacancy.empresa_id;
-                            onCompanyClick?.(id || vacancy);
-                        }}
+                        onClick={handleCompanyClick}
                         className="flex items-center gap-1.5 mt-0.5 group/company text-left hover:opacity-80 transition-opacity"
                         type="button"
                         aria-label="Acción">
@@ -59,9 +68,9 @@ export const VacancyDetailHeader = ({ vacancy, closeBtnRef, onClose, onCompanyCl
             </div>
             <button
                 ref={closeBtnRef}
-                onClick={onClose}
+                onClick={handleClose}
                 aria-label="Cerrar detalle de vacante"
-                className="shrink-0 w-8 h-8 flex items-center justify-center rounded-xl bg-zinc-800/60 border border-white/8 text-zinc-500 hover:text-white hover:bg-zinc-700 transition-all"
+                className="relative z-50 shrink-0 w-8 h-8 flex items-center justify-center rounded-xl bg-zinc-800/60 border border-white/8 text-zinc-500 hover:text-white hover:bg-zinc-700 transition-all cursor-pointer"
                 type="button">
                 <X size={16} strokeWidth={2.5} />
             </button>
