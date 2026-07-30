@@ -8,31 +8,51 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Turnes">
-  <!-- 🟢 CORRECCIÓN: Añadimos la base URL para asegurar el enrutamiento -->
   <base href="/">
   <meta name="theme-color" content="#09090b" />
-  <meta name="description" content="Turnes: La plataforma líder para conectar talento operativo de hospitalidad y construcción con empresas de primer nivel." />
-  <meta name="keywords" content="empleo, turnos, hospitalidad, construcción, colombia, vacantes, restaurante, mesero, chef, constructor" />
-  <meta name="author" content="Turnes Inc." />
-  
-  <!-- Open Graph / Default Social Meta Tags -->
+
+  <!-- ================================================ -->
+  <!-- META TAGS ESTÁTICOS: Los únicos que leen los bots -->
+  <!-- WhatsApp, LinkedIn, Twitter no ejecutan JavaScript -->
+  <!-- react-helmet-async NO funciona para previews de links -->
+  <!-- ================================================ -->
+
+  <title>Turnes | Tu operación no puede detenerse</title>
+  <meta name="description" content="Cubre turnos operativos en minutos con talento verificado cerca de ti. La infraestructura del trabajo operativo en Bucaramanga, Girón y Colombia." />
+  <meta name="keywords" content="trabajo por turnos, mesero, bartender, personal para eventos, empleo por días, bucaramanga, giron, colombia, contratar mesero urgente, trabajo flexible" />
+  <meta name="author" content="Turnes" />
+  <link rel="canonical" href="https://turnes.co/" />
+
+  <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Turnes - Trabajo y Turnos Flexibles" />
-  <meta property="og:description" content="Conecta con las mejores empresas de hospitalidad y construcción en Colombia." />
+  <meta property="og:site_name" content="Turnes" />
+  <meta property="og:title" content="Turnes | Tu operación no puede detenerse" />
+  <meta property="og:description" content="Cubre turnos operativos en minutos con talento verificado cerca de ti. Sin bolsa de empleo, sin burocracia." />
   <meta property="og:image" content="https://turnes.co/logo-turnes.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Turnes - Infraestructura del Trabajo Operativo" />
   <meta property="og:url" content="https://turnes.co/" />
+  <meta property="og:locale" content="es_CO" />
+
+  <!-- Twitter / X Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@turnes_app" />
+  <meta name="twitter:title" content="Turnes | Tu operación no puede detenerse" />
+  <meta name="twitter:description" content="Cubre turnos operativos en minutos con talento verificado cerca de ti." />
+  <meta name="twitter:image" content="https://turnes.co/logo-turnes.png" />
+  <meta name="twitter:image:alt" content="Turnes - Infraestructura del Trabajo Operativo" />
+
+  <!-- ================================================ -->
 
   <link rel="icon" type="image/png" href="/pwa-192x192.png" />
   <link rel="apple-touch-icon" href="/pwa-512x512.png" />
-  
-  <!-- LCP Optimization: Preload Hero Image -->
-
 
   <!-- LEAFLET CSS CDN (Asynchronous load to fix Render-Blocking) -->
   <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin="" />
   <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" /></noscript>
-  <title>Turnes</title>
 </head>
+
 
 <body style="background-color: #09090b; margin: 0;">
   <noscript>Necesitas habilitar JavaScript para ejecutar esta app.</noscript>
