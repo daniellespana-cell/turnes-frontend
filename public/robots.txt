@@ -1,22 +1,36 @@
-# 🛑 Bloqueo explícito de Bots (Eliminado para permitir AEO)
-# Hemos habilitado a GPTBot, Claude y Google-Extended para Answer Engine Optimization.
+# Turnes - Infraestructura del Trabajo Operativo en LATAM
+# robots.txt: Guía para los crawlers de búsqueda
 
-# 🌍 Configuración para Buscadores Normales y Bots de IA
+# ✅ Bots de búsqueda normales: Acceso total a páginas públicas
 User-agent: *
 Allow: /
 Allow: /explorar
-Allow: /acerca-de
+Allow: /explorar/
+Allow: /precios
+Allow: /about
 Allow: /contacto
 Allow: /privacidad
 Allow: /terminos
 Allow: /politicas
 Allow: /politica-pagos
+Allow: /politica-cookies
 
+# 🔒 Rutas privadas: Bloqueadas para proteger la privacidad del usuario
 Disallow: /dashboard/
 Disallow: /auth/
 Disallow: /onboarding/
 Disallow: /checkout/
 Disallow: /admin/
-Disallow: /verification/
+Disallow: /verificacion/
 
-Sitemap: https://llrveqigkgyafgzofoqh.supabase.co/functions/v1/sitemap
+# ✅ Bots de IA: Permitidos para Answer Engine Optimization (AEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://turnes.co/sitemap.xml

@@ -34,7 +34,7 @@ const pulseAnimation = {
 
 const Hero = () => {
 
-  const heroText = "Empleos por turnos y fijos, al instante.";
+  const heroText = "Tu operación no puede detenerse.";
   const words = heroText.split(" ");
 
   return (
@@ -66,7 +66,7 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-5xl mx-auto">
 
-          {/* Badge "Nueva Era" (Micro-Interaction) */}
+          {/* Badge "Infraestructura Operativa" */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ const Hero = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="font-bold text-zinc-300 tracking-widest uppercase text-[10px]">La nueva era del trabajo</span>
+            <span className="font-bold text-zinc-300 tracking-widest uppercase text-[10px]">Infraestructura del trabajo operativo · LATAM</span>
           </motion.div>
 
           <motion.h1
@@ -86,14 +86,14 @@ const Hero = () => {
             initial="hidden"
             animate="visible"
           >
-            EL FUTURO <br />
+            TU OPERACIÓN<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
-              ES AHORA
+              NO PUEDE ESPERAR.
             </span>
           </motion.h1>
 
           <p className="text-xl md:text-2xl text-zinc-300 my-10 max-w-3xl mx-auto leading-relaxed font-light">
-            Conectamos talento verificado con empresas líderes en tiempo récord.<br className="hidden md:block" /> Sin fricción. Sin esperas.
+            Cubre turnos operativos en minutos con personas disponibles y verificadas cerca de ti.<br className="hidden md:block" /> Sin burocracia. Sin bolsa de empleo.
           </p>
 
 
@@ -108,7 +108,7 @@ const Hero = () => {
             className="mt-12 pt-8 border-t border-white/5 flex flex-col items-center gap-4"
           >
             <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">
-              Confiado por +50 empresas en la ciudad
+              Confiado por negocios en Bucaramanga, Girón y el país
             </p>
             <div className="flex -space-x-3 opacity-80 hover:opacity-100 transition-opacity">
               <img className="w-10 h-10 rounded-full border-2 border-zinc-950 bg-zinc-800" src="https://ui-avatars.com/api/?name=H&background=0D8ABC&color=fff" alt="Company 1" />
