@@ -27,7 +27,7 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
             className={`w-10 h-10 rounded-full border border-white/10 bg-zinc-900 object-cover ${isClosed ? 'grayscale opacity-50' : 'grayscale-[0.5]'}`}
             alt="Avatar"
           />
-          {!isClosed && (
+          {!isClosed && candidate?.isOnline && (
             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-black rounded-full" />
           )}
         </div>
@@ -41,9 +41,9 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
               <ShieldCheck size={12} className={isClosed ? "text-zinc-600" : "text-blue-400"} />
             )}
           </div>
-          <p className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isClosed ? 'text-zinc-600' : 'text-emerald-500/80'}`}>
-            {!isClosed && <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />}
-            {isClosed ? 'Turno Finalizado · Archivo' : 'En línea · Radicado Activo'}
+          <p className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isClosed ? 'text-zinc-600' : candidate?.isOnline ? 'text-emerald-500/80' : 'text-zinc-500'}`}>
+            {!isClosed && candidate?.isOnline && <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />}
+            {isClosed ? 'Turno Finalizado · Archivo' : candidate?.isOnline ? 'En línea' : 'Desconectado'}
           </p>
         </div>
       </div>

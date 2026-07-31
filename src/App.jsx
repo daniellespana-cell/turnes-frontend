@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'sonner';
 import { NotificationsProvider } from './context/NotificationsContext';
 import GlobalErrorBoundary from './components/error/GlobalErrorBoundary';
+import GlobalNotifier from './components/common/GlobalNotifier';
 
 import { useEffect } from 'react';
 
@@ -52,6 +53,7 @@ function App() {
           <HelmetProvider>
             <NotificationsProvider>
               <Toaster richColors position="top-center" />
+              <GlobalNotifier />
               <RouterProvider 
                 router={router} 
                 // Note: HydrateFallback is defined at route level in src/router/index.jsx
