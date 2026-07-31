@@ -81,14 +81,14 @@ const Hero = () => {
 
           <motion.h1
             id="hero-heading"
-            className="text-5xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.9] text-white mb-8 drop-shadow-2xl"
+            className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-black tracking-tighter leading-[1] text-white mb-8 drop-shadow-2xl"
             variants={wordContainer}
             initial="hidden"
             animate="visible"
           >
-            TU OPERACIÓN<br />
+            CUBRE TUS TURNOS EN<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
-              NO PUEDE ESPERAR.
+              TIEMPO RÉCORD.
             </span>
           </motion.h1>
 
