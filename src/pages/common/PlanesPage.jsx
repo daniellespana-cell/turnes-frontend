@@ -5,6 +5,7 @@ import { companyPlans } from '../../data/companyPlans';
 import { useAuth } from '../../context/AuthContext';
 import PagePricingCard from '../../components/pricing/PagePricingCard';
 import FlashHireCard from '../../components/pricing/FlashHireCard';
+import SEO from '../../components/common/SEO';
 
 // =====================================================================
 // === ANIMATION VARIANTS (High Impact) ===
@@ -22,6 +23,10 @@ const PlanesPage = () => {
 
     return (
         <div className="min-h-screen bg-zinc-950 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
+            <SEO 
+                title="Planes y Precios | Turnes para Empresas"
+                description="Planes flexibles diseñados para escalar. Desde cubrir una vacante urgente hasta gestionar cientos de turnos al mes."
+            />
 
             <main className="pt-12 md:pt-16 pb-24 text-zinc-200 relative overflow-hidden">
 

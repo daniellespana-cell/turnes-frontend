@@ -1,6 +1,7 @@
 import React from 'react';
 import { m as motion } from 'framer-motion';
 import { Info, CheckCircle } from 'lucide-react';
+import SEO from '../../components/common/SEO';
 
 
 // === IMPORTACIONES REALES ===
@@ -53,6 +54,10 @@ const TerminosServicio = () => {
     return (
         // Fondo general NEGRO TOTAL (bg-black)
         <div className="min-h-screen flex flex-col bg-black text-white font-sans">
+            <SEO 
+                title="Términos y Condiciones de Servicio"
+                description="Conoce los términos legales de uso de la plataforma Turnes para trabajadores y empresas."
+            />
             <div className="flex-grow pt-8 pb-20">
                 {/* Reduced top padding from pt-24 to pt-10 to avoid excessive gap in MainLayout, 
                     but keep enough for standalone view */}

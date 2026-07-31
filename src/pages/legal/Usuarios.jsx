@@ -1,6 +1,7 @@
 import React from 'react';
 import { m as motion } from 'framer-motion';
 import { Zap, MessageSquare } from 'lucide-react';
+import SEO from '../../components/common/SEO';
 
 
 // === IMPORTACIONES REALES ===
@@ -53,6 +54,10 @@ const PoliticaUsuarios = () => {
     return (
         // Fondo general NEGRO TOTAL (bg-black)
         <div className="min-h-screen flex flex-col bg-black text-white font-sans">
+            <SEO 
+                title="Política de Usuarios y Reputación"
+                description="Conoce el sistema de reputación, normas de conducta y resolución de conflictos de Turnes."
+            />
             <div className="flex-grow pt-8 pb-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 

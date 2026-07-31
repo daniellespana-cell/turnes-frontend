@@ -1,6 +1,7 @@
 import React from 'react';
 import { m as motion } from 'framer-motion';
 import { Percent, Shield, Zap } from 'lucide-react';
+import SEO from '../../components/common/SEO';
 
 // 🛠️ CORRECCIÓN: Se agrega Clock a la lista de importaciones de lucide-react.
 
@@ -55,6 +56,10 @@ const PoliticaPagos = () => {
     return (
         // Fondo general NEGRO TOTAL (bg-black)
         <div className="min-h-screen flex flex-col bg-black text-white font-sans">
+            <SEO 
+                title="Política de Pagos y Facturación"
+                description="Información transparente sobre comisiones, retiros, pagos y facturación en Turnes."
+            />
             <div className="flex-grow pt-8 pb-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 

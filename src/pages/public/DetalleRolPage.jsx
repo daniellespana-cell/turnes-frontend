@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { m as motion } from 'framer-motion';
 
 import NotFound from '../common/NotFound';
-import SEOHead from '../../components/seo/SEOHead';
+import SEO from '../../components/common/SEO';
 import PublicWelcomeBonusBanner from '../../components/sections/PublicWelcomeBonusBanner';
 
 import RoleHeader from '../../components/role-detail/RoleHeader';
@@ -66,7 +66,7 @@ const DetalleRolPage = () => {
 
     return (
         <div className="min-h-screen flex flex-col bg-zinc-950 text-white font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
-            <SEOHead
+            <SEO
                 title={`${rol.title} - Empleos por Turnos`}
                 description={`Encuentra trabajo de ${rol.title} en Girón. ${shortSummary}`}
                 jsonLd={jobSchema}

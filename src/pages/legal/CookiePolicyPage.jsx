@@ -2,6 +2,7 @@ import React from 'react';
 import { m as motion } from 'framer-motion';
 import { Shield, Cookie, ShieldCheck, BarChart3, Target } from 'lucide-react';
 import CtaSection from '../../components/common/CtaSection';
+import SEO from '../../components/common/SEO';
 
 
 const fadeInUp = {
@@ -29,6 +30,10 @@ const PolicySection = ({ id, title, children }) => (
 const CookiePolicyPage = () => {
     return (
         <div className="min-h-screen flex flex-col bg-black text-white font-manrope">
+            <SEO 
+                title="Política de Cookies"
+                description="Aprende sobre cómo usamos las cookies en Turnes para mejorar tu experiencia y proteger tu privacidad."
+            />
             <main className="flex-grow pt-20 pb-20">
                 <div className="max-w-7xl mx-auto px-6">
                     

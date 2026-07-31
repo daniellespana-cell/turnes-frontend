@@ -1,6 +1,7 @@
 import React from 'react';
 import { Filter, Frown } from 'lucide-react';
 import ResultCard from '../../components/search/ResultCard';
+import SEO from '../../components/common/SEO';
 
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -38,6 +39,10 @@ const SearchPage = () => {
 
     return (
         <div className="min-h-screen bg-zinc-950 font-sans flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+            <SEO 
+                title={query ? `Resultados para "${query}" - Turnes` : "Explorar Vacantes | Turnes"}
+                description="Busca y encuentra las mejores oportunidades de trabajo flexible cerca de ti."
+            />
             {/* Navbar is handled by MainLayout */}
             <main className="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-zinc-200">
 
