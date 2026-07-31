@@ -73,7 +73,7 @@ const LandingPage = () => {
         title="Turnes | Tu operación no puede detenerse — Infraestructura del Trabajo Operativo en LATAM" 
         description="Cubre turnos operativos en minutos con talento verificado cerca de ti. Sin bolsa de empleo, sin burocracia. La plataforma de trabajo bajo demanda para negocios en Bucaramanga, Girón y Colombia."
         url="https://turnes.co"
-        image="https://turnes.co/turnes-og-logo-v2.png"
+        image="https://turnes.co/turnes-og-logo-v3.jpg"
       />
       {/* Schema.org: JSON-LD para Google Rich Results */}
       <Helmet>
