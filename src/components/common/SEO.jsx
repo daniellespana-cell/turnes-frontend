@@ -12,7 +12,7 @@ const SEO = ({
     name = "Turnes", 
     type = "website",
     url = "https://turnes.co",
-    image = "https://turnes.co/logo-turnes.png",
+    image = "https://turnes.co/turnes_og_banner.png",
     locale = "es_CO"
 }) => {
     return (
