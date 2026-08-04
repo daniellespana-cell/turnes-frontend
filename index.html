@@ -48,8 +48,8 @@
   <link rel="icon" type="image/png" href="/pwa-192x192.png" />
   <link rel="apple-touch-icon" href="/pwa-512x512.png" />
 
-  <!-- LEAFLET CSS CDN (Asynchronous load to fix Render-Blocking) -->
-  <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin="" />
+  <!-- LEAFLET CSS: Non-blocking, CSP-safe (sin handlers inline) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" /></noscript>
 </head>
 
