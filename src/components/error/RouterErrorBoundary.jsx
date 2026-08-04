@@ -14,8 +14,27 @@ export const RouterErrorBoundary = () => {
             error?.message?.includes('Importing a module script failed') ||
             error?.name === 'ChunkLoadError'
         ) {
-            console.warn('ChunkLoadError detectado. Forzando recarga de la página para obtener la nueva versión...');
-            window.location.reload();
+            const hasReloaded = sessionStorage.getItem('chunk_reload');
+            if (!hasReloaded) {
+                console.warn('ChunkLoadError detectado. Limpiando Service Workers y forzando recarga...');
+                sessionStorage.setItem('chunk_reload', 'true');
+                
+                // Desregistrar Service Workers para romper el caché infinito
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                        for(let registration of registrations) {
+                            registration.unregister();
+                        }
+                        window.location.reload();
+                    });
+                } else {
+                    window.location.reload();
+                }
+            } else {
+                console.error('El reload automático falló. El usuario debe vaciar la caché manualmente.');
+                // Limpiamos la bandera para el futuro si el usuario recarga manual
+                sessionStorage.removeItem('chunk_reload');
+            }
         }
     }, [error]);
 
