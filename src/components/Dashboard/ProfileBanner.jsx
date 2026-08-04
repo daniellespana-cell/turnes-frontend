@@ -78,10 +78,10 @@ const ProfileBanner = () => {
                         <X className="w-5 h-5 lg:w-6 lg:h-6" />
                     </button>
 
-                    <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-8">
+                    <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-8 pr-2 lg:pr-8">
 
                         {/* Left Content */}
-                        <div className="flex flex-col w-full lg:w-auto">
+                        <div className="flex flex-col flex-1 min-w-0 w-full">
                             {/* Header row */}
                             <div className="flex items-center gap-4 lg:gap-6">
                                 <div className="flex-shrink-0 w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-purple-600/20 border border-white/10 flex items-center justify-center shadow-xl">
@@ -120,7 +120,7 @@ const ProfileBanner = () => {
                         </div>
 
                         {/* Right Actions: Large hit targets */}
-                        <div className="flex w-full lg:w-auto mt-4 lg:mt-0">
+                        <div className="flex shrink-0 w-full lg:w-auto mt-4 lg:mt-0">
                             <button
                                 onClick={() => {
                                     const targetPath = user?.role === 'empresa' ? '/dashboard/perfil' : '/perfil';
