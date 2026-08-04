@@ -6,6 +6,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'sonner';
 import { authService } from '../../services/authService';
+import { supabase } from '../../services/supabaseClient';
 
 const AuthCallback = () => {
     const navigate = useNavigate();
@@ -17,6 +18,27 @@ const AuthCallback = () => {
 
     useEffect(() => {
         let isMounted = true;
+
+        // 🛡️ 0. PKCE CODE EXCHANGE (Confirmación de Email — Supabase PKCE Flow)
+        // Supabase envía ?code=xxx en la URL al confirmar email.
+        // Debemos canjearlo por una sesión real ANTES de cualquier otra lógica.
+        const code = searchParams.get('code');
+        if (code) {
+            supabase.auth.exchangeCodeForSession(code)
+                .then(({ error }) => {
+                    if (!isMounted) return;
+                    if (error) {
+                        toast.error("El enlace de confirmación expiró o ya fue usado. Solicita uno nuevo.", { id: 'pkce-error', duration: 8000 });
+                        navigate('/login', { replace: true });
+                    }
+                    // Si tuvo éxito, onAuthStateChange en AuthContext dispara automáticamente
+                    // y setUser se actualiza → el useEffect de abajo con [user] se encarga del redirect
+                })
+                .catch(() => {
+                    if (isMounted) navigate('/login', { replace: true });
+                });
+            return;
+        }
 
         // 🛡️ 1. INTERCEPTOR DE ERRORES EN LA URL (OTP Expirado, Link Inválido)
         const hash = window.location.hash;
