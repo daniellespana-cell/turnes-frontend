@@ -7,6 +7,8 @@ export const RouterErrorBoundary = () => {
     const error = useRouteError();
     const navigate = useNavigate();
 
+    const [needsManualReload, setNeedsManualReload] = React.useState(false);
+
     useEffect(() => {
         // Auto-reload para errores de carga de chunks (caché vieja tras un deploy)
         if (
@@ -16,23 +18,12 @@ export const RouterErrorBoundary = () => {
         ) {
             const hasReloaded = sessionStorage.getItem('chunk_reload');
             if (!hasReloaded) {
-                console.warn('ChunkLoadError detectado. Limpiando Service Workers y forzando recarga...');
+                console.warn('ChunkLoadError detectado. Intentando recarga automática suave...');
                 sessionStorage.setItem('chunk_reload', 'true');
-                
-                // Desregistrar Service Workers para romper el caché infinito
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                        for(let registration of registrations) {
-                            registration.unregister();
-                        }
-                        window.location.reload();
-                    });
-                } else {
-                    window.location.reload();
-                }
+                window.location.reload();
             } else {
-                console.error('El reload automático falló. El usuario debe vaciar la caché manualmente.');
-                // Limpiamos la bandera para el futuro si el usuario recarga manual
+                console.error('La recarga automática falló. Requiere acción del usuario.');
+                setNeedsManualReload(true);
                 sessionStorage.removeItem('chunk_reload');
             }
         }
@@ -50,32 +41,43 @@ export const RouterErrorBoundary = () => {
                 </div>
                 
                 <div className="space-y-3">
-                    <h1 className="text-3xl font-black tracking-tight text-white">Algo salió mal</h1>
+                    <h1 className="text-3xl font-black tracking-tight text-white">
+                        {needsManualReload ? 'Nueva Versión Disponible' : 'Algo salió mal'}
+                    </h1>
                     <p className="text-sm text-zinc-400 leading-relaxed max-w-[320px] mx-auto">
-                        Hemos detectado un error inesperado al cargar esta página.
+                        {needsManualReload 
+                            ? 'Hemos actualizado la aplicación con mejoras. Por favor, recarga la página para continuar.'
+                            : 'Hemos detectado un error inesperado al cargar esta página.'}
                     </p>
-                    <p className="text-xs text-zinc-600 font-mono mt-2 bg-zinc-900/50 p-2 rounded-lg text-left overflow-hidden text-ellipsis">
-                        {error?.message || 'Unknown error'}
-                    </p>
+                    {!needsManualReload && (
+                        <p className="text-xs text-zinc-600 font-mono mt-2 bg-zinc-900/50 p-2 rounded-lg text-left overflow-hidden text-ellipsis">
+                            {error?.message || 'Unknown error'}
+                        </p>
+                    )}
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 w-full pt-4">
                     <button
-                        onClick={() => window.location.reload()}
-                        className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-white text-black rounded-xl font-bold hover:bg-zinc-200 transition-colors active:scale-95"
+                        onClick={() => {
+                            sessionStorage.removeItem('chunk_reload');
+                            window.location.reload(true);
+                        }}
+                        className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20 active:scale-95"
                         type="button"
                         aria-label="Acción">
                         <RefreshCcw size={16} />
-                        Recargar Página
+                        Actualizar Turnes
                     </button>
-                    <button
-                        onClick={() => window.location.href = '/'}
-                        className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-zinc-900 border border-white/10 text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors active:scale-95"
-                        type="button"
-                        aria-label="Acción">
-                        <Home size={16} />
-                        Ir al Inicio
-                    </button>
+                    {!needsManualReload && (
+                        <button
+                            onClick={() => window.location.href = '/'}
+                            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-zinc-900 border border-white/10 text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors active:scale-95"
+                            type="button"
+                            aria-label="Acción">
+                            <Home size={16} />
+                            Ir al Inicio
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

@@ -25,11 +25,10 @@
   Cache-Control: public, max-age=86400, stale-while-revalidate=86400
 
 # 3. Service Worker, Manifest, y el HTML principal
-# NUNCA se deben cachear a largo plazo, de lo contrario
-# los usuarios no verán las actualizaciones de la app.
+# Para aplicaciones PWA (Turnes), esto asegura que el navegador SIEMPRE pida la versión más nueva, previniendo el "Loop de la muerte".
 /sw.js
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, no-store, must-revalidate
 /manifest.json
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, no-store, must-revalidate
 /*.html
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, no-store, must-revalidate
