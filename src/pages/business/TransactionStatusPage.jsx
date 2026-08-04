@@ -12,7 +12,7 @@ const TransactionStatusPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const [status, setStatus] = useState('verifying'); // verifying, approved, declined, error, delayed
-    const ref = searchParams.get('id') || 'PENDING';
+    const [ref, setRef] = useState(searchParams.get('id') || 'PENDING');
 
     const id = searchParams.get('id');
     const itemType = searchParams.get('itemType');
@@ -39,11 +39,11 @@ const TransactionStatusPage = () => {
                 setStatus('error');
             }
         }
-    }, [id, refreshSession]);
+    }, [id]);
 
     useEffect(() => {
         verifyTransaction();
-    }, [verifyTransaction]);
+    }, [id, verifyTransaction]);
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4 font-manrope">
