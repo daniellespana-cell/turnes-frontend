@@ -3,7 +3,7 @@ import { User, Check, Shield, Lock } from 'lucide-react';
 import ProfileHeader from '../../components/profile/ProfileHeader';
 import WalletCard from '../../components/profile/WalletCard';
 import ProfileForm from '../../components/profile/ProfileForm';
-
+import WelcomeBonusBanner from '../../components/business/WelcomeBonusBanner';
 import StatCard from '../../components/profile/shared/StatCard';
 import VerificationBanner from '../../components/profile/VerificationBanner';
 import ChangePasswordModal from '../../components/profile/ChangePasswordModal';
@@ -55,7 +55,7 @@ const ProfilePage = () => {
 
     return (
         <div className="max-w-6xl mx-auto pb-32 px-4 md:px-8 pt-8 space-y-8">
-
+            <WelcomeBonusBanner />
             {/* --- HEADER HERO --- */}
             <ProfileHeader
                 user={user}
