@@ -26,6 +26,9 @@ class PaymentService {
             const script = document.createElement('script');
             script.id = this.wompiScriptId;
             script.src = 'https://checkout.wompi.co/widget.js';
+            if (this.publicKey) {
+                script.setAttribute('data-public-key', this.publicKey);
+            }
             script.async = true;
             script.onload = () => resolve(window.WidgetCheckout);
             script.onerror = () => reject(new Error('Falló la carga de Wompi'));
