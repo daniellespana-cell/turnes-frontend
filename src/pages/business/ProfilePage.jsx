@@ -54,25 +54,35 @@ const ProfilePage = () => {
     }, []);
 
     return (
-        <div className="max-w-6xl mx-auto pb-32 px-4 md:px-8 pt-8 space-y-8">
-            <WelcomeBonusBanner />
+        <div className="max-w-6xl mx-auto pb-32 px-4 md:px-8 pt-8 flex flex-col gap-8">
+            <div className="order-1">
+                <WelcomeBonusBanner />
+            </div>
             {/* --- HEADER HERO --- */}
-            <ProfileHeader
-                user={user}
-                formData={formData}
-                handleInputChange={handleInputChange}
-                isEditing={isEditing}
-                setIsEditing={setIsEditing}
-                handleSave={handleSave}
-                handleCancel={handleCancel}
-                loading={loading}
-            />
-            <GlowDivider />
+            <div className="order-2">
+                <ProfileHeader
+                    user={user}
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    handleSave={handleSave}
+                    handleCancel={handleCancel}
+                    loading={loading}
+                />
+            </div>
+            <div className="order-3 hidden md:block">
+                <GlowDivider />
+            </div>
             {/* --- BANNER VERIFICACIÓN ELITE (Precio inyectado desde SSOT) --- */}
-            <VerificationBanner verifyPrice={verifyPrice} />
-            <GlowDivider />
+            <div className="order-last md:order-4 w-full">
+                <VerificationBanner verifyPrice={verifyPrice} />
+            </div>
+            <div className="order-5 hidden md:block">
+                <GlowDivider />
+            </div>
             {/* --- GRID PRINCIPAL --- */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="order-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
                 {/* COLUMNA IZQUIERDA: BILLETERA Y STATS (4/12) */}
                 <div className="lg:col-span-4 space-y-8">

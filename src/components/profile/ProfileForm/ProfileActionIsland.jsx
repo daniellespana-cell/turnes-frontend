@@ -71,16 +71,12 @@ const ProfileActionIsland = ({ isEditing, setIsEditing, loading, handleSave, han
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="flex items-center gap-3 px-4 py-2 rounded-full group overflow-hidden relative"
+                                className="flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors group overflow-hidden relative"
                                 role="button"
                                 tabIndex={0}
                                 onKeyDown={() => setIsEditing(true)}>
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_4s_infinite]" />
-
-                                <div className="w-5 h-5 rounded-full bg-brand-primary/5 flex items-center justify-center border border-transparent transition-transform duration-700">
-                                    <Edit2 size={10} className="text-white/60" />
-                                </div>
-                                <span className="text-white/60 font-black text-[8px] uppercase tracking-[0.3em] group-hover:text-white transition-all duration-500">
+                                <Edit2 size={12} className="text-white" />
+                                <span className="text-white font-bold text-[10px] uppercase tracking-[0.2em]">
                                     Editar Info
                                 </span>
                             </motion.button>
