@@ -61,17 +61,10 @@ export const useExploreVacancies = () => {
     useEffect(() => {
         if (lastFetchedRef.current) return;
 
-        let target = null;
-        if (geo.lat) {
-            target = { lat: geo.lat, lng: geo.lng };
-        } else if (user?.ciudad_nombre) {
-            const searchName = user.ciudad_nombre.trim().toLowerCase();
-            const cityKey = Object.keys(CIUDADES_COORDS).find(k => k.toLowerCase() === searchName);
-            if (cityKey && CIUDADES_COORDS[cityKey]) target = CIUDADES_COORDS[cityKey];
+        if (userLocation.lat && userLocation.lng) {
+            _setExplorationCenter({ lat: userLocation.lat, lng: userLocation.lng });
         }
-
-        if (target) _setExplorationCenter(target);
-    }, [geo.lat, geo.lng, user?.ciudad_nombre]);
+    }, [userLocation.lat, userLocation.lng]);
 
     // ── Sub-hooks ─────────────────────────────────────────────────────────────
     const {
