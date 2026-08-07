@@ -55,7 +55,7 @@ const ProfilePage = () => {
 
     return (
         <div className="max-w-6xl mx-auto pb-32 px-4 md:px-8 pt-8 flex flex-col gap-8">
-            <div className="order-1 hidden md:block">
+            <div className="order-1">
                 <WelcomeBonusBanner />
             </div>
             {/* --- HEADER HERO --- */}
@@ -87,10 +87,12 @@ const ProfilePage = () => {
                 {/* COLUMNA IZQUIERDA: BILLETERA Y STATS (4/12) */}
                 <div className="lg:col-span-4 space-y-8">
 
-                    <WalletCard
-                        saldo={user?.saldo}
-                        onRecharge={navigateToRecharge}
-                    />
+                    <div className="hidden md:block">
+                        <WalletCard
+                            saldo={user?.saldo}
+                            onRecharge={navigateToRecharge}
+                        />
+                    </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <StatCard
