@@ -10,7 +10,7 @@ class TalentService {
     /**
      * Motor de Búsqueda de Talento (Radar)
      */
-    async getRadarTalent(lat, lng, query = '') {
+    async getRadarTalent(lat, lng, query = '', radiusKm = 5) {
         try {
             // 🛑 ZERO-TRUST: Mismo bloqueo estricto que en searchTalent
             if (!lat || !lng) {
@@ -22,7 +22,7 @@ class TalentService {
             const { data, error } = await supabase.rpc('buscar_talento_cercano', {
                 user_lat: lat,
                 user_lng: lng,
-                radio_km: 5, // Radio máximo exigido
+                radio_km: radiusKm,
                 search_query: query,
                 p_limit: 50
             });

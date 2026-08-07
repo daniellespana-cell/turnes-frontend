@@ -8,7 +8,7 @@ import { getCiudadCoords } from '../domain/geography.config';
 
 // ─── Fallback Geo ─────────────────────────────────────────────────────────────
 /** Centro geográfico por defecto (Girón, Santander) cuando no hay geo disponible */
-const DEFAULT_COORDS = { lat: 7.0682, lng: -73.1698 };
+const DEFAULT_COORDS = { lat: 4.5709, lng: -74.2973 };
 
 /** Radio de búsqueda estricto en km */
 const SEARCH_RADIUS_KM = 5;

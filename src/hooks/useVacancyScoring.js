@@ -26,10 +26,16 @@ export const useVacancyScoring = (vacancies, userLocation, filters, activeCatego
                 { lat, lng, categories: userCategories }
             );
 
+            let distanceStr = dist < 999 ? `${dist.toFixed(1)} km` : 'Desconocida';
+            if (userLocation.showDistance === false) {
+                // Si la ubicación es aproximada (IP) o Nacional, ocultamos los km irreales
+                distanceStr = userLocation.locationMode === 'national' ? 'Destacada' : 'Aprox';
+            }
+
             return {
                 ...v,
                 realDistance: dist,
-                distance:     dist < 999 ? `${dist.toFixed(1)} km` : 'Desconocida',
+                distance:     distanceStr,
                 matchScore:   score,
                 isHighMatch:  score >= 85,
             };

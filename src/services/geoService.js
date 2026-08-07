@@ -138,6 +138,71 @@ export const GeoService = {
         return dist <= maxRadiusKm;
     },
 
+    /**
+     * 🌐 IP Geolocation via Cloudflare Edge
+     * Consulta nuestra propia Cloudflare Pages Function (/api/geo) para obtener
+     * la ubicación aproximada del visitante basada en su IP.
+     * 
+     * - En producción: Cloudflare inyecta `request.cf` con datos geográficos reales.
+     * - En desarrollo (localhost): Retorna null para que la cascada continúe al siguiente nivel.
+     * - Cachea el resultado en sessionStorage para no repetir la llamada en la misma sesión.
+     * 
+     * @returns {Promise<{lat: number, lng: number, city: string, region: string} | null>}
+     */
+    async fetchIPLocation() {
+        const CACHE_KEY = 'turnes_ip_geo';
+
+        // 1. Verificar caché de sesión
+        try {
+            const cached = sessionStorage.getItem(CACHE_KEY);
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                if (parsed.lat && parsed.lng) return parsed;
+            }
+        } catch { /* sessionStorage no disponible */ }
+
+        // 2. En desarrollo local, la Cloudflare Function no existe → saltar
+        if (import.meta.env.DEV) {
+            console.info('[GeoService] Dev mode: /api/geo no disponible, saltando IP geolocation.');
+            return null;
+        }
+
+        // 3. Fetch a nuestra propia Cloudflare Pages Function
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s máximo
+
+            const resp = await fetch('/api/geo', { signal: controller.signal });
+            clearTimeout(timeoutId);
+
+            if (!resp.ok) return null;
+
+            const data = await resp.json();
+
+            if (!data?.latitude || !data?.longitude) return null;
+
+            const result = {
+                lat: parseFloat(data.latitude),
+                lng: parseFloat(data.longitude),
+                city: data.city || null,
+                region: data.region || null,
+                country: data.country || null,
+            };
+
+            // 4. Cachear en sessionStorage
+            try {
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify(result));
+            } catch { /* sessionStorage lleno o no disponible */ }
+
+            return result;
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                console.warn('[GeoService] IP geolocation failed:', err.message);
+            }
+            return null;
+        }
+    },
+
     _toRad(value) {
         return value * Math.PI / 180;
     }

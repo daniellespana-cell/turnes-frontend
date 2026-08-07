@@ -54,7 +54,7 @@ const VacancyMap = ({
     onSelectVacancy,   // FIX: sin default → puede ser undefined → crash
     selectedId
 }) => {
-    const initialCenter = centerPoint || [7.0682, -73.1698];
+    const initialCenter = centerPoint || [4.5709, -74.2973];
     const initialZoom = ZOOM_BY_RADIUS[radius] || 13;
 
     // FIX: fallback no-op si onSelectVacancy no se pasa

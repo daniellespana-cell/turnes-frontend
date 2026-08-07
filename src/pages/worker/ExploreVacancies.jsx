@@ -9,6 +9,7 @@ import CompanyProfileModal from '../../components/features/CompanyProfileModal';
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { MapPinOff, Info } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import LocationHint from '../../components/common/LocationHint';
 import { useExploreVacancies } from '../../hooks/useExploreVacancies';
 import { useVacancyMap } from '../../hooks/useVacancyMap';
 import { useToast } from '../../context/ToastContext';
@@ -159,9 +160,12 @@ const ExploreVacancies = () => {
                 setIsFilterOpen={setIsFilterOpen} activeFilterCount={activeFilterCount}
             />
 
-            <InfoBanner show={userLocation.isDenied} icon={MapPinOff} color="bg-amber-500/5 border-amber-500/20 text-amber-400">
-                <p className="text-[11px] font-medium"><span className="font-bold">GPS desactivado.</span> Activa la ubicación para ver vacantes cerca de ti.</p>
-            </InfoBanner>
+            <div className="px-3 md:px-6">
+                <LocationHint 
+                    locationMode={userLocation.locationMode} 
+                    cityName={userLocation.cityName} 
+                />
+            </div>
 
             <InfoBanner show={isFallbackMode && !loading && vacancies.length > 0} icon={Info} color="bg-blue-500/5 border-blue-500/20 text-blue-400">
                 <p className="text-[11px] font-medium">No encontramos vacantes en tu zona. <span className="font-bold">Mostrando recomendaciones generales.</span> Amplía el radio.</p>

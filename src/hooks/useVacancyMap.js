@@ -18,7 +18,7 @@ export const useVacancyMap = (vacancies, userLocation, explorationCenter, setExp
     const centerPoint = useMemo(() => {
         if (explorationCenter) return [explorationCenter.lat, explorationCenter.lng];
         if (userLocation) return [userLocation.lat, userLocation.lng];
-        return [7.0682, -73.1698]; // Girón fallback
+        return [4.5709, -74.2973]; // Colombia center fallback (neutral)
     }, [explorationCenter, userLocation]);
 
     // ⚡ CALLBACKS

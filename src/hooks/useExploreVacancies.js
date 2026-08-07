@@ -2,13 +2,10 @@ import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { getCategoriasList } from '../domain/vacantes.taxonomy';
 import { useVacancyFilters } from './useVacancyFilters';
 import { useAuth } from '../context/AuthContext';
-import { useGeolocation } from './useGeolocation';
 import { useVacancyFetch } from './useVacancyFetch';
 import { useVacancyScoring } from './useVacancyScoring';
 import { VacancyService } from '../services/vacancyService';
-import { CIUDADES_COORDS } from '../domain/geography.config';
-
-const GIRON = { lat: 7.0682, lng: -73.1698 };
+import { useLocationResolver } from './useLocationResolver';
 
 /**
  * useExploreVacancies — Orchestrator Hook
@@ -25,30 +22,28 @@ export const useExploreVacancies = () => {
     const [activeCategory, setActiveCategoryRaw] = useState('TODOS');
     const [searchQuery,    setSearchQuery]        = useState('');
     const [viewMode,       setViewMode]           = useState('list');
-    const [radius,         setRadius]             = useState(3);
-    const [appliedIds,     setAppliedIds]         = useState(new Set());
-
-    const geo                       = useGeolocation();
+    const location                  = useLocationResolver();
+    const [radius,         setRadius]             = useState(location.radiusKm || 3);
     const { user, isAuthenticated } = useAuth();
 
-    // ── Best-known location (GPS → Profile → Bogotá) ─────────────────────────
-    const userLocation = useMemo(() => {
-        let profileCity = null;
-        if (user?.ciudad_nombre) {
-            const searchName = user.ciudad_nombre.trim().toLowerCase();
-            const cityKey = Object.keys(CIUDADES_COORDS).find(k => k.toLowerCase() === searchName);
-            if (cityKey && CIUDADES_COORDS[cityKey]) profileCity = CIUDADES_COORDS[cityKey];
+    // Sincronizar el radio si el resolver cambia de nivel (ej. cae de GPS a Nacional)
+    useEffect(() => {
+        if (location.radiusKm) {
+            setRadius(location.radiusKm);
         }
+    }, [location.radiusKm]);
+    const [appliedIds,     setAppliedIds]         = useState(new Set());
 
-        return {
-            lat:           geo.lat ?? profileCity?.lat ?? GIRON.lat,
-            lng:           geo.lng ?? profileCity?.lng ?? GIRON.lng,
-            isReal:        Boolean(geo.lat),
-            isProfileBased: !geo.lat && Boolean(profileCity),
-            isDenied:      geo.denied ?? false,
-            user,           // passed into scoring hook
-        };
-    }, [geo.lat, geo.lng, geo.denied, user]);
+    // ── Best-known location (GPS → Profile → IP → Nacional) ──────────────────
+    const userLocation = useMemo(() => ({
+        ...location, // Propagamos la ubicación completa (incluye locationMode, cityName)
+        lat:            location.lat,
+        lng:            location.lng,
+        isReal:         location.locationMode === 'exact',
+        isProfileBased: location.locationMode === 'profile',
+        isDenied:       location.isDenied,
+        user,
+    }), [location, user]);
 
     // ── Exploration center (the moveable search sphere) ──────────────────────
     const lastFetchedRef = useRef(null); // tracks whether user has moved manually

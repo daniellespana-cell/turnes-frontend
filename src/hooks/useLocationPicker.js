@@ -24,7 +24,7 @@ export const useLocationPicker = ({ isOpen, initialPos, cityLabel, onConfirm, on
         if (initialPos?.lat != null && initialPos?.lng != null) {
             return [initialPos.lat, initialPos.lng];
         }
-        return [7.0682, -73.1698]; // Girón fallback
+        return [4.5709, -74.2973]; // Colombia center fallback (neutral)
     }, [initialPos]);
 
     const [tempPos, setTempPos] = useState({ lat: validInitial[0], lng: validInitial[1] });
