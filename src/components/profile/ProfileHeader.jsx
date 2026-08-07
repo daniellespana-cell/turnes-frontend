@@ -153,10 +153,10 @@ const ProfileHeader = ({ user, formData, handleInputChange, isEditing, setIsEdit
                     ) : (
                         <button
                             onClick={() => setIsEditing(true)}
-                            className="px-4 py-2 rounded-lg bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all text-sm flex items-center gap-1.5"
+                            className="px-6 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:text-white hover:bg-emerald-500/20 hover:border-emerald-500/40 transition-all font-bold text-sm flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
                             type="button"
                             aria-label="Acción">
-                            <Edit2 size={16} /> Editar
+                            <Edit2 size={16} /> Editar Perfil
                         </button>
                     )}
                 </div>

@@ -55,7 +55,7 @@ const ProfilePage = () => {
 
     return (
         <div className="max-w-6xl mx-auto pb-32 px-4 md:px-8 pt-8 flex flex-col gap-8">
-            <div className="order-1">
+            <div className="order-1 hidden md:block">
                 <WelcomeBonusBanner />
             </div>
             {/* --- HEADER HERO --- */}
@@ -75,7 +75,7 @@ const ProfilePage = () => {
                 <GlowDivider />
             </div>
             {/* --- BANNER VERIFICACIÓN ELITE (Precio inyectado desde SSOT) --- */}
-            <div className="order-last md:order-4 w-full">
+            <div className="order-4 md:order-last w-full">
                 <VerificationBanner verifyPrice={verifyPrice} />
             </div>
             <div className="order-5 hidden md:block">
