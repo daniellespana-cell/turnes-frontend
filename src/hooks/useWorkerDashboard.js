@@ -76,7 +76,9 @@ export const useWorkerDashboard = () => {
                         const norm = normalizeVacancy(v, new Map(), false);
                         return {
                             ...norm,
-                            distance: v.distancia_mts ? `${(v.distancia_mts / 1000).toFixed(1)} km` : '1.0 km'
+                            distance: (v.distancia_mts != null && v.distancia_mts < 1000) 
+                                ? '< 1 km' 
+                                : (v.distancia_mts ? `${(v.distancia_mts / 1000).toFixed(1)} km` : '< 1 km')
                         };
                     });
 

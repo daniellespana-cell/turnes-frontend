@@ -26,7 +26,7 @@ export const useVacancyScoring = (vacancies, userLocation, filters, activeCatego
                 { lat, lng, categories: userCategories }
             );
 
-            let distanceStr = dist < 999 ? `${dist.toFixed(1)} km` : 'Desconocida';
+            let distanceStr = dist < 1 ? '< 1 km' : (dist < 999 ? `${dist.toFixed(1)} km` : 'Desconocida');
             if (userLocation.showDistance === false) {
                 // Si la ubicación es aproximada (IP) o Nacional, ocultamos los km irreales
                 distanceStr = userLocation.locationMode === 'national' ? 'Destacada' : 'Aprox';
