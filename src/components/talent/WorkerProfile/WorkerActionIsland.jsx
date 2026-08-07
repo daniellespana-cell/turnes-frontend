@@ -17,9 +17,17 @@ const WorkerActionIsland = ({ isEditing, setIsEditing, loading, handleSave, hand
                     .dynamic-island-glow-worker {
                         animation: border-glow-worker 8s infinite ease-in-out;
                     }
+                    /* 🔥 FIX UX: Ocultar isla cuando el teclado virtual esté activo */
+                    @media (max-width: 768px) {
+                        body:has(input:focus, textarea:focus, select:focus) .worker-action-island {
+                            opacity: 0 !important;
+                            pointer-events: none !important;
+                            transform: translateY(100px) !important;
+                        }
+                    }
                 `}
             </style>
-            <div className="md:hidden fixed bottom-10 left-0 right-0 z-[100] flex justify-center px-6 pointer-events-none">
+            <div className="worker-action-island md:hidden fixed bottom-10 left-0 right-0 z-[100] flex justify-center px-6 pointer-events-none transition-all duration-300">
                 <motion.div
                     layout
                     initial={{ y: 50, opacity: 0 }}

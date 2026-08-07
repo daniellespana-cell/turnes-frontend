@@ -35,7 +35,7 @@ const WorkerProfile = () => {
     const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
 
     return (
-        <div className="max-w-5xl mx-auto pb-24 px-4 md:px-8 pt-6">
+        <div className="max-w-5xl mx-auto pb-24 px-4 md:px-8 pt-6 overflow-x-hidden">
             {/* 1. HEADER HERO (Reused) */}
             <ProfileHeader
                 user={user}
