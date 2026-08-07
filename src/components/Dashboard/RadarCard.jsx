@@ -28,14 +28,14 @@ const RadarCard = ({ candidate, idx, onView, showDistance = true, locationMode }
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={onView}
-            className="group relative w-[290px] md:w-[340px] shrink-0 snap-center cursor-pointer select-none"
+            className="group relative w-[82vw] max-w-[280px] md:max-w-none md:w-[340px] shrink-0 snap-center cursor-pointer select-none"
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && onView()}
         >
             {/* Card Body */}
             <div className={`
-                relative rounded-3xl p-5 md:p-6 overflow-hidden transition-all duration-500
+                relative rounded-3xl p-4 md:p-6 overflow-hidden transition-all duration-500
                 bg-gradient-to-br from-zinc-900/80 to-zinc-950/90
                 border border-white/[0.04] hover:border-emerald-500/20
                 shadow-xl hover:shadow-emerald-500/[0.06] hover:shadow-2xl
@@ -44,11 +44,11 @@ const RadarCard = ({ candidate, idx, onView, showDistance = true, locationMode }
                 <div className={`absolute -top-20 -right-20 w-40 h-40 rounded-full transition-all duration-700 pointer-events-none ${isHovered ? 'bg-emerald-500/[0.06] scale-150' : 'bg-transparent scale-100'}`} />
 
                 {/* Top Section: Avatar + Info */}
-                <div className="relative flex gap-4 mb-4">
+                <div className="relative flex gap-3 md:gap-4 mb-4">
                     {/* Avatar with verified badge */}
                     <div className="relative shrink-0">
                         <div className={`
-                            w-14 h-14 md:w-16 md:h-16 rounded-2xl overflow-hidden transition-all duration-500
+                            w-12 h-12 md:w-16 md:h-16 rounded-2xl overflow-hidden transition-all duration-500
                             border-2 ${isHovered ? 'border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.15)]' : 'border-white/[0.06]'}
                         `}>
                             <img
