@@ -47,6 +47,13 @@ const AuthCallback = () => {
             const errorCode = hashParams.get('error_code');
             const errorDesc = hashParams.get('error_description') || hashParams.get('error');
             
+            // 🔥 FIX UX: Si el usuario ya está autenticado (ej. doble clic al enlace o escáner de correos),
+            // ignoramos el error de expiración y lo redirigimos silenciosamente al dashboard.
+            if (errorCode === 'otp_expired' && user) {
+                navigate('/dashboard', { replace: true });
+                return;
+            }
+
             let mensajeAmigable = decodeURIComponent(errorDesc).replace(/\+/g, ' ');
             
             if (errorCode === 'otp_expired') {
