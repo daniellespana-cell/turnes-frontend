@@ -48,7 +48,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="App font-manrope antialiased bg-[#0a0a0a] min-h-screen">
+      <div className="App font-manrope antialiased bg-[#0a0a0a] min-h-screen w-full overflow-x-hidden">
         <GlobalErrorBoundary>
           <HelmetProvider>
             <NotificationsProvider>

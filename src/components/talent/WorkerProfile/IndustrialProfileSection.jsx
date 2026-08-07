@@ -60,7 +60,7 @@ const IndustrialProfileSection = ({
                                             whileTap={isEditing ? { scale: 0.98 } : {}}
                                             onClick={() => isEditing && handleSkillToggle(role.label)}
                                             className={`
-                                                relative flex items-center gap-3 p-2.5 rounded-xl border transition-all cursor-pointer group
+                                                relative flex items-center gap-3 p-2.5 rounded-xl border transition-all cursor-pointer group min-w-0
                                                 ${isSelected
                                                     ? 'bg-emerald-500/10 border-emerald-500/30'
                                                     : 'bg-zinc-900/40 border-white/5 '
@@ -98,7 +98,7 @@ const IndustrialProfileSection = ({
                                             whileTap={isEditing ? { scale: 0.98 } : {}}
                                             onClick={() => isEditing && handleSkillToggle(skill.label)}
                                             className={`
-                                                relative flex items-center gap-3 p-2.5 rounded-xl border transition-all cursor-pointer group
+                                                relative flex items-center gap-3 p-2.5 rounded-xl border transition-all cursor-pointer group min-w-0
                                                 ${isSelected
                                                     ? 'bg-emerald-500/20 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)]'
                                                     : 'bg-zinc-900/40 border-white/5 '
