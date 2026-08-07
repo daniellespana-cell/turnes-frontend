@@ -1,27 +1,19 @@
 /**
- * Cloudflare Pages SPA fallback function.
- * Handles all non-asset routes by serving index.html,
- * enabling client-side routing (React Router) to work correctly.
+ * Cloudflare Pages SPA fallback.
+ * Always tries to serve the real static asset first.
+ * Only falls back to index.html if the asset doesn't exist (404).
  */
 export async function onRequest(context) {
-  const url = new URL(context.request.url);
-  const pathname = url.pathname;
+  // First, try to serve the actual static file from Cloudflare's asset store
+  const assetResponse = await context.env.ASSETS.fetch(context.request);
 
-  // Let Cloudflare serve real static files directly (assets, manifest, sw, etc.)
-  if (
-    pathname.startsWith('/assets/') ||
-    pathname.startsWith('/functions/') ||
-    pathname === '/sw.js' ||
-    pathname === '/manifest.webmanifest' ||
-    pathname === '/sitemap.xml' ||
-    pathname === '/robots.txt' ||
-    pathname === '/favicon.ico' ||
-    pathname.match(/\.[a-zA-Z0-9]+$/)
-  ) {
-    return context.next();
+  // If the asset exists (200, 304, etc.), return it as-is
+  if (assetResponse.status !== 404) {
+    return assetResponse;
   }
 
-  // For all SPA routes, serve index.html
-  const indexUrl = new URL('/index.html', url);
-  return context.env.ASSETS.fetch(indexUrl);
+  // Asset not found → this is a SPA client-side route → serve index.html
+  const url = new URL(context.request.url);
+  const indexRequest = new Request(new URL('/index.html', url), context.request);
+  return context.env.ASSETS.fetch(indexRequest);
 }
