@@ -1,19 +1,23 @@
-/**
- * Cloudflare Pages SPA fallback.
- * Always tries to serve the real static asset first.
- * Only falls back to index.html if the asset doesn't exist (404).
- */
 export async function onRequest(context) {
-  // First, try to serve the actual static file from Cloudflare's asset store
+  // Intentar cargar el archivo real (JS, CSS, HTML, imagen, etc)
   const assetResponse = await context.env.ASSETS.fetch(context.request);
-
-  // If the asset exists (200, 304, etc.), return it as-is
+  
+  // Si el archivo existe (200 OK), devuélvelo tal cual
   if (assetResponse.status !== 404) {
     return assetResponse;
   }
 
-  // Asset not found → this is a SPA client-side route → serve index.html
   const url = new URL(context.request.url);
+
+  // CRÍTICO: Si falta un archivo JS/CSS de la carpeta /assets/, 
+  // DEBEMOS devolver un error 404 real. 
+  // Si devolvemos index.html aquí, causamos el error "MIME type text/html"
+  if (url.pathname.startsWith('/assets/')) {
+    return assetResponse; 
+  }
+
+  // Si no es un asset, es una ruta de usuario (ej. /dashboard, /profile).
+  // Como es una SPA, devolvemos el index.html
   const indexRequest = new Request(new URL('/index.html', url), context.request);
   return context.env.ASSETS.fetch(indexRequest);
 }
