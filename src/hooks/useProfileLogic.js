@@ -6,6 +6,7 @@ import { UI_STRINGS } from '../domain/uiTranslations';
 import { ReputationService } from '../services/reputationService';
 import { ContractService } from '../services/contractService';
 import { authService } from '../services/authService';
+import { CIUDADES_COORDS } from '../domain/geography.config';
 
 /**
  * 💼 BUSINESS PROFILE LOGIC (SENIOR)
@@ -84,9 +85,17 @@ export const useProfileLogic = () => {
     // 3. MANEJADORES DE ACCIÓN
     const handleInputChange = (field, value) => {
         setFormData(prev => {
-            // Mantener address y location siempre en sync
-            if (field === 'address') return { ...prev, address: value, location: value };
-            if (field === 'location') return { ...prev, location: value, address: value };
+            // Mantener address y location siempre en sync y resolver coordenadas
+            if (field === 'address' || field === 'location') {
+                const cityMatch = CIUDADES_COORDS.find(c => c.name === value || `${c.name}, ${c.departamento}` === value);
+                return { 
+                    ...prev, 
+                    address: value, 
+                    location: value,
+                    lat: cityMatch ? cityMatch.lat : prev.lat,
+                    lng: cityMatch ? cityMatch.lng : prev.lng 
+                };
+            }
             return { ...prev, [field]: value };
         });
     };

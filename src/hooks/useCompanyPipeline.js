@@ -4,6 +4,8 @@ import { VacancyService } from '../services/vacancyService';
 import { applicationService } from '../services/applicationService';
 import { useToast } from '../context/ToastContext';
 
+import { GeoService } from '../services/geoService';
+
 /**
  * 🕵️‍♂️ USE COMPANY PIPELINE (SENIOR)
  * Encapsula toda la lógica de negocio de la Mesa de Contratación.
@@ -61,6 +63,14 @@ export const useCompanyPipeline = (userId, activeVacancyId) => {
 
         if (gruposMap.has(vId)) {
           const profile = postulacion.candidato || {};
+          const vac = gruposMap.get(vId).vacante;
+          
+          let distStr = 'Desconocida';
+          if (vac.lat && vac.lng && profile.lat && profile.lng) {
+            const dist = GeoService.calculateDistance(vac.lat, vac.lng, profile.lat, profile.lng);
+            distStr = dist < 1 ? '< 1 km' : `${dist.toFixed(1)} km`;
+          }
+
           gruposMap.get(vId).postulantes.push({
             id: profile.id,
             applicationId: postulacion.id,
@@ -69,7 +79,7 @@ export const useCompanyPipeline = (userId, activeVacancyId) => {
             rating: profile.calificacion || 5.0,
             verified: profile.verificado || false,
             avatar_url: profile.avatar_url,
-            distance: 'Cercano',
+            distance: distStr,
             status: postulacion.status
           });
         }

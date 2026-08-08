@@ -163,7 +163,8 @@ const ExploreVacancies = () => {
             <div className="px-3 md:px-6">
                 <LocationHint 
                     locationMode={userLocation.locationMode} 
-                    cityName={userLocation.cityName} 
+                    cityName={userLocation.cityName}
+                    onManualOverride={() => setIsFilterOpen(true)}
                 />
             </div>
 

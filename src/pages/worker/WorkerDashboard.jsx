@@ -9,6 +9,7 @@ import ActivityFeed from '../../components/worker-dashboard/ActivityFeed';
 import DailyTip from '../../components/worker-dashboard/DailyTip';
 import TodayMission from '../../components/worker-dashboard/TodayMission';
 import RecommendedSection from '../../components/worker-dashboard/RecommendedSection';
+import LocationHint from '../../components/common/LocationHint';
 
 import { useWorkerDashboard } from '../../hooks/useWorkerDashboard';
 import { useWorkerStats } from '../../hooks/useWorkerStats';
@@ -37,7 +38,7 @@ const GpsWarning = () => (
 const WorkerDashboard = () => {
     const { 
         user, recommendationsLoading, priorityAction, gpsDenied, 
-        appliedIds 
+        appliedIds, locationMode, cityName
     } = useWorkerDashboard();
     
     const { stats, loading: statsLoading } = useWorkerStats();
@@ -66,7 +67,8 @@ const WorkerDashboard = () => {
             {/* 2. SYSTEM ALERTS */}
             <ProfileBanner />
             <EliteBanner userName={user?.name} />
-            {gpsDenied && <GpsWarning />}
+            <LocationHint locationMode={locationMode} cityName={cityName} />
+            {gpsDenied && locationMode !== 'profile' && <GpsWarning />}
 
             {/* 3. WIDGET GRID (Upper Body) */}
             <main className="space-y-5 md:grid md:grid-cols-2 md:gap-5 md:space-y-0">

@@ -51,7 +51,10 @@ export const useVacantesLogic = () => {
             applicants: Array.isArray(v.postulaciones) ? (v.postulaciones[0]?.count ?? v.postulaciones.length) : 0,
             esUrgente: v.es_urgente,
             urgenteExpiracion: v.urgente_expiracion,
-            cost: getDisplayCost(v.tipo_turno, null)
+            cost: getDisplayCost(v.tipo_turno, null),
+            lat: v.lat,
+            lng: v.lng,
+            direccion_formateada: v.direccion_formateada
           }))
           .filter(v => v.status !== 'Oculta'); // 🛡️ Filtro raíz: No mostrar canceladas
 

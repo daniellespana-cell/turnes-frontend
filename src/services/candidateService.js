@@ -42,7 +42,9 @@ export const CandidateService = {
                         rol,
                         bio,
                         skills,
-                        calificacion
+                        calificacion,
+                        lat,
+                        lng
                     )
                 `)
                 .in('vacante_id', vacanteIds);
@@ -321,7 +323,9 @@ export const CandidateService = {
                         bio,
                         skills,
                         calificacion,
-                        verificado
+                        verificado,
+                        lat,
+                        lng
                     )
                 `)
                 .eq('vacante_id', vacanteId)
@@ -376,7 +380,9 @@ export const CandidateService = {
                         rol, 
                         skills, 
                         calificacion, 
-                        verificado
+                        verificado,
+                        lat,
+                        lng
                     )
                 `)
                 .in('vacante_id', vacanteIds)

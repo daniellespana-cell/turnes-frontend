@@ -57,8 +57,12 @@ export const useVacancyScoring = (vacancies, userLocation, filters, activeCatego
         // ⚠️ DB jitter: vacantes_public & buscar_vacantes_cercanas add ±0.09° (~±5km) random noise.
         // We compensate with a buffer so nearby vacancies are not incorrectly rejected by the radius filter.
         const JITTER_BUFFER_KM = 6;
-        // Fallback vacancies bypass strict distance — they're shown with a banner notice
-        const matchesDistance  = (v) => v.isFallback || !v.hasCoords || v.realDistance <= (radius + JITTER_BUFFER_KM);
+        // Fallback vacancies bypass strict distance — but capped at 100km max to avoid showing cross-country results
+        const matchesDistance  = (v) => {
+            if (!v.hasCoords) return true;
+            if (v.isFallback) return v.realDistance <= 100;
+            return v.realDistance <= (radius + JITTER_BUFFER_KM);
+        };
 
         // 🟢 Strict Match: Only filter when we have real distance data (GPS available).
         // If coords are null, matchScore=0 is spurious — do NOT filter on it.

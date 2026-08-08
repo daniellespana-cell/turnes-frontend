@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useGeolocation } from './useGeolocation';
+import { useLocationResolver } from './useLocationResolver';
 import { GeoService } from '../services/geoService';
 import { MatchService } from '../services/matchService';
 import { applicationService } from '../services/applicationService';
@@ -14,8 +14,8 @@ export const useWorkerDashboard = () => {
     const [appliedIds, setAppliedIds] = useState(new Set());
     const [isApplying, setIsApplying] = useState(null);
 
-    // 🛰️ GPS SENSOR
-    const geo = useGeolocation();
+    // 🛰️ Cascading Location Resolver (GPS -> Profile -> IP -> National)
+    const location = useLocationResolver();
 
     // ── Real-time Sync for Applied Status (SSOT via Service) ─────────────────
     const fetchAppliedIds = useCallback(async () => {
@@ -47,11 +47,10 @@ export const useWorkerDashboard = () => {
     useEffect(() => {
         let isCancelled = false;
         const timer = setTimeout(async () => {
-            if (geo.loading || !user) return;
+            if (location.loading || !user) return;
 
-            // Coordenadas reales: GPS > perfil del usuario > null
-            const lat = geo.lat ?? user?.lat ?? null;
-            const lng = geo.lng ?? user?.lng ?? null;
+            const lat = location.lat;
+            const lng = location.lng;
 
             if (!lat || !lng) {
                 setRecommendationsLoading(false);
@@ -67,7 +66,7 @@ export const useWorkerDashboard = () => {
             try {
                 // 🚀 Optimized Fetch via PostGIS RPC (Bypasses RLS issues and filters by distance on DB)
                 // Se solicitan 100 para que el algoritmo de Match tenga suficientes vacantes para calificar
-                const { data, error } = await GeoService.fetchNearby(lat, lng, 30, user.id, 100);
+                const { data, error } = await GeoService.fetchNearby(lat, lng, location.radiusKm || 30, user.id, 100);
 
                 if (!error && data && !isCancelled) {
                     lastFetchedCoord.current = { lat, lng };
@@ -105,7 +104,7 @@ export const useWorkerDashboard = () => {
             clearTimeout(timer);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [geo.loading, geo.lat, geo.lng, user?.id, user?.lat, user?.lng]);
+    }, [location.loading, location.lat, location.lng, location.radiusKm, user?.id]);
 
     // ── Apply to vacancy ──────────────────────────────────────────────────────
     const applyToVacancy = useCallback(async (vacancyId) => {
@@ -153,7 +152,11 @@ export const useWorkerDashboard = () => {
             type: 'RECOMMENDATIONS',
             data: recommended,
             title: 'Vacantes para ti hoy',
-            subtitle: geo.lat ? 'Basado en tu ubicación actual' : 'Recomendaciones generales',
+            subtitle: location.locationMode === 'gps' 
+                ? 'Basado en tu ubicación exacta' 
+                : location.locationMode === 'profile'
+                    ? 'Basado en la ciudad de tu perfil'
+                    : 'Recomendaciones generales',
             actionLabel: 'Explorar Todo',
         };
 
@@ -163,7 +166,7 @@ export const useWorkerDashboard = () => {
             showOnboarding,
             priorityAction,
         };
-    }, [user, recommended, geo.lat]);
+    }, [user, recommended, location.locationMode]);
 
     return {
         ...dashboardData,
@@ -171,7 +174,7 @@ export const useWorkerDashboard = () => {
         appliedIds,
         isApplying,
         applyToVacancy,
-        gpsAvailable: Boolean(geo.lat),
-        gpsDenied: geo.denied,
+        locationMode: location.locationMode,
+        cityName: location.cityName,
     };
 };
