@@ -87,13 +87,15 @@ export const useProfileLogic = () => {
         setFormData(prev => {
             // Mantener address y location siempre en sync y resolver coordenadas
             if (field === 'address' || field === 'location') {
-                const cityMatch = CIUDADES_COORDS.find(c => c.name === value || `${c.name}, ${c.departamento}` === value);
+                const cityMatch = Object.entries(CIUDADES_COORDS).find(
+                    ([name, data]) => name === value || `${name}, ${data.departamento}` === value
+                );
                 return { 
                     ...prev, 
                     address: value, 
                     location: value,
-                    lat: cityMatch ? cityMatch.lat : prev.lat,
-                    lng: cityMatch ? cityMatch.lng : prev.lng 
+                    lat: cityMatch ? cityMatch[1].lat : prev.lat,
+                    lng: cityMatch ? cityMatch[1].lng : prev.lng 
                 };
             }
             return { ...prev, [field]: value };
