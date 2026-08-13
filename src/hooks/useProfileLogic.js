@@ -94,8 +94,8 @@ export const useProfileLogic = () => {
                     ...prev, 
                     address: value, 
                     location: value,
-                    lat: cityMatch ? cityMatch[1].lat : prev.lat,
-                    lng: cityMatch ? cityMatch[1].lng : prev.lng 
+                    lat: cityMatch ? cityMatch[1].lat : (value === '' ? null : prev.lat),
+                    lng: cityMatch ? cityMatch[1].lng : (value === '' ? null : prev.lng) 
                 };
             }
             return { ...prev, [field]: value };
