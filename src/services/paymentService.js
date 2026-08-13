@@ -51,10 +51,10 @@ class PaymentService {
         const rawKey = import.meta.env.VITE_WOMPI_PUBLIC_KEY;
         logger.dev('🔑 [PaymentService] Verificando llave pública de Wompi');
 
-        const publicKey = (rawKey || '').trim();
+        const publicKey = String(rawKey || '').trim();
 
-        if (!publicKey) {
-            logger.error('[PaymentService] CRITICAL: VITE_WOMPI_PUBLIC_KEY no encontrada o vacía');
+        if (!publicKey || publicKey === 'undefined' || publicKey === 'null') {
+            logger.error('[PaymentService] CRITICAL: VITE_WOMPI_PUBLIC_KEY no encontrada o es inválida (undefined). Revisa las variables de entorno de tu hosting.');
             return;
         }
 
