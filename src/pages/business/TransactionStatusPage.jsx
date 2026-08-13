@@ -19,13 +19,16 @@ const TransactionStatusPage = () => {
     const itemId = searchParams.get('itemId');
 
     // 🔄 Función de Verificación (SSOT)
-    const verifyTransaction = useCallback(async () => {
+    const verifyTransaction = useCallback(async (isInitial = false) => {
         if (!id) {
             setStatus('error');
             return;
         }
 
-        setStatus('verifying');
+        if (!isInitial) {
+            setStatus('verifying');
+        }
+
         try {
             // Esperamos a que la BD reciba el Webhook (max 60 segundos)
             await FinanceService.waitForTransaction(id);
@@ -39,10 +42,10 @@ const TransactionStatusPage = () => {
                 setStatus('error');
             }
         }
-    }, [id]);
+    }, [id, refreshSession]);
 
     useEffect(() => {
-        verifyTransaction();
+        verifyTransaction(true);
     }, [id, verifyTransaction]);
 
     return (
@@ -109,7 +112,7 @@ const TransactionStatusPage = () => {
                 <div className="relative z-10 pt-4 flex flex-col gap-3">
                     {status === 'delayed' && (
                         <button
-                            onClick={verifyTransaction}
+                            onClick={() => verifyTransaction(false)}
                             className="w-full py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition-colors flex items-center justify-center gap-2"
                             type="button"
                             aria-label="Acción">
