@@ -67,7 +67,8 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
     }
 
     // Cerrar cuando finaliza la validación (Hangup Signaling)
-    if (lastMsg.type === 'video_ended' && onCerrarVideo) {
+    const isVideoEndMsg = lastMsg.type === 'video_ended' || lastMsg.metadata?.subtype === 'call_summary';
+    if (isVideoEndMsg && onCerrarVideo) {
         onCerrarVideo();
     }
   }, [messages, onStartVideo, onCerrarVideo]);

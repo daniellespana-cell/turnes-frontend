@@ -90,7 +90,9 @@ export const MessageList = ({
         onDeclineRehire={onDeclineRehire}
         isFinalizing={isFinalizing}
       >
-        {messages.map((msg, index) => (
+        {messages
+          .filter(msg => msg.metadata?.subtype !== 'call_summary')
+          .map((msg, index) => (
             <MessageRenderer
               key={msg.id || `msg-${index}`}
               msg={msg}
