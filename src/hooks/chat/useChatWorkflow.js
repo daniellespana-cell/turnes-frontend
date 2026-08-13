@@ -58,7 +58,7 @@ export const useChatWorkflow = (candidato, onSystemMessage, userRole) => {
           : 'Excelente. Ya puedes proceder a firmar el acuerdo con el candidato.',
         timestamp: new Date().toISOString()
       },
-      userRole === 'empresa' ? 'prompt_contract' : null
+      userRole === 'empresa' ? 'system_info' : null
     );
     return { action: 'VIDEO_COMPLETED' };
   }, [onSystemMessage, userRole]);

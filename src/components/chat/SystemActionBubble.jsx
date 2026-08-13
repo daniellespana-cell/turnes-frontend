@@ -47,6 +47,13 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
     useEffect(() => {
         if (message.type === 'contract_signed' && userRole === 'trabajador' && !confettiFired.current) {
             confettiFired.current = true;
+            
+            // 🛡️ Solo disparar si el mensaje es reciente (menos de 10 segundos)
+            // Esto evita que salga confeti al recargar la página o volver a abrir el chat.
+            const msgTime = new Date(timestamp || message.timestamp || Date.now()).getTime();
+            const now = Date.now();
+            if (now - msgTime > 10000) return;
+
             // Configuración del confeti "premium"
             const duration = 3000;
             const end = Date.now() + duration;
@@ -188,15 +195,6 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
                                         type="button"
                                         aria-label="Acción">
                                         <Video size={12} /> Invitar a Video
-                                    </button>
-                                )}
-                                {message.type === 'prompt_contract' && onContractAction && (
-                                    <button
-                                        onClick={onContractAction}
-                                        className="w-full py-2 bg-indigo-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2"
-                                        type="button"
-                                        aria-label="Acción">
-                                        <FileSignature size={12} /> Emitir Acuerdo
                                     </button>
                                 )}
                             </div>

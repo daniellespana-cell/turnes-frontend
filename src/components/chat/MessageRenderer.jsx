@@ -48,13 +48,16 @@ export const MessageRenderer = ({
     ].includes(msg.type);
 
     if (isSystemAction) {
+        const hasAnyVideoActivity = allMessages.some(m => m.type === 'video_accepted' || m.type === 'video_ended');
+        const effectiveHasValidatedVideo = state.hasValidatedVideo || hasAnyVideoActivity;
+
         return (
             <div className="my-4">
                 <SystemActionBubble
                     message={msg}
                     userRole={userRole}
                     isClosed={isClosed}
-                    hasValidatedVideo={state.hasValidatedVideo}
+                    hasValidatedVideo={effectiveHasValidatedVideo}
                 />
                 {isClosed && msg.type === 'video_invitation' && (
                     <div className="text-center pt-1 text-[9px] text-zinc-700 font-mono flex items-center justify-center gap-1">
