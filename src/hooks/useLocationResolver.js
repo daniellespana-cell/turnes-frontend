@@ -118,19 +118,9 @@ export const useLocationResolver = () => {
 
     // ── Resolución Final ─────────────────────────────────────────────────
     const resolved = useMemo(() => {
-        // Nivel 1: GPS
-        if (hasGPS) {
-            return {
-                lat: geo.lat,
-                lng: geo.lng,
-                locationMode: 'exact',
-                cityName: null,
-                showDistance: true,
-                radiusKm: RADIUS_BY_MODE.exact,
-            };
-        }
+        const isCompany = user?.role === 'empresa' || user?.role === 'company';
 
-        // Nivel 1.5: Manual Override
+        // Nivel Absoluto: Manual Override (Siempre gana si el usuario busca una ciudad explícita)
         if (hasManual) {
             return {
                 lat: manualLocation.lat,
@@ -142,16 +132,51 @@ export const useLocationResolver = () => {
             };
         }
 
-        // Nivel 2: Perfil
-        if (hasProfile) {
-            return {
-                lat: profileLocation.lat,
-                lng: profileLocation.lng,
-                locationMode: 'profile',
-                cityName: profileLocation.city,
-                showDistance: true,
-                radiusKm: RADIUS_BY_MODE.profile,
-            };
+        // 🏢 LÓGICA DE EMPRESAS: El local físico no se mueve. Perfil > GPS.
+        if (isCompany) {
+            if (hasProfile) {
+                return {
+                    lat: profileLocation.lat,
+                    lng: profileLocation.lng,
+                    locationMode: 'profile',
+                    cityName: profileLocation.city,
+                    showDistance: true,
+                    radiusKm: RADIUS_BY_MODE.profile,
+                };
+            }
+            if (hasGPS) {
+                return {
+                    lat: geo.lat,
+                    lng: geo.lng,
+                    locationMode: 'exact',
+                    cityName: null,
+                    showDistance: true,
+                    radiusKm: RADIUS_BY_MODE.exact,
+                };
+            }
+        } 
+        // 👷‍♂️ LÓGICA DE TRABAJADORES: Trabajo on-demand. GPS > Perfil.
+        else {
+            if (hasGPS) {
+                return {
+                    lat: geo.lat,
+                    lng: geo.lng,
+                    locationMode: 'exact',
+                    cityName: null,
+                    showDistance: true,
+                    radiusKm: RADIUS_BY_MODE.exact,
+                };
+            }
+            if (hasProfile) {
+                return {
+                    lat: profileLocation.lat,
+                    lng: profileLocation.lng,
+                    locationMode: 'profile',
+                    cityName: profileLocation.city,
+                    showDistance: true,
+                    radiusKm: RADIUS_BY_MODE.profile,
+                };
+            }
         }
 
         // Nivel 3: IP (Cloudflare Edge)
@@ -175,7 +200,7 @@ export const useLocationResolver = () => {
             showDistance: false,
             radiusKm: RADIUS_BY_MODE.national,
         };
-    }, [hasGPS, geo.lat, geo.lng, hasManual, manualLocation, hasProfile, profileLocation, ipLocation]);
+    }, [hasGPS, geo.lat, geo.lng, hasManual, manualLocation, hasProfile, profileLocation, ipLocation, user?.role]);
 
     return {
         ...resolved,

@@ -1,14 +1,13 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { useGeolocation } from './useGeolocation';
+import { useLocationResolver } from './useLocationResolver';
 import { getCategoriasList } from '../domain/vacantes.taxonomy';
 import { talentService } from '../services/talentService';
-import { GeoService } from '../services/geoService';
 
 export const useTalentSearch = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const geo = useGeolocation();
+    const location = useLocationResolver();
     const queryClient = useQueryClient();
 
     // 1. Core State
@@ -27,12 +26,12 @@ export const useTalentSearch = () => {
 
     // 3. Jitter geográfico preventivo (Evita DDOS por fluctuaciones mínimas del GPS)
     const debouncedCenter = useMemo(() => {
-        if (!geo.lat || !geo.lng) return null;
+        if (!location.lat || !location.lng) return null;
         return {
-            lat: Number(geo.lat.toFixed(3)),
-            lng: Number(geo.lng.toFixed(3))
+            lat: Number(location.lat.toFixed(3)),
+            lng: Number(location.lng.toFixed(3))
         };
-    }, [geo.lat, geo.lng]);
+    }, [location.lat, location.lng]);
 
     // 4. Integración React Query (SSOT de Datos)
     const {
@@ -71,7 +70,7 @@ export const useTalentSearch = () => {
                 lastId: lastTalent.id
             };
         },
-        enabled: !!debouncedCenter && !geo.loading,
+        enabled: !!debouncedCenter && !location.isLoading,
         staleTime: 1000 * 60 * 5, // Caché fresca por 5 minutos
     });
 
@@ -110,7 +109,7 @@ export const useTalentSearch = () => {
         setQuery,
         activeSector,
         setActiveSector,
-        loading: isLoading || geo.loading,
+        loading: isLoading || location.isLoading,
         isFetching,
         loadingMore: isFetchingNextPage,
         hasMore: hasNextPage,
