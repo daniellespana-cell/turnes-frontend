@@ -6,7 +6,7 @@ import { useChatActionsContext } from '../../context/ChatActionContext';
 import { getBubbleStyleConfig, resolveBubbleText } from './bubbleConfig';
 // 🆕 Import K.I.S.S Component
 
-const SystemActionBubble = ({ message, userRole, isClosed }) => {
+const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) => {
     // 🧠 CONSUMIENDO ACCIONES DESDE EL CONTEXTO (Anti-Prop Drilling)
     const actions = useChatActionsContext();
     const { 
@@ -90,7 +90,7 @@ const SystemActionBubble = ({ message, userRole, isClosed }) => {
                         )}
 
                         {/* --- BOTONES MINIMALISTAS (Solo para Video y Solo para el Trabajador) --- */}
-                        {isVideoInvite && userRole === 'trabajador' && (
+                        {isVideoInvite && userRole === 'trabajador' && !hasValidatedVideo && (
                             <div className="flex items-center gap-3 pt-3">
                                 <button
                                     onClick={onAccept}
@@ -106,6 +106,11 @@ const SystemActionBubble = ({ message, userRole, isClosed }) => {
                                     aria-label="Acción">
                                     <X size={12} /> Declinar
                                 </button>
+                            </div>
+                        )}
+                        {isVideoInvite && userRole === 'trabajador' && hasValidatedVideo && (
+                            <div className="text-center pt-2 pb-1 text-[10px] text-emerald-500 font-black uppercase tracking-widest flex justify-center items-center gap-1 bg-emerald-500/10 rounded-lg mt-2">
+                                <Check size={12} /> Ya Validado
                             </div>
                         )}
 

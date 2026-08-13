@@ -1,5 +1,6 @@
 import React from 'react';
 import VideoCallOverlay from './VideoCallOverlay';
+import ChatActionModal from './ChatActionModal';
 import { CheckCircle2, X } from 'lucide-react';
 
 import { useState, useEffect } from 'react';
@@ -14,7 +15,10 @@ const ChatOverlays = ({
   isClosed,
   isConfirmModalOpen,
   setIsConfirmModalOpen,
-  onExecutePayment
+  onExecutePayment,
+  isVideoReinviteModalOpen, // 🆕 Modal video
+  setIsVideoReinviteModalOpen,
+  onConfirmVideoInvite
 }) => {
   const {
     finanzas = {},
@@ -86,6 +90,15 @@ const ChatOverlays = ({
           onClose={handleCloseVideo}
         />
       )}
+
+      {/* MODAL RE-INVITACION VIDEO */}
+      <ChatActionModal
+        isOpen={isVideoReinviteModalOpen}
+        onClose={() => setIsVideoReinviteModalOpen(false)}
+        onConfirm={onConfirmVideoInvite}
+        actionType="video_reinvite"
+        candidateName={candidato?.name || "el candidato"}
+      />
     </>
   );
 };

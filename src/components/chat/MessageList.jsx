@@ -31,7 +31,8 @@ export const MessageList = ({
   onDeclineRehire,
   userRole,
   isFinalizing,
-  activeStep
+  activeStep,
+  hasValidatedVideo
 }) => {
   const scrollRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -95,7 +96,7 @@ export const MessageList = ({
               msg={msg}
               index={index}
               allMessages={messages}
-              state={{ isClosed }}
+              state={{ isClosed, hasValidatedVideo }}
               currentUser={currentUser}
               userRole={userRole}
             />

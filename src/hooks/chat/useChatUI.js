@@ -10,6 +10,7 @@ export const useChatUI = () => {
     const abrirModalPago = useCallback(() => setIsConfirmModalOpen(true), []);
 
     const [isInVideoCall, setIsInVideoCall] = useState(false);
+    const [isVideoReinviteModalOpen, setIsVideoReinviteModalOpen] = useState(false); // 🆕 Modal de re-invitación
     
     // 🆕 ACCIONES REACTIVAS SENIOR
     const abrirVideo = useCallback(() => {
@@ -30,6 +31,8 @@ export const useChatUI = () => {
         isConfirmModalOpen,
         setIsConfirmModalOpen,
         abrirModalPago,
+        isVideoReinviteModalOpen,
+        setIsVideoReinviteModalOpen,
 
         // Video
         isInVideoCall,

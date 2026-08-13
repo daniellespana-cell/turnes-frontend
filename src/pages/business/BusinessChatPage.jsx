@@ -97,6 +97,21 @@ const BusinessChatPage = () => {
         }
     };
 
+    const hasValidatedVideo = chat?.workflowState === 'VALIDATED' || chat?.workflowState === 'AGREEMENT_CONFIRMED' || chat?.workflowState === 'COMPLETED';
+
+    const handleVideoInviteClick = () => {
+        if (hasValidatedVideo) {
+            ui.setIsVideoReinviteModalOpen(true);
+        } else {
+            chat.invitarAVideo();
+        }
+    };
+
+    const handleConfirmReinvite = () => {
+        ui.setIsVideoReinviteModalOpen(false);
+        chat.invitarAVideo();
+    };
+
     if (!user || !activeEntity || !chat) {
         return <ChatLoadingSkeleton />;
     }
@@ -129,7 +144,7 @@ const BusinessChatPage = () => {
                 onPay={chat.ejecutarPagoComision}
                 onExecute={handleConfirmarAcuerdo}
                 onFinalize={chat.sellarChatAction}
-                onVideoInvite={chat.invitarAVideo}
+                onVideoInvite={handleVideoInviteClick}
                 isPanelOpen={ui.isPanelOpen}
                 setIsPanelOpen={ui.setIsPanelOpen}
             />
@@ -143,6 +158,9 @@ const BusinessChatPage = () => {
                 isConfirmModalOpen={ui.isConfirmModalOpen}
                 setIsConfirmModalOpen={ui.setIsConfirmModalOpen}
                 onExecutePayment={chat.ejecutarPagoComision}
+                isVideoReinviteModalOpen={ui.isVideoReinviteModalOpen}
+                setIsVideoReinviteModalOpen={ui.setIsVideoReinviteModalOpen}
+                onConfirmVideoInvite={handleConfirmReinvite}
             />
         </div>
     );

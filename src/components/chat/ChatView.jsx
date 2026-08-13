@@ -94,6 +94,7 @@ const ChatView = ({
           // Pasamos flags para que MessageList sepa qué cartel mostrar
           isPaid={isPaid}
           isClosed={realIsClosed}
+          hasValidatedVideo={chat?.workflowState === 'VALIDATED' || chat?.workflowState === 'AGREEMENT_CONFIRMED' || chat?.workflowState === 'COMPLETED'}
           // 🆕 PROPS PARA MOBILE DASHBOARD
           finanzas={chat?.finanzas}
           permisos={chat?.permisos}

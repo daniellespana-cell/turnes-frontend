@@ -54,6 +54,7 @@ export const MessageRenderer = ({
                     message={msg}
                     userRole={userRole}
                     isClosed={isClosed}
+                    hasValidatedVideo={state.hasValidatedVideo}
                 />
                 {isClosed && msg.type === 'video_invitation' && (
                     <div className="text-center pt-1 text-[9px] text-zinc-700 font-mono flex items-center justify-center gap-1">

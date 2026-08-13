@@ -32,6 +32,15 @@ const ACTION_CONFIG = {
         buttonAction: 'Eliminar',
         bgGradient: 'from-red-500/10 to-transparent',
         borderFocus: 'focus:ring-red-500/50'
+    },
+    video_reinvite: {
+        title: 'Re-invitar a Video',
+        description: 'La verificación visual ya se hizo con este candidato en este ciclo. ¿Deseas volver a solicitarla y gastar otro ticket?',
+        icon: <AlertCircle className="w-6 h-6 text-emerald-400" />,
+        color: 'emerald',
+        buttonAction: 'Re-invitar',
+        bgGradient: 'from-emerald-500/10 to-transparent',
+        borderFocus: 'focus:ring-emerald-500/50'
     }
 };
 
@@ -144,7 +153,8 @@ const ChatActionModal = ({ isOpen, onClose, onConfirm, actionType, candidateName
                             className={`flex-1 py-3 px-4 rounded-xl font-black text-[14px] transition-all relative overflow-hidden group active:scale-95 disabled:opacity-50
                                 ${actionType === 'archive' ? 'bg-zinc-100 text-black hover:bg-zinc-200  shadow-zinc-500/20' :
                                     actionType === 'delete' ? 'bg-red-500 hover:bg-red-600 text-white  shadow-red-500/20' :
-                                        'bg-orange-500 hover:bg-orange-600 text-white  shadow-orange-500/20'
+                                        actionType === 'video_reinvite' ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20' :
+                                            'bg-orange-500 hover:bg-orange-600 text-white  shadow-orange-500/20'
                                 }
                             `}
                             type="button"
