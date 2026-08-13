@@ -136,9 +136,10 @@ export const profileMapper = {
             }
         });
 
-        // 🌍 Manejo de Coordenadas
-        const lat = uiUpdates.lat ?? uiUpdates.location?.lat ?? uiUpdates.coords?.lat;
-        const lng = uiUpdates.lng ?? uiUpdates.location?.lng ?? uiUpdates.coords?.lng;
+        // 🌍 Manejo de Coordenadas (Soporta nulos explícitos)
+        const lat = uiUpdates.lat !== undefined ? uiUpdates.lat : (uiUpdates.location?.lat ?? uiUpdates.coords?.lat);
+        const lng = uiUpdates.lng !== undefined ? uiUpdates.lng : (uiUpdates.location?.lng ?? uiUpdates.coords?.lng);
+        
         if (lat !== undefined) dbPayload.lat = lat;
         if (lng !== undefined) dbPayload.lng = lng;
 
