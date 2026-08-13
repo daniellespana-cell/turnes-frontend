@@ -18,6 +18,8 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
 
   // 1. ESCUCHAR EVENTOS DEL IFRAME (Daily.co postMessage API)
   useEffect(() => {
+    let hangupTimer = null;
+
     const handleMessage = (e) => {
       if (e.data?.event === 'participant-joined' && !e.data?.participant?.local) {
         logger.info("👥 [VIDEO] Participante remoto conectado");
@@ -25,12 +27,18 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
       }
       if (e.data?.event === 'participant-left' && !e.data?.participant?.local) {
         setIsRemoteConnected(false);
+        // 🔴 CANAL 1: El otro participante colgó → cerrar overlay automáticamente
+        hangupTimer = setTimeout(() => onClose(formatTime(seconds)), 3000);
       }
     };
 
     window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      if (hangupTimer) clearTimeout(hangupTimer);
+    };
+  }, [onClose, seconds]);
+
 
   useEffect(() => {
     const interval = setInterval(() => setSeconds(s => s + 1), 1000);

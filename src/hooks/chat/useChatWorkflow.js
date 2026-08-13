@@ -49,7 +49,7 @@ export const useChatWorkflow = (candidato, onSystemMessage, userRole) => {
   const finalizarValidacion = useCallback((duracionString) => {
     onSystemMessage(
       userRole === 'trabajador' ? 'Validación Completada' : 'Has completado la Validación',
-      'system_info',
+      'video_ended',
       {
         subtype: 'call_summary',
         duration: duracionString || '00:00',
