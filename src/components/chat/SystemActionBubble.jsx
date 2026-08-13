@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Video, FileSignature, Check, X } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import FinalizeActionBtn from './FinalizeActionBtn';
 
 import { useChatActionsContext } from '../../context/ChatActionContext';
@@ -40,6 +41,39 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
     const config = getBubbleStyleConfig(message.type);
 
     const timeStr = new Date(timestamp || message.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const confettiFired = useRef(false);
+
+    useEffect(() => {
+        if (message.type === 'contract_signed' && userRole === 'trabajador' && !confettiFired.current) {
+            confettiFired.current = true;
+            // Configuración del confeti "premium"
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            const frame = () => {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#34d399', '#10b981', '#059669', '#047857'] // Emerald palette
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#34d399', '#10b981', '#059669', '#047857']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            };
+            frame();
+        }
+    }, [message.type, userRole]);
 
     return (
         <div className="w-full flex justify-center py-2 animate-in fade-in zoom-in duration-300">
