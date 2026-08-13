@@ -49,10 +49,12 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
 
   const workflow = useChatWorkflow(candidato, onSystemMessage, userRole);
 
-  // 🆕 ROOM URL RESOLUTION: Modo Test Activo con sala real de Daily.co
+  // 🎥 ROOM URL: Entrada directa sin lobby (prejoinUI=false)
   const roomUrl = useMemo(() => {
-    return "https://turnes.daily.co/test-room";
-  }, []);
+    const base = "https://turnes.daily.co/test-room";
+    const displayName = encodeURIComponent(user?.name || 'Participante');
+    return `${base}?prejoinUI=false&userName=${displayName}`;
+  }, [user?.name]);
 
   // 🆕 SYNC SENSOR: Sincronización de apertura/cierre reactiva via Realtime
   useEffect(() => {
