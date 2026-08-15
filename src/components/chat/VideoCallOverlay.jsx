@@ -32,9 +32,19 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
       }
     };
 
+    // 🛡️ SANITIZACIÓN SENIOR: Notificar cierre si el usuario mata la pestaña o bloquea el móvil
+    const handleAbruptLeave = () => {
+      if (onClose) onClose(formatTime(seconds));
+    };
+
     window.addEventListener('message', handleMessage);
+    window.addEventListener('beforeunload', handleAbruptLeave);
+    window.addEventListener('pagehide', handleAbruptLeave);
+
     return () => {
       window.removeEventListener('message', handleMessage);
+      window.removeEventListener('beforeunload', handleAbruptLeave);
+      window.removeEventListener('pagehide', handleAbruptLeave);
       if (hangupTimer) clearTimeout(hangupTimer);
     };
   }, [onClose, seconds]);

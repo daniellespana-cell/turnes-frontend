@@ -18,7 +18,7 @@ export const initSentry = () => {
       environment: import.meta.env.MODE || "production",
       release: "turnes-vite@1.0.0",
 
-      // 🛡️ FILTRADO SENIOR DE ERRORES RUIDOSOS O INOFENSIVOS
+      // 🛡️ FILTRADO SENIOR DE ERRORES RUIDOSOS O INOFENSIVOS (Sanitización)
       beforeSend(event, hint) {
         const error = hint.originalException;
         if (error) {
@@ -36,6 +36,18 @@ export const initSentry = () => {
           if (event.exception?.values?.[0]?.stacktrace?.frames?.some(frame => frame.filename?.includes('chrome-extension://'))) {
             return null;
           }
+
+          // 4. Rate-Limiting Local: Evitar que un loop infinito agote la cuota de Sentry
+          const errorKey = `${error.name || 'Error'}:${errorMessage}`;
+          const now = Date.now();
+          if (recentErrorTracker.has(errorKey)) {
+            const lastTime = recentErrorTracker.get(errorKey);
+            if (now - lastTime < 10000) {
+              // Silenciamos si el mismo error se repite en menos de 10 segundos
+              return null;
+            }
+          }
+          recentErrorTracker.set(errorKey, now);
         }
         return event;
       },
@@ -43,6 +55,9 @@ export const initSentry = () => {
     console.info("[Sentinel] Sentry Error Tracking con estándares Élite activado.");
   }
 };
+
+// 🛡️ Mapa en memoria para Throttle Anti-Loops
+const recentErrorTracker = new Map();
 
 /**
  * 🔒 Método helper para vincular el contexto del usuario autenticado a Sentry sin exponer PII sensible
