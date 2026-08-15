@@ -45,14 +45,21 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
     const confettiFired = useRef(false);
 
     useEffect(() => {
-        if (message.type === 'contract_signed' && userRole === 'trabajador' && !confettiFired.current) {
+        if (message.type === 'contract_signed' && userRole === 'trabajador' && !isClosed && !confettiFired.current) {
             confettiFired.current = true;
             
-            // 🛡️ Solo disparar si el mensaje es reciente (menos de 10 segundos)
-            // Esto evita que salga confeti al recargar la página o volver a abrir el chat.
-            const msgTime = new Date(timestamp || message.timestamp || Date.now()).getTime();
+            // 🛡️ IDEMPOTENCIA DE SESIÓN: Evitar re-disparar al reabrir el chat
+            const storageKey = `turnes_confetti_${message.id || txId || 'contract'}`;
+            if (sessionStorage.getItem(storageKey)) return;
+            sessionStorage.setItem(storageKey, 'true');
+
+            // 🛡️ PARSEO SEGURO DE FECHA: Evitar NaN en formatos de PostgreSQL
+            const rawTime = timestamp || message.timestamp;
+            const parsedDate = rawTime ? new Date(typeof rawTime === 'string' ? rawTime.replace(' ', 'T') : rawTime) : null;
+            const msgTime = parsedDate && !isNaN(parsedDate.getTime()) ? parsedDate.getTime() : null;
             const now = Date.now();
-            if (now - msgTime > 10000) return;
+            
+            if (!msgTime || (now - msgTime > 10000)) return;
 
             // Configuración del confeti "premium"
             const duration = 3000;
@@ -80,7 +87,7 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
             };
             frame();
         }
-    }, [message.type, userRole]);
+    }, [message.type, message.id, txId, userRole, isClosed, timestamp, message.timestamp]);
 
     return (
         <div className="w-full flex justify-center py-2 animate-in fade-in zoom-in duration-300">
