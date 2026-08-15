@@ -14,24 +14,19 @@ export const ToastProvider = ({ children }) => {
     setToast(null);
   }, []);
 
-  const showToast = useCallback((message, type = 'success') => {
-    // 1. Limpiamos cualquier toast y timer previo
+  const showToast = useCallback((payload, defaultType = 'success') => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setToast(null);
 
-    // 2. Log de auditoría para debug (puedes borrarlo luego)
-    logger.info(`[Toast] Desplegando: ${message} (${type})`);
+    const toastData = typeof payload === 'object' && payload !== null
+      ? { type: payload.type || defaultType, ...payload }
+      : { message: payload, type: defaultType };
 
-    /**
-     * 3. Aumentamos ligeramente el delay a 50ms. 
-     * Esto asegura que React termine de procesar los cambios en la tabla 
-     * antes de intentar renderizar el Toast en una nueva capa.
-     */
+    logger.info(`[Toast] Desplegando: ${toastData.title || toastData.message} (${toastData.type})`);
+
     timeoutRef.current = setTimeout(() => {
-      // ✅ Cross-env ID: crypto.randomUUID() solo funciona en HTTPS.
-      // Date.now() + random string funciona en HTTP local (móvil LAN) y producción.
       const id = `toast-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-      setToast({ id, message, type });
+      setToast({ id, ...toastData });
     }, 50);
   }, []);
 

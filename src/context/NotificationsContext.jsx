@@ -2,6 +2,7 @@ import React from 'react';
 
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from './AuthContext';
+import { useToast } from './ToastContext';
 import { notificationObserver } from '../services/notificationObserver';
 import { resolveNotificationText } from '../domain/notificationTranslations';
 
@@ -9,6 +10,7 @@ const NotificationsContext = createContext(null);
 
 export const NotificationsProvider = ({ children }) => {
     const { user } = useAuth();
+    const { showToast } = useToast();
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -79,10 +81,23 @@ export const NotificationsProvider = ({ children }) => {
         notificationObserver.connect(user.id);
 
         const unsubInsert = notificationObserver.subscribe('INSERT', (row) => {
+            const newNote = normalize(row);
+
+            // 🚀 SSOT TOAST: Disparar la ventana emergente con el texto rico traducido de la campanita
+            if (showToast && newNote) {
+                const isChatActive = window.location.pathname.includes(`/chat/${newNote.referenceId}`);
+                if (!isChatActive) {
+                    showToast({
+                        title: newNote.title,
+                        body: newNote.body,
+                        icon: newNote.icon,
+                        type: newNote.color === 'red' ? 'error' : newNote.color === 'yellow' ? 'warning' : 'success'
+                    });
+                }
+            }
+
             setNotifications(prev => {
-                const newNote = normalize(row);
                 const newList = [newNote, ...prev];
-                // 🚀 Aplicamos deduplicación global para limpiar y ordenamos de forma estricta (Newest First)
                 return deduplicate(newList).sort((a, b) => {
                     const dateA = new Date(a.createdAt).getTime() || 0;
                     const dateB = new Date(b.createdAt).getTime() || 0;

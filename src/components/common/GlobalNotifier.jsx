@@ -1,13 +1,10 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
-import { toast } from 'sonner';
 import { ChatStorage } from '../../services/chat';
 import { useNotificationsContext } from '../../context/NotificationsContext';
+import { useToast } from '../../context/ToastContext';
 
-const notifyUser = (title, body) => {
-    // 1. Toast In-App (Siempre visible dentro de la app sin importar la ruta)
-    toast.info(title, { description: body, duration: 6000 });
-
-    // 2. Alerta Nativa (Windows/Mac/Android) si está en OTRA pestaña
+const notifyNative = (title, body) => {
+    // Alerta Nativa (Windows/Mac/Android) si está en OTRA pestaña
     if (document.visibilityState === 'hidden' && 'Notification' in window && Notification.permission === 'granted') {
         new Notification(title, { body, icon: '/pwa-192x192.png' });
     }
@@ -16,6 +13,7 @@ const notifyUser = (title, body) => {
 const GlobalNotifier = () => {
     // SSOT 1: Estado global de alertas generales
     const { unreadCount, notifications } = useNotificationsContext();
+    const { showToast } = useToast();
     
     // SSOT 2: Estado global de chats (Realtime)
     const chatSnapshot = useSyncExternalStore(ChatStorage.subscribe, ChatStorage.getSnapshot);
@@ -26,7 +24,6 @@ const GlobalNotifier = () => {
     const prevUnreadNotes = useRef(unreadCount);
 
     useEffect(() => {
-        // Pedimos permiso nativo silenciosamente al inicializar (para alertas fuera de pestaña)
         if ('Notification' in window && Notification.permission === 'default') {
             Notification.requestPermission().catch(() => {});
         }
@@ -34,29 +31,39 @@ const GlobalNotifier = () => {
 
     // ── LISTENER DE MENSAJES DE CHAT ──
     useEffect(() => {
-        // Solo alertamos si el número TOTAL de no leídos AUMENTA.
-        // Esto ignora las lecturas (cuando baja a 0) y evita notificar cuando el usuario envía un mensaje (no sube el unreadCount).
         if (unreadChatsTotal > prevUnreadChats.current) {
-            notifyUser("Tienes un nuevo mensaje", "Revisa tu bandeja para responder.");
+            const isChatOpen = window.location.pathname.includes('/chat');
+            if (!isChatOpen) {
+                showToast({
+                    title: "Nuevo Mensaje",
+                    body: "Tienes mensajes no leídos en tu bandeja.",
+                    type: "info"
+                });
+            }
+            notifyNative("Tienes un nuevo mensaje", "Revisa tu bandeja para responder.");
         }
         prevUnreadChats.current = unreadChatsTotal;
-    }, [unreadChatsTotal]);
+    }, [unreadChatsTotal, showToast]);
 
-    // ── LISTENER DE MATCHES Y NOTIFICACIONES INTERNAS ──
+    // ── LISTENER DE MATCHES Y NOTIFICACIONES INTERNAS DE LA CAMPANITA ──
     useEffect(() => {
-        if (unreadCount > prevUnreadNotes.current) {
+        if (unreadCount > prevUnreadNotes.current && notifications.length > 0) {
             const latestNote = notifications[0];
-            const isMatch = latestNote?.tipo === 'MATCH_ESTABLISHED';
+            const title = latestNote?.title || "Notificación de Turnes";
+            const body = latestNote?.body || latestNote?.texto || "Revisa tus alertas en la campanita.";
             
-            const title = isMatch ? "¡Nueva conexión!" : "Tienes una nueva alerta";
-            const body = latestNote?.texto || "Revisa tu centro de notificaciones.";
-            
-            notifyUser(title, body);
+            showToast({
+                title: title,
+                body: body,
+                icon: latestNote?.icon,
+                type: latestNote?.color === 'red' ? 'error' : latestNote?.color === 'yellow' ? 'warning' : 'success'
+            });
+
+            notifyNative(title, body);
         }
         prevUnreadNotes.current = unreadCount;
-    }, [unreadCount, notifications]);
+    }, [unreadCount, notifications, showToast]);
 
-    // Componente puramente Lógico/Reactivo (SSOT listener), sin anidamiento visual
     return null;
 };
 

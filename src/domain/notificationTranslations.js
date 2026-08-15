@@ -37,7 +37,7 @@ export const NOTIFICATION_DICTIONARY = {
     },
     PAYMENT_SUCCESS: {
         empresa:   { title: 'Comisión Pagada',    body: 'Pago de ${{amount}} COP aprobado. Canal de {{candidateName}} desbloqueado. Procede a Validación Visual.',  icon: '💳', color: 'yellow',  link: `/dashboard/chat/{{entityId}}` },
-        candidato: { title: 'Canal Desbloqueado', body: '{{companyName}} pagó la comisión. Tu canal de contacto fue activado.',                                      icon: '🔓', color: 'emerald', link: `/dashboard/chat/{{entityId}}` },
+        candidato: { title: 'Canal de Contacto Activo', body: '{{companyName}} ha activado la comunicación directa contigo. Tu chat está disponible.',                 icon: '🔓', color: 'emerald', link: `/dashboard/chat/{{entityId}}` },
     },
     CALL_SCHEDULED: {
         empresa:   { title: 'Validación Iniciada',     body: 'Invitaste a {{candidateName}} a videollamada. Esperando que acepte.',                       icon: '🎥', color: 'blue', link: `/dashboard/chat/{{entityId}}` },
