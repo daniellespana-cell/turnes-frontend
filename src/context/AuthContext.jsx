@@ -6,6 +6,7 @@ import { authService } from '../services/authService';
 import { profileMapper } from '../utils/profileMapper';
 import { clearSessionCache, setSessionCache } from '../utils/sessionCache';
 import { logger } from '../utils/logger';
+import { setSentryUserContext } from '../config/sentry.config';
 
 const AuthContext = createContext(null);
 
@@ -35,6 +36,7 @@ export const AuthProvider = ({ children }) => {
           const fullUser = profileMapper.normalize(profile, session.user);
           fullUser.saldo = bootData.wallet?.saldo || 0;
           setUser(fullUser);
+          setSentryUserContext(fullUser);
           return fullUser;
         }
       } catch (err) {
@@ -88,6 +90,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         clearSessionCache();
         setUser(null);
+        setSentryUserContext(null);
       }
 
       if (!authReady) setAuthReady(true);
