@@ -52,17 +52,11 @@ const GlobalNotifier = () => {
             const title = latestNote?.title || "Notificación de Turnes";
             const body = latestNote?.body || latestNote?.texto || "Revisa tus alertas en la campanita.";
             
-            showToast({
-                title: title,
-                body: body,
-                icon: latestNote?.icon,
-                type: latestNote?.color === 'red' ? 'error' : latestNote?.color === 'yellow' ? 'warning' : 'success'
-            });
-
+            // 🛡️ NATIVO: Solo alerta a nivel de Sistema Operativo si el usuario tiene la pestaña minimizada
             notifyNative(title, body);
         }
         prevUnreadNotes.current = unreadCount;
-    }, [unreadCount, notifications, showToast]);
+    }, [unreadCount, notifications]);
 
     return null;
 };

@@ -13,6 +13,7 @@ export const NotificationsProvider = ({ children }) => {
     const { showToast } = useToast();
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
+    const firedToastsRef = useRef(new Set());
 
     /**
      * Normaliza una fila DB al formato UI.
@@ -83,16 +84,23 @@ export const NotificationsProvider = ({ children }) => {
         const unsubInsert = notificationObserver.subscribe('INSERT', (row) => {
             const newNote = normalize(row);
 
-            // 🚀 SSOT TOAST: Disparar la ventana emergente con el texto rico traducido de la campanita
+            // 🚀 SSOT TOAST: Disparar la ventana emergente con el texto rico traducido de la campanita (Deduplicación estricta)
             if (showToast && newNote) {
-                const isChatActive = window.location.pathname.includes(`/chat/${newNote.referenceId}`);
-                if (!isChatActive) {
-                    showToast({
-                        title: newNote.title,
-                        body: newNote.body,
-                        icon: newNote.icon,
-                        type: newNote.color === 'red' ? 'error' : newNote.color === 'yellow' ? 'warning' : 'success'
-                    });
+                const windowKey = Math.floor(new Date(newNote.createdAt).getTime() / 10000);
+                const dedupKey = `${newNote.id || newNote.tipo}-${newNote.referenceId}-${windowKey}`;
+
+                if (!firedToastsRef.current.has(dedupKey)) {
+                    firedToastsRef.current.add(dedupKey);
+
+                    const isChatActive = window.location.pathname.includes(`/chat/${newNote.referenceId}`);
+                    if (!isChatActive) {
+                        showToast({
+                            title: newNote.title,
+                            body: newNote.body,
+                            icon: newNote.icon,
+                            type: newNote.color === 'red' ? 'error' : newNote.color === 'yellow' ? 'warning' : 'success'
+                        });
+                    }
                 }
             }
 
