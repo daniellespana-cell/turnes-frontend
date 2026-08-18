@@ -13,9 +13,25 @@ dist
 dist-ssr
 out/
 
-# Env & Local
-*.local
+# Env & Secrets (Zero-Leak Security Shield)
 .env
+.env.*
+*.env
+*.local
+secrets.*
+secrets/
+*.secret
+*.pem
+*.key
+*.cert
+*.crt
+
+# Scratch, Temporary & Diagnostic scripts
+scratch/
+temp_download/
+*.test.manual.js
+*.scratch.js
+test-*.js
 
 # Editor directories and files
 .vscode/*
@@ -27,5 +43,3 @@ out/
 *.njsproj
 *.sln
 *.sw?
-
-secrets.env
