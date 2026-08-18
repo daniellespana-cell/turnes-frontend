@@ -41,39 +41,44 @@ describe('🛡️ Hook Lifecycle Integration Tests (SSOT & Reactivity)', () => {
     describe('useAppliedVacancies (TanStack Query Cache)', () => {
         it('debe inicializar el Set con los IDs obtenidos del servicio', async () => {
             const wrapper = createWrapper();
-            const { result } = renderHook(() => useAppliedVacancies(), { wrapper });
-
-            // Esperar a que React Query resuelva la consulta
-            await vi.waitFor(() => {
-                expect(result.current.appliedIds.has('vac-applied-1')).toBe(true);
+            let hookResult;
+            await act(async () => {
+                hookResult = renderHook(() => useAppliedVacancies(), { wrapper });
             });
-            expect(result.current.appliedIds.has('vac-not-applied')).toBe(false);
+
+            await vi.waitFor(() => {
+                expect(hookResult.result.current.appliedIds.has('vac-applied-1')).toBe(true);
+            });
+            expect(hookResult.result.current.appliedIds.has('vac-not-applied')).toBe(false);
         });
 
         it('debe ejecutar mutación optimista con markApplied y rollback con revertApplied', async () => {
             const wrapper = createWrapper();
-            const { result } = renderHook(() => useAppliedVacancies(), { wrapper });
+            let hookResult;
+            await act(async () => {
+                hookResult = renderHook(() => useAppliedVacancies(), { wrapper });
+            });
 
             await vi.waitFor(() => {
-                expect(result.current.appliedIds.has('vac-applied-1')).toBe(true);
+                expect(hookResult.result.current.appliedIds.has('vac-applied-1')).toBe(true);
             });
 
             // 1. Mutación optimista en 0ms
-            act(() => {
-                result.current.markApplied('vac-optimistic-999');
+            await act(async () => {
+                hookResult.result.current.markApplied('vac-optimistic-999');
             });
 
             await vi.waitFor(() => {
-                expect(result.current.appliedIds.has('vac-optimistic-999')).toBe(true);
+                expect(hookResult.result.current.appliedIds.has('vac-optimistic-999')).toBe(true);
             });
 
             // 2. Rollback en caso de error
-            act(() => {
-                result.current.revertApplied('vac-optimistic-999');
+            await act(async () => {
+                hookResult.result.current.revertApplied('vac-optimistic-999');
             });
 
             await vi.waitFor(() => {
-                expect(result.current.appliedIds.has('vac-optimistic-999')).toBe(false);
+                expect(hookResult.result.current.appliedIds.has('vac-optimistic-999')).toBe(false);
             });
         });
     });
