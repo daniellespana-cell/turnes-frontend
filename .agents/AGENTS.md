@@ -29,3 +29,15 @@
 ## 6. Privacidad y Seguridad (Privacy Shield)
 - **Zero-Trust de Coordenadas:** Las coordenadas geográficas exactas de Candidatos NO deben ser expuestas al frontend de las Empresas, y viceversa, para evitar perfilamiento y doxxeo.
 - **Fuzzing Determinístico:** Cualquier RPC de búsqueda geográfica que retorne `lat` y `lng` (ej. `buscar_talento_cercano`) debe aplicar un Jitter Determinístico (ej. `lat + (hashtext... % 100) * 0.02`). El desvío debe basarse en un hash estático (como la misma coordenada) para que el pin en el mapa se mueva ~2km, pero siempre aparezca en el mismo lugar, permitiendo aprovechar las cachés de red y de React.
+
+## 7. Control de Calidad Estático Obligatorio (`npm run check`)
+- **Prohibición Absoluta de Código Ciego:** Queda **ESTRICTAMENTE PROHIBIDO** hacer `git commit` o `git push` sin haber ejecutado y aprobado el comando:
+  ```bash
+  npm run check
+  ```
+- **El Candado de 3 Capas:**
+  1. `npm run typecheck` (`tsc --noEmit`): Valida el árbol de tipos y referencias estáticas para erradicar `ReferenceError` y variables no declaradas.
+  2. `npm run lint` (`eslint .`): Valida reglas de hooks de React y prohíbe `no-undef`.
+  3. `npm run test` (`vitest run`): Ejecuta la suite de pruebas unitarias y de integración de hooks.
+- Si cualquiera de estos 3 pasos falla, el Agente debe corregir la causa raíz antes de entregar su respuesta al usuario. Prohibido usar `// @ts-ignore` o mutar reglas de lint para ocultar errores reales. Consultar [`docs/STATIC_TYPE_ANALYSIS.md`](file:///c:/Users/R059/turnes_frontend/turnes-vite/docs/STATIC_TYPE_ANALYSIS.md) para más detalles.
+
