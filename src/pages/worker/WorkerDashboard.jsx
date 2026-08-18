@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPinOff } from 'lucide-react';
+import WhatsAppOnboardingBanner from '../../components/worker-dashboard/WhatsAppOnboardingBanner';
 import ProfileBanner from '../../components/Dashboard/ProfileBanner';
 import EliteBanner from '../../components/Dashboard/EliteBanner';
 import HeroStatsRing from '../../components/worker-dashboard/HeroStatsRing';
@@ -64,7 +65,8 @@ const WorkerDashboard = () => {
                 </div>
             </header>
 
-            {/* 2. SYSTEM ALERTS */}
+            {/* 2. SYSTEM ALERTS & ONBOARDING */}
+            <WhatsAppOnboardingBanner />
             <ProfileBanner />
             <EliteBanner userName={user?.name} />
             <LocationHint locationMode={locationMode} cityName={cityName} />
