@@ -67,7 +67,6 @@ export const usePushNotifications = () => {
 
             // 2. Registrar al dispositivo en el servidor Push (Google/Apple)
             const registration = await navigator.serviceWorker.ready;
-            // eslint-disable-next-line react-doctor/effect-needs-cleanup
             const pushSub = await registration.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),

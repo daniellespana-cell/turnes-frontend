@@ -104,7 +104,6 @@ const useWorkerApplicationsRealtime = (user, isAuthenticated, activeTab, setAppl
         activeTabRef.current = activeTab;
     }, [activeTab]);
 
-    // eslint-disable-next-line react-doctor/effect-needs-cleanup
     useEffect(() => {
         let mounted = true;
         if (!isAuthenticated || !user?.id) return;
