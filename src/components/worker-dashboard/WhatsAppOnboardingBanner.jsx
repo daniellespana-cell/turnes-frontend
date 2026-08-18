@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Smartphone, ShieldCheck, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { validateColombianPhone, formatPhoneInput } from '../../utils/validationUtils';
 
 /**
  * WhatsAppOnboardingBanner — Componente Atómico & SSOT
  *
  * Responsabilidad Única:
  * - Solicitar y persistir el número de WhatsApp del postulante para la bolsa de turnos.
+ * - Validación estricta bajo estándar móvil colombiano (10 dígitos iniciando por 3).
  * - Desaparecer permanentemente (return null) tan pronto `user.telefono` exista.
  * - Cero acoplamiento con listas de vacantes ni comunicación directa con la BD.
  */
@@ -21,19 +23,24 @@ const WhatsAppOnboardingBanner = () => {
     // 🔒 SSOT: Si el usuario ya tiene teléfono registrado, el componente se autodestruye del DOM
     if (user?.telefono) return null;
 
+    const handlePhoneChange = (e) => {
+        const formatted = formatPhoneInput(e.target.value);
+        setPhone(formatted);
+    };
+
     const handleSave = async (e) => {
         e.preventDefault();
-        const cleanPhone = phone.trim().replace(/\s+/g, '');
-
-        if (!cleanPhone || cleanPhone.length < 8) {
-            showToast('Ingresa un número de WhatsApp válido (mínimo 8 dígitos).', 'error');
+        
+        const validation = validateColombianPhone(phone);
+        if (!validation.isValid) {
+            showToast(validation.error, 'error');
             return;
         }
 
         setSaving(true);
         try {
-            // Delega la persistencia al contexto central de autenticación (SSOT)
-            await actualizarPerfil({ phone: cleanPhone });
+            // Guarda los dígitos limpios y normalizados (SSOT)
+            await actualizarPerfil({ phone: validation.digits });
             showToast('¡WhatsApp guardado! Te avisaremos de nuevos turnos directamente.', 'success');
         } catch (error) {
             console.error('[WhatsAppBanner] Error guardando teléfono:', error);
@@ -78,7 +85,8 @@ const WhatsAppOnboardingBanner = () => {
                             name="whatsapp"
                             placeholder="Ej: 310 123 4567"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={handlePhoneChange}
+                            maxLength={12}
                             disabled={saving}
                             className="w-full h-12 bg-black/60 border border-zinc-800 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 rounded-2xl pl-10 pr-4 text-white text-sm placeholder:text-zinc-600 transition-all outline-none"
                             aria-label="Número de WhatsApp"

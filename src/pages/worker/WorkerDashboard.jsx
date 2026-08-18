@@ -1,8 +1,6 @@
 import React from 'react';
 import { MapPinOff } from 'lucide-react';
-import WhatsAppOnboardingBanner from '../../components/worker-dashboard/WhatsAppOnboardingBanner';
-import ProfileBanner from '../../components/Dashboard/ProfileBanner';
-import EliteBanner from '../../components/Dashboard/EliteBanner';
+import WorkerActionBanners from '../../components/worker-dashboard/WorkerActionBanners';
 import HeroStatsRing from '../../components/worker-dashboard/HeroStatsRing';
 import SkillMatchRadar from '../../components/worker-dashboard/SkillMatchRadar';
 import QuickStatsStrip from '../../components/worker-dashboard/QuickStatsStrip';
@@ -65,10 +63,8 @@ const WorkerDashboard = () => {
                 </div>
             </header>
 
-            {/* 2. SYSTEM ALERTS & ONBOARDING */}
-            <WhatsAppOnboardingBanner />
-            <ProfileBanner />
-            <EliteBanner userName={user?.name} />
+            {/* 2. SYSTEM ALERTS & ACTION BANNERS (Orchestrated — Max 1 Banner) */}
+            <WorkerActionBanners />
             <LocationHint locationMode={locationMode} cityName={cityName} />
             {gpsDenied && locationMode !== 'profile' && <GpsWarning />}
 
