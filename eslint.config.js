@@ -29,6 +29,11 @@ export default defineConfig([
         sourceType: 'module',
       },
     },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     rules: {
       ...js.configs.recommended.rules,
       ...react.configs.recommended.rules,

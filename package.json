@@ -41,6 +41,8 @@
     "sitemap": "node scripts/generate-sitemap.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "check": "tsc --noEmit && eslint . && vitest run",
     "test": "vitest run"
   },
   "devDependencies": {
@@ -61,6 +63,7 @@
     "jsdom": "^29.1.1",
     "sharp": "^0.35.3",
     "tailwindcss": "^4.1.17",
+    "typescript": "^7.0.2",
     "vite": "^6.0.0",
     "vite-plugin-pwa": "^1.3.0",
     "vitest": "^4.1.10"

@@ -24,7 +24,10 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci
 
-      - name: 🔍 Static Analysis (ESLint)
+      - name: 🛡️ Static Type Analysis (tsc)
+        run: npm run typecheck
+
+      - name: 🔍 Code Quality & Linter (ESLint)
         run: npm run lint
 
       - name: 🧪 Unit Tests (Vitest)
