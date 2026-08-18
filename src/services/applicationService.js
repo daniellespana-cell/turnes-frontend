@@ -7,14 +7,20 @@ import { supabase } from './supabaseClient';
 export const applicationService = {
     /**
      * Obtiene los IDs de las vacantes a las que el usuario ya se postuló.
-     * Útil para evitar duplicados en la UI.
+     * Ventana de 60 días para optimización de memoria y red (Anti-Leak).
+     *
+     * @param {string} userId
+     * @param {number} daysWindow - Ventana en días (default: 60)
      */
-    async getAppliedVacancyIds(userId) {
+    async getAppliedVacancyIds(userId, daysWindow = 60) {
         try {
+            const cutoffDate = new Date(Date.now() - daysWindow * 24 * 60 * 60 * 1000).toISOString();
+
             const { data, error } = await supabase
                 .from('postulaciones')
                 .select('vacante_id')
-                .eq('user_id', userId);
+                .eq('user_id', userId)
+                .gte('created_at', cutoffDate);
 
             if (error) throw error;
             return { data: data.map(p => p.vacante_id), error: null };

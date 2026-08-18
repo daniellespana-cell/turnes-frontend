@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useVacancyFetch } from './useVacancyFetch';
 import { useVacancyScoring } from './useVacancyScoring';
 import { VacancyService } from '../services/vacancyService';
-import { applicationService } from '../services/applicationService';
+import { useAppliedVacancies } from './useAppliedVacancies';
 import { useLocationResolver } from './useLocationResolver';
 
 /**
@@ -34,32 +34,8 @@ export const useExploreVacancies = () => {
         }
     }, [location.radiusKm]);
     
-    const [appliedIds, setAppliedIds] = useState(new Set());
-
-    // ── SSOT: Sincronizar IDs de vacantes a las que el usuario ya aplicó ─────
-    const fetchAppliedIds = useCallback(async () => {
-        if (!isAuthenticated || !user?.id) {
-            setAppliedIds(new Set());
-            return;
-        }
-        const { data, error } = await applicationService.getAppliedVacancyIds(user.id);
-        if (!error && data) {
-            setAppliedIds(new Set(data));
-        }
-    }, [isAuthenticated, user?.id]);
-
-    useEffect(() => {
-        fetchAppliedIds();
-        if (!isAuthenticated || !user?.id) return;
-
-        const channel = applicationService.subscribeToUserApplications(user.id, () => {
-            fetchAppliedIds();
-        });
-
-        return () => {
-            applicationService.unsubscribeChannel(channel);
-        };
-    }, [fetchAppliedIds, isAuthenticated, user?.id]);
+    // 🛡️ SSOT: Caché global compartido de postulaciones (TanStack Query)
+    const { appliedIds, markApplied, revertApplied } = useAppliedVacancies();
 
     // ── Best-known location (GPS → Profile → IP → Nacional) ──────────────────
     const userLocation = useMemo(() => ({
@@ -133,12 +109,8 @@ export const useExploreVacancies = () => {
             return { success: false, message: 'Inicia sesión para postularte.' };
         }
 
-        // 🚀 OPTIMISTIC UI UPDATE
-        setAppliedIds(prev => {
-            const next = new Set(prev);
-            next.add(vacancyId);
-            return next;
-        });
+        // 🚀 GLOBAL OPTIMISTIC UI UPDATE (0ms)
+        markApplied(vacancyId);
 
         try {
             const { error: applyError } = await VacancyService.apply(vacancyId, user.id);
@@ -146,17 +118,13 @@ export const useExploreVacancies = () => {
             
             return { success: true, message: '¡Postulación enviada!' };
         } catch (err) {
-            // 🛑 ROLLBACK ON ERROR
-            setAppliedIds(prev => {
-                const revert = new Set(prev);
-                revert.delete(vacancyId);
-                return revert;
-            });
+            // 🛑 GLOBAL ROLLBACK ON ERROR
+            revertApplied(vacancyId);
 
             if (err.code === '23505') return { success: false, message: 'Ya te has postulado a esta vacante.' };
             return { success: false, message: 'Error al enviar postulación. Intenta de nuevo.' };
         }
-    }, [isAuthenticated, user?.id]);
+    }, [isAuthenticated, user?.id, markApplied, revertApplied]);
 
     return {
         // Data

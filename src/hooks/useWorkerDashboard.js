@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLocationResolver } from './useLocationResolver';
+import { useAppliedVacancies } from './useAppliedVacancies';
 import { GeoService } from '../services/geoService';
 import { MatchService } from '../services/matchService';
-import { applicationService } from '../services/applicationService';
 import { VacancyService } from '../services/vacancyService';
 import { normalizeVacancy } from '../domain/vacancy.mapper';
 
@@ -11,35 +11,13 @@ export const useWorkerDashboard = () => {
     const { user, isAuthenticated } = useAuth();
     const [recommendationsLoading, setRecommendationsLoading] = useState(true);
     const [recommended, setRecommended] = useState([]);
-    const [appliedIds, setAppliedIds] = useState(new Set());
     const [isApplying, setIsApplying] = useState(null);
 
     // 🛰️ Cascading Location Resolver (GPS -> Profile -> IP -> National)
     const location = useLocationResolver();
 
-    // ── Real-time Sync for Applied Status (SSOT via Service) ─────────────────
-    const fetchAppliedIds = useCallback(async () => {
-        if (!isAuthenticated || !user?.id) {
-            setAppliedIds(new Set());
-            return;
-        }
-        const { data, error } = await applicationService.getAppliedVacancyIds(user.id);
-        if (!error) setAppliedIds(new Set(data));
-    }, [isAuthenticated, user?.id]);
-
-    useEffect(() => {
-        fetchAppliedIds();
-        if (!isAuthenticated || !user?.id) return;
-
-        // 🛡️ Suscripción Delegada al Servicio
-        const channel = applicationService.subscribeToUserApplications(user.id, () => {
-            fetchAppliedIds();
-        });
-
-        return () => { 
-            import('../services/supabaseClient').then(m => m.supabase.removeChannel(channel));
-        };
-    }, [fetchAppliedIds, isAuthenticated, user?.id]);
+    // 🛡️ SSOT: Caché global reactivo de postulaciones (TanStack Query + Realtime)
+    const { appliedIds, markApplied, revertApplied } = useAppliedVacancies();
 
     const lastFetchedCoord = useRef({ lat: null, lng: null });
 
@@ -111,27 +89,19 @@ export const useWorkerDashboard = () => {
         if (!isAuthenticated || !user?.id) return { success: false, message: 'Inicia sesión.' };
 
         setIsApplying(vacancyId);
-        setAppliedIds(prev => {
-            const next = new Set(prev);
-            next.add(vacancyId);
-            return next;
-        });
+        markApplied(vacancyId);
 
         try {
             const { error: applyError } = await VacancyService.apply(vacancyId, user.id);
             if (applyError) throw applyError;
             return { success: true, message: '¡Postulación enviada!' };
         } catch (err) {
-            setAppliedIds(prev => {
-                const revert = new Set(prev);
-                revert.delete(vacancyId);
-                return revert;
-            });
+            revertApplied(vacancyId);
             return { success: false, message: 'Error al postularse.' };
         } finally {
             setIsApplying(null);
         }
-    }, [isAuthenticated, user?.id]);
+    }, [isAuthenticated, user?.id, markApplied, revertApplied]);
 
     const dashboardData = useMemo(() => {
         if (!user) return null;
