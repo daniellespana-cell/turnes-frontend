@@ -77,7 +77,6 @@ export const AuthProvider = ({ children }) => {
   }, [loadUserProfile]);
 
   // 🔥 REAL-TIME SYNC: Profiles & Wallet
-  // eslint-disable-next-line react-doctor/effect-needs-cleanup
   useEffect(() => {
     let mounted = true;
 

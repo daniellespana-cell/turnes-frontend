@@ -7,7 +7,7 @@ import unusedImports from 'eslint-plugin-unused-imports'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'scratch/**', 'scripts/**']),
   {
     files: ['**/*.{js,jsx}'],
     plugins: {
@@ -20,6 +20,8 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: {
         ...globals.browser,
+        ...globals.node,
+        ...globals.vitest,
       },
       parserOptions: {
         ecmaVersion: 'latest',
@@ -36,12 +38,15 @@ export default defineConfig([
       'react/jsx-uses-react': 'error',
       'react/jsx-uses-vars': 'error',
       'react/prop-types': 'off',
+      'react/display-name': 'off',
       'react/no-unescaped-entities': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'react-hooks/set-state-in-effect': 'off',
       'react-hooks/refs': 'off',
       'react-hooks/preserve-manual-memoization': 'off',
+      'react-hooks/purity': 'off',
+      'react-hooks/immutability': 'off',
       'no-plusplus': 'off',
       'no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'warn',

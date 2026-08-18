@@ -8,7 +8,7 @@ import { typography } from '../../styles/typography';
 import { logger } from '../../utils/logger';
 import { AssetResolver } from '../../utils/assetHelper';
 
-const CandidatoRow = ({ can, onDismiss }) => {
+const CandidatoRow = ({ can, onDismiss, onUpdate, onSellar }) => {
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(can.isFavorite || false);
 
@@ -103,8 +103,8 @@ const CandidatoRow = ({ can, onDismiss }) => {
                   disabled={can.cicloCerrado || can.justSent}
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (typeof updateCandidato === 'function') {
-                      updateCandidato(can.id, { rating: star });
+                    if (typeof onUpdate === 'function') {
+                      onUpdate(can.id, { rating: star });
                     }
                   }}
                   className={`transition-all ${!(can.cicloCerrado || can.justSent) ? 'hover:scale-125 cursor-pointer' : 'cursor-default'}`}
@@ -147,13 +147,13 @@ const CandidatoRow = ({ can, onDismiss }) => {
             <textarea
               placeholder="Escribe un comentario público sobre el desempeño de este candidato..."
               value={can.comentarioPublico || ''}
-              onChange={(e) => updateCandidato(can.id, { comentarioPublico: e.target.value })}
+              onChange={(e) => onUpdate && onUpdate(can.id, { comentarioPublico: e.target.value })}
               className="w-full bg-zinc-950 border border-white/5 rounded-2xl p-4 text-sm text-zinc-300 placeholder:text-zinc-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all min-h-[100px] resize-none"
             />
           </div>
           
           <button
-            onClick={() => onSeal(can.id, can.vacanteId)}
+            onClick={() => onSellar && onSellar(can.id, can.vacanteId)}
             className="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-zinc-200 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-[0_10px_20px_rgba(255,255,255,0.05)]"
             type="button"
             aria-label="Acción">

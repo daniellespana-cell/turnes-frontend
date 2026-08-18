@@ -85,6 +85,8 @@ const CandidatosContent = ({ activeTab, pendientes, historial, onUpdate, onSella
                 key={can.id}
                 can={can}
                 onDismiss={onDismiss}
+                onUpdate={onUpdate}
+                onSellar={onSellar}
               />
             )
           ))}
