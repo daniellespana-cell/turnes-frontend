@@ -62,7 +62,7 @@ export const usePushNotifications = () => {
             const perm = await Notification.requestPermission();
             setPermission(perm);
             if (perm !== 'granted') {
-                toast.error('Permiso de notificaciones denegado por el sistema operativo.');
+                showToast('Permiso de notificaciones denegado por el sistema operativo.', 'error');
                 return;
             }
 
