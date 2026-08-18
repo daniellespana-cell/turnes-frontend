@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { ROLE_MAP_DB } from '../context/authConstants';
-import { toast } from 'sonner';
 
 /**
  * Patrón "Clean Architecture": 
@@ -12,6 +12,7 @@ import { toast } from 'sonner';
  */
 export const useOnboarding = () => {
     const { user, refreshSession } = useAuth();
+    const { showToast } = useToast();
     const navigate = useNavigate();
     const [isRoleLoading, setIsRoleLoading] = useState(false);
 
@@ -47,10 +48,10 @@ export const useOnboarding = () => {
         } catch (err) {
             console.error("Error confirmando rol de Google:", err);
             setIsRoleLoading(false);
-            toast.error(err.message?.includes('ya tiene un rol') ? 'Tu cuenta ya definió un rol.' : 'Error servidor. Intenta de nuevo.');
+            showToast(err.message?.includes('ya tiene un rol') ? 'Tu cuenta ya definió un rol.' : 'Error servidor. Intenta de nuevo.', 'error');
             return false;
         }
-    }, [user, navigate, refreshSession]);
+    }, [user, navigate, refreshSession, showToast]);
 
     return {
         isOnboardingTrapped: user?.needs_onboarding,

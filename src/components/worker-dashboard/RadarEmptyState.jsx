@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Radar, Bell, Smartphone, Target, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { usePushNotifications } from '../../hooks/usePushNotifications';
-import { authService } from '../../services/authService';
+import { useToast } from '../../context/ToastContext';
 import { useWorkerStats } from '../../hooks/useWorkerStats';
-import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -12,13 +11,20 @@ import { useNavigate } from 'react-router-dom';
  * Reemplaza los estados vacíos tradicionales con Gamificación y Micro-Onboarding.
  */
 const RadarEmptyState = () => {
-    const { user, refreshUser } = useAuth();
+    const { user, actualizarPerfil } = useAuth();
+    const { showToast } = useToast();
     const { isSupported, permission, isSubscribed, subscribe, loading: pushLoading } = usePushNotifications();
     const { stats, loading: statsLoading } = useWorkerStats();
     const navigate = useNavigate();
 
     const [phone, setPhone] = useState(user?.telefono || '');
     const [savingPhone, setSavingPhone] = useState(false);
+
+    useEffect(() => {
+        if (user?.telefono) {
+            setPhone(user.telefono);
+        }
+    }, [user?.telefono]);
 
     // Derived State
     const hasPhone = Boolean(user?.telefono);
@@ -35,19 +41,19 @@ const RadarEmptyState = () => {
 
     const handleSavePhone = async (e) => {
         e.preventDefault();
-        if (!phone || phone.length < 8) {
-            toast.error("Ingresa un número de teléfono válido.");
+        const cleanPhone = phone?.trim();
+        if (!cleanPhone || cleanPhone.length < 8) {
+            showToast("Ingresa un número de teléfono válido (mínimo 8 dígitos).", "error");
             return;
         }
 
         setSavingPhone(true);
         try {
-            await authService.updateProfile(user.id, { telefono: phone });
-            await refreshUser();
-            toast.success("¡Teléfono guardado! Te avisaremos por WhatsApp.");
+            await actualizarPerfil({ phone: cleanPhone });
+            showToast("¡Teléfono guardado! Te avisaremos por WhatsApp.", "success");
         } catch (error) {
             console.error("Error saving phone:", error);
-            toast.error("Error al guardar el teléfono.");
+            showToast("Error al guardar el teléfono. Intenta nuevamente.", "error");
         } finally {
             setSavingPhone(false);
         }

@@ -4,7 +4,7 @@ import Spinner from '../../components/ui/Spinner';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { toast } from 'sonner';
+import { useToast } from '../../context/ToastContext';
 import { authService } from '../../services/authService';
 import { supabase } from '../../services/supabaseClient';
 
@@ -12,6 +12,7 @@ const AuthCallback = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const { user, refreshSession } = useAuth();
+    const { showToast } = useToast();
 
     // UI State for smooth transitions
     const [statusMessage, setStatusMessage] = useState("Autenticando de forma segura...");
@@ -28,7 +29,7 @@ const AuthCallback = () => {
                 .then(({ error }) => {
                     if (!isMounted) return;
                     if (error) {
-                        toast.error("El enlace de confirmación expiró o ya fue usado. Solicita uno nuevo.", { id: 'pkce-error', duration: 8000 });
+                        showToast("El enlace de confirmación expiró o ya fue usado. Solicita uno nuevo.", 'error');
                         navigate('/login', { replace: true });
                     }
                     // Si tuvo éxito, onAuthStateChange en AuthContext dispara automáticamente
@@ -60,7 +61,7 @@ const AuthCallback = () => {
                 mensajeAmigable = "El enlace de seguridad ha expirado, ya fue utilizado o tu gestor de correos lo invalidó por seguridad. Intenta iniciar sesión de nuevo.";
             }
 
-            toast.error(mensajeAmigable, { id: 'auth-hash-error', duration: 8000 });
+            showToast(mensajeAmigable, 'error');
             setStatusMessage("Redirigiendo...");
             navigate('/login', { replace: true });
             return;
@@ -91,7 +92,7 @@ const AuthCallback = () => {
                 } catch (error) {
                     console.error('[AuthCallback] Sincronización fallida:', error);
                     if (isMounted) {
-                        toast.error("Hubo un problema verificando tu rol. Por favor confírmalo manualmente.", { id: 'auth-callback-error' });
+                        showToast("Hubo un problema verificando tu rol. Por favor confírmalo manualmente.", 'error');
                         navigate('/register', { replace: true });
                     }
                 }
@@ -104,7 +105,7 @@ const AuthCallback = () => {
             // Si entró directo sin rol y es 'pendiente', va al registro.
             if (user.needs_onboarding) {
                 if (isMounted) {
-                    toast.info("¡Bienvenido a Turnes! Selecciona tu rol para continuar.", { id: 'auth-callback-welcome', duration: 5000 });
+                    showToast("¡Bienvenido a Turnes! Selecciona tu rol para continuar.", 'info');
                     navigate('/register', { replace: true });
                 }
                 return;

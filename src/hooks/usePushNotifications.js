@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../services/supabaseClient';
 import { useAuth } from '../context/AuthContext';
-import { toast } from 'sonner';
+import { useToast } from '../context/ToastContext';
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
@@ -29,6 +29,7 @@ const urlBase64ToUint8Array = (base64String) => {
  */
 export const usePushNotifications = () => {
     const { user } = useAuth();
+    const { showToast } = useToast();
     const [isSupported, setIsSupported] = useState(false);
     const [permission, setPermission] = useState('default');
     const [isSubscribed, setIsSubscribed] = useState(false);
@@ -99,11 +100,11 @@ export const usePushNotifications = () => {
             if (!res.ok) throw new Error(result.error || 'Error al guardar suscripción');
 
             setIsSubscribed(true);
-            toast.success('¡Notificaciones activadas! Ya recibirás alertas de nuevas ofertas.');
+            showToast('¡Notificaciones activadas! Ya recibirás alertas de nuevas ofertas.', 'success');
 
         } catch (error) {
             console.error('[Push] Error al suscribir:', error);
-            toast.error(`Error: ${error.message}`);
+            showToast(`Error: ${error.message}`, 'error');
         } finally {
             setLoading(false);
         }
@@ -128,11 +129,11 @@ export const usePushNotifications = () => {
                 }
 
                 setIsSubscribed(false);
-                toast.info('Notificaciones desactivadas.');
+                showToast('Notificaciones desactivadas.', 'info');
             }
         } catch (error) {
             console.error('[Push] Error al desuscribir:', error);
-            toast.error('Error al desactivar notificaciones.');
+            showToast('Error al desactivar notificaciones.', 'error');
         } finally {
             setLoading(false);
         }

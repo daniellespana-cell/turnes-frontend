@@ -101,17 +101,24 @@ export const profileMapper = {
 
         const mapping = {
             name:            'nombre_display',
+            nombre_display:  'nombre_display',
             phone:           'telefono',
-            company:         'nombre_empresa',   // columna en perfiles
+            telefono:        'telefono',
+            company:         'nombre_empresa',
+            nombre_empresa:  'nombre_empresa',
             address:         'direccion',
-            location:        'direccion',         // alias — no genera duplicado porque JS sobrescribe la key
+            direccion:       'direccion',
+            location:        'direccion',
             avatar:          'avatar_url',
-            nit:             'nit',               // perfiles.nit (no confundir con empresas.nit_rut)
+            avatar_url:      'avatar_url',
+            nit:             'nit',
             bio:             'bio',
             skills:          'skills',
             sector:          'sector',
             availability:    'disponibilidad',
+            disponibilidad:  'disponibilidad',
             experienceYears: 'experiencia_anios',
+            experiencia_anios: 'experiencia_anios',
             plan:            'plan',
             configuraciones: 'configuraciones'
         };
