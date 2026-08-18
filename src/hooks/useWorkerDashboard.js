@@ -67,7 +67,8 @@ export const useWorkerDashboard = () => {
                     };
 
                     // 3. Score and Sort by Relevance
-        const unappliedScored = scored.filter(v => !appliedIds.has(v.id));
+                    const scored = MatchService.scoreVacancies(normalized, userProfile);
+                    const unappliedScored = (scored || []).filter(v => !appliedIds.has(v.id));
                     setRecommended(unappliedScored.slice(0, 6));
                 }
             } catch (err) {

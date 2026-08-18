@@ -98,4 +98,28 @@ describe('profile.mapper.js', () => {
             expect(result.company).toBe('Empresa B');
         });
     });
+
+    describe('MatchService & Exclusion of Applied Vacancies', () => {
+        it('debe puntuar y ordenar vacantes sin lanzar ReferenceError', async () => {
+            const { MatchService } = await import('../services/matchService');
+            const mockVacancies = [
+                { id: 'v1', title: 'Barista', skills: ['barista'], lat: 4.6097, lng: -74.0817 },
+                { id: 'v2', title: 'Chef', skills: ['cocina'], lat: 4.6097, lng: -74.0817 },
+            ];
+            const userProfile = {
+                skills: ['barista'],
+                lat: 4.6097,
+                lng: -74.0817
+            };
+            const scored = MatchService.scoreVacancies(mockVacancies, userProfile);
+            expect(scored.length).toBe(2);
+            expect(scored[0].id).toBe('v1'); // Mayor coincidencia con barista
+
+            // Probar exclusión reactiva de postuladas
+            const appliedIds = new Set(['v1']);
+            const unappliedScored = scored.filter(v => !appliedIds.has(v.id));
+            expect(unappliedScored.length).toBe(1);
+            expect(unappliedScored[0].id).toBe('v2');
+        });
+    });
 });
