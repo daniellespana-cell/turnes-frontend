@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useVacancyFetch } from './useVacancyFetch';
 import { useVacancyScoring } from './useVacancyScoring';
 import { VacancyService } from '../services/vacancyService';
+import { applicationService } from '../services/applicationService';
 import { useLocationResolver } from './useLocationResolver';
 
 /**
@@ -32,7 +33,33 @@ export const useExploreVacancies = () => {
             setRadius(location.radiusKm);
         }
     }, [location.radiusKm]);
-    const [appliedIds,     setAppliedIds]         = useState(new Set());
+    
+    const [appliedIds, setAppliedIds] = useState(new Set());
+
+    // ── SSOT: Sincronizar IDs de vacantes a las que el usuario ya aplicó ─────
+    const fetchAppliedIds = useCallback(async () => {
+        if (!isAuthenticated || !user?.id) {
+            setAppliedIds(new Set());
+            return;
+        }
+        const { data, error } = await applicationService.getAppliedVacancyIds(user.id);
+        if (!error && data) {
+            setAppliedIds(new Set(data));
+        }
+    }, [isAuthenticated, user?.id]);
+
+    useEffect(() => {
+        fetchAppliedIds();
+        if (!isAuthenticated || !user?.id) return;
+
+        const channel = applicationService.subscribeToUserApplications(user.id, () => {
+            fetchAppliedIds();
+        });
+
+        return () => {
+            applicationService.unsubscribeChannel(channel);
+        };
+    }, [fetchAppliedIds, isAuthenticated, user?.id]);
 
     // ── Best-known location (GPS → Profile → IP → Nacional) ──────────────────
     const userLocation = useMemo(() => ({

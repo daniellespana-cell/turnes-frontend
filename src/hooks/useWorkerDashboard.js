@@ -89,8 +89,8 @@ export const useWorkerDashboard = () => {
                     };
 
                     // 3. Score and Sort by Relevance
-                    const scored = MatchService.scoreVacancies(normalized, userProfile);
-                    setRecommended(scored.slice(0, 3));
+        const unappliedScored = scored.filter(v => !appliedIds.has(v.id));
+                    setRecommended(unappliedScored.slice(0, 6));
                 }
             } catch (err) {
                 console.error('[useWorkerDashboard] Error loading recommendations:', err);
@@ -104,7 +104,7 @@ export const useWorkerDashboard = () => {
             clearTimeout(timer);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location.loading, location.lat, location.lng, location.radiusKm, user?.id]);
+    }, [location.loading, location.lat, location.lng, location.radiusKm, user?.id, appliedIds]);
 
     // ── Apply to vacancy ──────────────────────────────────────────────────────
     const applyToVacancy = useCallback(async (vacancyId) => {
@@ -148,9 +148,14 @@ export const useWorkerDashboard = () => {
         const profileProgress = Math.round((filledFields / profileFields.length) * 100);
         const showOnboarding = profileProgress < 80;
 
+        // 🛡️ Filtro reactivo: Excluye instantáneamente vacantes a las que el postulante ya aplicó
+        const visibleRecommendations = (recommended || [])
+            .filter(v => !appliedIds.has(v.id))
+            .slice(0, 3);
+
         const priorityAction = {
             type: 'RECOMMENDATIONS',
-            data: recommended,
+            data: visibleRecommendations,
             title: 'Vacantes para ti hoy',
             subtitle: location.locationMode === 'gps' 
                 ? 'Basado en tu ubicación exacta' 
@@ -166,7 +171,7 @@ export const useWorkerDashboard = () => {
             showOnboarding,
             priorityAction,
         };
-    }, [user, recommended, location.locationMode]);
+    }, [user, recommended, appliedIds, location.locationMode]);
 
     return {
         ...dashboardData,
