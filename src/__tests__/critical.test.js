@@ -122,4 +122,20 @@ describe('profile.mapper.js', () => {
             expect(unappliedScored[0].id).toBe('v2');
         });
     });
+
+    describe('FinanceService Resilience & Mobile Reconciliation', () => {
+        it('formatCurrency formatea montos en pesos colombianos y maneja fallbacks', async () => {
+            const { formatCurrency } = await import('../services/financeService');
+            expect(formatCurrency(50000)).toContain('50.000');
+            expect(formatCurrency('invalido')).toBe('$0');
+            expect(formatCurrency(null)).toBe('$0');
+        });
+
+        it('verifyTransactionStatus valida entradas nulas sin romper ejecución', async () => {
+            const { FinanceService } = await import('../services/financeService');
+            const res = await FinanceService.verifyTransactionStatus(null);
+            expect(res.found).toBe(false);
+            expect(res.status).toBe('UNKNOWN');
+        });
+    });
 });

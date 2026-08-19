@@ -76,16 +76,31 @@ class PaymentService {
 
         logger.dev('💳 [PaymentService] Config cargada (llave oculta)');
 
+        // 🛡️ Bóveda de Transacciones en Vuelo (Anti-Crash de Safari / Recargas Móviles)
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            try {
+                window.sessionStorage.setItem('turnes_pending_payment', JSON.stringify({
+                    reference,
+                    amountInCents,
+                    itemType,
+                    itemId,
+                    timestamp: Date.now()
+                }));
+            } catch {
+                // Ignore storage quota errors
+            }
+        }
+
         const checkout = new window.WidgetCheckout(checkoutConfig);
 
         checkout.open(function (result) {
             const transaction = result.transaction;
             logger.dev('🏁 Transacción Wompi finalizada:', transaction.status);
 
-            // MANEJO MANUAL DE REDIRECCIÓN (Para Localhost)
+            // MANEJO MANUAL DE REDIRECCIÓN (Para Localhost y Widget Directo)
             if (transaction.status === 'APPROVED') {
-                // Redirigir manualmente a la página de éxito incluyendo context de item
-                let successUrl = `/dashboard/finanzas/success?id=${transaction.id}&env=test`;
+                // Redirigir manualmente a la página de éxito incluyendo context de item y reference
+                let successUrl = `/dashboard/finanzas/success?id=${transaction.id}&reference=${reference}&env=test`;
                 if (itemType && itemId) {
                     successUrl += `&itemType=${itemType}&itemId=${itemId}`;
                 }

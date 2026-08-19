@@ -103,27 +103,71 @@ export const FinanceService = {
     },
 
     /**
-     * Realiza un polling a la base de datos (Read-Only) verificando si el Webhook de Wompi
-     * ya insertó el movimiento en la billetera. (Single Source of Truth)
+     * Verifica el estado de una transacción usando el RPC seguro de espectro completo (por ID o por Referencia).
+     * @param {string} idOrReference ID de Wompi o Referencia única de Turnes
      */
-    async waitForTransaction(transactionId, maxWaitMs = 60000) {
-        const checkInterval = 3000;
-        let elapsed = 0;
+    async verifyTransactionStatus(idOrReference) {
+        if (!idOrReference) return { found: false, status: 'UNKNOWN' };
 
-        while (elapsed < maxWaitMs) {
-            // 🛰️ RADAR READ-ONLY: Buscar si el webhook ya registró el movimiento
-            const { data, error } = await supabase
+        try {
+            // 1. Intentar primero con el RPC oficial (Chequea movimientos y wompi_events)
+            const { data, error } = await supabase.rpc('rpc_verify_transaction_status', {
+                p_wompi_id: idOrReference
+            });
+
+            if (!error && data?.found) {
+                const isApproved = data.status === 'completado' || data.status === 'APPROVED' || data.status === 'pending_credit';
+                return {
+                    found: true,
+                    status: isApproved ? 'APPROVED' : (data.status === 'error' ? 'DECLINED' : data.status),
+                    isEventOnly: !!data.is_event_only
+                };
+            }
+
+            // 2. Fallback resiliente directo a la tabla de movimientos
+            const fallbackQuery = await supabase
                 .from('movimientos')
                 .select('id, estado')
-                .eq('metadata->>wompi_id', transactionId)
+                .or(`referencia.eq.${idOrReference},metadata->>wompi_id.eq.${idOrReference},metadata->>reference.eq.${idOrReference}`)
                 .maybeSingle();
 
-            if (data && data.id) {
+            if (fallbackQuery.data?.id) {
                 return { found: true, status: 'APPROVED' };
             }
 
-            if (error && error.code !== 'PGRST116') {
-                console.warn("Polling Warning:", error);
+            return { found: false, status: 'PENDING' };
+        } catch (err) {
+            console.warn("⚠️ [FinanceService] Fallo en verificación individual:", err);
+            return { found: false, status: 'ERROR' };
+        }
+    },
+
+    /**
+     * Realiza un polling inteligente a la base de datos verificando si el Webhook de Wompi
+     * ya insertó el movimiento o evento en la base de datos (Single Source of Truth).
+     * @param {string} idOrReference ID de Wompi o Referencia de Turnes
+     * @param {number} maxWaitMs Tiempo máximo de espera
+     * @param {Function} [onTick] Callback opcional en cada intento
+     */
+    async waitForTransaction(idOrReference, maxWaitMs = 60000, onTick = null) {
+        if (!idOrReference) throw new Error("Identificador o referencia de transacción no proporcionado.");
+
+        const checkInterval = 2500;
+        let elapsed = 0;
+
+        while (elapsed < maxWaitMs) {
+            const result = await this.verifyTransactionStatus(idOrReference);
+
+            if (result.found && result.status === 'APPROVED') {
+                return { found: true, status: 'APPROVED', isEventOnly: result.isEventOnly };
+            }
+
+            if (result.found && result.status === 'DECLINED') {
+                throw new Error("Transacción rechazada por la entidad bancaria.");
+            }
+
+            if (typeof onTick === 'function') {
+                onTick(elapsed, maxWaitMs);
             }
 
             await new Promise(resolve => setTimeout(resolve, checkInterval));
@@ -218,6 +262,7 @@ export const FinanceService = {
  * Format currency utility
  */
 export const formatCurrency = (amount, locale = 'es-CO', currency = 'COP') => {
+    if (amount === null || amount === undefined || amount === '') return '$0';
     const num = Number(amount);
     if (isNaN(num)) return '$0';
     return new Intl.NumberFormat(locale, {

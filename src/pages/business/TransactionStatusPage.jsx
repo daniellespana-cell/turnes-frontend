@@ -12,15 +12,29 @@ const TransactionStatusPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const [status, setStatus] = useState('verifying'); // verifying, approved, declined, error, delayed
-    const ref = searchParams.get('id') || 'PENDING';
 
-    const id = searchParams.get('id');
-    const itemType = searchParams.get('itemType');
-    const itemId = searchParams.get('itemId');
+    // 🔍 RESOLUCIÓN DE IDENTIFICADOR RESILIENTE (Soporta múltiples proveedores y redirecciones)
+    const rawId = searchParams.get('id') || searchParams.get('transaction_id');
+    const rawRef = searchParams.get('reference') || searchParams.get('ref');
+
+    // Si la URL no trae ID ni Referencia (ej. reload en Safari), recuperamos de la sesión en vuelo
+    const [cachedPending] = useState(() => {
+        try {
+            const raw = sessionStorage.getItem('turnes_pending_payment');
+            return raw ? JSON.parse(raw) : null;
+        } catch {
+            return null;
+        }
+    });
+
+    const targetIdentifier = rawId || rawRef || cachedPending?.reference;
+    const itemType = searchParams.get('itemType') || cachedPending?.itemType;
+    const itemId = searchParams.get('itemId') || cachedPending?.itemId;
+    const displayRef = rawRef || rawId || cachedPending?.reference || 'PENDING';
 
     // 🔄 Función de Verificación (SSOT)
     const verifyTransaction = useCallback(async (isInitial = false) => {
-        if (!id) {
+        if (!targetIdentifier) {
             setStatus('error');
             return;
         }
@@ -31,22 +45,58 @@ const TransactionStatusPage = () => {
 
         try {
             // Esperamos a que la BD reciba el Webhook (max 60 segundos)
-            await FinanceService.waitForTransaction(id);
+            await FinanceService.waitForTransaction(targetIdentifier);
             if (refreshSession) await refreshSession();
+            
+            // Limpiar la bóveda de pagos pendientes al confirmar éxito
+            try {
+                sessionStorage.removeItem('turnes_pending_payment');
+            } catch {
+                // Ignore
+            }
+
             setStatus('approved');
         } catch (error) {
             console.error("Verification Failed:", error);
-            if (error.message?.includes('tiempo esperado')) {
+            if (error.message?.includes('rechazada')) {
+                setStatus('declined');
+            } else if (error.message?.includes('tiempo esperado')) {
                 setStatus('delayed');
             } else {
                 setStatus('error');
             }
         }
-    }, [id, refreshSession]);
+    }, [targetIdentifier, refreshSession]);
 
+    // 1. Verificación Inicial
     useEffect(() => {
         verifyTransaction(true);
-    }, [id, verifyTransaction]);
+    }, [verifyTransaction]);
+
+    // 2. 📱 RESILIENCIA MÓVIL (iOS / Android Backgrounding)
+    // Si el usuario fue a la app de Nequi/Bancolombia y regresa a Turnes, forzamos reconciliación inmediata
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible' && (status === 'verifying' || status === 'delayed')) {
+                console.log("📱 [TransactionStatus] App volvió a primer plano. Reconciliando...");
+                verifyTransaction(false);
+            }
+        };
+
+        const handleFocus = () => {
+            if (status === 'verifying' || status === 'delayed') {
+                verifyTransaction(false);
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('focus', handleFocus);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', handleFocus);
+        };
+    }, [status, verifyTransaction]);
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4 font-manrope">
@@ -89,7 +139,7 @@ const TransactionStatusPage = () => {
                         {status === 'error' && 'Error de Transacción'}
                     </h1>
                     <p className="text-zinc-500 text-sm">
-                        Referencia: <span className="font-mono text-zinc-300">{ref}</span>
+                        Referencia: <span className="font-mono text-zinc-300">{displayRef}</span>
                     </p>
                     {status === 'verifying' && (
                         <p className="text-xs text-zinc-600 animate-pulse">
