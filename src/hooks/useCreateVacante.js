@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { VacancyService } from "../services/vacancyService";
 import { useToast } from "../context/ToastContext";
 import { UI_STRINGS } from "../domain/uiTranslations";
+import { validateVacancyPayload } from "../utils/validationUtils";
 
 // Micro-Hooks K.I.S.S
 import { useVacancyForm } from "./vacancy/useVacancyForm";
@@ -47,43 +48,15 @@ export const useCreateVacante = (user) => {
       return;
     }
 
-    // Validación explícita con feedback por campo — no más silencios
     if (quote.isLoading) {
       showToast(UI_STRINGS.VALIDATION.CALCULATING_PRICE, "info");
       return;
     }
-    if (!formData.tags || formData.tags.length === 0) {
-      showToast(UI_STRINGS.VALIDATION.TAGS_REQUIRED, "error");
-      return;
-    }
-    if (!formData.location?.trim()) {
-      showToast(UI_STRINGS.VALIDATION.CITY_REQUIRED, "error");
-      return;
-    }
-    
-    // 🛡️ [LAW] MANDATORY MINIMUM OFFER (50k)
-    if (formData.payment < 50000) {
-      showToast(UI_STRINGS.VALIDATION.MIN_SALARY, "error");
-      return;
-    }
 
-    if (!formData.date) {
-      showToast(UI_STRINGS.VALIDATION.DATE_REQUIRED, "error");
-      return;
-    }
-
-    // Validación Crítica: No permitir fechas en el pasado
-    const localHoy = new Date().toLocaleDateString('en-CA'); // yyyy-mm-dd
-    if (formData.date < localHoy) {
-      showToast(UI_STRINGS.VALIDATION.DATE_PAST, "error");
-      return;
-    }
-    if (!formData.description || formData.description.trim().length < 10) {
-      showToast(UI_STRINGS.VALIDATION.DESCRIPTION_MIN, "error");
-      return;
-    }
-    if (hasSensitiveData) {
-      showToast(UI_STRINGS.VALIDATION.DESCRIPTION_PII, "error");
+    // Validación Exhaustiva Centralizada (SSOT)
+    const validation = validateVacancyPayload(formData, hasSensitiveData);
+    if (!validation.isValid) {
+      showToast(validation.firstError || "Revisa los campos del formulario.", "error");
       return;
     }
 

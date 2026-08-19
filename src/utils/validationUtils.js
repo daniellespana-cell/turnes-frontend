@@ -100,3 +100,107 @@ export const formatPhoneInput = (input) => {
     return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
 };
 
+/**
+ * Valida montos de dinero en Pesos Colombianos (COP).
+ * Evita números negativos, ceros, valores no numéricos o fuera de límites.
+ *
+ * @param {number|string} amount - Monto en pesos
+ * @param {number} min - Monto mínimo permitido (default: $50.000 COP)
+ * @param {number} max - Monto máximo permitido (default: $20.000.000 COP)
+ * @returns {{ isValid: boolean, cleanAmount: number, error: string | null }}
+ */
+export const validateMoneyAmount = (amount, min = 50000, max = 20000000) => {
+    if (amount === null || amount === undefined || amount === '') {
+        return { isValid: false, cleanAmount: 0, error: 'El monto es obligatorio.' };
+    }
+
+    const num = typeof amount === 'number' 
+        ? amount 
+        : parseInt(String(amount).replace(/\D/g, ''), 10);
+
+    if (isNaN(num) || num <= 0) {
+        return { isValid: false, cleanAmount: 0, error: 'Ingresa un monto válido mayor a $0.' };
+    }
+
+    if (num < min) {
+        const formattedMin = new Intl.NumberFormat('es-CO').format(min);
+        return { isValid: false, cleanAmount: num, error: `El monto mínimo es de $${formattedMin} COP.` };
+    }
+
+    if (num > max) {
+        const formattedMax = new Intl.NumberFormat('es-CO').format(max);
+        return { isValid: false, cleanAmount: num, error: `El monto máximo permitido es de $${formattedMax} COP.` };
+    }
+
+    return { isValid: true, cleanAmount: num, error: null };
+};
+
+/**
+ * Valida de forma exhaustiva el payload completo del formulario de creación de vacantes.
+ * 
+ * @param {object} formData
+ * @param {boolean} hasSensitiveData
+ * @returns {{ isValid: boolean, errors: Record<string, string>, firstError: string | null }}
+ */
+export const validateVacancyPayload = (formData, hasSensitiveData = false) => {
+    const errors = {};
+
+    // 1. Tags / Cargos
+    if (!formData?.tags || !Array.isArray(formData.tags) || formData.tags.length === 0) {
+        errors.tags = 'Debes seleccionar al menos un cargo o rol.';
+    } else if (formData.tags.length > 2) {
+        errors.tags = 'Máximo puedes seleccionar 2 cargos por turno.';
+    }
+
+    // 2. Ubicación
+    if (!formData?.location || typeof formData.location !== 'string' || !formData.location.trim()) {
+        errors.location = 'La ciudad o municipio es obligatoria.';
+    }
+
+    // 3. Pago (Mínimo legal en Turnes: $50.000 COP)
+    const moneyCheck = validateMoneyAmount(formData?.payment, 50000, 20000000);
+    if (!moneyCheck.isValid) {
+        errors.payment = moneyCheck.error || 'El pago mínimo por turno es de $50.000 COP.';
+    }
+
+    // 4. Fecha del Turno
+    if (!formData?.date) {
+        errors.date = 'La fecha del turno es obligatoria.';
+    } else {
+        const localHoy = new Date().toLocaleDateString('en-CA'); // yyyy-mm-dd
+        if (formData.date < localHoy) {
+            errors.date = 'La fecha del turno no puede ser en el pasado.';
+        }
+    }
+
+    // 5. Horario
+    if (!formData?.schedule) {
+        errors.schedule = 'Selecciona un horario para el turno.';
+    }
+
+    // 6. Cantidad de vacantes
+    const qty = parseInt(formData?.quantity, 10);
+    if (isNaN(qty) || qty < 1 || qty > 50) {
+        errors.quantity = 'La cantidad de personas debe ser entre 1 y 50.';
+    }
+
+    // 7. Descripción y DLP (Data Loss Prevention)
+    const desc = formData?.description?.trim() || '';
+    if (desc.length < 10) {
+        errors.description = 'La descripción debe tener al menos 10 caracteres.';
+    } else if (desc.length > 150) {
+        errors.description = 'La descripción no puede superar los 150 caracteres.';
+    } else if (hasSensitiveData) {
+        errors.description = 'Por seguridad, no incluyas teléfonos, correos ni datos de contacto.';
+    }
+
+    const firstError = Object.values(errors)[0] || null;
+
+    return {
+        isValid: Object.keys(errors).length === 0,
+        errors,
+        firstError
+    };
+};
+
+
