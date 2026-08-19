@@ -121,6 +121,7 @@ const FavoritosPage = () => {
         onConfirm={handleLanzarOferta}
         comision={comisionActual}
         user={user}
+        isSubmitting={isSubmitting}
       />
     </div>
   );
