@@ -165,11 +165,19 @@ export const ContractService = {
             });
 
             if (error) {
+                // Idempotencia segura: Si ya está finalizado, no es un error de sistema sino un estado terminal ya alcanzado.
+                if (error.message && (error.message.includes('CANNOT_SEAL_STATUS_IS_finalizado') || error.message.includes('ALREADY_FINALIZED'))) {
+                    logger.dev('ℹ️ Contrato ya finalizado en la BD. Tratando como éxito.');
+                    return { success: true, alreadyFinalized: true };
+                }
                 console.error("❌ RPC Seal Error:", error);
                 throw error;
             }
             return { success: true, data };
         } catch (err) {
+            if (err?.message?.includes('CANNOT_SEAL_STATUS_IS_finalizado')) {
+                return { success: true, alreadyFinalized: true };
+            }
             console.error("Error sellando chat:", err);
             throw err;
         }

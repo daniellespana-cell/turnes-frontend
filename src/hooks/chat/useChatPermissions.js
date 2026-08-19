@@ -11,9 +11,15 @@ export const useChatPermissions = (contractStatus, candidatoInfo, isVacanteCerra
       return { canWrite: false, isReadOnly: true, isPaid: false, isClosed: false, reason: 'NO_CANDIDATE' };
     }
     
-    const isCanceled = ['rechazada', 'rechazado', 'cancelada'].includes(contractStatus.status);
+    const rawStatus = (contractStatus.status || candidatoInfo?.status || candidatoInfo?.estadoTurno || '').toLowerCase();
+    const isCanceled = ['rechazada', 'rechazado', 'cancelada'].includes(rawStatus);
     if (isCanceled) {
       return { canWrite: false, isReadOnly: true, isPaid: false, isClosed: true, reason: 'CANCELED' };
+    }
+
+    const isFinished = rawStatus === 'finalizado' || rawStatus === 'cerrada' || Boolean(candidatoInfo?.cicloCerrado);
+    if (isFinished || contractStatus.step === PROTOCOL_STEPS.FINALIZED) {
+      return { canWrite: false, isReadOnly: true, isPaid: true, isClosed: true, reason: 'FINISHED', confirmado: true };
     }
 
     const isRehire = candidatoInfo?.estadoTurno === 'AGENDADO' || candidatoInfo?.type === 'RECONTRATACION_DIRECTA';
@@ -52,7 +58,9 @@ export const useChatPermissions = (contractStatus, candidatoInfo, isVacanteCerra
     contractStatus.status,
     contractStatus.step,
     candidatoInfo?.id,
+    candidatoInfo?.status,
     candidatoInfo?.estadoTurno,
+    candidatoInfo?.cicloCerrado,
     candidatoInfo?.type,
     candidatoInfo?.isWinner,
     isVacanteCerrada,

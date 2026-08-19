@@ -55,11 +55,18 @@ export const ContractSidebar = (props) => {
       <div className="space-y-4 pb-2 relative z-[60]">
 
         {status.isSealed || props.permisos?.isClosed ? (
-          <div className="w-full py-4 bg-blue-500/5 border border-blue-500/20 rounded-xl flex flex-col items-center justify-center gap-1">
-            <Archive size={16} className="text-blue-400 mb-1" />
-            <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest">
-              Ciclo Sellado
-            </span>
+          <div className="w-full py-4 bg-gradient-to-b from-blue-500/10 to-transparent border border-blue-500/20 rounded-2xl flex flex-col items-center justify-center gap-1.5 text-center p-3">
+            <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
+              <Archive size={15} />
+            </div>
+            <div>
+              <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest block">
+                Ciclo Sellado • Turno Completado
+              </span>
+              <p className="text-[8px] text-zinc-500 font-medium mt-0.5 leading-snug">
+                Este turno finalizó con éxito y el chat se encuentra archivado.
+              </p>
+            </div>
           </div>
         ) : isEmpresa ? (
           <ActionSteps

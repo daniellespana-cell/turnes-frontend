@@ -49,12 +49,15 @@ export const useContractSidebar = ({
     }, [finanzas, candidate, user, isEmpresa]);
 
     // 4. STATUS FLAGS (From Server Context)
+    const rawStatus = (candidate?.status || candidate?.estadoTurno || '').toLowerCase();
     const isRehire = candidate?.estadoTurno === 'AGENDADO' || permisos?.reason === 'REHIRE_ACTIVE';
 
     const isSealed = Boolean(
         candidate?.cicloCerrado ||
-        candidate?.estadoTurno === 'FINALIZADO' ||
-        permisos?.isClosed
+        rawStatus === 'finalizado' ||
+        rawStatus === 'cerrada' ||
+        permisos?.isClosed ||
+        permisos?.reason === 'FINISHED'
     );
 
     // 🔥 SECURITY FIX: `isPaid` must come exclusively from `permisos` which reads Supabase. 
