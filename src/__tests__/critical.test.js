@@ -1,10 +1,19 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
     normalizeCandidateProfile,
     normalizeCompanyProfile,
     normalizeChatContext
 } from '../domain/profile.mapper';
 import { UI_STRINGS } from '../domain/uiTranslations';
+
+vi.mock('@sentry/react', () => ({
+    init: vi.fn(),
+    setUser: vi.fn(),
+    captureException: vi.fn().mockReturnValue('mock-event-id'),
+    captureMessage: vi.fn(),
+    addBreadcrumb: vi.fn(),
+    browserTracingIntegration: vi.fn()
+}));
 
 // ═══════════════════════════════════════════════════════════════════
 // PROFILE MAPPER — Tests de normalización de perfiles
@@ -136,6 +145,35 @@ describe('profile.mapper.js', () => {
             const res = await FinanceService.verifyTransactionStatus(null);
             expect(res.found).toBe(false);
             expect(res.status).toBe('UNKNOWN');
+        });
+    });
+
+    describe('TelemetryService (SSOT Observability)', () => {
+        it('maneja captura de excepciones y contexto de usuario sin fallar', async () => {
+            const { telemetryService } = await import('../services/telemetryService');
+            
+            expect(telemetryService.isInitialized).toBeDefined();
+            
+            // Probar setUser sin PII
+            telemetryService.setUser({ id: 'usr-123', rol: 'empresa', email: 'secret@turnes.co', plan: 'Pro' });
+            expect(telemetryService.userContext).toEqual({
+                id: 'usr-123',
+                role: 'empresa',
+                plan: 'Pro'
+            });
+
+            // Probar clearUser
+            telemetryService.clearUser();
+            expect(telemetryService.userContext).toBeNull();
+
+            // Probar captureException segura
+            const testError = new Error('Test Telemetry Exception');
+            expect(() => telemetryService.captureException(testError, { source: 'unit_test' })).not.toThrow();
+
+            // Probar captureMessage y addBreadcrumb
+            expect(() => telemetryService.captureMessage('Operational Warning', 'warning')).not.toThrow();
+            expect(() => telemetryService.addBreadcrumb('auth', 'User Login Success')).not.toThrow();
+            expect(() => telemetryService.trackEvent('test_event', { step: 1 })).not.toThrow();
         });
     });
 });

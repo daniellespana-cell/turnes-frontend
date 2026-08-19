@@ -163,6 +163,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     clearSessionCache();
     localStorage.removeItem('sb-turnes-auth-token');
+    setSentryUserContext(null);
     authService.logout().catch(err => console.error("Error silencioso en logout:", err));
   }, []);
 

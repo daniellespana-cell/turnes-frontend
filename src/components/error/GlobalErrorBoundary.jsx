@@ -1,7 +1,7 @@
 import { TriangleAlert, RefreshCcw, Home } from 'lucide-react';
-
 import React from 'react';
 import turnesLogo from "../../assets/logo-turnes.png";
+import { telemetryService } from '../../services/telemetryService';
 
 export class GlobalErrorBoundary extends React.Component {
   constructor(props) {
@@ -14,12 +14,12 @@ export class GlobalErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // Aquí es donde Sentry captura automáticamente el error, pero
-    // podemos capturar el ID del evento si quisiéramos mostrarlo al usuario.
-    import('@sentry/react').then((Sentry) => {
-      const eventId = Sentry.captureException(error, { contexts: { react: { componentStack: errorInfo.componentStack } } });
-      this.setState({ errorId: eventId });
+    const eventId = telemetryService.captureException(error, {
+      componentStack: errorInfo?.componentStack
     });
+    if (eventId) {
+      this.setState({ errorId: eventId });
+    }
   }
 
   render() {

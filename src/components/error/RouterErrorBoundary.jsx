@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouteError } from 'react-router-dom';
 import { TriangleAlert, RefreshCcw, Home } from 'lucide-react';
 import turnesLogo from "../../assets/logo-turnes.png";
+import { telemetryService } from '../../services/telemetryService';
 
 export const RouterErrorBoundary = () => {
     const error = useRouteError();
@@ -10,11 +11,12 @@ export const RouterErrorBoundary = () => {
 
     useEffect(() => {
         // Auto-reload para errores de carga de chunks (caché vieja tras un deploy)
-        if (
+        const isChunkError = 
             error?.message?.includes('Failed to fetch dynamically imported module') ||
             error?.message?.includes('Importing a module script failed') ||
-            error?.name === 'ChunkLoadError'
-        ) {
+            error?.name === 'ChunkLoadError';
+
+        if (isChunkError) {
             const hasReloaded = sessionStorage.getItem('chunk_reload');
             if (!hasReloaded) {
                 console.warn('ChunkLoadError detectado. Intentando recarga automática suave...');
@@ -25,6 +27,9 @@ export const RouterErrorBoundary = () => {
                 setNeedsManualReload(true);
                 sessionStorage.removeItem('chunk_reload');
             }
+        } else if (error) {
+            // Reportar error de enrutamiento o render a telemetría
+            telemetryService.captureException(error, { source: 'RouterErrorBoundary' });
         }
     }, [error]);
 
