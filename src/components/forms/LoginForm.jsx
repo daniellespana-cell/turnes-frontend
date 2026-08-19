@@ -8,6 +8,7 @@ import TurnesButton from '../ui/TurnesButton';
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom'; // 🛡️ Importamos useLocation
 import { useAuth } from '../../context/AuthContext';
+import { validateEmail } from '../../utils/validationUtils';
 
 // IMPORTACIONES UI
 
@@ -32,12 +33,25 @@ const LoginForm = () => {
         setMessage(null);
 
         const formData = new FormData(e.target);
-        const email = formData.get('email');
-        const password = formData.get('password');
+        const rawEmail = formData.get('email')?.toString() || '';
+        const password = formData.get('password')?.toString() || '';
+
+        const emailCheck = validateEmail(rawEmail);
+        if (!emailCheck.isValid) {
+            setMessage({ text: emailCheck.error, type: 'error' });
+            setIsLoading(false);
+            return;
+        }
+
+        if (!password) {
+            setMessage({ text: 'Ingresa tu contraseña.', type: 'error' });
+            setIsLoading(false);
+            return;
+        }
 
         try {
-            // 1. Ejecutamos el login (que ahora es atómico gracias a nuestro AuthContext)
-            await login(email, password);
+            // 1. Ejecutamos el login con email sanitizado
+            await login(emailCheck.cleanEmail, password);
             localStorage.setItem('turnes_has_logged_in', 'true'); // Guardamos en caché que ya es usuario registrado
 
             // 2. Navegación Imperativa: Redirigimos EXACTAMENTE cuando la promesa se resuelve.

@@ -4,7 +4,10 @@ import {
     formatPhoneInput, 
     validatePasswordStrength,
     validateMoneyAmount,
-    validateVacancyPayload 
+    validateVacancyPayload,
+    validateEmail,
+    validateRegistrationPayload,
+    validateRechargeAmount
 } from '../utils/validationUtils';
 
 describe('Validation Utilities (SSOT)', () => {
@@ -85,6 +88,50 @@ describe('Validation Utilities (SSOT)', () => {
         });
     });
 
+    describe('validateEmail', () => {
+        it('debe aceptar correos válidos y normalizarlos a minúsculas', () => {
+            const result = validateEmail('  Juan.Perez@Gmail.COM ');
+            expect(result.isValid).toBe(true);
+            expect(result.cleanEmail).toBe('juan.perez@gmail.com');
+            expect(result.error).toBeNull();
+        });
+
+        it('debe rechazar correos inválidos sin dominio o con formato erróneo', () => {
+            expect(validateEmail('juan@').isValid).toBe(false);
+            expect(validateEmail('juan.perez').isValid).toBe(false);
+            expect(validateEmail('@gmail.com').isValid).toBe(false);
+            expect(validateEmail('').isValid).toBe(false);
+        });
+    });
+
+    describe('validateRegistrationPayload', () => {
+        const validRegistration = {
+            fullName: 'Carlos Santana',
+            email: 'carlos@turnes.co',
+            password: 'StrongPassword123!',
+            confirmPassword: 'StrongPassword123!',
+            role: 'postulante'
+        };
+
+        it('debe validar un registro completo', () => {
+            const res = validateRegistrationPayload(validRegistration);
+            expect(res.isValid).toBe(true);
+            expect(res.firstError).toBeNull();
+        });
+
+        it('debe rechazar si las contraseñas no coinciden', () => {
+            const res = validateRegistrationPayload({ ...validRegistration, confirmPassword: 'DifferentPassword123!' });
+            expect(res.isValid).toBe(false);
+            expect(res.errors.confirmPassword).toContain('no coinciden');
+        });
+
+        it('debe rechazar nombres muy cortos', () => {
+            const res = validateRegistrationPayload({ ...validRegistration, fullName: 'Al' });
+            expect(res.isValid).toBe(false);
+            expect(res.errors.name).toBeDefined();
+        });
+    });
+
     describe('validateMoneyAmount', () => {
         it('debe validar montos de dinero correctos', () => {
             const valid = validateMoneyAmount(70000);
@@ -103,6 +150,22 @@ describe('Validation Utilities (SSOT)', () => {
             expect(validateMoneyAmount(0).isValid).toBe(false);
             expect(validateMoneyAmount(-50000).isValid).toBe(false);
             expect(validateMoneyAmount('').isValid).toBe(false);
+        });
+    });
+
+    describe('validateRechargeAmount', () => {
+        it('debe validar recargas superiores a $15.000 y calcular centavos', () => {
+            const res = validateRechargeAmount(25000);
+            expect(res.isValid).toBe(true);
+            expect(res.cleanAmount).toBe(25000);
+            expect(res.amountInCents).toBe(2500000);
+        });
+
+        it('debe rechazar recargas inferiores a $15.000', () => {
+            const res = validateRechargeAmount(10000);
+            expect(res.isValid).toBe(false);
+            expect(res.amountInCents).toBe(0);
+            expect(res.error).toContain('mínimo');
         });
     });
 

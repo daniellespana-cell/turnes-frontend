@@ -203,4 +203,102 @@ export const validateVacancyPayload = (formData, hasSensitiveData = false) => {
     };
 };
 
+/**
+ * Valida y normaliza una dirección de correo electrónico según estándar RFC 5322.
+ * Limpia espacios y convierte a minúsculas automáticamente.
+ *
+ * @param {string} rawEmail
+ * @returns {{ isValid: boolean, cleanEmail: string, error: string | null }}
+ */
+export const validateEmail = (rawEmail) => {
+    if (!rawEmail || typeof rawEmail !== 'string') {
+        return { isValid: false, cleanEmail: '', error: 'El correo electrónico es obligatorio.' };
+    }
+
+    const cleanEmail = rawEmail.trim().toLowerCase();
+
+    if (cleanEmail.length === 0) {
+        return { isValid: false, cleanEmail: '', error: 'El correo electrónico es obligatorio.' };
+    }
+
+    // RegEx RFC 5322 simplificado de grado producción
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
+    if (!emailRegex.test(cleanEmail)) {
+        return { isValid: false, cleanEmail, error: 'Ingresa un formato de correo electrónico válido (ej. usuario@dominio.com).' };
+    }
+
+    return { isValid: true, cleanEmail, error: null };
+};
+
+/**
+ * Valida el formulario de registro de usuarios (Candidato / Empresa).
+ *
+ * @param {object} payload - { fullName, email, password, confirmPassword, role }
+ * @returns {{ isValid: boolean, errors: Record<string, string>, firstError: string | null }}
+ */
+export const validateRegistrationPayload = (payload) => {
+    const errors = {};
+
+    // 1. Nombre / Razón Social
+    const name = payload?.fullName?.trim() || '';
+    if (name.length < 3) {
+        errors.name = 'El nombre debe tener al menos 3 caracteres.';
+    }
+
+    // 2. Email
+    const emailCheck = validateEmail(payload?.email);
+    if (!emailCheck.isValid) {
+        errors.email = emailCheck.error || 'Correo electrónico inválido.';
+    }
+
+    // 3. Contraseñas
+    const password = payload?.password || '';
+    const confirmPassword = payload?.confirmPassword || '';
+
+    if (password !== confirmPassword) {
+        errors.confirmPassword = 'Las contraseñas no coinciden.';
+    }
+
+    const passwordCheck = validatePasswordStrength(password);
+    if (!passwordCheck.isValid) {
+        errors.password = passwordCheck.error || 'La contraseña no cumple con los requisitos de seguridad.';
+    }
+
+    const firstError = Object.values(errors)[0] || null;
+
+    return {
+        isValid: Object.keys(errors).length === 0,
+        errors,
+        firstError
+    };
+};
+
+/**
+ * Valida montos de recarga para la billetera empresarial con pasarela Wompi.
+ *
+ * @param {number|string} amount - Monto en pesos COP
+ * @param {number} min - Mínimo de recarga (default: $15.000 COP)
+ * @param {number} max - Máximo de recarga (default: $10.000.000 COP)
+ * @returns {{ isValid: boolean, cleanAmount: number, amountInCents: number, error: string | null }}
+ */
+export const validateRechargeAmount = (amount, min = 15000, max = 10000000) => {
+    const moneyCheck = validateMoneyAmount(amount, min, max);
+    if (!moneyCheck.isValid) {
+        return {
+            isValid: false,
+            cleanAmount: moneyCheck.cleanAmount,
+            amountInCents: 0,
+            error: moneyCheck.error
+        };
+    }
+
+    return {
+        isValid: true,
+        cleanAmount: moneyCheck.cleanAmount,
+        amountInCents: Math.round(moneyCheck.cleanAmount * 100),
+        error: null
+    };
+};
+
 

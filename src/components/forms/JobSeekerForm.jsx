@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService'; // Conexión Real
 import { useRegister } from '../../context/RegisterContext';
-import { validatePasswordStrength } from '../../utils/validationUtils';
+import { validateRegistrationPayload } from '../../utils/validationUtils';
 import PasswordSecurityGroup from './PasswordSecurityGroup';
 
 const FormClasses = {
@@ -34,15 +34,17 @@ const JobSeekerForm = () => {
         const password = formData.get('password')?.toString().trim();
         const confirmPassword = formData.get('confirmPassword')?.toString().trim();
 
-        if (password !== confirmPassword) {
-            setStatus({ message: "Las contraseñas no coinciden", type: "error" });
-            setIsLoading(false);
-            return;
-        }
+        // Validación Centralizada SSOT
+        const validation = validateRegistrationPayload({
+            fullName,
+            email,
+            password,
+            confirmPassword,
+            role: 'postulante'
+        });
 
-        const passwordValidation = validatePasswordStrength(password);
-        if (!passwordValidation.isValid) {
-            setStatus({ message: passwordValidation.error, type: "error" });
+        if (!validation.isValid) {
+            setStatus({ message: validation.firstError, type: "error" });
             setIsLoading(false);
             return;
         }

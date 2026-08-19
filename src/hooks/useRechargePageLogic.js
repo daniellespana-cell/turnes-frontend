@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import financeService, { formatCurrency } from '../services/financeService';
 import paymentService from '../services/paymentService';
+import { validateRechargeAmount } from '../utils/validationUtils';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { logger } from '../utils/logger';
@@ -50,8 +51,10 @@ export const useRechargePageLogic = () => {
 
     // 4. ORQUESTADOR DE PAGO (INTEGRACIÓN WOMPI)
     const handlePayment = useCallback(async () => {
-        if (amount < 15000) {
-            triggerToast('warning', 'El monto mínimo permitido es $15.000');
+        // Validación Centralizada SSOT
+        const rechargeCheck = validateRechargeAmount(amount, 15000, 10000000);
+        if (!rechargeCheck.isValid) {
+            triggerToast('warning', rechargeCheck.error);
             return;
         }
 
