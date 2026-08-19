@@ -11,7 +11,10 @@ const VacantesSearch = ({ query, setQuery }) => {
       />
 
       <input
+        id="vacantes-search-input"
+        name="vacantesSearch"
         type="text"
+        aria-label="Buscar vacantes"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Buscar..."

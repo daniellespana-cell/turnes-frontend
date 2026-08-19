@@ -40,7 +40,10 @@ const PredictiveSearchBar = ({ value, onChange, onSelectSuggestion, onClear }) =
                 </button>
                 <input
                     ref={inputRef}
+                    id="explore-search-input"
+                    name="exploreSearch"
                     type="text"
+                    aria-label="Buscar cargo, habilidad o sector"
                     value={value}
                     onChange={e => onChange(e.target.value)}
                     onKeyDown={e => { if(e.key === 'Enter') inputRef.current?.blur(); }}

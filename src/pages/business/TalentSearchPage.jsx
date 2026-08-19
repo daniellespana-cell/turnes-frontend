@@ -118,7 +118,10 @@ const TalentSearchPage = () => {
                             <Search size={16} />
                         </div>
                         <input
+                            id="talent-search-input"
+                            name="talentSearchQuery"
                             type="text"
+                            aria-label="Buscar talento por especialidad o rol"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSearchClick()}

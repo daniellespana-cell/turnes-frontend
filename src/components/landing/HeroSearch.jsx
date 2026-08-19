@@ -51,8 +51,11 @@ const HeroSearch = () => {
 
             <form onSubmit={handleSearch} className="relative group">
                 <input
+                    id="hero-talent-search"
+                    name="talentSearch"
                     type="text"
                     readOnly
+                    aria-label="Buscar talento por especialidad o rol"
                     placeholder={`Ej: ${placeholder}|`}
                     className="w-full h-14 md:h-16 pl-6 pr-14 bg-[#0a0a0a] rounded-2xl border-2 border-emerald-500/50 hover:border-emerald-500 focus:border-emerald-400 text-white placeholder:text-zinc-500 text-lg outline-none transition-all shadow-[0_0_20px_rgba(16,185,129,0.1)] hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] focus:shadow-[0_0_40px_rgba(16,185,129,0.25)] cursor-pointer"
                 />
