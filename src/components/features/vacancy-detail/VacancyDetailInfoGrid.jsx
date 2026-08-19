@@ -21,8 +21,8 @@ export const VacancyDetailInfoGrid = ({ vacancy }) => {
                 {
                     icon: Clock,
                     label: 'Fecha Turno',
-                    value: vacancy.date || 'Hoy',
-                    sub: null,
+                    value: vacancy.date || 'A convenir',
+                    sub: vacancy.scheduleLabel || null,
                 },
             ].map(({ icon: Icon, label, value, sub }) => (
                 <div key={label} className="bg-zinc-900/40 rounded-[14px] p-2.5 border border-white/5 text-center shadow-inner shadow-black/20">

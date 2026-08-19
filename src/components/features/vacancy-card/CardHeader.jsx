@@ -37,29 +37,42 @@ export const CardHeader = ({ vacancy }) => {
             </div>
 
             {/* ── INFO (nombre + meta row) ── */}
-            <div className="min-w-0">
-                <h3 className="text-white font-bold text-xs md:text-[13px] tracking-tight truncate mb-1.5">
+            <div className="min-w-0 flex-1">
+                <h3 className="text-white font-bold text-xs md:text-[13px] tracking-tight truncate mb-1">
                     {vacancy.business}
                 </h3>
 
-                {/* META ROW: flex wrap para evitar que truncates agresivos oculten la fecha */}
-                <div className="flex flex-wrap items-center gap-2 w-full mt-1.5">
+                {/* META ROW: flex-wrap fluido con truncate responsivo para evitar desbordes */}
+                <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 w-full min-w-0">
                     {/* Distancia */}
-                    <div className="flex items-center gap-1 text-[9px] text-zinc-500 font-medium shrink-0">
-                        <MapPin size={9} className="text-zinc-600 shrink-0" aria-hidden="true" />
-                        {vacancy.distance}
-                    </div>
+                    {vacancy.distance && (
+                        <div className="flex items-center gap-1 text-[9px] text-zinc-500 font-medium shrink-0">
+                            <MapPin size={9} className="text-zinc-600 shrink-0" aria-hidden="true" />
+                            <span>{vacancy.distance}</span>
+                        </div>
+                    )}
 
                     {/* Separador */}
-                    <span className="text-zinc-700 text-[9px] shrink-0">•</span>
+                    {vacancy.distance && <span className="text-zinc-700 text-[9px] shrink-0">•</span>}
 
-                    {/* Fecha y Horario combinados en el estilo original/mejorado */}
-                    <div className="flex items-center gap-1.5 shrink-0 text-emerald-400">
-                        <Clock size={10} className="shrink-0" aria-hidden="true" />
-                        <span className="whitespace-nowrap font-black uppercase text-[10px] tracking-tight">
-                            {vacancy.date} {vacancy.scheduleLabel && `• ${vacancy.scheduleLabel}`}
-                        </span>
+                    {/* Fecha */}
+                    <div className="flex items-center gap-1 text-emerald-400 text-[10px] font-black uppercase tracking-tight shrink-0">
+                        <Clock size={10} className="shrink-0 text-emerald-400" aria-hidden="true" />
+                        <span>{vacancy.date || 'A convenir'}</span>
                     </div>
+
+                    {/* Horario (A definir / Turno) con truncate inteligente */}
+                    {vacancy.scheduleLabel && (
+                        <div className="flex items-center gap-1 min-w-0 max-w-full">
+                            <span className="text-zinc-700 text-[9px] shrink-0">•</span>
+                            <span
+                                className="text-emerald-400/90 text-[10px] font-black uppercase tracking-tight truncate max-w-[110px] xs:max-w-[140px] sm:max-w-[180px] md:max-w-none"
+                                title={vacancy.scheduleLabel}
+                            >
+                                {vacancy.scheduleLabel}
+                            </span>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -67,7 +80,7 @@ export const CardHeader = ({ vacancy }) => {
             {vacancy.type && (
                 <div
                     aria-label={`Tipo: ${vacancy.type}`}
-                    className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[7px] font-black uppercase tracking-widest border self-start ${typeBadgeClass}`}
+                    className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[7px] font-black uppercase tracking-widest border self-start shrink-0 ${typeBadgeClass}`}
                 >
                     {vacancy.type === 'Fijo'
                         ? <Briefcase size={8} aria-hidden="true" />
