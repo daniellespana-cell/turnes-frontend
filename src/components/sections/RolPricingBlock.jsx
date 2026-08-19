@@ -8,14 +8,6 @@ import { Briefcase } from 'lucide-react';
 // 🛠️ CORRECCIÓN: Se elimina la definición local de companyPlans.
 // La variable companyPlans AHORA DEBE SER IMPORTADA desde su archivo de datos real.
 import { companyPlans } from '../../data/companyPlans'; 
- 
-
-// Definición de la variante de animación (se mantiene aunque se use en SectionCard)
-const fadeInUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-};
-
 
 /**
  * Componente RolPricingBlock

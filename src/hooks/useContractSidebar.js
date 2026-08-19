@@ -20,11 +20,8 @@ export const useContractSidebar = ({
     // 1. LOCAL UI STATE
     const [confirmingPay, setConfirmingPay] = useState(false);
 
-    // 2. TRANSACTION ID (Memoized Session ID)
-    const transactionId = useMemo(
-        () => Math.random().toString(36).substring(7).toUpperCase(),
-        [candidate?.id]
-    );
+    // 2. TRANSACTION ID (Per-mount Session ID)
+    const [transactionId] = useState(() => Math.random().toString(36).substring(7).toUpperCase());
 
     // 3. FINANCIAL CONFIG DERIVATION
     const { user } = useAuth();

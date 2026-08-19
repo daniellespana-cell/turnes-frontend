@@ -6,7 +6,6 @@
  */
 
 const D = '/dashboard';
-const C = '/chat';
 
 const FALLBACK = { title: 'Notificación del Sistema', body: 'Hay una novedad en tu cuenta.', icon: '🔔', color: 'zinc', link: `${D}/notifications` };
 

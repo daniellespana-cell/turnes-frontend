@@ -35,7 +35,7 @@ export const CookieSentinel = () => {
  * 🛠️ Script Loader Helper
  * Encapsula la lógica de inyección para evitar duplicados y errores de DOM.
  */
-const loadExternalScript = (id, src) => {
+export const loadExternalScript = (id, src) => {
     if (document.getElementById(id)) return;
     const script = document.createElement('script');
     script.id = id;

@@ -18,7 +18,7 @@ import { formatCurrency } from '../../services/financeService';
 import { useWalletPageLogic } from '../../hooks/useWalletPageLogic';
 
 const WalletPage = () => {
-  const { user, data, isLoading, error, fetchData, navigate } = useWalletPageLogic();
+  const { user, data, isLoading, error, fetchData } = useWalletPageLogic();
 
   if (error) {
     return (

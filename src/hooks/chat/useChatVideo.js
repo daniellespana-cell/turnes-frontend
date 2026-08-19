@@ -9,7 +9,7 @@ export const useChatVideo = ({
     addMessage, 
     triggerDomainSync,
     onStartVideo,
-    cerrarVideo, // 🆕 Necesitamos cerrar el overlay localmente
+    _cerrarVideo, // 🆕 Necesitamos cerrar el overlay localmente
     isPaid
 }) => {
     const [isInviting, setIsInviting] = useState(false);
@@ -33,50 +33,51 @@ export const useChatVideo = ({
             }
         };
         fetchStats();
-    }, [userRole, resolveAppId, candidato]);
+    }, [userRole, candidato?.applicationId, candidato?.id, resolveAppId]);
 
-    // --- STEP 2: VIDEO VALIDATION ---
+    // --- ACCIÓN: INVITAR A VIDEO (ATÓMICO RPC) ---
     const invitarAVideoWrapper = useCallback(async () => {
         if (userRole !== 'empresa' || isInviting) return;
+        if (!isPaid) return; // Doble candado
 
-        // 🛡️ SECURITY SHIELD: Bloqueo Estricto si no se ha pagado
-        if (!isPaid) {
-            addMessage("🚫 Operación denegada: Debes pagar la comisión (Paso 1) antes de solicitar una validación visual.", 'system', 'error_alert');
-            return;
-        }
-
-        // 🛡️ IDEMPOTENCIA SENIOR: Si ya se alcanzó el límite o ya validó, no permitir.
         if (videoStats.remaining <= 0) {
-            addMessage("🚫 Límite de validaciones alcanzado para esta vacante.", 'system', 'error_alert');
+            if (workflowActions?.solicitarRecarga) {
+                workflowActions.solicitarRecarga();
+            }
             return;
         }
 
         setIsInviting(true);
         try {
             const appId = resolveAppId();
-            const res = await ContractService.step2_requestVideo(appId);
+            const { success, roomUrl, error: rpcError } = await ContractService.step2_requestVideo(appId);
 
-            if (res?.success) {
-                setVideoStats(prev => ({
-                    ...prev,
-                    used: prev.used + 1,
-                    remaining: Math.max(0, prev.remaining - 1)
-                }));
-                
-                if (triggerDomainSync) triggerDomainSync();
-
-                // 🎥 SIGNALING: Emitir invitación
-                if (workflowActions?.invitarAVideo) {
-                    workflowActions.invitarAVideo(res.room_url);
-                }
-
-                if (onStartVideo) onStartVideo();
+            if (!success) {
+                console.error("Fallo al invitar a video (RPC):", rpcError);
+                return;
             }
+
+            // Actualizar stats locales
+            setVideoStats(prev => ({
+                ...prev,
+                used: prev.used + 1,
+                remaining: Math.max(0, prev.remaining - 1)
+            }));
+
+            // Iniciar llamada localmente
+            if (onStartVideo) {
+                onStartVideo(roomUrl);
+            }
+
+            // 🚀 SENIOR FIX: Eliminada la inyección manual de mensaje desde el frontend.
+            // Ahora la RPC `rpc_process_protocol_step2_v3` inserta el mensaje de "Invitación a Video" 
+            // directamente en la BD con su type='video_invitation' y metadata para garantizar SSOT.
+
+            if (triggerDomainSync) triggerDomainSync();
+
         } catch (err) {
-            console.error(err);
-            if (err.code === 'MAX_VIDEOS') {
-                addMessage(`🚫 ${err.message}`, 'system', 'error_alert');
-            } else {
+            console.error("Error general invitando a video:", err);
+            if (addMessage) {
                 addMessage("❌ Sistema: No autorizado para validación visual.", 'system', 'error_alert');
             }
         } finally {
@@ -87,7 +88,7 @@ export const useChatVideo = ({
     const registrarValidacionVideo = useCallback(async (duracion) => {
         try {
             const appId = resolveAppId();
-            const res = await ContractService.step2_confirmVideo(appId);
+            await ContractService.step2_confirmVideo(appId);
             
             // 🎥 SIGNALING: Notificar fin de llamada para que ambos cierren el overlay
             // 🚀 SENIOR FIX: Eliminada inyección de BD desde UI. El backend lo hace ahora, 
@@ -101,7 +102,7 @@ export const useChatVideo = ({
         } catch (e) {
             console.error("Error confirmando video:", e);
         }
-    }, [resolveAppId, workflowActions, triggerDomainSync, addMessage]);
+    }, [resolveAppId, workflowActions, triggerDomainSync]);
 
     const declinarValidacionVideo = useCallback(() => {
         if (workflowActions?.declinarVideo) {

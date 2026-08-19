@@ -43,7 +43,7 @@ export const useBusinessRatings = () => {
 
     useEffect(() => {
         fetchRatings();
-    }, [user?.id]);
+    }, [fetchRatings]);
 
     const loadMoreRatings = () => fetchRatings(true);
 

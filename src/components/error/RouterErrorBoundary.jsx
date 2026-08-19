@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { useRouteError, useNavigate } from 'react-router-dom';
+import { useRouteError } from 'react-router-dom';
 import { TriangleAlert, RefreshCcw, Home } from 'lucide-react';
 import turnesLogo from "../../assets/logo-turnes.png";
 
 export const RouterErrorBoundary = () => {
     const error = useRouteError();
-    const navigate = useNavigate();
 
     const [needsManualReload, setNeedsManualReload] = React.useState(false);
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { AdminService } from '../../services/adminService';
 import { useToast } from '../../context/ToastContext';
 import { ADMIN_PAGE_LIMIT } from '../../domain/admin.config';
@@ -18,7 +18,7 @@ export const useAdminUsers = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [page, setPage] = useState(0);
 
-    const loadUsers = async () => {
+    const loadUsers = useCallback(async () => {
         setLoading(true);
         try {
             const { data, error } = await AdminService.getUsers(roleFilter, ADMIN_PAGE_LIMIT, page * ADMIN_PAGE_LIMIT);
@@ -27,9 +27,11 @@ export const useAdminUsers = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [roleFilter, page, showToast]);
 
-    useEffect(() => { loadUsers(); }, [roleFilter, page]);
+    useEffect(() => { 
+        loadUsers(); 
+    }, [loadUsers]);
 
     const filteredUsers = useMemo(() => {
         return users.filter(u => {
@@ -42,10 +44,10 @@ export const useAdminUsers = () => {
     /**
      * Suspende una cuenta. Requiere confirmación textual.
      * @param {string} userId
-     * @param {string} name
+     * @param {string} _name
      * @param {string} confirmText - Texto ingresado por el usuario para confirmar
      */
-    const handleBan = async (userId, name, confirmText) => {
+    const handleBan = async (userId, _name, confirmText) => {
         if (confirmText !== 'BAN') {
             showToast('Operación abortada. Se requiere verificación manual.', 'info');
             return false;
@@ -66,7 +68,7 @@ export const useAdminUsers = () => {
         }
     };
 
-    const handleResetPassword = async (email, name) => {
+    const handleResetPassword = async (email, _name) => {
         try {
             const { error } = await AdminService.resetUserPassword(email);
             if (error) throw error;

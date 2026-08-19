@@ -14,7 +14,6 @@ const staggerContainer = {
     visible: { transition: { staggerChildren: 0.1 } }
 };
 
-const brandPrimary = 'emerald-400';
 const cardColor = 'zinc-950';
 const cardTextColor = 'zinc-400';
 

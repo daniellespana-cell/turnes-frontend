@@ -61,7 +61,7 @@ export const useWorkerStats = () => {
         };
 
         fetchStats();
-    }, [isAuthenticated, user?.id]);
+    }, [isAuthenticated, user?.id, user?.nombre_display, user?.avatar_url, user?.bio, user?.telefono, user?.direccion, user?.skills?.length, user?.created_at, user?.createdAt]);
 
     return { stats: data, loading };
 };

@@ -22,7 +22,7 @@ export const RegisterProvider = ({ children, initialRole = null, onReset }) => {
         if (initialRole !== null && initialRole !== role) {
             setRoleState(initialRole);
         }
-    }, [initialRole]);
+    }, [initialRole, role]);
 
     // Función setter que actualiza el estado local (instantáneo)
     const setRole = useCallback((newRole) => {

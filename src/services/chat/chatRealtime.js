@@ -15,7 +15,7 @@ import { logger } from '../../utils/logger';
  */
 
 // Statuses que implican que una conversación debe ser visible en la bandeja
-const CHAT_VISIBLE_STATUSES = ['chat_abierto', 'contratado', 'aceptado', 'en_progreso'];
+export const CHAT_VISIBLE_STATUSES = ['chat_abierto', 'contratado', 'aceptado', 'en_progreso'];
 
 class ChatRealtimeService {
     constructor() {
@@ -73,7 +73,6 @@ class ChatRealtimeService {
                     this._debouncedRefresh(); // Recarga la bandeja
                     
                     // Si el usuario está viendo un chat específico, recargarlo completo
-                    const snapshot = chatState.getSnapshot();
                     if (chatState._activeChatId) {
                         import('./chatNetwork').then(module => {
                             module.chatNetwork.fetchMessages(chatState._activeChatId);
@@ -119,7 +118,7 @@ class ChatRealtimeService {
      * la lista completa. Eliminamos restricciones de status para asegurar
      * que invitaciones y aplicaciones nuevas sean visibles de inmediato.
      */
-    _handlePostulacionUpdate(newRow, oldRow) {
+    _handlePostulacionUpdate(_newRow, _oldRow) {
         // Refrescamos ante cualquier cambio relevante en la tabla de postulaciones
         this._debouncedRefresh();
     }

@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useLocationResolver } from './useLocationResolver';
 import { getCategoriasList } from '../domain/vacantes.taxonomy';
 import { talentService } from '../services/talentService';
@@ -8,7 +8,6 @@ import { talentService } from '../services/talentService';
 export const useTalentSearch = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocationResolver();
-    const queryClient = useQueryClient();
 
     // 1. Core State
     const [query, setQuery] = useState(searchParams.get('q') || '');
@@ -118,6 +117,7 @@ export const useTalentSearch = () => {
         handleSearchClick,
         handleClearSearch,
         loadMore,
+        refetch,
         taxonomyOptions: getCategoriasList()
     };
 };

@@ -37,7 +37,7 @@ export const NotificationsProvider = ({ children }) => {
             timeLabel,   // Pre-formateado: evita instanciar Date en el render de NotificationItem
             ...resolved
         };
-    }, [user?.id, user?.rol]);  // Solo depende de valores reales del usuario
+    }, [user?.rol]);  // Solo depende de valores reales del usuario
 
     /**
      * 🛡️ MOTOR DE DEDUPLICACIÓN SENIOR (O(n log n))
@@ -121,7 +121,7 @@ export const NotificationsProvider = ({ children }) => {
             setNotifications(prev => prev.filter(n => n.id !== row.id))
         );
         return () => { unsubInsert(); unsubUpdate(); unsubDelete(); };
-    }, [user?.id, normalize, deduplicate]);
+    }, [user?.id, normalize, deduplicate, showToast]);
 
     const markAsRead = useCallback((id) => {
         setNotifications(prev => prev.map(n => n.id === id ? { ...n, leida: true } : n));

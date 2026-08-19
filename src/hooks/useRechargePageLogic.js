@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useBlocker } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
 import financeService, { formatCurrency } from '../services/financeService';
 import paymentService from '../services/paymentService';
 import { validateRechargeAmount } from '../utils/validationUtils';
@@ -12,7 +11,6 @@ import { logger } from '../utils/logger';
 export const useRechargePageLogic = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { showToast } = useToast();
 
     // ESTADO MAESTRO
     const [status, setStatus] = useState('idle'); // idle | processing | success | error
@@ -96,7 +94,7 @@ export const useRechargePageLogic = () => {
             setStatus('error');
             triggerToast('error', 'No se pudo iniciar la pasarela de pagos.');
         }
-    }, [amount, triggerToast, user?.email]);
+    }, [amount, triggerToast, user?.email, user?.id]);
 
     const handleReset = useCallback(() => {
         setTransactionId(null);

@@ -23,15 +23,15 @@ export const MessageList = ({
   onSealChat,
   onVideoInvite,
   aceptarInvitacionVideo,
-  finanzas,
-  permisos,
-  onPay,
+  _finanzas,
+  _permisos,
+  _onPay,
   candidato,
   onAcceptRehire,
   onDeclineRehire,
   userRole,
   isFinalizing,
-  activeStep,
+  _activeStep,
   hasValidatedVideo
 }) => {
   const scrollRef = useRef(null);

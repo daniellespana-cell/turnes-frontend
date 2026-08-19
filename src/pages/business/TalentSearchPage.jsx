@@ -5,7 +5,7 @@ import TalentProfileModal from '../../components/business/TalentProfileModal';
 import InviteToVacancyModal from '../../components/business/InviteToVacancyModal';
 import EmptyState from '../../components/common/EmptyState';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
@@ -78,14 +78,16 @@ const TalentSearchPage = () => {
         scrollMargin: listRef.current?.offsetTop ?? 0,
     });
 
-    useEffect(() => {
-        const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
-        if (!lastItem) return;
+    const virtualItems = rowVirtualizer.getVirtualItems();
+    const lastVirtualIndex = virtualItems[virtualItems.length - 1]?.index;
 
-        if (lastItem.index >= rows.length - 1 && hasMore && !loadingMore && !isFetching) {
+    useEffect(() => {
+        if (lastVirtualIndex === undefined) return;
+
+        if (lastVirtualIndex >= rows.length - 1 && hasMore && !loadingMore && !isFetching) {
             loadMore();
         }
-    }, [hasMore, loadingMore, isFetching, loadMore, rows.length, rowVirtualizer.getVirtualItems()]);
+    }, [hasMore, loadingMore, isFetching, loadMore, rows.length, lastVirtualIndex]);
 
     return (
         <div className="max-w-7xl mx-auto pb-20 pt-4 md:pt-8 px-4 md:px-6 min-h-screen text-zinc-300 antialiased font-manrope w-full min-w-0">

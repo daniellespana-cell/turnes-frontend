@@ -26,7 +26,7 @@ const WorkerApplications = () => {
     const handleConfirmCancel = async () => {
         if (!cancelModal.appId) return;
         setIsCancelling(true);
-        const { success, error } = await cancelApplication(cancelModal.appId);
+        const { success } = await cancelApplication(cancelModal.appId);
         setIsCancelling(false);
         setCancelModal({ isOpen: false, appId: null });
 

@@ -90,7 +90,7 @@ export const usePlanCheckout = (planSlug) => {
                 navigate('/dashboard');
             }
         }, 1500);
-    }, [item, navigate, refreshSession]);
+    }, [item, navigate, refreshSession, showToast]);
 
     // Anti-Double Click Guard (Synchronous vs React async state)
     const isProcessingRef = useRef(false);

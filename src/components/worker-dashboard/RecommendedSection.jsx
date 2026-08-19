@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronRight, MapPinOff } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import VacancyCard from '../features/VacancyCard';
 import RadarEmptyState from './RadarEmptyState';
 import { useNavigate } from 'react-router-dom';

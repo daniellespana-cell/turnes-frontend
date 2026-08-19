@@ -7,7 +7,7 @@ import financeService, { formatCurrency } from '../../services/financeService';
 import paymentService from '../../services/paymentService';
 import { useToast } from '../../context/ToastContext'; // 🚀 Importado para feedback real
 
-const CardPaymentMethod = ({ user, item, handleSuccess }) => {
+const CardPaymentMethod = ({ user, item, _handleSuccess }) => {
     const navigate = useNavigate();
     const { showToast } = useToast(); // 🚀 Feedback visible para el usuario
     const [isProcessing, setIsProcessing] = useState(false);

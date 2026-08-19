@@ -41,11 +41,6 @@ class NotificationObserver {
         this.disconnect();
         this._subscriberId = subscriberId;
 
-        const onChange = (event) => (payload) => {
-            const rowData = event === 'DELETE' ? payload.old : payload.new;
-            this._notify(event, rowData);
-        };
-
         this._channel = supabase
             .channel(`${CHANNEL_NAME}-${subscriberId}`)
             .on('postgres_changes', { 
@@ -57,7 +52,7 @@ class NotificationObserver {
                 const rowData = event === 'DELETE' ? payload.old : payload.new;
                 this._notify(event, rowData);
             })
-            .subscribe((status, err) => {
+            .subscribe((status, _err) => {
                 if (status === 'SUBSCRIBED') {
                     logger.info('✅ [Observer] Realtime conectado:', subscriberId);
                 } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
@@ -100,7 +95,7 @@ class NotificationObserver {
         return !error;
     }
 
-    async markAllAsRead(subscriberId) {
+    async markAllAsRead(_subscriberId) {
         const query = supabase.from('notificaciones').update({ leida: true }).eq('leida', false);
         const { error } = await BaseService.handle(query);
         if (error) console.error('[Observer] markAllAsRead error:', error);

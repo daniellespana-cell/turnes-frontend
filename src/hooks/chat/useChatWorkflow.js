@@ -9,7 +9,7 @@ export const useChatWorkflow = (candidato, onSystemMessage, userRole) => {
     if (candidato.estadoTurno === 'EJECUTADO' || candidato.estadoTurno === 'AGENDADO') return 'AGREEMENT_CONFIRMED';
     if (candidato.videoHabilitado || candidato.estadoTurno === 'VALIDADO') return 'VALIDATED';
     return 'IDLE';
-  }, [candidato?.estadoTurno, candidato?.videoHabilitado, candidato?.cicloCerrado]);
+  }, [candidato]);
 
   // 2. ACCIONES DEL PROTOCOLO
 

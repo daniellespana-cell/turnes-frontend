@@ -5,7 +5,6 @@ import { Divider, GoogleButton } from '../ui/SocialButtons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService'; // Conexión Real
-import { useRegister } from '../../context/RegisterContext';
 import { validateRegistrationPayload } from '../../utils/validationUtils';
 import PasswordSecurityGroup from './PasswordSecurityGroup';
 
@@ -17,7 +16,6 @@ const FormClasses = {
 
 const JobSeekerForm = () => {
     const navigate = useNavigate();
-    const { setRole } = useRegister();
 
     // Estados para control de envío
     const [isLoading, setIsLoading] = useState(false);

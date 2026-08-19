@@ -1,17 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Menu, Crown, MessageCircle } from 'lucide-react';
 import NotificationsMenu from '../navbar/NotificationsMenu';
 import NavAccount from './NavAccount';
 import RechargeButton from '../finance/RechargeButton';
 import { useNavbarVisibility } from '../../hooks/useNavbarVisibility';
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSyncExternalStore, useMemo } from 'react';
 import { ChatStorage } from '../../services/chat';
-const AppNavbar = ({ user, isSidebarExpanded, onOpenMobileSidebar }) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const AppNavbar = ({ user, _isSidebarExpanded, onOpenMobileSidebar }) => {
   const navigate = useNavigate();
   const { showExtraActions } = useNavbarVisibility();
 

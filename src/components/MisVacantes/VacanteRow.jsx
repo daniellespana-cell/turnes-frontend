@@ -1,5 +1,5 @@
 import React from 'react';
-import { MoreHorizontal, Trash2, Edit3, Copy, Users, Rocket, X } from 'lucide-react';
+import { MoreHorizontal, Trash2, Edit3, Copy, Users, Rocket } from 'lucide-react';
 
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

@@ -24,7 +24,6 @@ const TABS_CONFIG = [
 
 const Configuracion = () => {
     const { user } = useAuth();
-    const navigate = useNavigate();
     const [activeTabId, setActiveTabId] = useState('profile');
 
     // 🛡️ FILTRADO SENIOR: Las pestañas se adaptan al rol del usuario

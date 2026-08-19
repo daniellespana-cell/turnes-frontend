@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef, useSyncExternalStore } from 'react';
+import { useEffect, useCallback, useMemo, useSyncExternalStore } from 'react';
 import { ChatStorage } from '../../services/chat';
 import { useAuth } from '../../context/AuthContext';
 
@@ -6,9 +6,8 @@ import { useAuth } from '../../context/AuthContext';
  * ⚡ useChatMessaging (Supabase Edition)
  * Controls the active chat thread.
  */
-export const useChatMessaging = (chatId, otherParticipant, permisos = {}, config = {}) => {
+export const useChatMessaging = (chatId, _otherParticipant, _permisos = {}, _config = {}) => {
   const { user } = useAuth();
-  const initialized = useRef(false);
 
   // 1. REACTIVE SUBSCRIPTION (Always fresh messages)
   const snapshot = useSyncExternalStore(
@@ -17,7 +16,7 @@ export const useChatMessaging = (chatId, otherParticipant, permisos = {}, config
   );
 
   // Selector: Get messages for THIS chat
-  const messages = snapshot.messages[chatId] || [];
+  const messages = useMemo(() => snapshot.messages[chatId] || [], [snapshot.messages, chatId]);
 
   // 2. INITIALIZATION (KISS - No hooks spaghetti)
   useEffect(() => {
@@ -34,7 +33,7 @@ export const useChatMessaging = (chatId, otherParticipant, permisos = {}, config
   }, [chatId, user]);
 
   // 3. SEND MESSAGE
-  const addMessage = useCallback(async (content, sender = 'me', type = 'text', metadata = {}) => {
+  const addMessage = useCallback(async (content, _sender = 'me', type = 'text', metadata = {}) => {
     if (!user) return;
 
     // Sender ID resolution: 'me' -> userId

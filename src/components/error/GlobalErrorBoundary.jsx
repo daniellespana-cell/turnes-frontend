@@ -9,7 +9,7 @@ export class GlobalErrorBoundary extends React.Component {
     this.state = { hasError: false, errorId: null };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(_error) {
     return { hasError: true };
   }
 

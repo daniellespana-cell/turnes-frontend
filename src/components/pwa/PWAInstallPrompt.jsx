@@ -6,7 +6,7 @@ const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
+  const [_isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
     // Check if app is already installed

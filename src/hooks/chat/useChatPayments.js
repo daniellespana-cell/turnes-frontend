@@ -5,8 +5,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { UI_STRINGS } from '../../domain/uiTranslations';
 
-export const useChatPayments = (candidato, finanzas, setContractStatus, onSystemMessage) => {
-    const { user, actualizarSaldo } = useAuth();
+export const useChatPayments = (candidato, _finanzas, setContractStatus, _onSystemMessage) => {
+    const { actualizarSaldo } = useAuth();
     const { showToast } = useToast();
     const [isPaying, setIsPaying] = useState(false);
 
@@ -18,7 +18,6 @@ export const useChatPayments = (candidato, finanzas, setContractStatus, onSystem
 
             const applicationId = candidato.id;
             const candidateName = candidato.name || "Candidato";
-            const companyName = user?.nombre_empresa || user?.nombre_display || "La empresa";
 
             // 2. Procesar Pago Atómico (ContractService -> RPC V3)
             // El backend calcula el precio exacto según el plan y tipo de vacante.
@@ -59,7 +58,7 @@ export const useChatPayments = (candidato, finanzas, setContractStatus, onSystem
             setIsPaying(false);
             return { success: false };
         }
-    }, [candidato, finanzas, user, actualizarSaldo, setContractStatus, showToast, onSystemMessage, isPaying]);
+    }, [candidato?.id, candidato?.name, actualizarSaldo, setContractStatus, showToast, isPaying]);
 
     return { ejecutarPagoComision, isPaying };
 };

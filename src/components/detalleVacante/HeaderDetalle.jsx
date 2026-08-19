@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { typography } from '../../styles/typography';
 
-export const HeaderDetalle = ({ id }) => {
+export const HeaderDetalle = ({ _id } = {}) => {
   const navigate = useNavigate();
 
   return (

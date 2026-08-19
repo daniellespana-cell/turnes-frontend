@@ -12,7 +12,7 @@ import { TrendingUp, TrendingDown, AlertTriangle, Minus } from 'lucide-react';
  * - Racha: Determinada por la combinación de rating + actividad reciente.
  * - Cero valores hardcoded.
  */
-const ReputationHero = ({ rating = 0, reviewsCount = 0, pendingCount = 0, user = {} }) => {
+const ReputationHero = ({ rating = 0, reviewsCount = 0, _pendingCount = 0, user = {} }) => {
     const numericRating = Number(rating) || 0;
 
     // ── SATISFACCIÓN REAL ────────────────────────────────────

@@ -13,11 +13,13 @@ export const useChats = () => {
         ChatStorage.getSnapshot
     );
 
-    const conversationsMap = snapshot?.conversations || {};
-    const messagesMap = snapshot?.messages || {};
+    const conversations = snapshot?.conversations;
+    const messages = snapshot?.messages;
     const isLoading = snapshot?.loading || false;
 
     const activeChats = useMemo(() => {
+        const conversationsMap = conversations || {};
+        const messagesMap = messages || {};
         const list = Object.values(conversationsMap);
         if (list.length === 0) return [];
 
@@ -71,7 +73,7 @@ export const useChats = () => {
             .filter(Boolean)
             .sort((a, b) => b.lastActivityEpoch - a.lastActivityEpoch);
 
-    }, [conversationsMap, messagesMap]);
+    }, [conversations, messages, user?.id]);
 
     return {
         chats: activeChats,

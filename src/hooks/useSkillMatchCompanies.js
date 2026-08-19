@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../services/supabaseClient';
 import { GeoService } from '../services/geoService';
@@ -26,19 +26,21 @@ export const useSkillMatchCompanies = () => {
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const userSkills = useMemo(() => {
+        const rawSkills = user?.skills || user?.categorias || user?.categories || [];
+        return rawSkills
+            .map(s => String(s).toLowerCase().trim())
+            .filter(Boolean);
+    }, [user?.skills, user?.categorias, user?.categories]);
+
+    const userCity = user?.direccion || user?.location || '';
+    const userCoords = useMemo(() => getCiudadCoords(userCity), [userCity]);
+
     useEffect(() => {
         if (!isAuthenticated || !user?.id) return;
 
         const fetchMatchingCompanies = async () => {
             try {
-                const userSkills = (user?.skills || user?.categorias || user?.categories || [])
-                    .map(s => String(s).toLowerCase().trim())
-                    .filter(Boolean);
-
-                // Resolver coordenadas del postulante desde su ciudad base
-                const userCity = user?.direccion || user?.location || '';
-                const userCoords = getCiudadCoords(userCity);
-
                 // Si no hay skills NI ubicación, no podemos hacer match
                 if (userSkills.length === 0 && !userCoords) {
                     setLoading(false);
@@ -176,7 +178,7 @@ export const useSkillMatchCompanies = () => {
         };
 
         fetchMatchingCompanies();
-    }, [isAuthenticated, user?.id, user?.skills?.length, user?.direccion]);
+    }, [isAuthenticated, user?.id, userSkills, userCoords]);
 
     return { companies, loading };
 };

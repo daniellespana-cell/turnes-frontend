@@ -2,9 +2,6 @@ import React from 'react';
 
 import { useMemo } from 'react';
 
-// Configuration for particle density and movement
-const PARTICLE_COUNT = 20;
-
 const AntigravityBackground = ({ role }) => {
 
     // 🔥 DYNAMIC COLOR PALETTE BASED ON ROLE

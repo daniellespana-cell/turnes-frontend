@@ -49,7 +49,7 @@ export const useContactForm = () => {
         setStatus('loading');
 
         // Enviamos los datos reales, incluyendo el consentimiento legal
-        const { honeypot, ...dataToSend } = formData;
+        const { honeypot: _honeypot, ...dataToSend } = formData;
 
         const result = await contactService.sendMessage(dataToSend);
 

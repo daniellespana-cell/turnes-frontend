@@ -70,7 +70,6 @@ const AuthCallback = () => {
         // 🛡️ 2. GESTIÓN DE SESIÓN
         const handleOAuthSync = async () => {
             const rawRole = searchParams.get('role');
-            const action = searchParams.get('action'); // 'login_only'
 
             // Validación estricta del rol para prevenir inyección de parámetros (Security)
             const role = ['empresa', 'trabajador'].includes(rawRole) ? rawRole : null;
@@ -122,7 +121,7 @@ const AuthCallback = () => {
         }
 
         return () => { isMounted = false; };
-    }, [user, searchParams, navigate, refreshSession]);
+    }, [user, searchParams, navigate, refreshSession, showToast]);
 
     return (
         <div className="h-screen w-full bg-[#0a0a0a] flex flex-col items-center justify-center space-y-4 font-manrope">

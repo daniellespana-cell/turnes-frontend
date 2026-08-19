@@ -1,6 +1,5 @@
 import React from 'react';
 import { m as motion, AnimatePresence } from 'framer-motion';
-import EmptyState from '../common/EmptyState';
 import ErrorView from '../common/ErrorView';
 import RadarEmptyState from '../worker-dashboard/RadarEmptyState';
 import ExploreCarouselSkeleton from './explore/ExploreCarouselSkeleton';
@@ -8,7 +7,6 @@ import ExploreSectionedList from './explore/ExploreSectionedList';
 import ExploreGridList from './explore/ExploreGridList';
 import ExploreMapView from './explore/ExploreMapView';
 
-import { Search } from 'lucide-react';
 
 // ─── Main Export ──────────────────────────────────────────────────────────────
 /**
@@ -39,8 +37,8 @@ const ExploreContent = ({
     isApplying,
     appliedIds,
     setActiveCategory,
-    clearFilters,
-    setSearchQuery,
+    _clearFilters,
+    _setSearchQuery,
     onCompanyClick,
     hasMore,
     loadMore

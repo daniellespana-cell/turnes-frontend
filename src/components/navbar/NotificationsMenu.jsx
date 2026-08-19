@@ -14,7 +14,6 @@ const NotificationsMenu = () => {
         unreadCount,
         groupedNotifications,
         notificationsCount,
-        isUnread,
         handleNotificationClick,
         handleMarkAll,
         handleViewAll,

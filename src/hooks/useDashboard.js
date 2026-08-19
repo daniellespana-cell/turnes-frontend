@@ -75,7 +75,7 @@ export const useDashboard = () => {
         percentile: parseFloat(currentStats.score) >= 4.5 ? 'Top 12%' : 'Top 25%'
       }
     };
-  }, [user, stats, pendientes]);
+  }, [user, stats, pendientes, safeUnread]);
 
   // ELIMINADO: useEffect para el loading artificial
 

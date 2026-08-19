@@ -147,7 +147,7 @@ export const AuthProvider = ({ children }) => {
   }, [actualizarSaldo]);
 
   // 🔥 SENIOR FIX: Wrappers Seguros para Login/Logout
-  const handleLogin = async (email, password) => {
+  const handleLogin = useCallback(async (email, password) => {
     const response = await authService.login(email, password);
     if (response.error) throw response.error;
 
@@ -157,7 +157,7 @@ export const AuthProvider = ({ children }) => {
       await loadUserProfile(response.data.session);
     }
     return response;
-  };
+  }, [loadUserProfile]);
 
   const handleLogout = useCallback(() => {
     setUser(null);
@@ -177,7 +177,7 @@ export const AuthProvider = ({ children }) => {
     actualizarSaldo,
     actualizarPerfil,
     refreshSession,
-  }), [user, authReady, actualizarSaldo, actualizarPerfil, refreshSession, handleLogout]);
+  }), [user, authReady, handleLogin, handleLogout, actualizarSaldo, actualizarPerfil, refreshSession]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

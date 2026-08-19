@@ -75,7 +75,7 @@ export const useChatFinance = (candidato) => {
         };
 
         fetchQuote();
-    }, [candidato?.id]);
+    }, [candidato?.id, candidato?.vacante?.tipo_turno, candidato?.billingConfig?.plan, candidato?.payment]);
 
     return finanzas;
 };

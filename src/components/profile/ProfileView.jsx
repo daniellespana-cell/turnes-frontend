@@ -17,8 +17,6 @@ export const ProfileView = ({ profile, reviews = [], isCompany = false, companyD
     const displayAvatar = isCompany ? (companyData?.logo_url || profile.avatar_url) : profile.avatar_url;
     const isVerified = isCompany ? companyData?.verificado : profile.verificado;
 
-    const formattedRating = Number(profile.calificacion || profile.rating || 5.0).toFixed(1);
-
     return (
         <div className={`relative overflow-hidden flex flex-col justify-start w-full ${isModalMode ? 'p-6' : 'bg-[#0a0a0a] rounded-[2rem] border border-transparent  p-6 md:p-8'}`}>
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none" />

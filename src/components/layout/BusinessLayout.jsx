@@ -14,11 +14,7 @@ const BusinessLayout = ({ user }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const location = useLocation();
-  const isDashboard = location.pathname === '/dashboard';
   const isChat = location.pathname.includes('/chat');
-
-  const isMobileMenuOpen = isMobileOpen;
-  const setIsMobileMenuOpen = setIsMobileOpen;
 
   return (
     <div className="flex min-h-[100dvh] bg-[#0a0a0a] relative">

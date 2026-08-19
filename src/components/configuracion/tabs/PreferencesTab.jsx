@@ -6,7 +6,7 @@ import { useSettings } from '../../../hooks/useSettings';
 import CookieSettingsModal from '../../common/cookies/CookieSettingsModal';
 
 const PreferencesTab = () => {
-    const { settings, setLanguage, setTheme, updateSettings } = useSettings();
+    const { settings, updateSettings } = useSettings();
     const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
 
     return (

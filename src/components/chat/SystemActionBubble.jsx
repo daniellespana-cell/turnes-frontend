@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Video, FileSignature, Check, X } from 'lucide-react';
+import { Video, Check, X } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import FinalizeActionBtn from './FinalizeActionBtn';
 
@@ -30,7 +30,7 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
     } : undefined;
     const onDecline = !isClosed ? onDeclineVideo : undefined;
     const onInviteAction = !isClosed ? onInviteVideo : undefined;
-    const onContractAction = !isClosed ? onExecute : undefined;
+    const _onContractAction = !isClosed ? onExecute : undefined;
 
     const isVideoInvite = message.type === 'video_invitation' || subtype === 'video_invite';
     const isEmployerPrompt = ['prompt_video_invite', 'prompt_contract'].includes(message.type);

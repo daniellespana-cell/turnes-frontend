@@ -74,7 +74,6 @@ export const MatchService = {
 
         // Resolver el sector de la vacante para obtener sus roles permitidos
         const sectorData = SECTOR_MAP.get(vacancyCategory?.toUpperCase());
-        const allowedRoleIds = sectorData ? (sectorData.roles || []).map(r => r.id.toLowerCase()) : [];
         const allowedRoleLabels = sectorData ? (sectorData.roles || []).map(r => r.label.toLowerCase()) : [];
 
         // 2a. Rol Exacto: ¿alguna habilidad del usuario coincide directamente con el título/etiqueta de la vacante?

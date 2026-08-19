@@ -26,7 +26,6 @@ const PricingCard = ({ plan }) => {
     const isMicro = plan.name === 'Micro'; // Identifica el plan destacado
 
     // 🟢 Estilos para el tema Oscuro
-    const headerClass = isMicro ? 'bg-brand-success text-black' : 'bg-surface text-white';
     const listIcon = isMicro
         ? <Check className="w-5 h-5 text-black mr-2 flex-shrink-0" />
         : <Check className="w-5 h-5 text-brand-success mr-2 flex-shrink-0" />;

@@ -50,7 +50,7 @@ export const useVerificationDetail = (id) => {
             }
         };
         load();
-    }, [id]);
+    }, [id, showToast]);
 
     const handleApprove = async () => {
         if (actionLoading) return;

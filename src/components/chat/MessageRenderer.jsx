@@ -9,7 +9,7 @@ export const MessageRenderer = ({
     msg,
     index,
     allMessages,
-    handlers, // { onRehire, onAcceptVideo, onDeclineVideo, onInviteVideo, onExecute, onFinalize }
+    _handlers, // { onRehire, onAcceptVideo, onDeclineVideo, onInviteVideo, onExecute, onFinalize }
     state,    // { isClosed }
     currentUser, // 🆕 Required to match UUID identities
     userRole    // 🆕 Required for dual-sided system message translation

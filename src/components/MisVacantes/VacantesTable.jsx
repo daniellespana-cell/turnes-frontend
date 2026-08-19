@@ -5,7 +5,7 @@ import EmptyState from '../common/EmptyState';
 import { useNavigate } from 'react-router-dom';
 import { Info } from 'lucide-react';
 
-const VacantesTable = ({ data, activeTab, onAction, isLoading }) => {
+const VacantesTable = ({ data, activeTab, onAction, _isLoading }) => {
   const navigate = useNavigate();
 
   // Carga Eliminada: Permitimos renderizado inmediato o EmptyState

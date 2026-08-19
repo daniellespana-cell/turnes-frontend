@@ -5,18 +5,18 @@ import FinalizeActionBtn from './FinalizeActionBtn';
 
 export const ActionSteps = ({
     activeStep,
-    isPaid,
+    _isPaid,
     status, // { confirmingPay, isPaying, isSealed, isFinalizing }
-    permisos,
-    config,
+    _permisos,
+    _config,
     actions, // { handlePay, setConfirmingPay, handleMobileAction }
     onExecute,
     onFinalize,
     onVideoInvite
 }) => {
 
-    const { confirmingPay, isPaying, isFinalizing } = status;
-    const { handlePay, setConfirmingPay, handleMobileAction } = actions;
+    const { isPaying, isFinalizing } = status;
+    const { handlePay, handleMobileAction } = actions;
 
     // 1. STATE: SEALED (Archived)
     if (status.isSealed) return null;

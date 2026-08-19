@@ -51,7 +51,7 @@ const InviteToVacancyModal = ({ isOpen, onClose, candidate }) => {
         };
 
         fetchVacancies();
-    }, [isOpen, user?.id]);
+    }, [isOpen, user?.id, showToast]);
 
     const handleInvite = async () => {
         if (!selectedVacancyId) return;

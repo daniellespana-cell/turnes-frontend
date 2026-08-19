@@ -6,8 +6,8 @@ import ExploreContent from '../../components/features/ExploreContent';
 import VacancyDetailSheet from '../../components/features/VacancyDetailSheet';
 import CompanyProfileModal from '../../components/features/CompanyProfileModal';
 
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { MapPinOff, Info } from 'lucide-react';
+import { useState, useMemo, useCallback, useRef } from 'react';
+import { Info } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LocationHint from '../../components/common/LocationHint';
 import { useExploreVacancies } from '../../hooks/useExploreVacancies';

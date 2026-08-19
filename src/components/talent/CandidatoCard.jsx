@@ -1,11 +1,9 @@
 import React from 'react';
 import { m as motion } from 'framer-motion';
 import { Star, Send, X, ShieldCheck, CheckCircle2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { AssetResolver } from '../../utils/assetHelper';
 
 const CandidatoCard = ({ can, onUpdate, onSellar }) => {
-  const navigate = useNavigate();
   const isRehire = can.estadoTurno === 'AGENDADO';
 
   // 🛡️ DEFENSE IN DEPTH: Este componente solo renderiza el formulario de

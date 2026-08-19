@@ -5,7 +5,6 @@ import PlanSummaryCard from '../../components/checkout/PlanSummaryCard';
 import WalletPaymentMethod from '../../components/checkout/WalletPaymentMethod';
 import CardPaymentMethod from '../../components/checkout/CardPaymentMethod';
 
-import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { usePlanCheckout } from '../../hooks/usePlanCheckout';
@@ -17,7 +16,6 @@ const PlanActionPage = () => {
     const { planSlug } = useParams();
     const navigate = useNavigate();
 
-    const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
     const { user } = useAuth();
 
     const {

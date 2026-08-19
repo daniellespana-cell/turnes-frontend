@@ -12,7 +12,7 @@ const TransactionStatusPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const [status, setStatus] = useState('verifying'); // verifying, approved, declined, error, delayed
-    const [ref, setRef] = useState(searchParams.get('id') || 'PENDING');
+    const ref = searchParams.get('id') || 'PENDING';
 
     const id = searchParams.get('id');
     const itemType = searchParams.get('itemType');

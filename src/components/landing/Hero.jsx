@@ -17,26 +17,7 @@ const wordContainer = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
-const wordAnimation = {
-  hidden: { opacity: 0, y: 30, rotateX: -10 },
-  visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.6, ease: "easeOut" } },
-};
-
-const pulseAnimation = {
-  scale: [1, 1.02, 1],
-  transition: {
-    duration: 4,
-    repeat: Infinity,
-    ease: "easeInOut",
-    delay: 1.5
-  }
-};
-
 const Hero = () => {
-
-  const heroText = "Tu operación no puede detenerse.";
-  const words = heroText.split(" ");
-
   return (
     <motion.section
       className="py-32 md:py-48 bg-zinc-950 text-main overflow-hidden relative"

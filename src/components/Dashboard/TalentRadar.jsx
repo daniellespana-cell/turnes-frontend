@@ -1,6 +1,6 @@
 import React from 'react';
-import { Sparkles, ShieldCheck, Star, ChevronRight, MapPin, Briefcase, Navigation } from 'lucide-react';
-import { m as motion, AnimatePresence } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
 
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +29,7 @@ const RADAR_TITLES = {
 const TalentRadar = () => {
     const navigate = useNavigate();
     const location = useLocationResolver();
+    const { isLoading: isLocLoading, lat: locLat, lng: locLng, radiusKm: locRadiusKm, locationMode, cityName } = location;
     const [candidates, setCandidates] = useState([]);
     const [loading, setLoading] = useState(true);
     const lastFetchedCoord = useRef({ lat: null, lng: null });
@@ -36,22 +37,20 @@ const TalentRadar = () => {
     useEffect(() => {
         let isCancelled = false;
         const timer = setTimeout(async () => {
-            if (location.isLoading) return;
-
-            const { lat, lng, radiusKm } = location;
+            if (isLocLoading) return;
 
             // 🛡️ ANTI-DDOS: Prevenir llamados si la coordenada no cambió significativamente (0.5km)
             if (lastFetchedCoord.current.lat) {
-                const dist = GeoService.calculateDistance(lat, lng, lastFetchedCoord.current.lat, lastFetchedCoord.current.lng);
+                const dist = GeoService.calculateDistance(locLat, locLng, lastFetchedCoord.current.lat, lastFetchedCoord.current.lng);
                 if (dist < 0.5) return;
             }
 
             if (!isCancelled) setLoading(true);
 
             try {
-                const data = await talentService.getRadarTalent(lat, lng, '', radiusKm);
+                const data = await talentService.getRadarTalent(locLat, locLng, '', locRadiusKm);
                 if (!isCancelled) {
-                    lastFetchedCoord.current = { lat, lng };
+                    lastFetchedCoord.current = { lat: locLat, lng: locLng };
                     setCandidates(data || []);
                 }
             } catch (err) {
@@ -65,13 +64,13 @@ const TalentRadar = () => {
             isCancelled = true;
             clearTimeout(timer);
         };
-    }, [location.isLoading, location.lat, location.lng, location.radiusKm]);
+    }, [isLocLoading, locLat, locLng, locRadiusKm]);
 
     const hasCandidates = candidates && candidates.length > 0;
 
     // Título dinámico
-    const radarTitle = RADAR_TITLES[location.locationMode]
-        || (location.cityName ? `Talento cerca de ${location.cityName}` : 'Talento Disponible');
+    const radarTitle = RADAR_TITLES[locationMode]
+        || (cityName ? `Talento cerca de ${cityName}` : 'Talento Disponible');
 
     return (
         <div className="w-full space-y-6">

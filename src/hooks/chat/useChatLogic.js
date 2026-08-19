@@ -23,7 +23,6 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
   // 1. PROTOCOL & STATE (Source of Truth)
   const {
     permissions,
-    contractStatus,
     setContractStatus,
     activeStep,
     isLoadingProtocol
@@ -113,7 +112,7 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
   }, [permissions.isReadOnly, permissions.canWrite, addMessage, validateSecurity]);
 
   // --- DOMAINS ---
-  const { videoStats, invitarAVideo, registrarValidacionVideo, declinarValidacionVideo } = useChatVideo({
+  const { videoStats, invitarAVideo, registrarValidacionVideo } = useChatVideo({
     candidato,
     userRole,
     resolveAppId,
@@ -164,7 +163,7 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
     } finally {
       setIsFinalizing(false);
     }
-  }, [candidato, setContractStatus, isFinalizing, resolveAppId, triggerDomainSync, navigate]);
+  }, [setContractStatus, isFinalizing, resolveAppId, triggerDomainSync, showToast, navigate]);
 
   return {
     isLoadingProtocol,

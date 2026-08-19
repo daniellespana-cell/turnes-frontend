@@ -62,7 +62,7 @@ export const useWorkerFinance = () => {
                 setIsLoadingMore(false);
             }
         }
-    }, [isAuthenticated, user?.id, user?.role, history.length]);
+    }, [isAuthenticated, user?.id, history.length]);
 
     const loadMore = () => {
         if (!isLoadingMore && hasMore) {

@@ -13,15 +13,14 @@ const ChatOverlays = ({
   setIsInVideoCall,
   roomUrl, // 🆕
   isClosed,
-  isConfirmModalOpen,
-  setIsConfirmModalOpen,
-  onExecutePayment,
+  _isConfirmModalOpen,
+  setIsConfirmModalOpen: _setIsConfirmModalOpen,
+  onExecutePayment: _onExecutePayment,
   isVideoReinviteModalOpen, // 🆕 Modal video
   setIsVideoReinviteModalOpen,
   onConfirmVideoInvite
 }) => {
   const {
-    finanzas = {},
     registrarValidacionVideo
   } = chat || {};
 
@@ -35,21 +34,6 @@ const ChatOverlays = ({
       return () => clearTimeout(timer);
     }
   }, [showSuccessToast]);
-
-
-
-  const handleConfirmPayment = async () => {
-    if (!onExecutePayment) return;
-
-    // Ejecutamos la lógica del Hook
-    const resultado = await onExecutePayment();
-
-    if (resultado?.success) {
-      setIsConfirmModalOpen(false);
-      // 🔥 ACTIVAMOS EL TOAST AQUÍ
-      setShowSuccessToast(true);
-    }
-  };
 
   const handleCloseVideo = (tiempo) => {
     setIsInVideoCall(false);

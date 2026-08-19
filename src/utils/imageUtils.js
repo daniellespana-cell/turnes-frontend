@@ -63,9 +63,9 @@ export const compressImageToBlob = (file, maxWidth = 500, maxHeight = 500, quali
                 }, 'image/jpeg', quality);
             };
             
-            img.onerror = (error) => reject(new Error("Error cargando la imagen para comprimir"));
+            img.onerror = () => reject(new Error("Error cargando la imagen para comprimir"));
         };
         
-        reader.onerror = (error) => reject(new Error("Error leyendo el archivo original"));
+        reader.onerror = () => reject(new Error("Error leyendo el archivo original"));
     });
 };

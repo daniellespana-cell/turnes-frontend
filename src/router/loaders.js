@@ -1,6 +1,6 @@
 import { supabase } from '../services/supabaseClient';
 import { redirect } from 'react-router-dom';
-import { getSessionCache, setSessionCache, clearSessionCache } from '../utils/sessionCache';
+import { getSessionCache, setSessionCache } from '../utils/sessionCache';
 
 // Re-export so AuthContext can clear the cache on logout without importing from router
 
@@ -52,7 +52,7 @@ export const rootLoader = async () => {
 // --------------------------------------------------------------------------
 // PROTECTED LOADER  (not currently wired into the router, kept for future use)
 // --------------------------------------------------------------------------
-const protectedLoader = async ({ request }) => {
+export const protectedLoader = async ({ request }) => {
   const { data: { session } } = await safeGetSession(500);
   const cache = getSessionCache();
   if (!session && cache.fetched) {

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 /**
  * Header Ultra-Sutil: Escala Senior reducida.
  */
-export const DashboardHeader = ({ name, balance, unread }) => {
+export const DashboardHeader = ({ name, balance, _unread }) => {
   const navigate = useNavigate();
 
   return (

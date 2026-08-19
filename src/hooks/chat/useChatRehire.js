@@ -37,7 +37,7 @@ export const useChatRehire = ({
         } catch (e) {
             showToast(`Error declinando oferta: ${e.message}`, "error");
         }
-    }, [resolveAppId, triggerDomainSync]);
+    }, [resolveAppId, triggerDomainSync, showToast]);
 
     return {
         onAcceptRehire,

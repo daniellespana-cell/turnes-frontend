@@ -33,9 +33,10 @@ export const useVacancyForm = () => {
 
             if (cityKey && CIUDADES_COORDS[cityKey]) {
                 const { lat, lng } = CIUDADES_COORDS[cityKey];
-                if (formData.lat !== lat || formData.lng !== lng) {
-                    setFormData(prev => ({ ...prev, lat, lng }));
-                }
+                setFormData(prev => {
+                    if (prev.lat === lat && prev.lng === lng) return prev;
+                    return { ...prev, lat, lng };
+                });
             }
         }
     }, [formData.location, formData.isLocationConfirmed]);

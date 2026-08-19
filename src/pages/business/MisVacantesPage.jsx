@@ -27,7 +27,6 @@ const MisVacantesPage = () => {
     activeTab,
     setActiveTab,
     counts,
-    moverACompletada,
     handleAction,
     isLoading
   } = useVacantesLogic();

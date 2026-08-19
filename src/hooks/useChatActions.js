@@ -11,7 +11,6 @@ import { supabase } from '../services/supabaseClient';
 export const useChatActions = ({
     candidato,
     onFinalize,
-    messages,
     setMessages // Optional: if we want to mutate local state directly
 }) => {
 
