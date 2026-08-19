@@ -15,6 +15,11 @@ precacheAndRoute(self.__WB_MANIFEST || []);
 
 // Evento: Recibir la notificación Push del servidor
 self.addEventListener('push', (event) => {
+    // 🛡️ Verificar permisos antes de invocar showNotification (Evita TypeError en consola)
+    if (typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
+        return;
+    }
+
     let data = {
         title: 'Turnes',
         body: 'Tienes una nueva notificación',
@@ -24,7 +29,7 @@ self.addEventListener('push', (event) => {
     if (event.data) {
         try {
             data = event.data.json();
-        } catch (e) {
+        } catch {
             data.body = event.data.text();
         }
     }
@@ -41,7 +46,10 @@ self.addEventListener('push', (event) => {
     };
 
     event.waitUntil(
-        self.registration.showNotification(data.title, options)
+        self.registration.showNotification(data.title, options).catch((err) => {
+            // Manejo seguro si el permiso fue revocado
+            console.warn('[SW] No se pudo mostrar la notificación Push:', err?.message || err);
+        })
     );
 });
 
