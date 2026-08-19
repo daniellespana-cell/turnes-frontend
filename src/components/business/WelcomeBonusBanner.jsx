@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Gift, CheckCircle2, Info } from 'lucide-react';
+import { Gift, CheckCircle2, Info, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../services/supabaseClient';
+import { isCompanyProfileComplete, WELCOME_BONUS_CONDITIONS } from '../../domain/welcomeBonus.rules';
 
 const WelcomeBonusBanner = () => {
     const { user } = useAuth();
@@ -37,11 +38,7 @@ const WelcomeBonusBanner = () => {
     if (!user || user.rol !== 'empresa' || isChecking || hasRedeemed) return null;
 
     const companyData = Array.isArray(user.empresas) ? user.empresas[0] : (user.empresas || {});
-    const isProfileComplete = 
-        companyData?.nombre_comercial && 
-        companyData?.nit_rut && 
-        companyData?.logo_url && 
-        companyData?.sector_industrial;
+    const isProfileComplete = isCompanyProfileComplete(companyData);
 
     return (
         <>
@@ -58,8 +55,8 @@ const WelcomeBonusBanner = () => {
                         </h3>
                         <p className="text-zinc-300 text-sm">
                             {isProfileComplete 
-                                ? "¡Felicidades! Tu perfil está al 100%. Tu primera contratación de un turno temporal será totalmente gratuita (descuento automático)."
-                                : "Completa el 100% de tu perfil de empresa (logo y NIT) para desbloquear tu primera contratación temporal gratis."}
+                                ? "¡Felicidades! Tu perfil está al 100%. Tu primera contratación de un turno temporal será totalmente gratuita (descuento automático en comisión)."
+                                : "Completa el 100% de tu perfil de empresa (Nombre, NIT, Logo y Sector) para desbloquear tu primera contratación temporal gratis."}
                         </p>
                     </div>
                 </div>
@@ -97,16 +94,23 @@ const WelcomeBonusBanner = () => {
                                 <div className="p-2 bg-emerald-500/20 rounded-xl">
                                     <Info size={20} className="text-emerald-400" />
                                 </div>
-                                <h3 className="text-white font-bold text-lg">Términos y Condiciones</h3>
+                                <h3 className="text-white font-bold text-lg">{WELCOME_BONUS_CONDITIONS.TITLE}</h3>
                             </div>
 
-                            <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-xl p-4 text-sm text-zinc-300 leading-relaxed font-medium">
-                                "El beneficio de 'Primer Turno Gratis' aplica exclusivamente para el pago de comisión de la primera contratación de un Turno Temporal dentro de Turnes, siempre que el perfil de la empresa esté al 100% completo. No aplica para Turnos Fijos. En ningún caso es canjeable por dinero en efectivo ni transferible a cuentas bancarias."
+                            <div className="space-y-3 text-sm text-zinc-300 leading-relaxed font-medium">
+                                <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 text-emerald-300/90 flex items-start gap-2.5">
+                                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
+                                    <span>{WELCOME_BONUS_CONDITIONS.LEGAL_TEXT}</span>
+                                </div>
+                                <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-amber-300/90 text-xs flex items-center gap-2">
+                                    <ShieldAlert size={14} className="text-amber-400 shrink-0" />
+                                    <span>{WELCOME_BONUS_CONDITIONS.ELIGIBILITY_ALERT}</span>
+                                </div>
                             </div>
                             
                             <button
                                 onClick={() => setShowLegalModal(false)}
-                                className="w-full py-3 px-4 rounded-xl font-bold uppercase text-[11px] tracking-widest text-zinc-400 bg-zinc-900 hover:bg-zinc-800 transition-colors"
+                                className="w-full py-3 px-4 rounded-xl font-bold uppercase text-[11px] tracking-widest text-white bg-emerald-600 hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-600/20"
                                 type="button"
                                 aria-label="Acción">
                                 Entendido

@@ -196,4 +196,42 @@ describe('profile.mapper.js', () => {
             unsubscribe();
         });
     });
+
+    describe('WelcomeBonusRules (Primer Turno Gratis SSOT)', () => {
+        it('valida completitud del 100% del perfil de empresa correctamente', async () => {
+            const { isCompanyProfileComplete, getMissingCompanyProfileFields } = await import('../domain/welcomeBonus.rules');
+
+            // Caso 1: Perfil completo
+            const completeCompany = {
+                nombre_comercial: 'Restaurante El Sol',
+                nit_rut: '900123456-7',
+                logo_url: 'https://turnes.co/logo.png',
+                sector_industrial: 'Gastronomía'
+            };
+            expect(isCompanyProfileComplete(completeCompany)).toBe(true);
+            expect(getMissingCompanyProfileFields(completeCompany)).toEqual([]);
+
+            // Caso 2: Falta NIT
+            const missingNit = { ...completeCompany, nit_rut: '' };
+            expect(isCompanyProfileComplete(missingNit)).toBe(false);
+            expect(getMissingCompanyProfileFields(missingNit)).toContain('NIT / RUT');
+
+            // Caso 3: Falta Logo
+            const missingLogo = { ...completeCompany, logo_url: null, avatar_url: undefined };
+            expect(isCompanyProfileComplete(missingLogo)).toBe(false);
+            expect(getMissingCompanyProfileFields(missingLogo)).toContain('Logo');
+
+            // Caso 4: Null o undefined
+            expect(isCompanyProfileComplete(null)).toBe(false);
+            expect(getMissingCompanyProfileFields(null).length).toBe(4);
+        });
+
+        it('garantiza términos inequívocos que excluyen turnos fijos', async () => {
+            const { WELCOME_BONUS_CONDITIONS } = await import('../domain/welcomeBonus.rules');
+
+            expect(WELCOME_BONUS_CONDITIONS.LEGAL_TEXT).toContain('Turno Ocasional / Temporal');
+            expect(WELCOME_BONUS_CONDITIONS.LEGAL_TEXT).toContain('NO aplica para contrataciones de Turnos Fijos');
+            expect(WELCOME_BONUS_CONDITIONS.ELIGIBILITY_ALERT).toContain('Solo aplica para Turnos Temporales');
+        });
+    });
 });

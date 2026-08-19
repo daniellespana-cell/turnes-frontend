@@ -42,8 +42,10 @@ export const useContractSidebar = ({
         const labelCobro = finanzas?.labelCobro ?? 'Comisión';
         const beneficioPlan = finanzas?.beneficioPlan ?? null;
         const isFijo = finanzas?.isFijo ?? false;
+        const isWelcomeBonusApplied = Boolean(finanzas?.isWelcomeBonusApplied);
+        const originalAmount = finanzas?.originalAmount ?? 0;
 
-        return { cargo, pago, plan, labelCobro, beneficioPlan, isFijo };
+        return { cargo, pago, plan, labelCobro, beneficioPlan, isFijo, isWelcomeBonusApplied, originalAmount };
     }, [finanzas, candidate, user, isEmpresa]);
 
     // 4. STATUS FLAGS (From Server Context)

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Gift } from 'lucide-react';
 import { AssetResolver } from '../../utils/assetHelper';
 
 export const TalentInfo = ({ candidate, config, isPaid, isRehire, isSealed, isEmpresa }) => {
@@ -47,10 +47,25 @@ export const TalentInfo = ({ candidate, config, isPaid, isRehire, isSealed, isEm
                                 </p>
                             </div>
                             <div className="space-y-0.5 text-right">
-                                <span className="text-[7px] font-black text-zinc-700 uppercase tracking-widest">{config.labelCobro || 'Cobro'}</span>
-                                <p className="text-[14px] font-black text-white">
-                                    ${config.cargo.toLocaleString()}
-                                </p>
+                                <span className="text-[7px] font-black text-zinc-700 uppercase tracking-widest">
+                                    {config.isWelcomeBonusApplied ? (
+                                        <span className="text-emerald-400 font-bold flex items-center justify-end gap-1">
+                                            <Gift size={8} /> 1er Turno Gratis
+                                        </span>
+                                    ) : (
+                                        config.labelCobro || 'Cobro'
+                                    )}
+                                </span>
+                                <div className="flex items-baseline justify-end gap-1.5">
+                                    {config.isWelcomeBonusApplied && config.originalAmount > 0 && (
+                                        <span className="text-[10px] font-bold text-zinc-500 line-through">
+                                            ${config.originalAmount.toLocaleString()}
+                                        </span>
+                                    )}
+                                    <p className={`text-[14px] font-black ${config.isWelcomeBonusApplied ? 'text-emerald-400' : 'text-white'}`}>
+                                        ${config.cargo.toLocaleString()}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     )}

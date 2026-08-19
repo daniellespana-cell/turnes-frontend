@@ -26,13 +26,22 @@ export const useChatFinance = (candidato) => {
 
                 const isFijo = data.tipo_turno?.toLowerCase() === 'fijo';
                 const plan = data.plan?.charAt(0).toUpperCase() + data.plan?.slice(1) || 'Básico';
+                const isWelcomeBonus = Boolean(data.is_welcome_bonus_applied);
                 
                 let beneficioPlan = null;
-                if (data.plan === 'pro') beneficioPlan = isFijo ? 'Gratis (Plan Pro)' : 'Comisión 0% (Plan Pro)';
-                if (data.plan === 'micro' && isFijo) beneficioPlan = 'Cupo Mensual (Plan Micro)';
+                if (isWelcomeBonus) {
+                    beneficioPlan = 'Primer Turno Gratis (Bono Bienvenida)';
+                } else if (data.plan === 'pro') {
+                    beneficioPlan = isFijo ? 'Gratis (Plan Pro)' : 'Comisión 0% (Plan Pro)';
+                } else if (data.plan === 'micro' && isFijo) {
+                    beneficioPlan = 'Cupo Mensual (Plan Micro)';
+                }
 
                 setFinanzas({
-                    cargoServicio: Math.round(data.amount),
+                    cargoServicio: Math.round(data.amount || 0),
+                    originalAmount: Math.round(data.original_amount || data.amount || 0),
+                    isWelcomeBonusApplied: isWelcomeBonus,
+                    bonusReason: data.bonus_reason || null,
                     pagoPersonal: candidato.payment || 0,
                     plan: plan,
                     labelCobro: isFijo ? 'Cargo Fijo' : 'Comisión',

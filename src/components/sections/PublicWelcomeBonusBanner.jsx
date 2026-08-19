@@ -26,7 +26,7 @@ const PublicWelcomeBonusBanner = () => {
                 </h2>
                 
                 <p className="text-zinc-400 text-base md:text-lg mb-8 leading-relaxed max-w-lg">
-                    Registra tu empresa y completa tu perfil. Te regalamos la comisión de conexión de tu primer candidato para que pruebes la velocidad de nuestra red sin ningún riesgo.
+                    Registra tu empresa y completa tu perfil. Te regalamos la comisión de conexión de tu primer candidato en turnos temporales para que pruebes la velocidad de nuestra red sin ningún riesgo.
                 </p>
                 
                 <button 
