@@ -176,4 +176,24 @@ describe('profile.mapper.js', () => {
             expect(() => telemetryService.trackEvent('test_event', { step: 1 })).not.toThrow();
         });
     });
+
+    describe('VersionService (Anti-Zombie PWA & Update Sentinel)', () => {
+        it('gestiona suscripción de actualizaciones y metadatos de versión', async () => {
+            const { versionService, APP_METADATA } = await import('../services/versionService');
+            
+            expect(APP_METADATA.VERSION).toBe('0.1.0');
+            expect(versionService.updateAvailable).toBe(false);
+
+            let notified = false;
+            const unsubscribe = versionService.subscribe((hasUpdate) => {
+                notified = hasUpdate;
+            });
+
+            versionService.notifyUpdateAvailable();
+            expect(notified).toBe(true);
+            expect(versionService.updateAvailable).toBe(true);
+
+            unsubscribe();
+        });
+    });
 });

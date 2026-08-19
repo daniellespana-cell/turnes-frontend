@@ -11,14 +11,14 @@ import 'leaflet/dist/leaflet.css';
 
 import { LazyMotion, domAnimation } from 'framer-motion';
 
+import { registerSW } from 'virtual:pwa-register';
+import { versionService } from './services/versionService';
+
 // 🚀 Inicializar Sentinel Error Tracking (Sentry)
 initSentry();
 
-// 🚀 Registrar Service Worker (Requerido para PWA y Push Notifications)
-import { registerSW } from 'virtual:pwa-register';
-if ('serviceWorker' in navigator) {
-  registerSW({ immediate: true });
-}
+// 🚀 Inicializar Sentinel de Versionado y PWA Updates
+versionService.init(registerSW);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(

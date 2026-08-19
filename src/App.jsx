@@ -4,6 +4,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { NotificationsProvider } from './context/NotificationsContext';
 import GlobalErrorBoundary from './components/error/GlobalErrorBoundary';
 import GlobalNotifier from './components/common/GlobalNotifier';
+import AppUpdateToast from './components/pwa/AppUpdateToast';
+import PWAInstallPrompt from './components/pwa/PWAInstallPrompt';
 
 import { useEffect } from 'react';
 
@@ -52,6 +54,8 @@ function App() {
           <HelmetProvider>
             <NotificationsProvider>
               <GlobalNotifier />
+              <AppUpdateToast />
+              <PWAInstallPrompt />
               <RouterProvider 
                 router={router} 
               />

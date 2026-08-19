@@ -3,6 +3,7 @@ import { useRouteError } from 'react-router-dom';
 import { TriangleAlert, RefreshCcw, Home } from 'lucide-react';
 import turnesLogo from "../../assets/logo-turnes.png";
 import { telemetryService } from '../../services/telemetryService';
+import { versionService } from '../../services/versionService';
 
 export const RouterErrorBoundary = () => {
     const error = useRouteError();
@@ -17,16 +18,8 @@ export const RouterErrorBoundary = () => {
             error?.name === 'ChunkLoadError';
 
         if (isChunkError) {
-            const hasReloaded = sessionStorage.getItem('chunk_reload');
-            if (!hasReloaded) {
-                console.warn('ChunkLoadError detectado. Intentando recarga automática suave...');
-                sessionStorage.setItem('chunk_reload', 'true');
-                window.location.reload();
-            } else {
-                console.error('La recarga automática falló. Requiere acción del usuario.');
-                setNeedsManualReload(true);
-                sessionStorage.removeItem('chunk_reload');
-            }
+            versionService.handleChunkError();
+            setNeedsManualReload(true);
         } else if (error) {
             // Reportar error de enrutamiento o render a telemetría
             telemetryService.captureException(error, { source: 'RouterErrorBoundary' });
