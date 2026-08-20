@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient';
 import { normalizeCandidateProfile } from '../domain/profile.mapper';
+import { GeoService } from './geoService';
 
 /**
  * TalentService
@@ -114,7 +115,7 @@ class TalentService {
                 // Se eliminó la sobreescritura de rating para que el mapper aplique el Beneficio de la duda (5.0)
                 nombre_display: t.nombre_display,
                 distancia_mts: t.distancia_mts,
-                display_distance: t.distancia_mts ? (t.distancia_mts / 1000).toFixed(1) : "0.0",
+                display_distance: GeoService.formatDistance(t.distancia_mts, false),
                 match_score: t.match_score || 0
             };
         });

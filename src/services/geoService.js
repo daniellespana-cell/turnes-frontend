@@ -34,6 +34,22 @@ export const GeoService = {
     },
 
     /**
+     * Formateador de distancia inteligente (SSOT).
+     * Evita valores irreales como "0.0 km" y proporciona etiquetas humanas.
+     * @param {number|null} distance Distancia en metros (o km si isKm=true)
+     * @param {boolean} isKm Si el valor ingresado ya está en kilómetros
+     * @returns {string} Ej: '< 1 km', '2.5 km', 'Muy cerca', 'En tu zona'
+     */
+    formatDistance(distance, isKm = false) {
+        if (distance == null || isNaN(distance) || distance >= 999) return 'En tu zona';
+        const num = Number(distance);
+        const km = isKm ? num : num / 1000;
+        if (km <= 0.1) return 'Muy cerca';
+        if (km < 1) return '< 1 km';
+        return `${km.toFixed(1)} km`;
+    },
+
+    /**
      * Vacantes cercanas via PostGIS (Server-Side) con paginación por cursores.
      */
     async fetchNearby(lat, lng, radiusKm = 15, userId = null, limit = 15, lastDistance = null, lastId = null, timeout = 12000) {

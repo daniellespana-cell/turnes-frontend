@@ -16,7 +16,10 @@ const TalentCard = ({ candidate, onOpenProfile, onDirectInvite }) => {
         ? Number(candidate.rating).toFixed(1) 
         : "0.0";
         
-    const displayDistance = candidate.display_distance || (candidate.distancia_mts ? (candidate.distancia_mts / 1000).toFixed(1) : "0.0");
+    const displayDistance = candidate.display_distance 
+        || (candidate.distancia_mts != null 
+            ? (candidate.distancia_mts <= 100 ? 'Muy cerca' : (candidate.distancia_mts < 1000 ? '< 1 km' : `${(candidate.distancia_mts / 1000).toFixed(1)} km`))
+            : (candidate.ciudad_nombre || candidate.ciudad || 'En tu zona'));
     const skills = (candidate.skills || []).slice(0, 3);
     const isVerified = candidate.verificado || candidate.verified;
     const displayName = candidate.nombre_display || candidate.nombre || 'Candidato';
@@ -80,7 +83,7 @@ const TalentCard = ({ candidate, onOpenProfile, onDirectInvite }) => {
                                 <div className="w-px h-2.5 bg-zinc-800 shrink-0" />
                                 <div className="flex items-center gap-1 text-zinc-400 min-w-0 truncate">
                                     <MapPin size={11} className="shrink-0" />
-                                    <span className="text-[10px] font-bold uppercase tracking-tighter truncate">{displayDistance} km</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-tighter truncate">{displayDistance}</span>
                                 </div>
                             </div>
                         </div>

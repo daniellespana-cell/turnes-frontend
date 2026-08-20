@@ -11,9 +11,9 @@ export const TalentKPIs = ({ rating, exitos, distancia, ubicacion }) => {
     // 🛡️ REFUERZO SSOT: Reflejamos la verdad de la DB sin filtros
     const displayRating = Number(rating || 0).toFixed(1);
     const displayExitos = exitos || 0;
-    const displayDistance = distancia 
-        ? `${(Number(distancia) / 1000).toFixed(1)} km` 
-        : (ubicacion || 'Zona remota');
+    const displayDistance = distancia != null && !isNaN(distancia) && Number(distancia) > 0
+        ? (Number(distancia) <= 100 ? 'Muy cerca' : (Number(distancia) < 1000 ? '< 1 km' : `${(Number(distancia) / 1000).toFixed(1)} km`))
+        : (ubicacion || 'En tu zona');
     
     return (
         <div className="flex items-center gap-3">

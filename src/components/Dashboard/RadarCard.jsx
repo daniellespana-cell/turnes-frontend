@@ -14,7 +14,10 @@ const RadarCard = ({ candidate, idx, onView, showDistance = true, locationMode }
     
     // Normalización defensiva
     const displayRating = Number(candidate?.rating || 0).toFixed(1);
-    const displayDistance = candidate?.display_distance || '—';
+    const displayDistance = candidate?.display_distance 
+        || (candidate?.distancia_mts != null 
+            ? (candidate.distancia_mts <= 100 ? 'Muy cerca' : (candidate.distancia_mts < 1000 ? '< 1 km' : `${(candidate.distancia_mts / 1000).toFixed(1)} km`))
+            : (candidate?.ciudad_nombre || candidate?.ciudad || 'En tu zona'));
     const skills = (candidate?.skills || []).slice(0, 3);
     const isVerified = candidate?.verificado || candidate?.verified;
     const candidateCity = candidate?.ciudad_nombre || candidate?.ciudad || 'Colombia';
@@ -84,7 +87,7 @@ const RadarCard = ({ candidate, idx, onView, showDistance = true, locationMode }
                                     <div className="w-px h-3 bg-zinc-700/50" />
                                     <div className="flex items-center gap-1 text-zinc-500">
                                         <MapPin size={11} />
-                                        <span className="text-[11px] font-semibold">{displayDistance} km</span>
+                                        <span className="text-[11px] font-semibold">{displayDistance}</span>
                                     </div>
                                 </>
                             )}
