@@ -124,11 +124,17 @@ export const ChatList = ({ chats: initialChats, isDirectoryMode = false, backPat
                             key={chat.id}
                             chat={chat}
                             isActive={String(chat.id) === String(activeChatId)}
-                            onClick={() => navigate(`/dashboard/chat/${chat.id}`)}
+                            onClick={() => {
+                                ChatStorage.markAsRead(chat.id, user?.id);
+                                navigate(`/dashboard/chat/${chat.id}`);
+                            }}
                             onActionClick={handleActionClick}
                             role="button"
                             tabIndex={0}
-                            onKeyDown={() => navigate(`/dashboard/chat/${chat.id}`)} />
+                            onKeyDown={() => {
+                                ChatStorage.markAsRead(chat.id, user?.id);
+                                navigate(`/dashboard/chat/${chat.id}`);
+                            }} />
                     ))
                 )}
             </div>

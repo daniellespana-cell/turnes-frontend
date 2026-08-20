@@ -84,7 +84,10 @@ class ChatStorageFacade {
     sendMessage = (chatId, text, senderId, type = 'text', metadata = {}) =>
         chatNetwork.sendMessage(chatId, text, senderId, type, metadata);
 
-    markAsRead = (chatId, myUserId) => chatNetwork.markAsRead(chatId, myUserId);
+    markAsRead = (chatId, myUserId) => {
+        chatState.markAsRead(chatId);
+        return chatNetwork.markAsRead(chatId, myUserId);
+    };
     
     setActiveChat = (chatId) => chatState.setActiveChat(chatId);
 

@@ -65,13 +65,28 @@ class ChatStateService {
     }
 
     markAsRead(chatId) {
-        if (!chatId || !this._snapshot.unreadCounts[chatId]) return;
+        if (!chatId) return;
+
+        // 1. Limpiar contador no leído en memoria
+        const currentCounts = { ...this._snapshot.unreadCounts };
+        delete currentCounts[chatId];
+
+        // 2. Actualizar mensajes en memoria a isRead = true
+        let updatedMessages = this._snapshot.messages;
+        if (this._snapshot.messages[chatId]) {
+            const markedHistory = this._snapshot.messages[chatId].map(m => ({
+                ...m,
+                isRead: true
+            }));
+            updatedMessages = {
+                ...this._snapshot.messages,
+                [chatId]: markedHistory
+            };
+        }
 
         this.updateSnapshot({
-            unreadCounts: {
-                ...this._snapshot.unreadCounts,
-                [chatId]: 0
-            }
+            unreadCounts: currentCounts,
+            messages: updatedMessages
         });
     }
 

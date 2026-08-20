@@ -21,11 +21,14 @@ class ChatRealtimeService {
     constructor() {
         this._msgChannel = null;
         this._convChannel = null;
+        this._presenceChannel = null;
         this._refreshDebounce = null;
+        this._userId = null;
     }
 
     setupGlobalRealtime(userId) {
         this.teardown();
+        this._userId = userId;
 
         // ── CANAL 1: Mensajes (Alta Prioridad) ───────────────────────
         // Este canal no tiene filtros para asegurar que el RLS de Supabase 
@@ -141,6 +144,13 @@ class ChatRealtimeService {
         const msg = chatState.formatMessage(row);
         chatState.addMessageLocal(row.conversacion_id, msg);
         
+        // 🛡️ Si el usuario está viendo activamente este chat, marcarlo leído de inmediato
+        if (chatState._activeChatId === row.conversacion_id && this._userId) {
+            import('./chatNetwork').then(module => {
+                module.chatNetwork.markAsRead(row.conversacion_id, this._userId);
+            });
+        }
+
         // Si es un chat nuevo que no tenemos en memoria, forzamos recarga relacional
         if (!hasConversation) {
             this._debouncedRefresh();
@@ -208,6 +218,7 @@ class ChatRealtimeService {
             window.removeEventListener('focus', this._handleVisibility);
             this._handleVisibility = null;
         }
+        this._userId = null;
     }
 }
 

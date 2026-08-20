@@ -141,6 +141,11 @@ class ChatNetworkService {
     }
 
     async markAsRead(chatId, myUserId) {
+        if (!chatId) return;
+        // Inmediatamente limpiar en estado local reactivo (0ms de latencia)
+        chatState.markAsRead(chatId);
+
+        if (!myUserId) return;
         const { error } = await supabase
             .from('mensajes')
             .update({ leido: true, read_at: new Date().toISOString() })
