@@ -1,27 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import { m as motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import { useWindowVirtualizer } from '@tanstack/react-virtual';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import VacancyCard from '../VacancyCard';
-import Spinner from '../../ui/Spinner';
-
 
 const LoadMoreButton = ({ onClick, loading, hasMore }) => {
     if (!hasMore) return null;
     return (
-        <div className="flex justify-center pt-4 pb-12">
+        <div className="flex justify-center pt-6 pb-12">
             <button
                 onClick={onClick}
                 disabled={loading}
-                className="group relative px-8 py-3 bg-zinc-900 border border-transparent rounded-2xl overflow-hidden hover:border-brand-primary/30 transition-all duration-300 disabled:opacity-50"
+                className="group relative px-8 py-3 bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden hover:border-brand-primary/30 transition-all duration-300 disabled:opacity-50 cursor-pointer shadow-lg"
                 type="button"
-                aria-label="Acción">
+                aria-label="Cargar más vacantes"
+            >
                 <div className="absolute inset-0 bg-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <span className="relative text-xs font-black uppercase tracking-widest text-zinc-400 group-hover:text-brand-primary transition-colors flex items-center gap-2">
                     {loading ? (
                         <>
-                            <Spinner size="sm" variant="emerald" />
-                            Cargando...
+                            <Loader2 size={15} className="animate-spin text-emerald-400" />
+                            Cargando vacantes...
                         </>
                     ) : (
                         <>
@@ -35,86 +33,60 @@ const LoadMoreButton = ({ onClick, loading, hasMore }) => {
     );
 };
 
-const getColumnCount = () => {
-    if (typeof window === 'undefined') return 1;
-    if (window.innerWidth >= 1280) return 4;
-    if (window.innerWidth >= 1024) return 3;
-    if (window.innerWidth >= 640) return 2;
-    return 1;
-};
-
-const chunkArray = (arr, size) => {
-    const chunks = [];
-    for (let i = 0; i < arr.length; i += size) {
-        chunks.push(arr.slice(i, i + size));
-    }
-    return chunks;
-};
-
+/**
+ * ExploreGridList (CSS Grid Nativo + Infinite Scroll Sentinel)
+ * Elimina completamente los solapamientos y problemas de altura en móviles y escritorio.
+ */
 const ExploreGridList = ({ vacancies, onApply, onOpenDetail, onCompanyClick, isApplying, appliedIds, hasMore, loadMore, loading }) => {
-    const [columns, setColumns] = useState(getColumnCount());
+    const observerRef = useRef(null);
+
+    // Sentinel para infinite scrolling suave sin desincronización
+    const sentinelRef = useCallback((node) => {
+        if (loading) return;
+        if (observerRef.current) observerRef.current.disconnect();
+
+        observerRef.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasMore) {
+                loadMore?.();
+            }
+        }, { rootMargin: '300px' });
+
+        if (node) observerRef.current.observe(node);
+    }, [hasMore, loading, loadMore]);
 
     useEffect(() => {
-        const handleResize = () => setColumns(getColumnCount());
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        return () => {
+            if (observerRef.current) observerRef.current.disconnect();
+        };
     }, []);
-
-    const rows = chunkArray(vacancies, columns);
-    const listRef = useRef(null);
-
-    const rowVirtualizer = useWindowVirtualizer({
-        count: rows.length,
-        estimateSize: () => 320, // Estimated height of a vacancy card row
-        overscan: 3,
-        scrollMargin: listRef.current?.offsetTop ?? 0,
-    });
 
     return (
         <motion.div
             key="list"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            ref={listRef}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="w-full min-w-0"
         >
-            <div
-                style={{
-                    height: `${rowVirtualizer.getTotalSize()}px`,
-                    width: '100%',
-                    position: 'relative',
-                }}
-                className="pb-8 pt-6"
-            >
-                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                    const rowVacancies = rows[virtualRow.index];
-                    return (
-                        <ul
-                            key={virtualRow.index}
-                            style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                transform: `translateY(${virtualRow.start}px)`,
-                            }}
-                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
-                        >
-                            {rowVacancies.map(vacancy => (
-                                <li key={vacancy.id}>
-                                    <VacancyCard
-                                        vacancy={vacancy}
-                                        onApply={onApply}
-                                        onOpenDetail={onOpenDetail}
-                                        onCompanyClick={onCompanyClick}
-                                        isApplying={isApplying === vacancy.id}
-                                        isApplied={appliedIds.has(vacancy.id)}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    );
-                })}
-            </div>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6 pb-8 pt-4 w-full">
+                {vacancies.map(vacancy => (
+                    <li key={vacancy.id} className="w-full min-w-0 flex">
+                        <VacancyCard
+                            vacancy={vacancy}
+                            onApply={onApply}
+                            onOpenDetail={onOpenDetail}
+                            onCompanyClick={onCompanyClick}
+                            isApplying={isApplying === vacancy.id}
+                            isApplied={appliedIds.has(vacancy.id)}
+                        />
+                    </li>
+                ))}
+            </ul>
+
+            {/* Sentinel de scroll */}
+            <div ref={sentinelRef} className="h-4 w-full" aria-hidden="true" />
             
+            {/* Botón de Paginación */}
             <LoadMoreButton
                 onClick={loadMore}
                 loading={loading}

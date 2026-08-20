@@ -114,7 +114,7 @@ export const VacancyGroupSection = ({
         </div>
       </div>
       {/* 📌 Candidate Grid */}
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
+      <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 w-full">
         <AnimatePresence>
           {postulantes.map(cand => (
             <PostulanteCard
