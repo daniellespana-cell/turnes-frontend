@@ -86,7 +86,30 @@ class ChatConversationsService {
                 };
             });
 
-            chatState.updateSnapshot({ conversations: convMap, loading: false });
+            // 📬 Consulta de Mensajes No Leídos para todas las conversaciones activas
+            const chatIds = Object.keys(convMap);
+            const unreadCountsMap = {};
+
+            if (chatIds.length > 0) {
+                const { data: unreadData, error: unreadError } = await supabase
+                    .from('mensajes')
+                    .select('conversacion_id')
+                    .in('conversacion_id', chatIds)
+                    .eq('leido', false)
+                    .neq('sender_id', userId);
+
+                if (!unreadError && unreadData) {
+                    unreadData.forEach(msg => {
+                        unreadCountsMap[msg.conversacion_id] = (unreadCountsMap[msg.conversacion_id] || 0) + 1;
+                    });
+                }
+            }
+
+            chatState.updateSnapshot({ 
+                conversations: convMap, 
+                unreadCounts: unreadCountsMap, 
+                loading: false 
+            });
         } catch (e) {
             console.error('🔥 [ChatConversations] Error crítico de esquema:', e);
             chatState.updateSnapshot({ loading: false });

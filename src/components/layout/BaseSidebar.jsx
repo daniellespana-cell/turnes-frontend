@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useSyncExternalStore, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ChevronLeft, LogOut, Settings } from 'lucide-react';
 
 import { useAuth } from '../../context/AuthContext';
 import { useNotificationsContext } from '../../context/NotificationsContext';
+import { ChatStorage } from '../../services/chat';
 import turnesLogo from "../../assets/logo-turnes.png";
 import { PATHS } from '../../config/routes.paths';
 
@@ -16,9 +17,16 @@ const BaseSidebar = ({ menuItems, isExpanded, setIsExpanded, isMobileOpen, setIs
     const { logout } = useAuth();
     const { unreadCount } = useNotificationsContext();
 
+    const chatSnapshot = useSyncExternalStore(ChatStorage.subscribe, ChatStorage.getSnapshot);
+    const unreadMessages = useMemo(() => {
+        if (!chatSnapshot?.unreadCounts) return 0;
+        return Object.values(chatSnapshot.unreadCounts).reduce((acc, count) => acc + count, 0);
+    }, [chatSnapshot?.unreadCounts]);
+
     // Badge count resolver: maps badgeId to live data
     const getBadgeCount = (badgeId) => {
         if (badgeId === 'notifications') return unreadCount;
+        if (badgeId === 'unread-messages') return unreadMessages;
         return null;
     };
 
@@ -115,7 +123,7 @@ const BaseSidebar = ({ menuItems, isExpanded, setIsExpanded, isMobileOpen, setIs
                                                 <span className="truncate capitalize">{item.name.toLowerCase()}</span>
                                                 {/* Badge Extendido */}
                                                 {count > 0 && (
-                                                     <span className="bg-emerald-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-lg ml-2 shrink-0">
+                                                     <span className="bg-gradient-to-r from-emerald-400 to-teal-500 text-black text-[10px] font-black px-1.5 py-0.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.6)] ml-2 shrink-0 border border-black/40 tabular-nums">
                                                         {count > 99 ? '99+' : count}
                                                     </span>
                                                 )}

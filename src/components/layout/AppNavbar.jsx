@@ -54,24 +54,39 @@ const AppNavbar = ({ user, _isSidebarExpanded, onOpenMobileSidebar }) => {
 
           {/* 5. Actions Section */}
           <div className="flex items-center gap-1 md:gap-4 relative flex-none justify-end">
-            {/* Chat Icon */}
+            {/* Chat Icon — Cyber-Luxury Enterprise Button */}
             <button
               onClick={() => navigate('/dashboard/chats')}
-              className={iconBtnClass}
+              className="relative flex items-center justify-center p-2 rounded-xl transition-all duration-300 group active:scale-90 focus:outline-none hover:bg-white/[0.04]"
               title="Mensajes"
               type="button"
-              aria-label="Acción">
+              aria-label={`Mensajes ${unreadMessages > 0 ? `(${unreadMessages} no leídos)` : ''}`}>
+              
+              {/* Subtle ambient hover glow */}
+              <span className="absolute inset-0 rounded-xl bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm pointer-events-none" />
+
+              {/* Message Icon with Holographic 3D Emboss */}
               <MessageCircle
-                className={iconSvgClass}
-                strokeWidth={2.5}
+                className="w-6 h-6 text-zinc-300 group-hover:text-emerald-400 transition-all duration-300 transform group-hover:-translate-y-0.5 relative z-10"
+                strokeWidth={2.3}
                 style={{
-                  filter: 'drop-shadow(0 2px 1px rgba(0,0,0,0.9)) drop-shadow(0 -1px 1px rgba(255,255,255,0.08))'
+                  filter: unreadMessages > 0
+                    ? 'drop-shadow(0 0 8px rgba(16,185,129,0.5)) drop-shadow(0 2px 4px rgba(0,0,0,0.8))'
+                    : 'drop-shadow(0 2px 1px rgba(0,0,0,0.9)) drop-shadow(0 -1px 1px rgba(255,255,255,0.08))'
                 }}
               />
+
+              {/* Enterprise Cyber Unread Badge */}
               {unreadMessages > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center bg-gradient-to-br from-purple-500 to-purple-600 text-white text-[10px] font-black rounded-full shadow-[0_0_12px_rgba(168,85,247,0.6),0_2px_4px_rgba(0,0,0,0.5)] z-20 pointer-events-none ring-2 ring-[#060606] px-1 leading-none">
-                  {unreadMessages > 99 ? '99+' : unreadMessages}
-                </span>
+                <div className="absolute -top-1 -right-1 flex items-center justify-center z-20 pointer-events-none">
+                  {/* Ping Animation Halo */}
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+                  
+                  {/* Badge Body */}
+                  <span className="relative flex items-center justify-center min-w-[19px] h-[19px] px-1 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-black text-[10px] font-black rounded-full shadow-[0_0_14px_rgba(16,185,129,0.8),0_2px_4px_rgba(0,0,0,0.7)] ring-2 ring-[#060606] leading-none tabular-nums border border-white/40">
+                    {unreadMessages > 99 ? '99+' : unreadMessages}
+                  </span>
+                </div>
               )}
             </button>
 
