@@ -41,7 +41,12 @@ const BusinessChatPage = () => {
         const lista = [...pendientes, ...historial];
         const found = lista.find(c => String(c.id) === String(id) || String(c.candidateId) === String(id));
 
-        if (found) return found;
+        if (found) {
+            return {
+                ...found,
+                otherUserId: found.candidateId || found.user_id || found.id,
+            };
+        }
         if (dbContact) {
             return {
                 ...dbContact,
@@ -51,6 +56,7 @@ const BusinessChatPage = () => {
                 name: dbContact.candidate || 'Candidato',
                 avatar: dbContact.avatar || dbContact.avatar_url || dbContact.candidateAvatar || null,
                 avatar_url: dbContact.avatar_url || dbContact.avatar || dbContact.candidateAvatar || null,
+                otherUserId: dbContact.candidateId || dbContact.user_id,
             };
         }
         return null;

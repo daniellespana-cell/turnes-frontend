@@ -10,6 +10,8 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
     // 🛡️ REACCIÓN DESCENTRALIZADA: Solo este item se suscribe a sus propios cambios
     const snapshot = useSyncExternalStore(chatState.subscribe, chatState.getSnapshot);
     const unreadCount = snapshot.unreadCounts[chat.id] || 0;
+    const isOtherOnline = Boolean(chat.otherUserId && snapshot.onlineUsers?.[chat.otherUserId]);
+
     // 🧠 Lógica Inteligente de Estado Binario (Activo vs Finalizada)
     // Fix: rely strictly on step === 4 or isClosed to determine end of lifecycle
     // 🧠 Lógica Inteligente de Estado Binario (Activo vs Finalizada)
@@ -63,9 +65,12 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                     className={`w-10 h-10 rounded-full object-cover transition-transform duration-300 ${isActive ? 'scale-100 ring-[1.5px] ring-white/20' : 'group-hover:scale-105'}`}
                 />
 
-                {/* Dot Indicador Orgánico Sutil */}
-                {!isClosedStatus && (
-                    <div className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-[2px] border-[#0a0a09] bg-emerald-500 shadow-sm" />
+                {/* Dot Indicador Orgánico de Presencia en Tiempo Real */}
+                {!isClosedStatus && isOtherOnline && (
+                    <div 
+                        className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-[2px] border-[#0a0a09] bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.7)] animate-in fade-in zoom-in duration-300"
+                        title="En línea"
+                    />
                 )}
             </div>
             {/* Contenido (Textos fluidos y pequeños) */}
@@ -86,7 +91,7 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                         {previewText}
                     </p>
 
-                    {/* Badge de No Leídos o Estado Activo */}
+                    {/* Badge de No Leídos o Estado Activo / En línea */}
                     {unreadCount > 0 ? (
                         <div className="flex items-center justify-center min-w-[18px] h-[18px] bg-emerald-500 rounded-full px-1.5 animate-in zoom-in duration-300 shadow-[0_0_12px_rgba(16,185,129,0.4)]">
                             <span className="text-[9px] font-black text-white leading-none">
@@ -102,14 +107,21 @@ export const ChatListItem = ({ chat, isActive, onClick, onActionClick }) => {
                                         Finalizada
                                     </span>
                                 </div>
-                            ) : (
+                            ) : isOtherOnline ? (
                                 <div className="flex items-center gap-1.5 shrink-0">
                                     <span className="relative flex h-1.5 w-1.5">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                         <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                                     </span>
                                     <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest hidden sm:block">
-                                        Activo
+                                        En línea
+                                    </span>
+                                </div>
+                            ) : (
+                                <div className="flex items-center gap-1.5 shrink-0">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-600"></span>
+                                    <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest hidden sm:block">
+                                        Desconectado
                                     </span>
                                 </div>
                             )}

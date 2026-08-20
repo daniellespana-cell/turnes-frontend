@@ -56,7 +56,10 @@ export const useWorkerChats = () => {
                 status: conv.status || 'pendiente',
                 step: conv.step,
                 isClosed: ['finalizado', 'rechazado'].includes(conv.status) || conv.step === 4,
-                protocol_state: conv.protocol_state 
+                protocol_state: conv.protocol_state,
+                otherUserId: conv.otherUserId || conv.empresa_id || conv.companyId || conv.empresa?.id || conv.vacante?.empresa_id,
+                companyId: conv.companyId || conv.empresa_id || conv.empresa?.id || conv.vacante?.empresa_id,
+                candidateId: conv.candidateId || conv.postulante_id || conv.postulante?.id
             };
         })
             .filter(Boolean)

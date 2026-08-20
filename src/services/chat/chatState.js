@@ -13,6 +13,7 @@ class ChatStateService {
             conversations: {},
             messages: {},
             unreadCounts: {}, // 🆕 { chatId: number }
+            onlineUsers: {}, // 🟢 { [userId: string]: true }
             loading: true
         };
 
@@ -72,6 +73,44 @@ class ChatStateService {
                 [chatId]: 0
             }
         });
+    }
+
+    // --- GESTIÓN DE PRESENCIA EN TIEMPO REAL (SSOT) --- //
+
+    setOnlineUsers(usersMapOrSet) {
+        const onlineMap = {};
+        if (usersMapOrSet instanceof Set) {
+            usersMapOrSet.forEach(id => { if (id) onlineMap[id] = true; });
+        } else if (Array.isArray(usersMapOrSet)) {
+            usersMapOrSet.forEach(id => { if (id) onlineMap[id] = true; });
+        } else if (typeof usersMapOrSet === 'object' && usersMapOrSet !== null) {
+            Object.assign(onlineMap, usersMapOrSet);
+        }
+        this.updateSnapshot({ onlineUsers: onlineMap });
+    }
+
+    addOnlineUser(userId) {
+        if (!userId) return;
+        if (this._snapshot.onlineUsers[userId]) return; // Ya está online
+        this.updateSnapshot({
+            onlineUsers: {
+                ...this._snapshot.onlineUsers,
+                [userId]: true
+            }
+        });
+    }
+
+    removeOnlineUser(userId) {
+        if (!userId) return;
+        if (!this._snapshot.onlineUsers[userId]) return; // Ya estaba offline
+        const updated = { ...this._snapshot.onlineUsers };
+        delete updated[userId];
+        this.updateSnapshot({ onlineUsers: updated });
+    }
+
+    isUserOnline(userId) {
+        if (!userId) return false;
+        return Boolean(this._snapshot.onlineUsers?.[userId]);
     }
 
     // --- MANEJO DE ARRAY DE MENSAJES --- //
@@ -169,7 +208,7 @@ class ChatStateService {
     }
 
     clearSession() {
-        this._snapshot = { conversations: {}, messages: {}, unreadCounts: {}, loading: true };
+        this._snapshot = { conversations: {}, messages: {}, unreadCounts: {}, onlineUsers: {}, loading: true };
         this.updateSnapshot({});
     }
 }

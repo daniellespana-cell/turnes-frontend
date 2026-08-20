@@ -65,6 +65,9 @@ export const useChats = () => {
                 step: conv.step,
                 isClosed: ['finalizado', 'rechazado'].includes(derivedStatus) || conv.step === 4,
                 protocol_state: conv.protocol_state,
+                otherUserId: conv.otherUserId || conv.postulante_id || conv.candidateId || conv.postulante?.id,
+                candidateId: conv.candidateId || conv.postulante_id || conv.postulante?.id,
+                empresaId: conv.empresa_id || conv.companyId,
 
                 // Raw ref
                 _raw: conv

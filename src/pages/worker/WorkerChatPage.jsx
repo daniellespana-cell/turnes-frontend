@@ -40,13 +40,19 @@ const WorkerChatPage = () => {
         const { aplicadas = [] } = logic;
         const found = aplicadas.find(v => String(v.applicationId) === String(id) || String(v.id) === String(id));
         
-        if (found) return found;
+        if (found) {
+            return {
+                ...found,
+                otherUserId: found.companyId || found.empresaId || found.vacante?.empresa_id,
+            };
+        }
         if (dbContact) {
             // 🛡️ IDENTIDAD DEL INTERLOCUTOR (Empresa)
             return {
                 ...dbContact,
                 name: dbContact.company || dbContact.nombre_comercial || "Empresa",
-                avatar: dbContact.companyAvatar || dbContact.logo_url || null
+                avatar: dbContact.companyAvatar || dbContact.logo_url || null,
+                otherUserId: dbContact.companyId,
             };
         }
         return null;

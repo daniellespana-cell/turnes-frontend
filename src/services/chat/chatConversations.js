@@ -19,6 +19,8 @@ class ChatConversationsService {
                 .from('turnes_chats')
                 .select(`
                     id,
+                    empresa_id,
+                    postulante_id,
                     postulacion:postulaciones!turnes_chats_id_fkey (
                         id, updated_at, status, step, protocol_state, user_id,
                         vacante:vacantes (
@@ -51,18 +53,29 @@ class ChatConversationsService {
                 const empresa = vacante.empresa || {};
                 const postulante = c.postulante || {};
 
+                const empresaId = item.empresa_id || vacante.empresa_id;
+                const postulanteId = item.postulante_id || c.user_id;
+                const otherUserId = empresaId === userId ? postulanteId : empresaId;
+
                 convMap[c.id] = {
                     id: c.id,
+                    empresa_id: empresaId,
+                    postulante_id: postulanteId,
+                    otherUserId: otherUserId,
+                    candidateId: postulanteId,
+                    companyId: empresaId,
                     updated_at: c.updated_at,
                     status: c.status,
                     step: c.step,
                     protocol_state: c.protocol_state,
                     // Datos unificados para la UI
                     empresa: {
+                        id: empresaId,
                         nombre_comercial: empresa.nombre_comercial || 'Empresa Turnes',
                         logo_url: empresa.logo_url || null
                     },
                     postulante: {
+                        id: postulanteId,
                         nombre_display: postulante.nombre_display || 'Usuario Turnes',
                         avatar_url: postulante.avatar_url || null
                     },

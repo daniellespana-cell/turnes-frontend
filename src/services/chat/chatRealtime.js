@@ -62,6 +62,44 @@ class ChatRealtimeService {
                 if (status === 'SUBSCRIBED') logger.info("✅ Realtime Bandeja: OK");
             });
 
+        // ── CANAL 3: Presencia Global en Tiempo Real ─────────────────
+        this._presenceChannel = supabase.channel('presence-turnes', {
+            config: {
+                presence: {
+                    key: userId,
+                },
+            },
+        });
+
+        this._presenceChannel
+            .on('presence', { event: 'sync' }, () => {
+                const state = this._presenceChannel.presenceState();
+                const onlineMap = {};
+                Object.keys(state).forEach(key => {
+                    onlineMap[key] = true;
+                });
+                chatState.setOnlineUsers(onlineMap);
+            })
+            .on('presence', { event: 'join' }, ({ key }) => {
+                if (key) chatState.addOnlineUser(key);
+            })
+            .on('presence', { event: 'leave' }, ({ key }) => {
+                if (key) chatState.removeOnlineUser(key);
+            })
+            .subscribe(async (status) => {
+                if (status === 'SUBSCRIBED') {
+                    logger.info("✅ Realtime Presencia: Conectado");
+                    try {
+                        await this._presenceChannel.track({
+                            user_id: userId,
+                            online_at: new Date().toISOString(),
+                        });
+                    } catch (err) {
+                        logger.warn("No se pudo registrar presencia inicial:", err);
+                    }
+                }
+            });
+
         // ── AUTO-SYNC EN BACKGROUND / FOREGROUND ────────────────────
         // Cuando el usuario sale a WhatsApp y vuelve, el WebSocket se reconecta,
         // pero los mensajes enviados durante ese lapso se pierden.
@@ -72,6 +110,13 @@ class ChatRealtimeService {
                     logger.info("🔄 App retornó al primer plano. Sincronizando chats...");
                     this._debouncedRefresh(); // Recarga la bandeja
                     
+                    if (this._presenceChannel && userId) {
+                        this._presenceChannel.track({
+                            user_id: userId,
+                            online_at: new Date().toISOString(),
+                        }).catch(() => {});
+                    }
+
                     // Si el usuario está viendo un chat específico, recargarlo completo
                     if (chatState._activeChatId) {
                         import('./chatNetwork').then(module => {
@@ -139,6 +184,13 @@ class ChatRealtimeService {
     // ── LIFECYCLE ────────────────────────────────────────────────────────
 
     teardown() {
+        if (this._presenceChannel) {
+            try {
+                this._presenceChannel.untrack();
+            } catch (_) { /* ignore */ }
+            supabase.removeChannel(this._presenceChannel);
+            this._presenceChannel = null;
+        }
         if (this._msgChannel) {
             supabase.removeChannel(this._msgChannel);
             this._msgChannel = null;

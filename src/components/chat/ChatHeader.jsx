@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useSyncExternalStore } from 'react';
 import { ShieldCheck, MoreHorizontal, LayoutDashboard, Video, ChevronLeft, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AssetResolver } from '../../utils/assetHelper';
+import { chatState } from '../../services/chat/chatState';
 
 export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed, isPaid }) => {
   const navigate = useNavigate();
+  const snapshot = useSyncExternalStore(chatState.subscribe, chatState.getSnapshot);
+
+  const targetUserId = candidate?.otherUserId || candidate?.candidateId || candidate?.companyId || candidate?.user_id || candidate?.id;
+  const isOnline = Boolean(candidate?.isOnline || (targetUserId && snapshot.onlineUsers?.[targetUserId]));
 
   return (
     <header className="h-20 border-b border-white/5 bg-zinc-900/20 backdrop-blur-xl px-4 md:px-6 flex items-center justify-between sticky top-0 z-50">
@@ -27,8 +32,8 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
             className={`w-10 h-10 rounded-full border border-white/10 bg-zinc-900 object-cover ${isClosed ? 'grayscale opacity-50' : 'grayscale-[0.5]'}`}
             alt="Avatar"
           />
-          {!isClosed && candidate?.isOnline && (
-            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-black rounded-full" />
+          {!isClosed && isOnline && (
+            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-black rounded-full shadow-[0_0_8px_rgba(16,185,129,0.7)] animate-in fade-in zoom-in duration-300" />
           )}
         </div>
 
@@ -41,9 +46,9 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
               <ShieldCheck size={12} className={isClosed ? "text-zinc-600" : "text-blue-400"} />
             )}
           </div>
-          <p className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isClosed ? 'text-zinc-600' : candidate?.isOnline ? 'text-emerald-500/80' : 'text-zinc-500'}`}>
-            {!isClosed && candidate?.isOnline && <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />}
-            {isClosed ? 'Turno Finalizado · Archivo' : candidate?.isOnline ? 'En línea' : 'Desconectado'}
+          <p className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isClosed ? 'text-zinc-600' : isOnline ? 'text-emerald-400 font-bold' : 'text-zinc-500'}`}>
+            {!isClosed && isOnline && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_6px_rgba(16,185,129,0.8)]" />}
+            {isClosed ? 'Turno Finalizado · Archivo' : isOnline ? 'En línea' : 'Desconectado'}
           </p>
         </div>
       </div>
