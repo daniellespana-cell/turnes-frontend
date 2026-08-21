@@ -56,8 +56,15 @@ export const RouterErrorBoundary = () => {
                 <div className="flex flex-col sm:flex-row gap-3 w-full pt-4">
                     <button
                         onClick={() => {
+                            sessionStorage.removeItem('turnes_chunk_reload_count');
                             sessionStorage.removeItem('chunk_reload');
-                            window.location.reload(true);
+                            if ('caches' in window) {
+                                caches.keys().then(names => Promise.all(names.map(name => caches.delete(name)))).finally(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                window.location.reload();
+                            }
                         }}
                         className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20 active:scale-95"
                         type="button"
