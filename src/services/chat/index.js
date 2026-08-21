@@ -7,11 +7,11 @@ import { chatRealtime } from './chatRealtime';
 import { chatConversations } from './chatConversations';
 
 /**
- * ⚡ ChatStorageService (Refactored Facade)
+ * ⚡ ChatService (Orchestrator Facade)
  * Acts as the Orchestrator for State, Network, and Realtime modules.
- * Exposes the exact same public API as the legacy monolithic system to prevent bleeding changes into React UI.
+ * In-Memory SSOT connected directly to Supabase Cloud & Realtime WebSockets.
  */
-class ChatStorageFacade {
+class ChatServiceFacade {
     constructor() {
         this._currentUserId = null;
         this._init();
@@ -84,12 +84,12 @@ class ChatStorageFacade {
     sendMessage = (chatId, text, senderId, type = 'text', metadata = {}) =>
         chatNetwork.sendMessage(chatId, text, senderId, type, metadata);
 
-    markAsRead = (chatId, myUserId) => {
+    markAsRead = (chatId, _myUserId) => {
         chatState.markAsRead(chatId);
-        return chatNetwork.markAsRead(chatId, myUserId);
+        return chatNetwork.markAsRead(chatId, _myUserId);
     };
 
-    markAllAsRead = (myUserId) => chatNetwork.markAllAsRead(myUserId);
+    markAllAsRead = (_myUserId) => chatNetwork.markAllAsRead(_myUserId);
     
     setActiveChat = (chatId) => chatState.setActiveChat(chatId);
 
@@ -99,5 +99,6 @@ class ChatStorageFacade {
     EVENTS = EVENTS;
 }
 
-export const ChatStorage = new ChatStorageFacade();
+export const chatService = new ChatServiceFacade();
+export const ChatStorage = chatService; // Alias de compatibilidad hacia atrás
 export { EVENTS };
