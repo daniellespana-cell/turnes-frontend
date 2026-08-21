@@ -74,20 +74,36 @@ class ChatRealtimeService {
             },
         });
 
-        this._presenceChannel
-            .on('presence', { event: 'sync' }, () => {
-                const state = this._presenceChannel.presenceState();
-                const onlineMap = {};
-                Object.keys(state).forEach(key => {
+        const syncPresence = () => {
+            if (!this._presenceChannel) return;
+            const state = this._presenceChannel.presenceState();
+            const onlineMap = {};
+            Object.keys(state).forEach(key => {
+                if (key && key !== 'undefined' && key !== 'null') {
                     onlineMap[key] = true;
-                });
-                chatState.setOnlineUsers(onlineMap);
-            })
-            .on('presence', { event: 'join' }, ({ key }) => {
+                }
+                const presences = state[key];
+                if (Array.isArray(presences)) {
+                    presences.forEach(p => {
+                        if (p?.user_id) onlineMap[p.user_id] = true;
+                    });
+                }
+            });
+            chatState.setOnlineUsers(onlineMap);
+        };
+
+        this._presenceChannel
+            .on('presence', { event: 'sync' }, syncPresence)
+            .on('presence', { event: 'join' }, ({ key, newPresences }) => {
                 if (key) chatState.addOnlineUser(key);
+                if (Array.isArray(newPresences)) {
+                    newPresences.forEach(p => {
+                        if (p?.user_id) chatState.addOnlineUser(p.user_id);
+                    });
+                }
             })
-            .on('presence', { event: 'leave' }, ({ key }) => {
-                if (key) chatState.removeOnlineUser(key);
+            .on('presence', { event: 'leave' }, () => {
+                syncPresence();
             })
             .subscribe(async (status) => {
                 if (status === 'SUBSCRIBED') {

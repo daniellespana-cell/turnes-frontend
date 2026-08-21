@@ -3,12 +3,18 @@ import { ShieldCheck, MoreHorizontal, LayoutDashboard, Video, ChevronLeft, Lock 
 import { useNavigate } from 'react-router-dom';
 import { AssetResolver } from '../../utils/assetHelper';
 import { chatState } from '../../services/chat/chatState';
+import { useAuth } from '../../context/AuthContext';
 
 export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed, isPaid }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const snapshot = useSyncExternalStore(chatState.subscribe, chatState.getSnapshot);
 
-  const targetUserId = candidate?.otherUserId || candidate?.candidateId || candidate?.companyId || candidate?.user_id || candidate?.id;
+  // 🛡️ Resolución inequívoca del interlocutor según el rol autenticado
+  const targetUserId = candidate?.otherUserId 
+    || (user?.rol === 'empresa' ? (candidate?.candidateId || candidate?.postulante_id || candidate?.user_id) : (candidate?.companyId || candidate?.empresa_id))
+    || candidate?.id;
+
   const isOnline = Boolean(candidate?.isOnline || (targetUserId && snapshot.onlineUsers?.[targetUserId]));
 
   return (
