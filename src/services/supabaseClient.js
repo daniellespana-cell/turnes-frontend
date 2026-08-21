@@ -9,11 +9,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
     console.error('⚠️ Supabase Error: Faltan variables de entorno (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)');
 }
 
-// 2. Cliente Singleton
-// Optimizado para persistencia de sesión en localStorage (defecto en web)
+// 2. Cliente Singleton Enterprise
+// Utiliza flujo PKCE estándar y almacenamiento defensivo nativo tolerante a fallos
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
-        storage: window.localStorage, // 🔒 FORZAR que use LocalStorage, NUNCA SessionStorage
+        flowType: 'pkce',
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: true
