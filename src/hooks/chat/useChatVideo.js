@@ -69,9 +69,10 @@ export const useChatVideo = ({
                 onStartVideo(roomUrl);
             }
 
-            // 🚀 SENIOR FIX: Eliminada la inyección manual de mensaje desde el frontend.
-            // Ahora la RPC `rpc_process_protocol_step2_v3` inserta el mensaje de "Invitación a Video" 
-            // directamente en la BD con su type='video_invitation' y metadata para garantizar SSOT.
+            // Emitir mensaje del sistema al chat para que el postulante reciba los botones Aceptar/Declinar
+            if (workflowActions?.invitarAVideo) {
+                workflowActions.invitarAVideo(roomUrl);
+            }
 
             if (triggerDomainSync) triggerDomainSync();
 

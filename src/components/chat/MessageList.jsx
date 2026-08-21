@@ -47,19 +47,23 @@ export const MessageList = ({
   });
 
   // 2. SCROLL MANAGEMENT
-  // 🍎 iOS Fix: scrollIntoView mueve todo el body en Safari Mobile.
-  // scrollTop solo mueve el contenedor overflow, manteniendo el input anclado.
+  // 🍎 iOS & Responsive Fix: scrollTop solo mueve el contenedor overflow, manteniendo el input anclado.
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
     const scrollToBottom = () => {
-      container.scrollTop = container.scrollHeight;
+      if (container) container.scrollTop = container.scrollHeight;
     };
     scrollToBottom();
-    const t1 = setTimeout(scrollToBottom, 50);
-    const t2 = setTimeout(scrollToBottom, 200);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [messages.length]);
+    const raf = requestAnimationFrame(scrollToBottom);
+    const t1 = setTimeout(scrollToBottom, 60);
+    const t2 = setTimeout(scrollToBottom, 250);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [messages.length, messages]);
 
   // 3. HANDLERS BUNDLE
   const handlers = {

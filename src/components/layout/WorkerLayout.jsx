@@ -16,7 +16,7 @@ const WorkerLayout = ({ user }) => {
 
     // Mismo patrón "Clean Layout" que BusinessLayout
     return (
-        <div className="flex min-h-[100dvh] bg-[#0a0a0a] relative">
+        <div className={`flex ${isChat ? 'h-[100dvh] max-h-[100dvh] overflow-hidden' : 'min-h-[100dvh]'} bg-[#0a0a0a] relative`}>
             <BaseSidebar
                 menuItems={WORKER_MENU}
                 isExpanded={isExpanded}
@@ -25,7 +25,7 @@ const WorkerLayout = ({ user }) => {
                 setIsMobileOpen={setIsMobileOpen}
             />
 
-            <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 w-full">
+            <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 w-full ${isChat ? 'h-full overflow-hidden' : ''}`}>
                 {/* Ocultamos AppNavbar en modo Chat para permitir UX Edge-to-Edge nativa */}
                 {!isChat && (
                     <AppNavbar
@@ -36,10 +36,10 @@ const WorkerLayout = ({ user }) => {
                 )}
 
                 <main 
-                    className={`flex-1 flex flex-col min-w-0 w-full overflow-x-hidden ${isChat ? 'pt-0 pb-0 px-0' : 'pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}
+                    className={`flex-1 flex flex-col min-w-0 w-full ${isChat ? 'h-full overflow-hidden pt-0 pb-0 px-0' : 'overflow-x-hidden pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}
                     style={{ paddingTop: isChat ? 'env(safe-area-inset-top)' : 'calc(6rem + env(safe-area-inset-top))' }}
                 >
-                    <div className={`flex-1 flex flex-col min-w-0 w-full ${isChat ? 'h-full' : 'max-w-6xl mx-auto'}`}>
+                    <div className={`flex-1 flex flex-col min-w-0 w-full ${isChat ? 'h-full overflow-hidden' : 'max-w-6xl mx-auto'}`}>
                         <Outlet context={{ user }} />
                     </div>
                 </main>

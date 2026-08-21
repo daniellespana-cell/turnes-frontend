@@ -118,7 +118,7 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
     resolveAppId,
     workflowActions: {
         ...workflow.actions,
-        invitarAVideo: () => workflow.actions.invitarAVideo(roomUrl) // 🛡️ FORCE TEST ROOM URL
+        invitarAVideo: (overrideUrl) => workflow.actions.invitarAVideo(overrideUrl || roomUrl)
     },
     addMessage,
     triggerDomainSync,

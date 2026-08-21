@@ -17,7 +17,7 @@ const BusinessLayout = ({ user }) => {
   const isChat = location.pathname.includes('/chat');
 
   return (
-    <div className="flex min-h-[100dvh] bg-[#0a0a0a] relative">
+    <div className={`flex ${isChat ? 'h-[100dvh] max-h-[100dvh] overflow-hidden' : 'min-h-[100dvh]'} bg-[#0a0a0a] relative`}>
       {/* Sidebar con lógica de expansión y responsive */}
       <BaseSidebar
         menuItems={BUSINESS_MENU}
@@ -28,7 +28,7 @@ const BusinessLayout = ({ user }) => {
       />
 
       {/* Contenedor principal: Se ajusta suavemente gracias a transition-all */}
-      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 w-full">
+      <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 w-full ${isChat ? 'h-full overflow-hidden' : ''}`}>
 
         {/* NAVBAR: Visible en todas partes (su contenido interno decide qué muestra) */}
         {!isChat && (
@@ -46,10 +46,10 @@ const BusinessLayout = ({ user }) => {
             - Internas: pt-8 (Header mas arriba)
         */}
         <main 
-          className={`flex-1 flex flex-col min-w-0 w-full overflow-x-hidden ${isChat ? 'pt-0 pb-0 px-0' : 'pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}
+          className={`flex-1 flex flex-col min-w-0 w-full ${isChat ? 'h-full overflow-hidden pt-0 pb-0 px-0' : 'overflow-x-hidden pt-24 pb-12 px-4 sm:px-6 lg:px-10'}`}
           style={{ paddingTop: isChat ? 'env(safe-area-inset-top)' : 'calc(6rem + env(safe-area-inset-top))' }}
         >
-          <div className={`flex-1 flex flex-col min-w-0 w-full ${isChat ? 'h-full' : 'max-w-6xl mx-auto'}`}>
+          <div className={`flex-1 flex flex-col min-w-0 w-full ${isChat ? 'h-full overflow-hidden' : 'max-w-6xl mx-auto'}`}>
             {/* El Outlet hereda el usuario para las sub-páginas */}
             <Outlet context={{ user }} />
           </div>
