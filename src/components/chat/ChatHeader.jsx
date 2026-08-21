@@ -5,7 +5,7 @@ import { AssetResolver } from '../../utils/assetHelper';
 import { chatState } from '../../services/chat/chatState';
 import { useAuth } from '../../context/AuthContext';
 
-export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed, isPaid }) => {
+export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed, isPaid, userRole, hasValidatedVideo }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const snapshot = useSyncExternalStore(chatState.subscribe, chatState.getSnapshot);
@@ -16,6 +16,14 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
     || candidate?.id;
 
   const isOnline = Boolean(candidate?.isOnline || (targetUserId && snapshot.onlineUsers?.[targetUserId]));
+
+  const isEmployer = user?.rol === 'empresa' || userRole === 'empresa';
+  const isVideoValidated = Boolean(
+    hasValidatedVideo || 
+    candidate?.protocol_state?.video_validated || 
+    candidate?.videoHabilitado || 
+    candidate?.step >= 2
+  );
 
   return (
     <header className="h-20 border-b border-white/5 bg-zinc-900/20 backdrop-blur-xl px-4 md:px-6 flex items-center justify-between sticky top-0 z-50">
@@ -58,26 +66,39 @@ export const ChatHeader = ({ candidate, onToggleSidebar, onVideoInvite, isClosed
           </p>
         </div>
       </div>
-      {/* ACCIONES MINIMALISTAS (SIN QUITAR NADA) */}
+      {/* ACCIONES MINIMALISTAS (Solo la empresa tiene acceso al disparador de video) */}
       <div className="flex items-center gap-1 md:gap-2">
 
-        {/* Cámara: Solo se muestra si NO está cerrado Y ya se pagó la comisión */}
-        {!isClosed && isPaid ? (
-          <button
-            onClick={onVideoInvite}
-            className="p-2 text-zinc-600 hover:text-emerald-500 transition-all group active:scale-90"
-            title="Iniciar Cita por Video"
-            type="button"
-            aria-label="Acción">
-            <Video size={16} className="group-hover:scale-110 transition-transform" />
-          </button>
-        ) : (
-          <div className="p-2 text-zinc-800" title={isClosed ? "Canal Protegido" : "Requiere Pago de Comisión"}>
-            <Lock size={14} className={!isClosed && !isPaid ? "text-amber-500/50" : ""} />
-          </div>
+        {/* 📹 Cámara: Regla 1 (Solo Empresa) y Regla 4 (Desactivada tras Validación) */}
+        {isEmployer && (
+          !isClosed && isPaid ? (
+            isVideoValidated ? (
+              <button
+                disabled
+                className="p-2 text-zinc-600 opacity-40 cursor-not-allowed"
+                title="Validación visual completada"
+                type="button"
+                aria-label="Validación visual completada">
+                <Video size={16} />
+              </button>
+            ) : (
+              <button
+                onClick={onVideoInvite}
+                className="p-2 text-zinc-600 hover:text-emerald-500 transition-all group active:scale-90"
+                title="Iniciar Cita por Video"
+                type="button"
+                aria-label="Acción">
+                <Video size={16} className="group-hover:scale-110 transition-transform" />
+              </button>
+            )
+          ) : (
+            <div className="p-2 text-zinc-800" title={isClosed ? "Canal Protegido" : "Requiere Pago de Comisión"}>
+              <Lock size={14} className={!isClosed && !isPaid ? "text-amber-500/50" : ""} />
+            </div>
+          )
         )}
 
-        <div className="w-[1px] h-4 bg-white/10 mx-1 md:mx-2" />
+        {isEmployer && <div className="w-[1px] h-4 bg-white/10 mx-1 md:mx-2" />}
 
         {/* Toggle Panel con estilo discreto */}
         <button

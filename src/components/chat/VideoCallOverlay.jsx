@@ -32,7 +32,7 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
       if (e.data?.event === 'participant-left' && !e.data?.participant?.local) {
         setIsRemoteConnected(false);
         // 🔴 CANAL 1: El otro participante colgó → cerrar overlay automáticamente
-        hangupTimer = setTimeout(() => onClose(formatTime(secondsRef.current)), 3000);
+        hangupTimer = setTimeout(() => onClose(formatTime(secondsRef.current)), 500);
       }
     };
 

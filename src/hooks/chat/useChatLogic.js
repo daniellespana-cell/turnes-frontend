@@ -60,17 +60,22 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
     if (!messages || messages.length === 0) return;
     const lastMsg = messages[messages.length - 1];
     
-    // Abrir cuando se acepta
+    // 🎥 Abrir cuando el postulante acepta la invitación (para ambos)
     if (lastMsg.type === 'video_accepted' && onStartVideo) {
-        onStartVideo();
+        onStartVideo(lastMsg.metadata?.roomUrl || roomUrl);
     }
 
-    // Cerrar cuando finaliza la validación (Hangup Signaling)
-    const isVideoEndMsg = lastMsg.type === 'video_ended' || lastMsg.metadata?.subtype === 'call_summary';
+    // 🔴 Cerrar cuando finaliza la videollamada o si se declina la invitación (Hangup & Decline Signaling)
+    const isVideoEndMsg = 
+        lastMsg.type === 'video_ended' || 
+        lastMsg.type === 'video_declined' ||
+        lastMsg.metadata?.subtype === 'call_summary' ||
+        lastMsg.metadata?.subtype === 'video_declined';
+
     if (isVideoEndMsg && onCerrarVideo) {
         onCerrarVideo();
     }
-  }, [messages, onStartVideo, onCerrarVideo]);
+  }, [messages, onStartVideo, onCerrarVideo, roomUrl]);
 
   // 5. PAYMENTS
   const { ejecutarPagoComision, isPaying } = useChatPayments(candidato, finanzas, setContractStatus, onSystemMessage);

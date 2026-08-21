@@ -37,8 +37,8 @@ const ChatOverlays = ({
 
   const handleCloseVideo = (tiempo) => {
     setIsInVideoCall(false);
-    if (tiempo && registrarValidacionVideo) {
-      registrarValidacionVideo(tiempo);
+    if (registrarValidacionVideo) {
+      registrarValidacionVideo(tiempo || '00:00');
     }
   };
 

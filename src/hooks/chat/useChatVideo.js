@@ -64,11 +64,6 @@ export const useChatVideo = ({
                 remaining: Math.max(0, prev.remaining - 1)
             }));
 
-            // Iniciar llamada localmente
-            if (onStartVideo) {
-                onStartVideo(roomUrl);
-            }
-
             // Emitir mensaje del sistema al chat para que el postulante reciba los botones Aceptar/Declinar
             if (workflowActions?.invitarAVideo) {
                 workflowActions.invitarAVideo(roomUrl);

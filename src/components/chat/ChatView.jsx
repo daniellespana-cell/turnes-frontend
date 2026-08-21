@@ -64,6 +64,7 @@ const ChatView = ({
         isClosed={realIsClosed}
         userRole={userRole}
         videoStats={videoStats}
+        hasValidatedVideo={chat?.workflowState === 'VALIDATED' || chat?.workflowState === 'AGREEMENT_CONFIRMED' || chat?.workflowState === 'COMPLETED' || Boolean(candidato?.protocol_state?.video_validated)}
       />
 
       {isCanceled && (
