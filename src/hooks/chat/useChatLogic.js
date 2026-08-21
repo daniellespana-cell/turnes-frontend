@@ -55,6 +55,10 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
     return `${base}?prejoinUI=false&userName=${displayName}`;
   }, [user?.name]);
 
+  const triggerDomainSync = useCallback(() => {
+    window.dispatchEvent(new CustomEvent('turnes_contract_update'));
+  }, []);
+
   // 🆕 SYNC SENSOR: Sincronización de apertura/cierre reactiva via Realtime
   useEffect(() => {
     if (!messages || messages.length === 0) return;
@@ -75,7 +79,19 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
     if (isVideoEndMsg && onCerrarVideo) {
         onCerrarVideo();
     }
-  }, [messages, onStartVideo, onCerrarVideo, roomUrl]);
+
+    // 🚀 PASO 2 -> PASO 3 AUTOMÁTICO PARA AMBOS (Single Source of Truth en Tiempo Real):
+    // Cuando finaliza la llamada (sea colgada por la empresa o por el postulante),
+    // se avanza el estado del protocolo a VIDEO_VALIDATED y se sincroniza el estado local en 0ms.
+    const isVideoValidated = lastMsg.type === 'video_ended' || lastMsg.metadata?.subtype === 'call_summary';
+    if (isVideoValidated) {
+        setContractStatus(prev => ({
+            ...prev,
+            step: Math.max(prev.step, PROTOCOL_STEPS.VIDEO_VALIDATED)
+        }));
+        triggerDomainSync();
+    }
+  }, [messages, onStartVideo, onCerrarVideo, roomUrl, setContractStatus, triggerDomainSync]);
 
   // 5. PAYMENTS
   const { ejecutarPagoComision, isPaying } = useChatPayments(candidato, finanzas, setContractStatus, onSystemMessage);
@@ -86,10 +102,6 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
     if (!appId) throw new Error("CRITICAL_DOMAIN_ERROR: Missing valid Application UUID for RPC operation.");
     return appId;
   }, [candidato]);
-
-  const triggerDomainSync = useCallback(() => {
-    window.dispatchEvent(new CustomEvent('turnes_contract_update'));
-  }, []);
 
   // --- ACTIONS ---
   const inyectarMensajeBienvenida = useCallback(() => {
