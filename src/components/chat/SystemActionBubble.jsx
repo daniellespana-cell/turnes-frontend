@@ -25,8 +25,8 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
     let { subtype, duration, txId, timestamp, roomUrl: msgRoomUrl } = message.metadata || {};
 
     const onAccept = !isClosed ? () => {
+        if (onAcceptVideo) onAcceptVideo(msgRoomUrl);
         if (aceptarInvitacionVideo) aceptarInvitacionVideo(msgRoomUrl);
-        else if (onAcceptVideo) onAcceptVideo();
     } : undefined;
     const onDecline = !isClosed ? onDeclineVideo : undefined;
     const onInviteAction = !isClosed ? onInviteVideo : undefined;
