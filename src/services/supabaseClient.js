@@ -1,12 +1,12 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// 1. Configuración de Entorno (Fail-Fast)
+// 1. Configuración de Entorno (Fail-Fast Real)
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('⚠️ Supabase Error: Faltan variables de entorno (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)');
+    throw new Error('⚠️ [Supabase Client] Faltan variables de entorno requeridas: VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY');
 }
 
 // 2. Cliente Singleton Enterprise
@@ -19,14 +19,3 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
         detectSessionInUrl: true
     }
 });
-
-// 3. Supress Dev Noise (React 18 Strict Mode + Supabase Locks AbortError)
-// Intercepta las promesas huérfanas de Supabase que fallan internamente al desmontar
-if (import.meta.env.DEV && typeof window !== 'undefined') {
-    window.addEventListener('unhandledrejection', (event) => {
-        if (event.reason?.name === 'AbortError' || event.reason?.message?.includes('aborted')) {
-            // Silenciamos totalmente en consola para no confundir al usuario durante el desarrollo
-            event.preventDefault();
-        }
-    });
-}
