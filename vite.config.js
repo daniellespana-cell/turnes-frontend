@@ -22,7 +22,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['pwa-192x192.png', 'pwa-512x512.png', 'pwa-maskable-512x512.png'],
       injectManifest: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}']
+        globPatterns: ['**/*.{html,ico,png,svg,webp,css}', 'assets/index-*.js', 'assets/vendor-*.js']
       },
       manifest: {
         name: 'Turnes',

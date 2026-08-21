@@ -138,23 +138,31 @@ class VersionService {
 
         try {
             const reloadCount = parseInt(sessionStorage.getItem(APP_METADATA.CHUNK_RETRY_KEY) || '0', 10);
-            if (reloadCount < 2) {
+            if (reloadCount < 3) {
                 sessionStorage.setItem(APP_METADATA.CHUNK_RETRY_KEY, String(reloadCount + 1));
-                logger.warn('🔄 [VersionService] ChunkLoadError detectado. Purgando caché y recargando...');
+                logger.warn('🔄 [VersionService] ChunkLoadError detectado. Purgando caché y recargando versión nueva...');
                 
-                // Limpiar cachés de navegación si están soportadas
-                if ('caches' in window) {
-                    caches.keys().then(names => {
-                        names.forEach(name => caches.delete(name));
-                    }).finally(() => {
-                        window.location.reload();
-                    });
-                } else {
+                const performReload = () => {
                     window.location.reload();
+                };
+
+                // Limpiar cachés de navegación y service workers
+                if ('caches' in window) {
+                    caches.keys()
+                        .then(names => Promise.all(names.map(name => caches.delete(name))))
+                        .finally(performReload);
+                } else {
+                    performReload();
                 }
             } else {
                 sessionStorage.removeItem(APP_METADATA.CHUNK_RETRY_KEY);
                 logger.error('❌ [VersionService] La recarga automática de chunks excedió el límite seguro.');
+                // Purgar Service Worker en caso de quedar huérfano
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(regs => {
+                        regs.forEach(r => r.unregister());
+                    });
+                }
             }
         } catch {
             window.location.reload();

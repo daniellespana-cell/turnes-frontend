@@ -19,6 +19,15 @@ initSentry();
 
 // 🚀 Inicializar Sentinel de Versionado y PWA Updates
 versionService.init(registerSW);
+
+// 🛡️ RECOVERY SENTINEL (Vite Preload / Chunk Mismatch tras despliegue)
+if (typeof window !== 'undefined') {
+  window.addEventListener('vite:preloadError', (event) => {
+    event.preventDefault();
+    versionService.handleChunkError();
+  });
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
