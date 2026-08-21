@@ -3,19 +3,20 @@ import { useAuth } from '../context/AuthContext';
 import { supabase } from '../services/supabaseClient';
 import { GeoService } from '../services/geoService';
 import { getCiudadCoords } from '../domain/geography.config';
+import { useAppliedVacancies } from './useAppliedVacancies';
 
 /**
- * useSkillMatchCompanies — Busca empresas con vacantes activas
+ * useSkillMatchCompanies — Busca empresas con vacantes activas y DISPONIBLES
  * que coincidan con las habilidades Y la zona geográfica del postulante.
  * 
  * Flujo:
- *   1. Lee user.skills y user.direccion del AuthContext
- *   2. Resuelve coordenadas de la ciudad del postulante via CIUDADES_COORDS
- *   3. Trae vacantes activas con lat/lng + tags + empresa
- *   4. Filtra por proximidad geográfica (radio configurable)
- *   5. Calcula overlap de skills
- *   6. Agrupa por empresa, rankea por (skills + proximidad + verificación)
- *   7. Retorna top 3
+ *   1. Lee user.skills, ubicación y appliedIds (vacantes a las que ya se postuló)
+ *   2. Resuelve coordenadas de la ciudad/perfil del postulante
+ *   3. Trae vacantes activas con coordenadas + tags + postulaciones + empresa
+ *   4. Filtra vacantes ya aplicadas o con cupo cerrado
+ *   5. Filtra por proximidad geográfica (radio configurable)
+ *   6. Agrupa por empresa y descarta empresas con 0 vacantes disponibles
+ *   7. Retorna top 3 ordenadas por afinidad
  */
 
 const MAX_RADIUS_KM = 50; // Radio máximo de búsqueda
@@ -23,6 +24,7 @@ const PROXIMITY_BONUS = 15; // Puntos extra por estar en la misma zona
 
 export const useSkillMatchCompanies = () => {
     const { user, isAuthenticated } = useAuth();
+    const { appliedIds } = useAppliedVacancies();
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -33,21 +35,23 @@ export const useSkillMatchCompanies = () => {
             .filter(Boolean);
     }, [user?.skills, user?.categorias, user?.categories]);
 
-    const userCity = user?.direccion || user?.location || '';
-    const userCoords = useMemo(() => getCiudadCoords(userCity), [userCity]);
+    const userCoords = useMemo(() => {
+        if (user?.lat != null && user?.lng != null) {
+            return { lat: Number(user.lat), lng: Number(user.lng) };
+        }
+        const userCity = user?.direccion || user?.ciudad_nombre || user?.ciudad || user?.location || '';
+        return getCiudadCoords(userCity);
+    }, [user?.lat, user?.lng, user?.direccion, user?.ciudad_nombre, user?.ciudad, user?.location]);
 
     useEffect(() => {
-        if (!isAuthenticated || !user?.id) return;
+        if (!isAuthenticated || !user?.id) {
+            setLoading(false);
+            return;
+        }
 
         const fetchMatchingCompanies = async () => {
             try {
-                // Si no hay skills NI ubicación, no podemos hacer match
-                if (userSkills.length === 0 && !userCoords) {
-                    setLoading(false);
-                    return;
-                }
-
-                // Traer vacantes activas con coordenadas y datos de empresa
+                // Traer vacantes activas con coordenadas, postulaciones y datos de empresa
                 const { data: vacantes, error } = await supabase
                     .from('vacantes')
                     .select(`
@@ -58,7 +62,14 @@ export const useSkillMatchCompanies = () => {
                         pago_monto,
                         lat,
                         lng,
+                        status,
                         empresa_id,
+                        postulaciones (
+                            id,
+                            status,
+                            step,
+                            user_id
+                        ),
                         empresas!inner(
                             id,
                             nombre_comercial,
@@ -78,7 +89,16 @@ export const useSkillMatchCompanies = () => {
                     const empresa = v.empresas;
                     if (!empresa) return;
 
-                    // ── PROXIMITY CHECK ──
+                    // ── 1. VALIDACIÓN DE DISPONIBILIDAD REAL ──
+                    // Si el usuario ya se postuló a esta vacante, no cuenta como vacante disponible para él
+                    const isAlreadyApplied = appliedIds.has(v.id) || (v.postulaciones || []).some(p => p.user_id === user.id);
+                    if (isAlreadyApplied) return;
+
+                    // Si la vacante ya fue cerrada, contratada o finalizada, no está disponible
+                    const isFulfilled = (v.postulaciones || []).some(p => ['contratado', 'finalizado', 'sellado'].includes(p.status) || p.step === 4);
+                    if (isFulfilled) return;
+
+                    // ── 2. PROXIMITY CHECK ──
                     let isInZone = false;
                     let distanceKm = null;
 
@@ -93,7 +113,7 @@ export const useSkillMatchCompanies = () => {
                     // Si tenemos ubicación y la vacante está fuera de zona, descartarla
                     if (userCoords && !isInZone) return;
 
-                    // ── SKILLS OVERLAP ──
+                    // ── 3. SKILLS OVERLAP ──
                     const vacancyTags = (v.etiquetas || []).map(t => String(t).toLowerCase().trim());
                     const vacancyCategory = v.categoria ? String(v.categoria).toLowerCase().trim() : '';
 
@@ -103,10 +123,10 @@ export const useSkillMatchCompanies = () => {
                         if (vacancyCategory && (vacancyCategory.includes(skill) || skill.includes(vacancyCategory))) matchCount++;
                     });
 
-                    // Si tiene skills definidos pero no hay match, descartar
+                    // Si el postulante tiene skills definidos pero no hay match en esta vacante, descartar
                     if (userSkills.length > 0 && matchCount === 0) return;
 
-                    // ── AGREGAR A EMPRESA ──
+                    // ── 4. AGREGAR A EMPRESA DISPONIBLE ──
                     const key = empresa.id;
                     if (!companyMap.has(key)) {
                         companyMap.set(key, {
@@ -136,14 +156,19 @@ export const useSkillMatchCompanies = () => {
                     }
                 });
 
+                // Filtrar solo empresas que TENGAN al menos 1 vacante disponible
+                const availableCompanies = Array.from(companyMap.values()).filter(c => c.vacancyCount > 0);
+
                 // Calcular % de afinidad compuesto y ordenar
-                const ranked = Array.from(companyMap.values())
+                const ranked = availableCompanies
                     .map(c => {
                         let score = 0;
 
                         // Skills component (max 50 pts)
                         if (userSkills.length > 0) {
                             score += Math.round((c.totalMatchScore / userSkills.length) * 50);
+                        } else {
+                            score += 25; // Base score si aún no define skills
                         }
 
                         // Proximity bonus (max 15 pts) — más cerca = más puntos
@@ -160,10 +185,10 @@ export const useSkillMatchCompanies = () => {
 
                         return {
                             ...c,
-                            affinity: Math.min(100, score),
+                            affinity: Math.min(100, Math.max(10, score)),
                             distance: c.nearestDistance !== Infinity 
-                                ? `${c.nearestDistance.toFixed(0)} km` 
-                                : null,
+                                ? GeoService.formatDistance(c.nearestDistance, true) 
+                                : 'En tu zona',
                         };
                     })
                     .sort((a, b) => b.affinity - a.affinity)
@@ -178,7 +203,7 @@ export const useSkillMatchCompanies = () => {
         };
 
         fetchMatchingCompanies();
-    }, [isAuthenticated, user?.id, userSkills, userCoords]);
+    }, [isAuthenticated, user?.id, userSkills, userCoords, appliedIds]);
 
     return { companies, loading };
 };

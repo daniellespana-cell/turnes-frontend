@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { getCategoriasList } from '../domain/vacantes.taxonomy';
 import { useVacancyFilters } from './useVacancyFilters';
 import { useAuth } from '../context/AuthContext';
@@ -20,11 +21,12 @@ import { useLocationResolver } from './useLocationResolver';
  * This hook contains NO business logic — only composition and state wiring.
  */
 export const useExploreVacancies = () => {
+    const routerLocation = useLocation();
     const [activeCategory, setActiveCategoryRaw] = useState('TODOS');
-    const [searchQuery,    setSearchQuery]        = useState('');
-    const [viewMode,       setViewMode]           = useState('list');
-    const location                  = useLocationResolver();
-    const [radius,         setRadius]             = useState(location.radiusKm || 3);
+    const [searchQuery, setSearchQuery] = useState(routerLocation.state?.search || '');
+    const [viewMode, setViewMode] = useState('list');
+    const location = useLocationResolver();
+    const [radius, setRadius] = useState(location.radiusKm || 3);
     const { user, isAuthenticated } = useAuth();
 
     // Sincronizar el radio si el resolver cambia de nivel (ej. cae de GPS a Nacional)

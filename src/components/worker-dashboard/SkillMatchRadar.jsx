@@ -68,11 +68,11 @@ const SkillMatchRadar = ({ companies, loading }) => {
                         initial={{ opacity: 0, x: -16 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.4 + i * 0.12 }}
-                        onClick={() => navigate('/dashboard/explorar')}
+                        onClick={() => navigate('/dashboard/explorar', { state: { search: company.name } })}
                         className="group flex items-center gap-3.5 p-3 rounded-2xl bg-zinc-800/30 hover:bg-zinc-800/60 border border-transparent hover:border-cyan-500/10 transition-all duration-300 cursor-pointer"
                         role="button"
                         tabIndex={0}
-                        onKeyDown={() => navigate('/dashboard/explorar')}>
+                        onKeyDown={() => navigate('/dashboard/explorar', { state: { search: company.name } })}>
                         {/* Logo */}
                         <div className="relative shrink-0">
                             <div className="w-11 h-11 rounded-xl overflow-hidden bg-zinc-800 ring-1 ring-white/5">
