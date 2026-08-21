@@ -115,6 +115,15 @@ export const authService = {
     },
 
     /**
+     * Canjear código PKCE por sesión real (confirmación de email)
+     * @param {string} code
+     */
+    async exchangeCodeForSession(code) {
+        if (!code) throw new Error('Auth code is required');
+        return await supabase.auth.exchangeCodeForSession(code);
+    },
+
+    /**
      * Establecer Rol después de OAuth
      * @param {string} role - 'BUSINESS_ROLE' o 'WORKER_ROLE'
      */

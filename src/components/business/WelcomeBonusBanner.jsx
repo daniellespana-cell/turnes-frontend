@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Gift, CheckCircle2, Info, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../services/supabaseClient';
+import { pricingService } from '../../services/pricingService';
 import { isCompanyProfileComplete, WELCOME_BONUS_CONDITIONS } from '../../domain/welcomeBonus.rules';
 
 const WelcomeBonusBanner = () => {
@@ -20,11 +20,8 @@ const WelcomeBonusBanner = () => {
                 return;
             }
             try {
-                const { data, error } = await supabase.rpc('rpc_check_welcome_bonus_redeemed', {
-                    p_empresa_id: user.id
-                });
-                if (error) throw error;
-                if (mounted) setHasRedeemed(!!data);
+                const redeemed = await pricingService.checkWelcomeBonusRedeemed(user.id);
+                if (mounted) setHasRedeemed(redeemed);
             } catch (err) {
                 console.error("Error checking welcome bonus:", err);
             } finally {

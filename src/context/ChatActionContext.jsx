@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 
 // Creamos el contexto para las acciones de negocio del Chat
 const ChatActionContext = createContext(null);
@@ -25,8 +23,8 @@ export const ChatActionProvider = ({
     onDeclineRehire,
     isFinalizing
 }) => {
-    // Estas son las acciones críticas de negocio del Chat
-    const actions = {
+    // Estas son las acciones críticas de negocio del Chat (Memoizadas para prevenir re-renders)
+    const actions = useMemo(() => ({
         onAcceptVideo,
         onDeclineVideo,
         onInviteVideo,
@@ -36,7 +34,17 @@ export const ChatActionProvider = ({
         onAcceptRehire,
         onDeclineRehire,
         isFinalizing
-    };
+    }), [
+        onAcceptVideo,
+        onDeclineVideo,
+        onInviteVideo,
+        onExecute,
+        onSealChat,
+        onRehire,
+        onAcceptRehire,
+        onDeclineRehire,
+        isFinalizing
+    ]);
 
     return (
         <ChatActionContext.Provider value={actions}>

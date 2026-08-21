@@ -1,7 +1,7 @@
 import React from 'react';
 import Toast from '../components/common/Toast';
 
-import { createContext, useContext, useState, useCallback, useRef } from 'react';
+import { createContext, useContext, useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { logger } from '../utils/logger';
 
 const ToastContext = createContext(null);
@@ -9,6 +9,12 @@ const ToastContext = createContext(null);
 export const ToastProvider = ({ children }) => {
   const [toast, setToast] = useState(null);
   const timeoutRef = useRef(null); // Para limpiar timers pendientes
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const hideToast = useCallback(() => {
     setToast(null);
@@ -30,8 +36,10 @@ export const ToastProvider = ({ children }) => {
     }, 50);
   }, []);
 
+  const value = useMemo(() => ({ showToast }), [showToast]);
+
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={value}>
       {children}
 
       {/* ESTRATEGIA DE RENDER:

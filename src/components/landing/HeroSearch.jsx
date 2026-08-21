@@ -15,6 +15,8 @@ const HeroSearch = () => {
     const [typingSpeed, setTypingSpeed] = useState(150);
     // TYPEWRITER EFFECT
     useEffect(() => {
+        let pauseTimer = null;
+
         const handleType = () => {
             const i = loopNum % activeRoles.length;
             const fullText = activeRoles[i];
@@ -27,15 +29,18 @@ const HeroSearch = () => {
             setTypingSpeed(isDeleting ? 50 : 150);
 
             if (!isDeleting && placeholder === fullText) {
-                setTimeout(() => setIsDeleting(true), 2000);
+                pauseTimer = setTimeout(() => setIsDeleting(true), 2000);
             } else if (isDeleting && placeholder === '') {
                 setIsDeleting(false);
-                setLoopNum(loopNum + 1);
+                setLoopNum(prev => prev + 1);
             }
         };
 
         const timer = setTimeout(handleType, typingSpeed);
-        return () => clearTimeout(timer);
+        return () => {
+            clearTimeout(timer);
+            if (pauseTimer) clearTimeout(pauseTimer);
+        };
     }, [placeholder, isDeleting, loopNum, typingSpeed]);
 
     const handleSearch = (e) => {

@@ -14,7 +14,11 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
   const [seconds, setSeconds] = useState(0);
   const [isInsecure, setIsInsecure] = useState(false);
   const [isRemoteConnected, setIsRemoteConnected] = useState(false); // 🆕 Feedback de conexión
+  const secondsRef = useRef(0);
   const iframeRef = useRef(null);
+  useEffect(() => {
+    secondsRef.current = seconds;
+  }, [seconds]);
 
   // 1. ESCUCHAR EVENTOS DEL IFRAME (Daily.co postMessage API)
   useEffect(() => {
@@ -28,13 +32,13 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
       if (e.data?.event === 'participant-left' && !e.data?.participant?.local) {
         setIsRemoteConnected(false);
         // 🔴 CANAL 1: El otro participante colgó → cerrar overlay automáticamente
-        hangupTimer = setTimeout(() => onClose(formatTime(seconds)), 3000);
+        hangupTimer = setTimeout(() => onClose(formatTime(secondsRef.current)), 3000);
       }
     };
 
     // 🛡️ SANITIZACIÓN SENIOR: Notificar cierre si el usuario mata la pestaña o bloquea el móvil
     const handleAbruptLeave = () => {
-      if (onClose) onClose(formatTime(seconds));
+      if (onClose) onClose(formatTime(secondsRef.current));
     };
 
     window.addEventListener('message', handleMessage);
@@ -47,7 +51,7 @@ export const VideoCallOverlay = ({ candidate, fromVacante, roomUrl, onClose }) =
       window.removeEventListener('pagehide', handleAbruptLeave);
       if (hangupTimer) clearTimeout(hangupTimer);
     };
-  }, [onClose, seconds]);
+  }, [onClose]);
 
 
   useEffect(() => {

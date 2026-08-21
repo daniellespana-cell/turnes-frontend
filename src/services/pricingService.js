@@ -127,7 +127,27 @@ class PricingService {
             return null;
         }
     }
+
+    /**
+     * Verifica si la empresa ya redimió el bono de bienvenida (RPC)
+     * @param {string} empresaId
+     * @returns {Promise<boolean>}
+     */
+    async checkWelcomeBonusRedeemed(empresaId) {
+        if (!empresaId) return false;
+        try {
+            const { data, error } = await this._withTimeout(
+                supabase.rpc('rpc_check_welcome_bonus_redeemed', { p_empresa_id: empresaId })
+            );
+            if (error) throw error;
+            return Boolean(data);
+        } catch (error) {
+            console.error("Error checking welcome bonus:", error);
+            return false;
+        }
+    }
 }
 
 const pricingService = new PricingService();
 export default pricingService;
+export { pricingService, PricingService };

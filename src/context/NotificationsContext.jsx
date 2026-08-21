@@ -152,8 +152,28 @@ export const NotificationsProvider = ({ children }) => {
     const unreadCount = useMemo(() => notifications.filter(n => !n.leida).length, [notifications]);
     const userRole = user?.rol === 'postulante' ? 'candidato' : 'empresa';
 
+    const value = useMemo(() => ({
+        notifications,
+        unreadCount,
+        loading,
+        userRole,
+        markAsRead,
+        markAllAsRead,
+        dispatch,
+        deleteNotification
+    }), [
+        notifications,
+        unreadCount,
+        loading,
+        userRole,
+        markAsRead,
+        markAllAsRead,
+        dispatch,
+        deleteNotification
+    ]);
+
     return (
-        <NotificationsContext.Provider value={{ notifications, unreadCount, loading, userRole, markAsRead, markAllAsRead, dispatch, deleteNotification }}>
+        <NotificationsContext.Provider value={value}>
             {children}
         </NotificationsContext.Provider>
     );

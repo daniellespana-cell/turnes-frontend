@@ -33,11 +33,15 @@ const PremiumBanner = ({ currentPlan = 'Basic' }) => {
 
   useEffect(() => {
     if (isPaidPlan) return;
+    let highlightTimer = null;
     const interval = setInterval(() => {
       setHighlight(true);
-      setTimeout(() => setHighlight(false), 2000);
+      highlightTimer = setTimeout(() => setHighlight(false), 2000);
     }, 6000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      if (highlightTimer) clearTimeout(highlightTimer);
+    };
   }, [isPaidPlan]);
 
   if (isPaidPlan) return null;

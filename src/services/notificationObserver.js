@@ -135,6 +135,16 @@ class NotificationObserver {
         });
         if (error) console.error(`[Observer] dispatch ${tipo} falló:`, error);
     }
+
+    async deletePushSubscription(userId, endpoint) {
+        if (!userId || !endpoint) return;
+        const { error } = await supabase
+            .from('push_subscriptions')
+            .delete()
+            .eq('user_id', userId)
+            .eq('endpoint', endpoint);
+        if (error) console.error('[Observer] deletePushSubscription error:', error);
+    }
 }
 
 // Singleton: servicio de infraestructura, no vive en el árbol de React

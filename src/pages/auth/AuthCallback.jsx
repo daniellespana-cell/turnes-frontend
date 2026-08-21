@@ -6,7 +6,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { authService } from '../../services/authService';
-import { supabase } from '../../services/supabaseClient';
 
 const AuthCallback = () => {
     const navigate = useNavigate();
@@ -25,7 +24,7 @@ const AuthCallback = () => {
         // Debemos canjearlo por una sesión real ANTES de cualquier otra lógica.
         const code = searchParams.get('code');
         if (code) {
-            supabase.auth.exchangeCodeForSession(code)
+            authService.exchangeCodeForSession(code)
                 .then(({ error }) => {
                     if (!isMounted) return;
                     if (error) {

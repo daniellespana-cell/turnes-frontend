@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo } from 'react';
 
 /**
  * Contexto para manejar el estado del flujo de registro en Turnes.
@@ -36,11 +36,11 @@ export const RegisterProvider = ({ children, initialRole = null, onReset }) => {
         setRoleState(null);
     }, []);
 
-    const value = {
+    const value = useMemo(() => ({
         role,
         setRole,
         resetRegistration
-    };
+    }), [role, setRole, resetRegistration]);
 
     return (
         <RegisterContext.Provider value={value}>

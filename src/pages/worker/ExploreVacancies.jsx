@@ -6,7 +6,7 @@ import ExploreContent from '../../components/features/ExploreContent';
 import VacancyDetailSheet from '../../components/features/VacancyDetailSheet';
 import CompanyProfileModal from '../../components/features/CompanyProfileModal';
 
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { Info } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LocationHint from '../../components/common/LocationHint';
@@ -54,7 +54,9 @@ const ExploreVacancies = () => {
 
     // Ref para leer location.state sin invalidar useCallback
     const stateRef = useRef(location.state);
-    stateRef.current = location.state;
+    useEffect(() => {
+        stateRef.current = location.state;
+    }, [location.state]);
 
     const openDetail = useCallback((vacancy) => {
         const params = new URLSearchParams(window.location.search);

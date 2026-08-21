@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../services/supabaseClient';
+import { authService } from '../services/authService';
+import { notificationObserver } from '../services/notificationObserver';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
@@ -73,10 +74,12 @@ export const usePushNotifications = () => {
                 applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
             });
 
-            const { endpoint, keys } = JSON.parse(JSON.stringify(pushSub));
+            const subJson = pushSub.toJSON ? pushSub.toJSON() : JSON.parse(JSON.stringify(pushSub));
+            const endpoint = subJson.endpoint;
+            const keys = subJson.keys || {};
 
             // 3. Obtener el JWT activo del usuario para enviarlo al backend
-            const { data: { session } } = await supabase.auth.getSession();
+            const session = await authService.getSession();
             if (!session) throw new Error('Sesión expirada. Inicia sesión de nuevo.');
 
             // 4. SSOT: Enviar la suscripción a la Edge Function (nunca directo a la BD)
@@ -119,13 +122,9 @@ export const usePushNotifications = () => {
             if (subscription) {
                 await subscription.unsubscribe();
 
-                // Borrar de la BD a través del cliente autenticado
+                // Borrar de la BD a través del servicio desacoplado
                 if (user) {
-                    await supabase
-                        .from('push_subscriptions')
-                        .delete()
-                        .eq('user_id', user.id)
-                        .eq('endpoint', subscription.endpoint);
+                    await notificationObserver.deletePushSubscription(user.id, subscription.endpoint);
                 }
 
                 setIsSubscribed(false);
