@@ -1,9 +1,9 @@
-import { Search, ChevronLeft } from 'lucide-react';
+import { Search, ChevronLeft, CheckCheck } from 'lucide-react';
 import EmptyState from '../common/EmptyState';
 import ChatListItem from './ChatListItem';
 import ChatActionModal from './ChatActionModal';
 
-import React, { useEffect, useSyncExternalStore } from 'react';
+import React, { useEffect, useSyncExternalStore, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MessageSquare } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -24,6 +24,11 @@ export const ChatList = ({ chats: initialChats, isDirectoryMode = false, backPat
     // 🛡️ REACCIÓN GLOBAL: Escuchar cambios en cualquier conversación (Realtime)
     const snapshot = useSyncExternalStore(ChatStorage.subscribe, ChatStorage.getSnapshot);
     
+    const totalUnread = useMemo(() => {
+        if (!snapshot?.unreadCounts) return 0;
+        return Object.values(snapshot.unreadCounts).reduce((acc, count) => acc + count, 0);
+    }, [snapshot?.unreadCounts]);
+
     // Unir la "Verdad" del estado reactivo con la lista base proporcionada por el hook
     const chats = (initialChats || []).map(baseChat => {
         const reactiveData = snapshot.conversations[baseChat.id] || {};
@@ -83,16 +88,29 @@ export const ChatList = ({ chats: initialChats, isDirectoryMode = false, backPat
         <div className={`flex flex-col h-full ${!isDirectoryMode && 'border-r border-white/5 w-full md:w-[26rem]'} shrink-0 bg-[#060606]`}>
             {/* Header: Title Left, Search Right (Inline Premium) */}
             <div className="flex flex-col gap-4 px-5 pt-6 pb-4 border-b border-white/5 bg-zinc-950/50 backdrop-blur-xl sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                    <button
-                        onClick={() => navigate(backPath)}
-                        className="p-1.5 -ml-1 text-zinc-400 hover:text-white hover:bg-white/5 rounded-full transition-all"
-                        title="Volver"
-                        type="button"
-                        aria-label="Acción">
-                        <ChevronLeft size={22} className="stroke-[2.5px]" />
-                    </button>
-                    <h1 className={`${typography.entityName} text-[22px] tracking-tight font-extrabold text-white/90`}>Mensajes</h1>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => navigate(backPath)}
+                            className="p-1.5 -ml-1 text-zinc-400 hover:text-white hover:bg-white/5 rounded-full transition-all"
+                            title="Volver"
+                            type="button"
+                            aria-label="Acción">
+                            <ChevronLeft size={22} className="stroke-[2.5px]" />
+                        </button>
+                        <h1 className={`${typography.entityName} text-[22px] tracking-tight font-extrabold text-white/90`}>Mensajes</h1>
+                    </div>
+
+                    {totalUnread > 0 && (
+                        <button
+                            onClick={() => ChatStorage.markAllAsRead(user?.id)}
+                            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 transition-all active:scale-95 shadow-sm"
+                            title="Marcar todas las conversaciones como leídas"
+                            type="button">
+                            <CheckCheck size={14} className="stroke-[2.5px]" />
+                            <span>Marcar leídos</span>
+                        </button>
+                    )}
                 </div>
 
                 {/* Search Bar Premium */}

@@ -88,6 +88,8 @@ class ChatStorageFacade {
         chatState.markAsRead(chatId);
         return chatNetwork.markAsRead(chatId, myUserId);
     };
+
+    markAllAsRead = (myUserId) => chatNetwork.markAllAsRead(myUserId);
     
     setActiveChat = (chatId) => chatState.setActiveChat(chatId);
 

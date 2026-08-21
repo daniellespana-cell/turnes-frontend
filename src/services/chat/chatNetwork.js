@@ -148,12 +148,24 @@ class ChatNetworkService {
         if (!myUserId) return;
         const { error } = await supabase
             .from('mensajes')
-            .update({ leido: true, read_at: new Date().toISOString() })
+            .update({ leido: true, is_read: true, read_at: new Date().toISOString() })
             .eq('conversacion_id', chatId)
-            .neq('sender_id', myUserId)
-            .eq('leido', false);
+            .neq('sender_id', myUserId);
 
         if (error) console.warn("[CHAT_NETWORK] No se pudo marcar leído:", error);
+    }
+
+    async markAllAsRead(myUserId) {
+        // Inmediatamente limpiar en estado local reactivo (0ms de latencia)
+        chatState.updateSnapshot({ unreadCounts: {} });
+
+        if (!myUserId) return;
+        const { error } = await supabase
+            .from('mensajes')
+            .update({ leido: true, is_read: true, read_at: new Date().toISOString() })
+            .neq('sender_id', myUserId);
+
+        if (error) console.warn("[CHAT_NETWORK] No se pudo marcar todo como leído:", error);
     }
 
     async _fireHttpInsert(payload, overrideToken = null) {

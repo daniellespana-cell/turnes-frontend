@@ -37,9 +37,11 @@ export const useChats = () => {
 
             // Status Real desde DB
             const derivedStatus = conv.status || 'pendiente';
+            const hasUnread = Boolean(snapshot?.unreadCounts?.[conv.id]);
 
-            // 🔥 SENIOR FIX: Evitar que postulaciones sin MATCH aparezcan como chats
-            if (derivedStatus === 'pendiente') {
+            // 🔥 SENIOR FIX: Evitar que postulaciones sin mensajes ni interacción saturen la lista,
+            // pero si tienen mensajes no leídos o historial, DEBEN ser visibles.
+            if (derivedStatus === 'pendiente' && msgs.length === 0 && !hasUnread) {
                 return null;
             }
 
@@ -76,7 +78,7 @@ export const useChats = () => {
             .filter(Boolean)
             .sort((a, b) => b.lastActivityEpoch - a.lastActivityEpoch);
 
-    }, [conversations, messages, user?.id]);
+    }, [conversations, messages, snapshot?.unreadCounts, user?.id]);
 
     return {
         chats: activeChats,
