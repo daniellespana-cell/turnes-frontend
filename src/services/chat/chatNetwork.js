@@ -140,32 +140,37 @@ class ChatNetworkService {
         }
     }
 
-    async markAsRead(chatId, myUserId) {
+    async markAsRead(chatId, _myUserId) {
         if (!chatId) return;
         // Inmediatamente limpiar en estado local reactivo (0ms de latencia)
         chatState.markAsRead(chatId);
 
-        if (!myUserId) return;
-        const { error } = await supabase
-            .from('mensajes')
-            .update({ leido: true, is_read: true, read_at: new Date().toISOString() })
-            .eq('conversacion_id', chatId)
-            .neq('sender_id', myUserId);
+        try {
+            const { error } = await supabase
+                .from('mensajes')
+                .update({ leido: true, is_read: true, read_at: new Date().toISOString() })
+                .eq('conversacion_id', chatId);
 
-        if (error) console.warn("[CHAT_NETWORK] No se pudo marcar leído:", error);
+            if (error) console.warn("[CHAT_NETWORK] No se pudo marcar leído:", error);
+        } catch (e) {
+            console.warn("[CHAT_NETWORK] Exception marking read:", e);
+        }
     }
 
-    async markAllAsRead(myUserId) {
+    async markAllAsRead(_myUserId) {
         // Inmediatamente limpiar en estado local reactivo (0ms de latencia)
         chatState.updateSnapshot({ unreadCounts: {} });
 
-        if (!myUserId) return;
-        const { error } = await supabase
-            .from('mensajes')
-            .update({ leido: true, is_read: true, read_at: new Date().toISOString() })
-            .neq('sender_id', myUserId);
+        try {
+            const { error } = await supabase
+                .from('mensajes')
+                .update({ leido: true, is_read: true, read_at: new Date().toISOString() })
+                .or('leido.eq.false,is_read.eq.false');
 
-        if (error) console.warn("[CHAT_NETWORK] No se pudo marcar todo como leído:", error);
+            if (error) console.warn("[CHAT_NETWORK] No se pudo marcar todo como leído:", error);
+        } catch (e) {
+            console.warn("[CHAT_NETWORK] Exception mark all as read:", e);
+        }
     }
 
     async _fireHttpInsert(payload, overrideToken = null) {

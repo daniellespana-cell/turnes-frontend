@@ -4,13 +4,14 @@ import ChatView from '../../components/chat/ChatView';
 import ChatPanels from '../../components/chat/ChatPanels';
 import ChatOverlays from '../../components/chat/ChatOverlays';
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useChatLogic } from "../../hooks/chat/useChatLogic";
 import { useCandidatosLogic } from '../../hooks/useCandidatosLogic';
 import { CandidateService } from '../../services/candidateService';
 import { useChatUI } from '../../hooks/chat/useChatUI';
+import { ChatStorage } from '../../services/chat';
 
 const BusinessChatPage = () => {
     const { id } = useParams();
@@ -21,6 +22,7 @@ const BusinessChatPage = () => {
 
     const logic = useCandidatosLogic();
     const [dbContact, setDbContact] = useState(null);
+    const chatSnapshot = useSyncExternalStore(ChatStorage.subscribe, ChatStorage.getSnapshot);
 
     useEffect(() => {
         const resolveContext = async () => {
@@ -37,6 +39,27 @@ const BusinessChatPage = () => {
     }, [id, user?.id, location.state]);
 
     const activeEntity = useMemo(() => {
+        // 1. Resolver desde el store reactivo de ChatStorage en 0ms
+        const conv = chatSnapshot?.conversations?.[id];
+        if (conv) {
+            return {
+                id: conv.id,
+                name: conv.postulante?.nombre_display || "Candidato",
+                avatar: conv.postulante?.avatar_url || null,
+                avatar_url: conv.postulante?.avatar_url || null,
+                candidate: conv.postulante?.nombre_display || "Candidato",
+                candidateAvatar: conv.postulante?.avatar_url || null,
+                candidateId: conv.postulante_id || conv.candidateId,
+                otherUserId: conv.otherUserId || conv.postulante_id,
+                status: conv.status,
+                step: conv.step,
+                isClosed: ['finalizado', 'rechazado'].includes(conv.status) || conv.step === 4,
+                protocol_state: conv.protocol_state,
+                vacante: conv.vacante
+            };
+        }
+
+        // 2. Resolver desde lógica de candidatos
         const { pendientes = [], historial = [] } = logic;
         const lista = [...pendientes, ...historial];
         const found = lista.find(c => String(c.id) === String(id) || String(c.candidateId) === String(id));
@@ -51,8 +74,6 @@ const BusinessChatPage = () => {
             return {
                 ...dbContact,
                 // dbContact ya viene normalizado por `normalizeChatContext`:
-                // .candidate  → nombre del candidato
-                // .avatar / .avatar_url → URL de la foto
                 name: dbContact.candidate || 'Candidato',
                 avatar: dbContact.avatar || dbContact.avatar_url || dbContact.candidateAvatar || null,
                 avatar_url: dbContact.avatar_url || dbContact.avatar || dbContact.candidateAvatar || null,
@@ -60,7 +81,7 @@ const BusinessChatPage = () => {
             };
         }
         return null;
-    }, [logic, dbContact, id]);
+    }, [chatSnapshot?.conversations, logic, dbContact, id]);
 
     // 🚀 CHAT LOGIC WITH REACTIVE UI TRIGGER
     const chat = useChatLogic(

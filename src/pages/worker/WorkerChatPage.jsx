@@ -4,13 +4,13 @@ import ChatView from '../../components/chat/ChatView';
 import ChatPanels from '../../components/chat/ChatPanels';
 import ChatOverlays from '../../components/chat/ChatOverlays';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useSyncExternalStore } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useChatLogic } from "../../hooks/chat/useChatLogic";
-import { useVacantesLogic } from '../../hooks/useVacantesLogic';
 import { CandidateService } from '../../services/candidateService';
 import { useChatUI } from '../../hooks/chat/useChatUI';
+import { ChatStorage } from '../../services/chat';
 
 const WorkerChatPage = () => {
     const { id } = useParams();
@@ -20,6 +20,7 @@ const WorkerChatPage = () => {
     const ui = useChatUI(); // 🚀 UI Hook
 
     const [dbContact, setDbContact] = useState(null);
+    const chatSnapshot = useSyncExternalStore(ChatStorage.subscribe, ChatStorage.getSnapshot);
 
     useEffect(() => {
         const resolveContext = async () => {
@@ -33,19 +34,28 @@ const WorkerChatPage = () => {
         };
         resolveContext();
     }, [id, user?.id]);
-
-    const logic = useVacantesLogic();
     
     const activeEntity = useMemo(() => {
-        const { aplicadas = [] } = logic;
-        const found = aplicadas.find(v => String(v.applicationId) === String(id) || String(v.id) === String(id));
-        
-        if (found) {
+        // 1. Resolver desde el store reactivo de ChatStorage en 0ms
+        const conv = chatSnapshot?.conversations?.[id];
+        if (conv) {
             return {
-                ...found,
-                otherUserId: found.companyId || found.empresaId || found.vacante?.empresa_id,
+                id: conv.id,
+                name: conv.empresa?.nombre_comercial || "Empresa",
+                avatar: conv.empresa?.logo_url || null,
+                company: conv.empresa?.nombre_comercial || "Empresa",
+                companyAvatar: conv.empresa?.logo_url || null,
+                companyId: conv.empresa_id || conv.companyId,
+                otherUserId: conv.otherUserId || conv.empresa_id,
+                status: conv.status,
+                step: conv.step,
+                isClosed: ['finalizado', 'rechazado'].includes(conv.status) || conv.step === 4,
+                protocol_state: conv.protocol_state,
+                vacante: conv.vacante
             };
         }
+
+        // 2. Si no, usar dbContact resuelto
         if (dbContact) {
             // 🛡️ IDENTIDAD DEL INTERLOCUTOR (Empresa)
             return {
@@ -56,7 +66,7 @@ const WorkerChatPage = () => {
             };
         }
         return null;
-    }, [logic, dbContact, id]);
+    }, [chatSnapshot?.conversations, dbContact, id]);
 
     // 🚀 CHAT LOGIC WITH REACTIVE UI TRIGGER
     const chat = useChatLogic(
@@ -96,7 +106,7 @@ const WorkerChatPage = () => {
                 chat={chat}
                 candidato={activeEntity}
                 isClosed={chat.isClosed}
-                stats={logic.stats}
+                stats={null}
                 isPaid={chat.isPaid}
                 finanzas={chat.finanzas}
                 permisos={chat.permisos}
