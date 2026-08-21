@@ -139,11 +139,37 @@ class ChatRealtimeService {
         if (!row || !row.conversacion_id) return;
         
         const snapshot = chatState.getSnapshot();
-        const hasConversation = !!snapshot.conversations[row.conversacion_id];
+        const conv = snapshot.conversations[row.conversacion_id];
+        const hasConversation = !!conv;
         
         const msg = chatState.formatMessage(row);
         chatState.addMessageLocal(row.conversacion_id, msg);
         
+        // 🛡️ Auto-Reactivación Enterprise: Si la conversación estaba eliminada o archivada por mí,
+        // restaurarla inmediatamente a visible tanto en memoria (0ms) como en base de datos.
+        if (conv && conv.protocol_state?.visibility?.[this._userId]) {
+            const currentVis = conv.protocol_state.visibility[this._userId];
+            if (currentVis === 'delete' || currentVis === 'archive') {
+                const cleanVisibility = { ...conv.protocol_state.visibility };
+                delete cleanVisibility[this._userId];
+
+                chatState.updateSnapshot({
+                    conversations: {
+                        ...snapshot.conversations,
+                        [row.conversacion_id]: {
+                            ...conv,
+                            protocol_state: {
+                                ...conv.protocol_state,
+                                visibility: cleanVisibility
+                            }
+                        }
+                    }
+                });
+
+                chatConversations.manageChatVisibility(row.conversacion_id, 'unarchive').catch(() => {});
+            }
+        }
+
         // 🛡️ Si el usuario está viendo activamente este chat, marcarlo leído de inmediato
         if (chatState._activeChatId === row.conversacion_id && this._userId) {
             import('./chatNetwork').then(module => {

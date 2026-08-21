@@ -29,15 +29,17 @@ export const useChats = () => {
 
             // Check Visibility Constraints per User
             const visibilityStatus = conv.protocol_state?.visibility?.[user?.id];
+            const hasUnread = Boolean(snapshot?.unreadCounts?.[conv.id]);
 
-            // Si está archivado o eliminado por mí, no lo renderizo en la principal
-            if (visibilityStatus === 'archive' || visibilityStatus === 'delete' || visibilityStatus === 'block') {
+            if (visibilityStatus === 'block') {
+                return null;
+            }
+            if ((visibilityStatus === 'archive' || visibilityStatus === 'delete') && !hasUnread) {
                 return null;
             }
 
             // Status Real desde DB
             const derivedStatus = conv.status || 'pendiente';
-            const hasUnread = Boolean(snapshot?.unreadCounts?.[conv.id]);
 
             // 🔥 SENIOR FIX: Evitar que postulaciones sin mensajes ni interacción saturen la lista,
             // pero si tienen mensajes no leídos o historial, DEBEN ser visibles.

@@ -71,7 +71,7 @@ export const useNotificationsMenu = () => {
         setIsOpen(false);
         if (!note.link) return;
 
-        // 🛡️ ANTI-GHOST: Validar visibilidad antes de abrir un chat
+        // Auto-reactivar chat en caso de haber sido eliminado/archivado previamente
         const chatMatch = note.link.match(/\/dashboard\/chat\/([^?]+)/);
         if (chatMatch) {
             const chatId = chatMatch[1];
@@ -79,13 +79,14 @@ export const useNotificationsMenu = () => {
             const conv = snapshot?.conversations?.[chatId];
             const visibility = conv?.protocol_state?.visibility;
 
-            if (typeof visibility === 'object') {
-                const hasBlock = Object.values(visibility).some(v => v === 'delete' || v === 'block');
-                if (hasBlock) {
-                    navigate('/dashboard/chats');
-                    return;
-                }
+            // Si hay un bloqueo real de seguridad (block), redirigir
+            if (typeof visibility === 'object' && Object.values(visibility).some(v => v === 'block')) {
+                navigate('/dashboard/chats');
+                return;
             }
+
+            // Auto-resurrección de chat archivado/eliminado
+            ChatStorage.manageChatVisibility(chatId, 'unarchive').catch(() => {});
         }
 
         navigate(note.link);

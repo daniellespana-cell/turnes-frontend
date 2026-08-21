@@ -95,6 +95,10 @@ class ChatServiceFacade {
 
     updateSnapshot = (partial) => chatState.updateSnapshot(partial);
 
+    manageChatVisibility = (chatId, action) => chatConversations.manageChatVisibility(chatId, action);
+
+    loadConversations = () => chatConversations.loadConversations();
+
     // --- EXPOSED CONSTANTS ---
     EVENTS = EVENTS;
 }

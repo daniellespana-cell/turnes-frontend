@@ -26,6 +26,12 @@ export const useChatMessaging = (chatId, _otherParticipant, _permisos = {}, _con
     ChatStorage.setActiveChat(chatId);
     ChatStorage.fetchMessages(chatId);
 
+    // 🛡️ Auto-Reactivación Enterprise: Si el usuario entra al chat, des-archivar automáticamente
+    const currentConv = ChatStorage.getSnapshot()?.conversations?.[chatId];
+    if (currentConv?.protocol_state?.visibility?.[user.id]) {
+      ChatStorage.manageChatVisibility(chatId, 'unarchive').catch(() => {});
+    }
+
     return () => {
       // Limpiamos al salir para que los nuevos mensajes vuelvan a marcarse como no leídos
       ChatStorage.setActiveChat(null);

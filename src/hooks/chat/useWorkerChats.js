@@ -30,10 +30,15 @@ export const useWorkerChats = () => {
             const lastMsgObj = msgs.length > 0 ? msgs[msgs.length - 1] : null;
 
             // 🛡️ RAZONAMIENTO PRO: A diferencia de la empresa, el trabajador 
-            // SIEMPRE quiere ver sus aplicaciones, incluso si están en 'pendiente'
-            // y no tienen mensajes aún. Solo filtramos si hay una acción explícita de borrar/archivar.
+            // SIEMPRE quiere ver sus aplicaciones.
+            // Si el chat tiene mensajes no leídos (hasUnread), SIEMPRE se muestra (inmunidad de mensajes entrantes).
+            const hasUnread = Boolean(snapshot?.unreadCounts?.[conv.id]);
             const visibilityStatus = conv.protocol_state?.visibility?.[user?.id];
-            if (visibilityStatus === 'archive' || visibilityStatus === 'delete' || visibilityStatus === 'block') {
+
+            if (visibilityStatus === 'block') {
+                return null;
+            }
+            if ((visibilityStatus === 'archive' || visibilityStatus === 'delete') && !hasUnread) {
                 return null;
             }
 
@@ -65,7 +70,7 @@ export const useWorkerChats = () => {
             .filter(Boolean)
             .sort((a, b) => b.lastActivityEpoch - a.lastActivityEpoch);
 
-    }, [conversations, messages, user?.id]);
+    }, [conversations, messages, snapshot?.unreadCounts, user?.id]);
 
     return {
         chats: activeChats,

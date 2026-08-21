@@ -44,7 +44,7 @@ const NotificationsPage = () => {
         markAsRead(note.id);
         if (!note.link) return;
 
-        // 🛡️ ANTI-GHOST: Si la notificación apunta a un chat, verificar que no esté eliminado/bloqueado
+        // Auto-reactivar chat en caso de haber sido eliminado/archivado previamente
         const chatMatch = note.link.match(/\/dashboard\/chat\/([^?]+)/);
         if (chatMatch) {
             const chatId = chatMatch[1];
@@ -53,14 +53,14 @@ const NotificationsPage = () => {
             const myVisibility = conv?.protocol_state?.visibility?.[note.referenceId] 
                               ?? conv?.protocol_state?.visibility;
 
-            // Si el chat fue eliminado o bloqueado por el usuario, redirigir a la lista
-            if (typeof myVisibility === 'object') {
-                const userVis = Object.values(myVisibility).find(v => v === 'delete' || v === 'block');
-                if (userVis) {
-                    navigate('/dashboard/chats');
-                    return;
-                }
+            // Si hay un bloqueo real de seguridad (block), redirigir
+            if (typeof myVisibility === 'object' && Object.values(myVisibility).some(v => v === 'block')) {
+                navigate('/dashboard/chats');
+                return;
             }
+
+            // Auto-resurrección de chat archivado/eliminado
+            ChatStorage.manageChatVisibility(chatId, 'unarchive').catch(() => {});
         }
 
         navigate(note.link);
