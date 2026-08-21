@@ -51,7 +51,10 @@ const WorkerChatPage = () => {
                 step: conv.step,
                 isClosed: ['finalizado', 'rechazado'].includes(conv.status) || conv.step === 4,
                 protocol_state: conv.protocol_state,
-                vacante: conv.vacante
+                vacante: conv.vacante,
+                payment: conv.payment ?? conv.vacante?.pago_monto ?? 0,
+                role: conv.role ?? conv.vacante?.titulo ?? "Vacante",
+                roleContext: conv.roleContext ?? conv.vacante?.titulo ?? "Vacante"
             };
         }
 

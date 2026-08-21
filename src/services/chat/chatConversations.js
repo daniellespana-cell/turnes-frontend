@@ -24,7 +24,7 @@ class ChatConversationsService {
                     postulacion:postulaciones!turnes_chats_id_fkey (
                         id, updated_at, status, step, protocol_state, user_id,
                         vacante:vacantes (
-                            id, titulo, empresa_id,
+                            id, titulo, tipo_turno, pago_monto, empresa_id,
                             empresa:empresas (nombre_comercial, logo_url)
                         ),
                         postulante:perfiles (nombre_display, avatar_url)
@@ -68,6 +68,9 @@ class ChatConversationsService {
                     status: c.status,
                     step: c.step,
                     protocol_state: c.protocol_state,
+                    payment: Number(vacante.pago_monto) || 0,
+                    role: vacante.titulo || 'Vacante',
+                    roleContext: vacante.titulo || 'Vacante',
                     // Datos unificados para la UI
                     empresa: {
                         id: empresaId,
@@ -81,7 +84,11 @@ class ChatConversationsService {
                     },
                     vacante: {
                         id: vacante.id,
-                        titulo: vacante.titulo || 'Vacante'
+                        titulo: vacante.titulo || 'Vacante',
+                        tipo_turno: vacante.tipo_turno || 'fijo',
+                        pago_monto: Number(vacante.pago_monto) || 0,
+                        empresa_id: empresaId,
+                        empresa: empresa
                     }
                 };
             });
