@@ -107,10 +107,7 @@ const BusinessChatPage = () => {
 
     const handleConfirmarAcuerdo = async () => {
         if (chat?.ejecutarAcuerdo) {
-            const result = await chat.ejecutarAcuerdo();
-            if (result?.success && logic?.ejecutarAcuerdoFinal) {
-                logic.ejecutarAcuerdoFinal(activeEntity?.id);
-            }
+            await chat.ejecutarAcuerdo();
         }
     };
 
@@ -154,7 +151,7 @@ const BusinessChatPage = () => {
                 chat={chat}
                 candidato={activeEntity}
                 isClosed={chat.isClosed}
-                stats={logic.stats}
+                stats={null}
                 isPaid={chat.isPaid}
                 finanzas={chat.finanzas}
                 permisos={chat.permisos}
