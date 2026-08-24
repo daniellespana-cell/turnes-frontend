@@ -8,7 +8,6 @@ import { useState, useEffect, useMemo, useRef, useSyncExternalStore } from 'reac
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useChatLogic } from "../../hooks/chat/useChatLogic";
-import { useCandidatosLogic } from '../../hooks/useCandidatosLogic';
 import { CandidateService } from '../../services/candidateService';
 import { useChatUI } from '../../hooks/chat/useChatUI';
 import { ChatStorage } from '../../services/chat';
@@ -20,7 +19,6 @@ const BusinessChatPage = () => {
     const { user } = useAuth();
     const ui = useChatUI();
 
-    const logic = useCandidatosLogic();
     const [dbContact, setDbContact] = useState(null);
     const chatSnapshot = useSyncExternalStore(ChatStorage.subscribe, ChatStorage.getSnapshot);
 
@@ -62,29 +60,18 @@ const BusinessChatPage = () => {
             };
         }
 
-        // 2. Resolver desde lógica de candidatos
-        const { pendientes = [], historial = [] } = logic;
-        const lista = [...pendientes, ...historial];
-        const found = lista.find(c => String(c.id) === String(id) || String(c.candidateId) === String(id));
-
-        if (found) {
-            return {
-                ...found,
-                otherUserId: found.candidateId || found.user_id || found.id,
-            };
-        }
+        // 2. Si no está en el snapshot en memoria, usar dbContact resuelto puntualmente
         if (dbContact) {
             return {
                 ...dbContact,
-                // dbContact ya viene normalizado por `normalizeChatContext`:
-                name: dbContact.candidate || 'Candidato',
+                name: dbContact.candidate || dbContact.nombre_display || 'Candidato',
                 avatar: dbContact.avatar || dbContact.avatar_url || dbContact.candidateAvatar || null,
                 avatar_url: dbContact.avatar_url || dbContact.avatar || dbContact.candidateAvatar || null,
                 otherUserId: dbContact.candidateId || dbContact.user_id,
             };
         }
         return null;
-    }, [chatSnapshot?.conversations, logic, dbContact, id]);
+    }, [chatSnapshot?.conversations, dbContact, id]);
 
     // 🚀 CHAT LOGIC WITH REACTIVE UI TRIGGER
     const chat = useChatLogic(
@@ -92,8 +79,8 @@ const BusinessChatPage = () => {
         location.state || {},
         'empresa',
         {
-            canActivateVideo: logic?.canActivateVideo,
-            isVacanteCerrada: !!logic?.isVacanteCerrada
+            canActivateVideo: true,
+            isVacanteCerrada: activeEntity?.cicloCerrado
         },
         ui.abrirVideo,
         ui.cerrarVideo

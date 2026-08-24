@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useChatMessaging } from './useChatMessaging';
 import { useChatWorkflow } from './useChatWorkflow';
@@ -59,11 +59,22 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
     window.dispatchEvent(new CustomEvent('turnes_contract_update'));
   }, []);
 
+  const lastProcessedMsgIdRef = useRef(null);
+
   // 🆕 SYNC SENSOR: Sincronización de apertura/cierre reactiva via Realtime
   useEffect(() => {
     if (!messages || messages.length === 0) return;
     const lastMsg = messages[messages.length - 1];
-    
+    if (!lastMsg) return;
+
+    // 🛡️ SENIOR IDEMPOTENCY GUARD:
+    // Evita loops infinitos (Maximum update depth exceeded) procesando cada evento de red una única vez.
+    const msgId = lastMsg.id || `${lastMsg.created_at || ''}_${lastMsg.type}_${lastMsg.content || ''}`;
+    if (lastProcessedMsgIdRef.current === msgId) {
+      return;
+    }
+    lastProcessedMsgIdRef.current = msgId;
+
     // 🎥 Abrir cuando el postulante acepta la invitación (para ambos)
     if (lastMsg.type === 'video_accepted' && onStartVideo) {
         onStartVideo(lastMsg.metadata?.roomUrl || roomUrl);
@@ -82,13 +93,16 @@ export const useChatLogic = (candidato, config, userRole, constraints, onStartVi
 
     // 🚀 PASO 2 -> PASO 3 AUTOMÁTICO PARA AMBOS (Single Source of Truth en Tiempo Real):
     // Cuando finaliza la llamada (sea colgada por la empresa o por el postulante),
-    // se avanza el estado del protocolo a VIDEO_VALIDATED y se sincroniza el estado local en 0ms.
+    // se avanza el estado del protocolo a VIDEO_VALIDATED solo si no ha sido avanzado previamente.
     const isVideoValidated = lastMsg.type === 'video_ended' || lastMsg.metadata?.subtype === 'call_summary';
     if (isVideoValidated) {
-        setContractStatus(prev => ({
-            ...prev,
-            step: Math.max(prev.step, PROTOCOL_STEPS.VIDEO_VALIDATED)
-        }));
+        setContractStatus(prev => {
+            if (prev.step >= PROTOCOL_STEPS.VIDEO_VALIDATED) return prev;
+            return {
+                ...prev,
+                step: PROTOCOL_STEPS.VIDEO_VALIDATED
+            };
+        });
         triggerDomainSync();
     }
   }, [messages, onStartVideo, onCerrarVideo, roomUrl, setContractStatus, triggerDomainSync]);
