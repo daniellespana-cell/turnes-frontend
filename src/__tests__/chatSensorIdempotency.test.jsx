@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { PROTOCOL_STEPS } from '../services/contractService';
@@ -9,12 +9,21 @@ import { PROTOCOL_STEPS } from '../services/contractService';
  */
 describe('🛡️ Certificación de Idempotencia del Sensor de Chat (Anti-Loop Guarantee)', () => {
     let dispatchedEvents = [];
+    let handleContractUpdate;
 
     beforeEach(() => {
         dispatchedEvents = [];
-        window.addEventListener('turnes_contract_update', (e) => {
+        handleContractUpdate = (e) => {
             dispatchedEvents.push(e);
-        });
+        };
+        window.addEventListener('turnes_contract_update', handleContractUpdate);
+    });
+
+    afterEach(() => {
+        if (handleContractUpdate) {
+            window.removeEventListener('turnes_contract_update', handleContractUpdate);
+        }
+        vi.restoreAllMocks();
     });
 
     const useMockChatSensor = (messages, onStartVideo, onCerrarVideo) => {
