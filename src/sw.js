@@ -1,8 +1,13 @@
 import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
 import { clientsClaim } from 'workbox-core';
 
-// Reemplazo automático del Service Worker viejo
-self.skipWaiting();
+// 🛡️ Activación controlada (Zero Reload Loop):
+// Solo salta la espera cuando el usuario acepta actualizar o en nuevo ciclo de pestañas
+self.addEventListener('message', (event) => {
+    if (event.data && (event.data.type === 'SKIP_WAITING' || event.data === 'skipWaiting')) {
+        self.skipWaiting();
+    }
+});
 clientsClaim();
 
 // Limpia cachés antiguas y precachea los assets generados por Vite

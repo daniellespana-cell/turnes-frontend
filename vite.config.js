@@ -19,7 +19,7 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'sw.js',
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       includeAssets: ['pwa-192x192.png', 'pwa-512x512.png', 'pwa-maskable-512x512.png'],
       injectManifest: {
         globPatterns: ['**/*.{html,ico,png,svg,webp,css}', 'assets/index-*.js', 'assets/vendor-*.js']
