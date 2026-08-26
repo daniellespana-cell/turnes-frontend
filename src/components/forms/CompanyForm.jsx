@@ -64,7 +64,7 @@ const CompanyForm = () => {
                 // ⚡ INSTANT REDIRECT: Don't wait for "Success" message
                 navigate('/dashboard');
             } else {
-                setStatus({ message: "Registro exitoso. Revisa tu email para confirmar.", type: "success" });
+                setStatus({ message: "¡Bienvenido a Turnes! Te enviamos un correo de activación. Ábrelo y pulsa 'Activar Mi Cuenta' para comenzar.", type: "success" });
             }
 
         } catch (error) {

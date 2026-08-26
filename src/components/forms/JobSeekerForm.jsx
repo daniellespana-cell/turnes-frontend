@@ -59,7 +59,7 @@ const JobSeekerForm = () => {
                 navigate('/dashboard');
             } else {
                 // Caso: Email Confirm activo
-                setStatus({ message: "¡Casi listo! Revisa tu correo para confirmar la cuenta.", type: "success" });
+                setStatus({ message: "¡Bienvenido a Turnes! Te enviamos un correo de activación. Ábrelo y pulsa 'Activar Mi Cuenta' para comenzar.", type: "success" });
             }
 
         } catch (error) {
