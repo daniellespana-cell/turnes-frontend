@@ -204,11 +204,62 @@ export const validateVacancyPayload = (formData, hasSensitiveData = false) => {
 };
 
 /**
+ * 🛡️ Mapa de Errores Tipográficos Comunes en Dominios de Correo (Typo Guard)
+ */
+const DOMAIN_TYPO_MAP = {
+    'gmil.com': 'gmail.com',
+    'gmaill.com': 'gmail.com',
+    'gmai.com': 'gmail.com',
+    'gmal.com': 'gmail.com',
+    'gamil.com': 'gmail.com',
+    'gmial.com': 'gmail.com',
+    'gmeil.com': 'gmail.com',
+    'hotmial.com': 'hotmail.com',
+    'hotmai.com': 'hotmail.com',
+    'hotmali.com': 'hotmail.com',
+    'hotmaik.com': 'hotmail.com',
+    'hotamail.com': 'hotmail.com',
+    'outlok.com': 'outlook.com',
+    'outllok.com': 'outlook.com',
+    'outloock.com': 'outlook.com',
+    'outlock.com': 'outlook.com',
+    'yaho.com': 'yahoo.com',
+    'yahooo.com': 'yahoo.com',
+    'yaho.es': 'yahoo.es',
+    'iclud.com': 'icloud.com',
+    'icoud.com': 'icloud.com'
+};
+
+/**
+ * 🛡️ Dominios de Correos Desechables / Temporales Bloqueados (Anti-Spam)
+ */
+const DISPOSABLE_EMAIL_DOMAINS = new Set([
+    'tempmail.com',
+    'temp-mail.org',
+    '10minutemail.com',
+    '10minutemail.net',
+    'mailinator.com',
+    'guerrillamail.com',
+    'guerrillamail.net',
+    'yopmail.com',
+    'yopmail.fr',
+    'trashmail.com',
+    'trashmail.net',
+    'fakeinbox.com',
+    'sharklasers.com',
+    'dispostable.com',
+    'getnada.com',
+    'throwawaymail.com',
+    'mohmal.com',
+    'crazymailing.com'
+]);
+
+/**
  * Valida y normaliza una dirección de correo electrónico según estándar RFC 5322.
- * Limpia espacios y convierte a minúsculas automáticamente.
+ * Limpia espacios, convierte a minúsculas, detecta typos comunes y bloquea correos desechables.
  *
  * @param {string} rawEmail
- * @returns {{ isValid: boolean, cleanEmail: string, error: string | null }}
+ * @returns {{ isValid: boolean, cleanEmail: string, suggestedEmail?: string, error: string | null }}
  */
 export const validateEmail = (rawEmail) => {
     if (!rawEmail || typeof rawEmail !== 'string') {
@@ -226,6 +277,29 @@ export const validateEmail = (rawEmail) => {
 
     if (!emailRegex.test(cleanEmail)) {
         return { isValid: false, cleanEmail, error: 'Ingresa un formato de correo electrónico válido (ej. usuario@dominio.com).' };
+    }
+
+    const parts = cleanEmail.split('@');
+    const domain = parts[1];
+
+    // 🛡️ 1. Bloqueo de dominios temporales / desechables
+    if (DISPOSABLE_EMAIL_DOMAINS.has(domain)) {
+        return { 
+            isValid: false, 
+            cleanEmail, 
+            error: 'No se permiten correos temporales o desechables. Ingresa tu correo personal o corporativo.' 
+        };
+    }
+
+    // 🛡️ 2. Detección proactiva de errores tipográficos en el dominio
+    if (DOMAIN_TYPO_MAP[domain]) {
+        const suggestedDomain = DOMAIN_TYPO_MAP[domain];
+        return { 
+            isValid: false, 
+            cleanEmail, 
+            suggestedEmail: `${parts[0]}@${suggestedDomain}`,
+            error: `¿Quisiste decir @${suggestedDomain}? Corrige el correo para poder activar tu cuenta.` 
+        };
     }
 
     return { isValid: true, cleanEmail, error: null };

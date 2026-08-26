@@ -102,6 +102,28 @@ describe('Validation Utilities (SSOT)', () => {
             expect(validateEmail('@gmail.com').isValid).toBe(false);
             expect(validateEmail('').isValid).toBe(false);
         });
+
+        it('debe detectar typos comunes en dominios y sugerir la corrección', () => {
+            const typoGmail = validateEmail('usuario@gmil.com');
+            expect(typoGmail.isValid).toBe(false);
+            expect(typoGmail.suggestedEmail).toBe('usuario@gmail.com');
+            expect(typoGmail.error).toContain('@gmail.com');
+
+            const typoHotmail = validateEmail('usuario@hotmial.com');
+            expect(typoHotmail.isValid).toBe(false);
+            expect(typoHotmail.suggestedEmail).toBe('usuario@hotmail.com');
+            expect(typoHotmail.error).toContain('@hotmail.com');
+        });
+
+        it('debe rechazar correos temporales / desechables (Anti-Spam)', () => {
+            const tempMail = validateEmail('bot123@tempmail.com');
+            expect(tempMail.isValid).toBe(false);
+            expect(tempMail.error).toContain('temporales');
+
+            const mailinator = validateEmail('fake@mailinator.com');
+            expect(mailinator.isValid).toBe(false);
+            expect(mailinator.error).toContain('temporales');
+        });
     });
 
     describe('validateRegistrationPayload', () => {
