@@ -84,7 +84,8 @@ serve(async (req) => {
                             <p style="margin: 0; color: #52525b; font-size: 13px;">© 2026 Turnes. Todos los derechos reservados.</p>
                         </div>
                     </div>
-                `
+                `,
+                text: `¡Hola ${candidato.nombre_display.split(' ')[0]}!\n\nHemos encontrado una oportunidad laboral que hace match perfecto con tus habilidades: ${vacante.titulo}.\nPago: $${vacante.pago_monto ? vacante.pago_monto.toLocaleString() : 'A convenir'}\nUbicación: ${vacante.direccion_formateada || 'Ver en la app'}\n\nVer Vacante y Postularme: https://turnes.co/dashboard/explorar\n\n© 2026 Turnes. Todos los derechos reservados.`
             }));
 
             const res = await fetch('https://api.resend.com/emails/batch', {

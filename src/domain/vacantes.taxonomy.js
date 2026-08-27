@@ -15,7 +15,7 @@ import { logger } from '../utils/logger';
 // Solo id + label para que el autocomplete y las categorías funcionen sin DB.
 // Los detalles (skills, marketing, slugs) vienen siempre del sync con Supabase.
 const FALLBACK_TAXONOMY = {
-  GASTRO: { id: 'GASTRO', label: 'Gastronomía y Bares 🍔', ui: { icon: 'Utensils', color: 'text-orange-500', hex: '#f97316' }, roles: [{ id: 'MESERO', label: 'Mesero / Camarero' }, { id: 'BARTENDER', label: 'Bartender / Barman' }, { id: 'BARISTA', label: 'Barista Profesional' }, { id: 'COCINERO', label: 'Cocinero (General)' }, { id: 'AYU_COCINA', label: 'Ayudante de Cocina' }, { id: 'PARRILLERO', label: 'Parrillero / Asador' }, { id: 'LAVAPLATOS', label: 'Lavaplatos / Steward' }, { id: 'DOMICILIARIO', label: 'Domiciliario (Moto/Bici)' }, { id: 'REPOSTERO', label: 'Repostero / Pastelero' }, { id: 'PANADERO', label: 'Panadero' }, { id: 'COMIDA_RAPIDA', label: 'Operario de Comida Rápida' }], skills: [{ id: 'MANIPULACION', label: 'Curso Manipulación Alimentos' }, { id: 'COCTELERIA', label: 'Coctelería' }, { id: 'BARISMO', label: 'Máquina de Café' }] },
+  GASTRO: { id: 'GASTRO', label: 'Gastronomía y Bares 🍔', ui: { icon: 'Utensils', color: 'text-orange-500', hex: '#f97316' }, roles: [{ id: 'MESERO', label: 'Mesero / Camarero' }, { id: 'BARTENDER', label: 'Bartender / Barman' }, { id: 'BARISTA', label: 'Barista Profesional' }, { id: 'COCINERO', label: 'Cocinero (General)' }, { id: 'AYU_COCINA', label: 'Ayudante de Cocina' }, { id: 'PARRILLERO', label: 'Parrillero / Asador' }, { id: 'PLANCHERO', label: 'Planchero / Comida Rápida' }, { id: 'LAVAPLATOS', label: 'Lavaplatos / Steward' }, { id: 'DOMICILIARIO', label: 'Domiciliario (Moto/Bici)' }, { id: 'REPOSTERO', label: 'Repostero / Pastelero' }, { id: 'PANADERO', label: 'Panadero' }, { id: 'COMIDA_RAPIDA', label: 'Operario de Comida Rápida' }], skills: [{ id: 'MANIPULACION', label: 'Curso Manipulación Alimentos' }, { id: 'COCTELERIA', label: 'Coctelería' }, { id: 'BARISMO', label: 'Máquina de Café' }, { id: 'PARRILLA', label: 'Parrillero / Asados' }, { id: 'PLANCHA', label: 'Planchero / Manejo de Plancha' }] },
   COMERCIAL: { id: 'COMERCIAL', label: 'Ventas y Comercial 💼', ui: { icon: 'TrendingUp', color: 'text-green-500', hex: '#22c55e' }, roles: [{ id: 'VENDEDOR_TAT', label: 'Vendedor TAT / Canal Tradicional' }, { id: 'IMPULSOR', label: 'Impulsor / Promotor de Marca' }, { id: 'CAJERO', label: 'Cajero / Operador de Caja' }, { id: 'ASESOR_VENTAS', label: 'Asesor Comercial' }, { id: 'MERCADERISTA', label: 'Mercaderista' }], skills: [{ id: 'EXP_VENTAS', label: 'Experiencia en Ventas' }, { id: 'MOTO_COM', label: 'Moto Propia + SOAT' }] },
   LOGISTICA: { id: 'LOGISTICA', label: 'Logística y Carga 📦', ui: { icon: 'Truck', color: 'text-blue-500', hex: '#3b82f6' }, roles: [{ id: 'COTERO', label: 'Cotero / Cargue y Descargue' }, { id: 'BODEGUERO', label: 'Auxiliar de Bodega' }, { id: 'EMPACADOR', label: 'Empacador / Picking' }, { id: 'MENSAJERO', label: 'Mensajero en Moto' }, { id: 'AUX_CAMION', label: 'Auxiliar de Ruta / Camión' }], skills: [{ id: 'FUERZA', label: 'Carga Pesada' }, { id: 'INV_BASICO', label: 'Inventarios' }] },
   CONSTRUCCION: { id: 'CONSTRUCCION', label: 'Construcción y Mantenimiento 🏗️', ui: { icon: 'Hammer', color: 'text-amber-500', hex: '#f59e0b' }, roles: [{ id: 'AYU_OBRA', label: 'Ayudante de Obra' }, { id: 'OFICIAL', label: 'Oficial de Obra' }, { id: 'PINTOR', label: 'Pintor / Estucador' }, { id: 'ELECTRICISTA', label: 'Electricista Básico' }, { id: 'PLOMERO', label: 'Plomero / Fontanero' }, { id: 'TODERO', label: 'Todero' }, { id: 'SOLDADOR', label: 'Soldador' }], skills: [{ id: 'ALTURAS', label: 'Curso de Alturas' }, { id: 'HERRAMIENTA', label: 'Herramienta Propia' }] },
@@ -124,13 +124,14 @@ export const getCategoryUIConfig = (catId) => {
   return { ...(s?.ui || { icon: 'Grid', color: 'text-zinc-500', hex: '#71717a' }), label: s?.label || 'Otros' };
 };
 
-// FIX: case-insensitive + fuzzy match en lugar de strict equality
+// FIX: case-insensitive + fuzzy match en sector, roles y skills
 export const getSectorByTag = (tagLabel) => {
   if (!tagLabel) return 'VARIOS';
-  const q = tagLabel.toLowerCase();
+  const q = tagLabel.toLowerCase().trim();
   for (const [sectorId, sector] of SECTOR_MAP.entries()) {
+    if (sector.id.toLowerCase() === q || sector.label.toLowerCase().includes(q) || q.includes(sector.label.toLowerCase())) return sectorId;
     if ((sector.roles || []).some(r => r.label.toLowerCase().includes(q) || q.includes(r.label.toLowerCase()))) return sectorId;
-    if ((sector.skills || []).some(s => s.label.toLowerCase().includes(q))) return sectorId;
+    if ((sector.skills || []).some(s => s.label.toLowerCase().includes(q) || q.includes(s.label.toLowerCase()))) return sectorId;
   }
   return 'VARIOS';
 };
