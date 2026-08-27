@@ -11,10 +11,16 @@ export const RouterErrorBoundary = () => {
     const [needsManualReload, setNeedsManualReload] = React.useState(false);
 
     useEffect(() => {
-        // Auto-reload para errores de carga de chunks (caché vieja tras un deploy)
+        // Auto-reload para errores de carga de chunks (caché vieja tras un deploy o micro-corte)
         const isChunkError = 
             error?.message?.includes('Failed to fetch dynamically imported module') ||
             error?.message?.includes('Importing a module script failed') ||
+            error?.message?.includes("reading 'default'") ||
+            error?.message?.includes('reading "default"') ||
+            error?.message?.includes("evaluating 'T._result.default'") ||
+            error?.message?.includes('evaluating "T._result.default"') ||
+            error?.message?.includes('Loading chunk') ||
+            error?.message?.includes('Loading CSS chunk') ||
             error?.name === 'ChunkLoadError';
 
         if (isChunkError) {

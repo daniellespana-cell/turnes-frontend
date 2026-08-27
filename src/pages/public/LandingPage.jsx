@@ -6,13 +6,13 @@ import Hero from '../../components/landing/Hero';
 import ValueProps from '../../components/landing/ValueProps';
 import SEO from '../../components/common/SEO';
 
-import { lazy } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { lazyWithRetry } from '../../utils/lazyWithRetry';
 
-const JobCarousel = lazy(() => import('../../components/landing/JobCarousel'));
-const Beneficios = lazy(() => import('../../components/landing/Beneficios'));
-const TestimoniosSection = lazy(() => import('../../components/landing/Testimonios'));
-const FAQSection = lazy(() => import('../../components/landing/FAQ'));
+const JobCarousel = lazyWithRetry(() => import('../../components/landing/JobCarousel'));
+const Beneficios = lazyWithRetry(() => import('../../components/landing/Beneficios'));
+const TestimoniosSection = lazyWithRetry(() => import('../../components/landing/Testimonios'));
+const FAQSection = lazyWithRetry(() => import('../../components/landing/FAQ'));
 
 // Schema.org JSON-LD: Le dice a Google exactamente qué es Turnes.
 // Genera Rich Results (resultados enriquecidos) y mejora el posicionamiento.
