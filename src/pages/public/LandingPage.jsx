@@ -13,6 +13,7 @@ const JobCarousel = lazyWithRetry(() => import('../../components/landing/JobCaro
 const Beneficios = lazyWithRetry(() => import('../../components/landing/Beneficios'));
 const TestimoniosSection = lazyWithRetry(() => import('../../components/landing/Testimonios'));
 const FAQSection = lazyWithRetry(() => import('../../components/landing/FAQ'));
+const PublicWelcomeBonusBanner = lazyWithRetry(() => import('../../components/sections/PublicWelcomeBonusBanner'));
 
 // Schema.org JSON-LD: Le dice a Google exactamente qué es Turnes.
 // Genera Rich Results (resultados enriquecidos) y mejora el posicionamiento.
@@ -86,6 +87,7 @@ const LandingPage = () => {
         <Hero />
         <ValueProps />
         <Suspense fallback={<LoadingSpinner />}>
+          <PublicWelcomeBonusBanner />
           <JobCarousel />
           <Beneficios />
           <TestimoniosSection />

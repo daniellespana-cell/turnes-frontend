@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PATHS } from '../../config/routes.paths';
-const activeRoles = ["Mesero", "Bartender", "Seguridad", "Logística", "Protocolo"];
+const activeRoles = ["Mesero", "Bartender", "Parrillero", "Planchero", "Seguridad", "Logística", "Protocolo"];
 
 const HeroSearch = () => {
     const navigate = useNavigate();
@@ -80,8 +80,11 @@ const HeroSearch = () => {
                     Soy Talento, busco turnos
                 </Link>
                 <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-zinc-700" />
-                <Link to={PATHS.PUBLIC.REGISTER_COMPANY} className="px-6 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-full font-bold transition-colors border border-emerald-500/20 w-full sm:w-auto text-center">
-                    Soy Empresa, busco personal
+                <Link to={PATHS.PUBLIC.REGISTER_COMPANY} className="group relative px-6 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-full font-bold transition-all border border-emerald-500/30 hover:border-emerald-500/50 w-full sm:w-auto text-center flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                    <span>Soy Empresa, busco personal</span>
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-500 text-zinc-950 px-2 py-0.5 rounded-full group-hover:scale-105 transition-transform shadow-sm">
+                        1er Turno Gratis
+                    </span>
                 </Link>
             </div>
         </div>

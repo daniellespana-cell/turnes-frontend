@@ -1,143 +1,198 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { m as motion } from 'framer-motion';
-import { Star, CheckCircle2, Zap, ArrowRight } from 'lucide-react';
+import { Star, CheckCircle2, Zap, ArrowRight, ShieldCheck, Sparkles, Clock, DollarSign } from 'lucide-react';
 import { PATHS } from '../../config/routes.paths';
 
 const PublicWelcomeBonusBanner = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="col-span-full mt-10 w-full rounded-[2rem] bg-[#0a0a0a] border border-zinc-800/50 overflow-hidden relative flex flex-col md:flex-row items-center justify-between p-8 md:p-14 min-h-[400px]">
-            
-            {/* Background Glows */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none translate-x-1/3 -translate-y-1/3"></div>
-            <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none -translate-x-1/2 translate-y-1/2"></div>
-
-            {/* Left Content */}
-            <div className="w-full md:w-[50%] z-10 flex flex-col items-start text-left mb-12 md:mb-0">
-                <span className="text-emerald-400 font-bold text-sm md:text-base mb-4 tracking-wide">
-                    ¿Primera vez en Turnes?
-                </span>
+        <section className="py-12 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full relative z-10" aria-label="Promoción Primer Turno Gratis">
+            <div className="w-full rounded-[2.5rem] bg-gradient-to-br from-zinc-900/90 via-zinc-950/95 to-black border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.08)] overflow-hidden relative flex flex-col lg:flex-row items-center justify-between p-8 sm:p-12 lg:p-16 min-h-[460px] backdrop-blur-xl">
                 
-                <h2 className="text-white text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-6 tracking-tight">
-                    Tu primer turno temporal es <br className="hidden lg:block"/>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Totalmente Gratis</span>
-                </h2>
-                
-                <p className="text-zinc-400 text-base md:text-lg mb-8 leading-relaxed max-w-lg">
-                    Registra tu empresa y completa tu perfil. Te regalamos la comisión de conexión de tu primer candidato en turnos temporales para que pruebes la velocidad de nuestra red sin ningún riesgo.
-                </p>
-                
-                <button 
-                    onClick={() => navigate(PATHS.PUBLIC.REGISTER_COMPANY)}
-                    className="group relative px-6 sm:px-8 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] active:scale-95 flex items-center gap-3 w-full sm:w-auto justify-center mt-2"
-                >
-                    Publicar Turno Gratis
-                    <Zap size={20} className="text-yellow-500 fill-yellow-500" />
-                </button>
-            </div>
+                {/* 🌟 Background Ambient Glows */}
+                <div className="absolute top-0 right-0 w-[550px] h-[550px] bg-emerald-500/15 blur-[140px] rounded-full pointer-events-none translate-x-1/4 -translate-y-1/4"></div>
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-teal-500/10 blur-[120px] rounded-full pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
 
-            {/* Right Visual Composition (CSS Mockup) */}
-            <div className="w-full md:w-[45%] h-[300px] md:h-[400px] relative z-10 flex items-center justify-center pointer-events-none">
-                
-                {/* Floating Star 1 - Pulsante y Giratoria */}
-                <motion.div 
-                    animate={{ 
-                        y: [-15, 15, -15], 
-                        rotate: [0, 15, -10, 0],
-                        scale: [1, 1.25, 0.95, 1]
-                    }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-4 left-0 md:-left-8 text-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.8)] z-30"
-                >
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                </motion.div>
+                {/* 1. Left Content (Copywriting de Alta Conversión) */}
+                <div className="w-full lg:w-[55%] z-10 flex flex-col items-start text-left mb-12 lg:mb-0">
+                    
+                    {/* Badge de Oferta Exclusiva */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-md mb-6 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                    >
+                        <Sparkles size={14} className="text-emerald-400 animate-pulse" />
+                        <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-300">
+                            Oferta de Bienvenida para Negocios
+                        </span>
+                    </motion.div>
+                    
+                    <motion.h2 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.15] mb-5 tracking-tight"
+                    >
+                        Tu Primer Turno Temporal es{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 drop-shadow-sm">
+                            100% Libre de Comisión
+                        </span>
+                    </motion.h2>
+                    
+                    <motion.p 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="text-zinc-300 text-sm sm:text-base lg:text-lg mb-8 leading-relaxed max-w-xl font-normal"
+                    >
+                        Prueba la velocidad de Turnes sin ningún riesgo. Publica tu turno hoy y recibe personal verificado en minutos. Paga únicamente el sueldo al trabajador:{' '}
+                        <strong className="text-emerald-300 font-semibold">nosotros asumimos el 100% de la comisión de conexión de tu primer turno.</strong>
+                    </motion.p>
 
-                {/* Floating Star 2 - Pulso Acelerado */}
-                <motion.div 
-                    animate={{ 
-                        y: [10, -20, 10], 
-                        rotate: [15, -15, 15],
-                        scale: [0.8, 1.1, 0.8]
-                    }}
-                    transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                    className="absolute bottom-8 right-0 md:-right-10 text-amber-300 drop-shadow-[0_0_20px_rgba(251,191,36,0.7)] z-0"
-                >
-                    <svg width="42" height="42" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                </motion.div>
-
-                {/* Floating Star 3 - Mini destello lejano */}
-                <motion.div 
-                    animate={{ 
-                        scale: [0.5, 1, 0.5],
-                        opacity: [0.3, 1, 0.3],
-                        rotate: [0, 180]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-                    className="absolute top-1/2 right-4 text-yellow-200 drop-shadow-[0_0_10px_rgba(253,230,138,0.9)] z-30"
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                </motion.div>
-
-                {/* Main Card (Candidate Profile) */}
-                <motion.div 
-                    initial={{ rotate: -5, y: 20 }}
-                    animate={{ y: [-5, 5, -5] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute z-20 w-[260px] bg-white rounded-3xl p-4 shadow-[0_20px_40px_rgba(0,0,0,0.4)] border border-zinc-200"
-                >
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="w-14 h-14 rounded-full bg-zinc-200 overflow-hidden border-2 border-white shadow-sm">
-                            <img src="https://i.pravatar.cc/150?img=47" alt="Candidato" className="w-full h-full object-cover" />
+                    {/* Value Pillars Badges */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.3 }}
+                        className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 w-full max-w-lg"
+                    >
+                        <div className="flex items-center gap-2.5 bg-zinc-900/60 border border-white/5 rounded-2xl px-3.5 py-2.5 backdrop-blur-sm">
+                            <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                            <span className="text-xs font-semibold text-zinc-200">0% Comisión de Conexión</span>
                         </div>
-                        <div>
-                            <h4 className="text-black font-bold text-lg leading-none mb-1">Sofía Castro</h4>
-                            <div className="flex items-center text-yellow-500 text-sm font-bold">
-                                <Star size={14} className="fill-yellow-500 mr-1" /> 5.0 
-                                <span className="text-zinc-400 font-normal ml-1 text-xs">(24 reseñas)</span>
+                        <div className="flex items-center gap-2.5 bg-zinc-900/60 border border-white/5 rounded-2xl px-3.5 py-2.5 backdrop-blur-sm">
+                            <Clock size={16} className="text-teal-400 shrink-0" />
+                            <span className="text-xs font-semibold text-zinc-200">Personal en &lt; 2 Horas</span>
+                        </div>
+                        <div className="flex items-center gap-2.5 bg-zinc-900/60 border border-white/5 rounded-2xl px-3.5 py-2.5 backdrop-blur-sm">
+                            <ShieldCheck size={16} className="text-cyan-400 shrink-0" />
+                            <span className="text-xs font-semibold text-zinc-200">Identidad y Referencias Validadas</span>
+                        </div>
+                        <div className="flex items-center gap-2.5 bg-zinc-900/60 border border-white/5 rounded-2xl px-3.5 py-2.5 backdrop-blur-sm">
+                            <Zap size={16} className="text-yellow-400 shrink-0 fill-yellow-400/20" />
+                            <span className="text-xs font-semibold text-zinc-200">Sin Tarjeta para Comenzar</span>
+                        </div>
+                    </motion.div>
+                    
+                    {/* CTA Button Magnético */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.4 }}
+                        className="w-full sm:w-auto"
+                    >
+                        <button 
+                            onClick={() => navigate(PATHS.PUBLIC.REGISTER_COMPANY)}
+                            className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-zinc-950 font-black rounded-2xl transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.35)] hover:shadow-[0_0_45px_rgba(16,185,129,0.55)] active:scale-95 flex items-center justify-center gap-3 w-full sm:w-auto cursor-pointer uppercase tracking-wider text-xs sm:text-sm"
+                            type="button"
+                            aria-label="Publicar Turno Gratis"
+                        >
+                            <span>Reclamar Mi Primer Turno Gratis</span>
+                            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                        </button>
+                        <p className="text-[11px] text-zinc-500 mt-2.5 text-center sm:text-left pl-1">
+                            * Válido para nuevas empresas registradas en turnos temporales.
+                        </p>
+                    </motion.div>
+                </div>
+
+                {/* 2. Right Visual Mockup (Dark Glassmorphism Interactive Talent Card) */}
+                <div className="w-full lg:w-[42%] h-[340px] sm:h-[380px] relative z-10 flex items-center justify-center pointer-events-none select-none">
+                    
+                    {/* Background Decorative Element */}
+                    <div className="absolute inset-0 bg-emerald-500/5 rounded-3xl border border-emerald-500/10 rotate-3 scale-95"></div>
+
+                    {/* Secondary Card (Match Encontrado - Back) */}
+                    <motion.div 
+                        initial={{ rotate: -6, x: -30, y: -25, opacity: 0.8 }}
+                        animate={{ y: [-30, -20, -30] }}
+                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute z-10 w-[270px] sm:w-[300px] bg-zinc-900/90 rounded-3xl p-4 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.7)] border border-zinc-800/80 backdrop-blur-md"
+                    >
+                        <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2.5">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                                Match Confirmado
+                            </span>
+                            <span className="text-[10px] font-bold text-zinc-400">Hace 4 min</span>
+                        </div>
+                        <div className="flex items-center justify-between bg-zinc-950/80 rounded-2xl p-3 border border-white/5">
+                            <div className="flex items-center gap-2.5">
+                                <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                                    <DollarSign size={16} />
+                                </div>
+                                <div>
+                                    <div className="text-[11px] font-bold text-white">Comisión Turnes</div>
+                                    <div className="text-[10px] text-zinc-400">Bono de Bienvenida</div>
+                                </div>
+                            </div>
+                            <span className="text-xs font-black text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20">
+                                $0 COP
+                            </span>
+                        </div>
+                    </motion.div>
+
+                    {/* Main Front Card (Candidato Operativo Verificado) */}
+                    <motion.div 
+                        initial={{ rotate: 3, y: 20 }}
+                        animate={{ y: [15, 25, 15] }}
+                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                        className="absolute z-20 w-[290px] sm:w-[320px] bg-zinc-900/95 rounded-3xl p-5 sm:p-6 shadow-[0_25px_60px_rgba(0,0,0,0.8)] border border-emerald-500/30 backdrop-blur-xl"
+                    >
+                        <div className="flex items-center gap-3.5 mb-4">
+                            <div className="w-12 h-12 rounded-2xl bg-zinc-800 overflow-hidden border-2 border-emerald-500/40 relative shadow-md">
+                                <img 
+                                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
+                                    alt="Talento Verificado" 
+                                    className="w-full h-full object-cover" 
+                                    loading="lazy"
+                                />
+                                <div className="absolute bottom-0 right-0 bg-emerald-500 p-0.5 rounded-tl-md">
+                                    <CheckCircle2 size={10} className="text-black" />
+                                </div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                    <h4 className="text-white font-bold text-sm sm:text-base truncate">Camila Serrano</h4>
+                                    <ShieldCheck size={14} className="text-emerald-400 shrink-0" />
+                                </div>
+                                <p className="text-[11px] text-zinc-400 font-medium truncate">Mesera / Bartender Pro</p>
+                                <div className="flex items-center text-amber-400 text-xs font-bold mt-0.5">
+                                    <Star size={12} className="fill-amber-400 mr-1" /> 4.9
+                                    <span className="text-zinc-500 font-normal ml-1 text-[10px]">(38 turnos)</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="space-y-2 mb-4">
-                        <div className="h-2 w-full bg-zinc-100 rounded-full"></div>
-                        <div className="h-2 w-3/4 bg-zinc-100 rounded-full"></div>
-                    </div>
-                    <div className="bg-emerald-500 text-white font-bold text-sm py-3 px-4 rounded-xl flex items-center justify-center gap-2 w-full">
-                        Contactar ahora <ArrowRight size={16} />
-                    </div>
-                </motion.div>
 
-                {/* Secondary Card (Behind) */}
-                <motion.div 
-                    initial={{ rotate: 10, x: 60, y: -40, opacity: 0.9 }}
-                    animate={{ y: [-45, -35, -45] }}
-                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                    className="absolute z-10 w-[240px] bg-zinc-900 rounded-3xl p-4 shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-zinc-800"
-                >
-                    <h4 className="text-white font-bold mb-3 text-center">Match Encontrado</h4>
-                    <div className="bg-zinc-800 rounded-xl p-3 flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
-                            <CheckCircle2 size={20} className="text-emerald-400" />
+                        {/* Availability Tag */}
+                        <div className="bg-zinc-950/70 rounded-xl p-3 border border-white/5 flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-2">
+                                <Clock size={13} className="text-emerald-400" />
+                                <span className="text-[11px] font-medium text-zinc-300">Disponible Hoy</span>
+                            </div>
+                            <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                                A 1.8 km
+                            </span>
                         </div>
-                        <div>
-                            <div className="text-sm font-bold text-white">Disponibilidad</div>
-                            <div className="text-xs text-emerald-400">Inmediata</div>
-                        </div>
-                    </div>
-                    <div className="bg-zinc-800 rounded-xl p-3 flex items-center gap-3">
-                        <div className="w-10 h-10 bg-indigo-500/20 rounded-full flex items-center justify-center">
-                            <Zap size={20} className="text-indigo-400" />
-                        </div>
-                        <div>
-                            <div className="text-sm font-bold text-white">Distancia</div>
-                            <div className="text-xs text-indigo-400">A 2.5 km de ti</div>
-                        </div>
-                    </div>
-                </motion.div>
 
+                        {/* Visual Contract Button */}
+                        <div className="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 w-full shadow-inner">
+                            <Sparkles size={14} className="text-emerald-400" />
+                            <span>Turno Confirmado con Bono</span>
+                        </div>
+                    </motion.div>
+
+                </div>
             </div>
-        </div>
+        </section>
     );
 };
 
