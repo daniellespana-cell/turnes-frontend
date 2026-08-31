@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { supabase } from '../services/supabaseClient';
 import { authService } from '../services/authService';
 import { notificationObserver } from '../services/notificationObserver';
 import { useAuth } from '../context/AuthContext';
@@ -78,29 +79,17 @@ export const usePushNotifications = () => {
             const endpoint = subJson.endpoint;
             const keys = subJson.keys || {};
 
-            // 3. Obtener el JWT activo del usuario para enviarlo al backend
-            const session = await authService.getSession();
-            if (!session) throw new Error('Sesión expirada. Inicia sesión de nuevo.');
-
-            // 4. SSOT: Enviar la suscripción a la Edge Function (nunca directo a la BD)
-            const res = await fetch(
-                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/subscribe-push`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${session.access_token}`,
-                    },
-                    body: JSON.stringify({
-                        endpoint,
-                        p256dh: keys.p256dh,
-                        auth: keys.auth,
-                    }),
+            // 3. SSOT: Enviar la suscripción a la Edge Function
+            const { data: result, error: funcError } = await supabase.functions.invoke('subscribe-push', {
+                body: {
+                    endpoint,
+                    p256dh: keys.p256dh,
+                    auth: keys.auth,
                 }
-            );
+            });
 
-            const result = await res.json();
-            if (!res.ok) throw new Error(result.error || 'Error al guardar suscripción');
+            if (funcError) throw funcError;
+            if (result && !result.success) throw new Error(result.error || 'Error al guardar suscripción');
 
             setIsSubscribed(true);
             showToast('¡Notificaciones activadas! Ya recibirás alertas de nuevas ofertas.', 'success');
