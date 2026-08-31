@@ -13,17 +13,24 @@ serve(async (req) => {
   }
 
   try {
+    const authHeader = req.headers.get('Authorization') || req.headers.get('authorization')
+    if (!authHeader) {
+      throw new Error('No autorizado. Falta cabecera Authorization.')
+    }
+
+    const token = authHeader.replace(/^Bearer\s+/i, '')
+
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+      { global: { headers: { Authorization: `Bearer ${token}` } } }
     )
 
     // Validar el JWT del usuario
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser()
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser(token)
     
     if (userError || !user) {
-      throw new Error('No autorizado. Token inválido o ausente.')
+      throw new Error(`No autorizado: ${userError?.message || 'Token inválido o expirado'}`)
     }
 
     const { endpoint, p256dh, auth } = await req.json()

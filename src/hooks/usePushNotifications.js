@@ -79,17 +79,24 @@ export const usePushNotifications = () => {
             const endpoint = subJson.endpoint;
             const keys = subJson.keys || {};
 
-            // 3. SSOT: Enviar la suscripción a la Edge Function
-            const { data: result, error: funcError } = await supabase.functions.invoke('subscribe-push', {
-                body: {
-                    endpoint,
-                    p256dh: keys.p256dh,
-                    auth: keys.auth,
-                }
+            // 3. SSOT: Guardar suscripción (RPC transaccional directa con fallback)
+            const { data: rpcResult, error: rpcError } = await supabase.rpc('rpc_save_push_subscription', {
+                p_endpoint: endpoint,
+                p_p256dh: keys.p256dh,
+                p_auth: keys.auth
             });
 
-            if (funcError) throw funcError;
-            if (result && !result.success) throw new Error(result.error || 'Error al guardar suscripción');
+            if (rpcError) {
+                // Fallback secundario a Edge Function
+                const { error: funcError } = await supabase.functions.invoke('subscribe-push', {
+                    body: {
+                        endpoint,
+                        p256dh: keys.p256dh,
+                        auth: keys.auth,
+                    }
+                });
+                if (funcError) throw new Error(rpcError.message || funcError.message);
+            }
 
             setIsSubscribed(true);
             showToast('¡Notificaciones activadas! Ya recibirás alertas de nuevas ofertas.', 'success');
