@@ -148,12 +148,16 @@ const PublicWelcomeBonusBanner = () => {
                         className="absolute z-20 w-[290px] sm:w-[320px] bg-zinc-900/95 rounded-3xl p-5 sm:p-6 shadow-[0_25px_60px_rgba(0,0,0,0.8)] border border-emerald-500/30 backdrop-blur-xl"
                     >
                         <div className="flex items-center gap-3.5 mb-4">
-                            <div className="w-12 h-12 rounded-2xl bg-zinc-800 overflow-hidden border-2 border-emerald-500/40 relative shadow-md">
+                            <div className="w-12 h-12 rounded-2xl bg-zinc-800 overflow-hidden border-2 border-emerald-500/40 relative shadow-md shrink-0">
                                 <img 
                                     src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
-                                    alt="Talento Verificado" 
+                                    alt="Camila Serrano - Talento Verificado" 
                                     className="w-full h-full object-cover" 
-                                    loading="lazy"
+                                    crossOrigin="anonymous"
+                                    onError={(e) => {
+                                        e.currentTarget.onerror = null;
+                                        e.currentTarget.src = 'https://ui-avatars.com/api/?name=Camila+Serrano&background=047857&color=fff&bold=true';
+                                    }}
                                 />
                                 <div className="absolute bottom-0 right-0 bg-emerald-500 p-0.5 rounded-tl-md">
                                     <CheckCircle2 size={10} className="text-black" />
