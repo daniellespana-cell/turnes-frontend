@@ -34,8 +34,7 @@ class TelemetryService {
                     'localhost',
                     /^https:\/\/turnes\.co/,
                     /^https:\/\/.*\.turnes\.co/,
-                    /^https:\/\/turnes\.app/,
-                    /^https:\/\/.*\.supabase\.co/
+                    /^https:\/\/turnes\.app/
                 ],
                 environment: import.meta.env.MODE || 'production',
                 release: 'turnes-vite@0.1.0',
