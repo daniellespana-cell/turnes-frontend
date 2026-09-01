@@ -77,7 +77,9 @@ FOR SELECT USING (status = 'activa');
 
 -- ── 5. VISTA PROTEGIDA ──
 DROP VIEW IF EXISTS public.vacantes_public CASCADE;
-CREATE OR REPLACE VIEW public.vacantes_public AS
+CREATE OR REPLACE VIEW public.vacantes_public
+WITH (security_invoker = true)
+AS
 SELECT 
     id, empresa_id, titulo, descripcion, pago_monto, 
     tipo_turno, modalidad, categoria, etiquetas, status, 
