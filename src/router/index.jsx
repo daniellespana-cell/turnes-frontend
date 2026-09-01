@@ -17,8 +17,8 @@ import PWAInstallPrompt from '../components/pwa/PWAInstallPrompt';
 
 // Layouts & Security
 import MainLayout from '../components/layout/MainLayout';
-const BusinessLayout = lazyWithRetry(() => import('../components/layout/BusinessLayout'));
-const WorkerLayout = lazyWithRetry(() => import('../components/layout/WorkerLayout'));
+import BusinessLayout from '../components/layout/BusinessLayout';
+import WorkerLayout from '../components/layout/WorkerLayout';
 
 /* =========================================================================
    PAGES (STATIC - CRITICAL PATH)
