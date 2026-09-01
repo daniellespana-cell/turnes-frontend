@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { useLocation } from 'react-router-dom';
-import turnesLogo from "../../assets/logo-turnes.png"; // ✅ Official Logo
+import turnesLogo from "../../assets/logo-turnes.webp"; // ✅ Official Logo
 
 // Replicating AnimatedButton from Navbar for perfect consistency
 const AnimatedButton = ({ to, label, isSuccess = false }) => (
@@ -35,6 +35,8 @@ const AuthNavbar = () => {
                 <img
                     src={turnesLogo}
                     alt="Turnes Logo"
+                    width="120"
+                    height="32"
                     className="h-8 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                 />
             </Link>

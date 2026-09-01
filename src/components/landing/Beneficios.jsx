@@ -56,7 +56,7 @@ const Beneficios = () => {
                 ))}
               </ul>
 
-              <Link to={PATHS.PUBLIC.REGISTER_COMPANY} className="inline-flex w-full items-center justify-center px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm tracking-wide transition-all shadow-md shadow-indigo-500/20 group-hover:scale-[1.01]">
+              <Link to={PATHS.PUBLIC.REGISTER_COMPANY} className="inline-flex w-full items-center justify-center px-6 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/30 group-hover:scale-[1.01]">
                 EMPIEZA A CONTRATAR
               </Link>
             </div>
@@ -90,7 +90,7 @@ const Beneficios = () => {
                 ))}
               </ul>
 
-              <Link to={PATHS.PUBLIC.REGISTER_TALENT} className="inline-flex w-full items-center justify-center px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm tracking-wide transition-all shadow-md shadow-emerald-500/20 group-hover:scale-[1.01]">
+              <Link to={PATHS.PUBLIC.REGISTER_TALENT} className="inline-flex w-full items-center justify-center px-6 py-3.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-zinc-950 font-black text-sm tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(52,211,153,0.3)] group-hover:scale-[1.01]">
                 ENCUENTRA TURNOS
               </Link>
             </div>

@@ -43,8 +43,9 @@ const NavItem = ({ to, label, isMobile = false, onClick, isButton = false }) => 
 
 // --------------------- Buttons ---------------------
 const AnimatedButton = ({ to, label, isMobile = false, isHeaderMobile = false, onClick, variant = 'primary' }) => {
-  const primaryStyles = "text-zinc-950 bg-emerald-400 hover:bg-emerald-300 border border-transparent shadow-[0_0_15px_rgba(52,211,153,0.3)] font-bold";
-  const ghostStyles = "text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-600 bg-zinc-900/50 hover:bg-zinc-800";
+  const isPrimary = variant === 'primary';
+  const primaryStyles = "text-zinc-950 bg-emerald-400 hover:bg-emerald-300 border border-transparent shadow-[0_0_15px_rgba(52,211,153,0.3)]";
+  const ghostStyles = "text-zinc-100 hover:text-white border border-zinc-700 hover:border-zinc-500 bg-zinc-900/80 hover:bg-zinc-800";
 
   return (
     <Link
@@ -52,12 +53,12 @@ const AnimatedButton = ({ to, label, isMobile = false, isHeaderMobile = false, o
       onClick={onClick}
       className={`
         relative rounded-xl overflow-hidden transition-all duration-300 flex items-center justify-center
-        ${variant === 'primary' ? primaryStyles : ghostStyles}
+        ${isPrimary ? primaryStyles : ghostStyles}
         ${isMobile ? "w-full text-center px-4 py-2.5 mt-2" : ""}
         ${isHeaderMobile ? "px-4 py-2 text-sm ml-1 font-bold shadow-md" : ""}
         ${!isMobile && !isHeaderMobile ? "px-5 py-2" : ""}
       `}>
-      <span className="relative z-10">{label}</span>
+      <span className={`relative z-10 ${isPrimary ? 'text-zinc-950 font-extrabold' : 'text-zinc-100 font-medium'}`}>{label}</span>
     </Link>
   );
 };
