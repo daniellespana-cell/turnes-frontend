@@ -34,10 +34,7 @@ const NavItem = ({ to, label, isMobile = false, onClick, isButton = false }) => 
     <Link
       to={to}
       onClick={onClick}
-      className={baseClasses}
-      role="button"
-      tabIndex={0}
-      onKeyDown={onClick}>
+      className={baseClasses}>
       {label}
       <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-brand-success transition-all duration-300 transform -translate-x-1/2 group-hover:w-full"></span>
     </Link>
@@ -59,10 +56,7 @@ const AnimatedButton = ({ to, label, isMobile = false, isHeaderMobile = false, o
         ${isMobile ? "w-full text-center px-4 py-2.5 mt-2" : ""}
         ${isHeaderMobile ? "px-4 py-2 text-sm ml-1 font-bold shadow-md" : ""}
         ${!isMobile && !isHeaderMobile ? "px-5 py-2" : ""}
-      `}
-      role="button"
-      tabIndex={0}
-      onKeyDown={onClick}>
+      `}>
       <span className="relative z-10">{label}</span>
     </Link>
   );

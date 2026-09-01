@@ -50,7 +50,7 @@ const LandingFooter = () => {
 
           {/* 2. Enlaces rápidos */}
           <div>
-            <h4 className="text-xs font-black mb-6 text-white uppercase tracking-widest">Enlaces Rápidos</h4>
+            <h3 className="text-xs font-black mb-6 text-white uppercase tracking-widest">Enlaces Rápidos</h3>
             <ul className="space-y-2 list-none p-0">
               <FooterLink to="/" label="Inicio" />
               <FooterLink to="/explorar" label="Explorar Vacantes" />
@@ -62,7 +62,7 @@ const LandingFooter = () => {
 
           {/* 3. Legal */}
           <div>
-            <h4 className="text-xs font-black mb-6 text-white uppercase tracking-widest">Legal & Docs</h4>
+            <h3 className="text-xs font-black mb-6 text-white uppercase tracking-widest">Legal & Docs</h3>
             <ul className="space-y-2 list-none p-0">
               <FooterLink to="/privacidad" label="Política de Privacidad" />
               <FooterLink to="/terminos" label="Términos y Condiciones" />
@@ -73,7 +73,7 @@ const LandingFooter = () => {
                   onClick={() => setIsCookieModalOpen(true)}
                   className="inline-block py-1.5 text-sm text-zinc-400 hover:text-emerald-400 hover:translate-x-1 transition-all duration-300"
                   type="button"
-                  aria-label="Acción">
+                  aria-label="Configurar preferencias de cookies">
                   Preferencias de Cookies
                 </button>
               </li>
@@ -82,7 +82,7 @@ const LandingFooter = () => {
 
           {/* 4. Soporte */}
           <div>
-            <h4 className="text-xs font-black mb-6 text-white uppercase tracking-widest">Soporte</h4>
+            <h3 className="text-xs font-black mb-6 text-white uppercase tracking-widest">Soporte</h3>
             <ul className="space-y-4 list-none p-0">
               <li>
                 <a href="mailto:soporte@turnes.com" className="group flex items-center text-sm text-zinc-400 hover:text-emerald-400 transition-colors duration-300">

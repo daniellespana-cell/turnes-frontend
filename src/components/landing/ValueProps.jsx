@@ -61,6 +61,7 @@ const ValueProps = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-indigo-900/10 blur-[100px] rounded-full pointer-events-none"></div>
 
       <div className="container mx-auto px-6 relative z-10">
+        <h2 id="value-heading" className="sr-only">Nuestros Valores y Beneficios Clave</h2>
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           variants={containerVariants}
@@ -86,7 +87,7 @@ const ValueProps = () => {
                   {card.title}
                 </h3>
 
-                <p className="text-sm text-zinc-500 font-medium leading-relaxed group-hover:text-zinc-300 transition-colors">
+                <p className="text-sm text-zinc-400 font-medium leading-relaxed group-hover:text-zinc-200 transition-colors">
                   {card.desc}
                 </p>
               </div>
