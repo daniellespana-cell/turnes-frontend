@@ -7,7 +7,6 @@ import App from './App';
 import GlobalErrorBoundary from './components/error/GlobalErrorBoundary';
 
 import './index.css';
-import 'leaflet/dist/leaflet.css';
 
 import { LazyMotion, domAnimation } from 'framer-motion';
 

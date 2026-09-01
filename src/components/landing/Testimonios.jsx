@@ -60,8 +60,8 @@ const Testimonios = () => {
                   {t.initials}
                 </div>
                 <div>
-                  <h4 className="font-bold text-white text-sm">{t.author}</h4>
-                  <p className="text-xs text-zinc-500 uppercase tracking-wider">{t.role}</p>
+                  <h3 className="font-bold text-white text-sm">{t.author}</h3>
+                  <p className="text-xs text-zinc-400 uppercase tracking-wider">{t.role}</p>
                 </div>
               </div>
             </div>

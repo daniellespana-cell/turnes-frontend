@@ -2,8 +2,6 @@ import React from 'react';
 import { ArrowUpRight, ArrowDownLeft, Download } from 'lucide-react';
 
 import { useState } from 'react';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { formatCurrency } from '../../services/financeService';
 
 const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoading }) => {
@@ -27,7 +25,12 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
     setCurrentPage(1);
   };
 
-  const downloadInvoice = () => {
+  const downloadInvoice = async () => {
+    const [{ jsPDF }, { default: autoTable }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
+
     const doc = new jsPDF();
     doc.setFontSize(20);
     doc.text("Reporte de Movimientos - Turnes", 14, 22);

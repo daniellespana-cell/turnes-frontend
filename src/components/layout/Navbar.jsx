@@ -5,8 +5,7 @@ import HowItWorksModal from '../landing/HowItWorksModal';
 
 import { useState } from "react";
 
-// ✅ ÚNICA CORRECCIÓN: Ruta ajustada para subir dos niveles
-import turnesLogo from "../../assets/logo-turnes.png";
+import turnesLogo from "../../assets/logo-turnes.webp";
 
 // --------------------- Nav Item ---------------------
 const NavItem = ({ to, label, isMobile = false, onClick, isButton = false }) => {

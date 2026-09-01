@@ -95,6 +95,10 @@ const PublicWelcomeBonusBanner = () => {
                                 <img 
                                     src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
                                     alt="Camila Serrano - Talento Verificado" 
+                                    width="48"
+                                    height="48"
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-full object-cover" 
                                     crossOrigin="anonymous"
                                     onError={(e) => {
@@ -108,7 +112,7 @@ const PublicWelcomeBonusBanner = () => {
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-1.5">
-                                    <h4 className="text-white font-bold text-sm truncate">Camila Serrano</h4>
+                                    <h3 className="text-white font-bold text-sm truncate">Camila Serrano</h3>
                                     <ShieldCheck size={14} className="text-emerald-400 shrink-0" />
                                 </div>
                                 <p className="text-[11px] text-zinc-400 font-medium truncate">Mesera / Bartender Pro</p>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../services/supabaseClient';
-import { authService } from '../services/authService';
 import { notificationObserver } from '../services/notificationObserver';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -80,7 +79,7 @@ export const usePushNotifications = () => {
             const keys = subJson.keys || {};
 
             // 3. SSOT: Guardar suscripción (RPC transaccional directa con fallback)
-            const { data: rpcResult, error: rpcError } = await supabase.rpc('rpc_save_push_subscription', {
+            const { data: _rpcResult, error: rpcError } = await supabase.rpc('rpc_save_push_subscription', {
                 p_endpoint: endpoint,
                 p_p256dh: keys.p256dh,
                 p_auth: keys.auth

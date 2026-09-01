@@ -50,9 +50,9 @@ const HeroSearch = () => {
 
     return (
         <div className="w-full max-w-2xl mx-auto my-10 font-manrope">
-            <h3 className="text-white text-xl md:text-2xl font-bold mb-4 text-center">
+            <h2 className="text-white text-xl md:text-2xl font-bold mb-4 text-center">
                 ¿Qué talento buscas hoy?
-            </h3>
+            </h2>
 
             <form onSubmit={handleSearch} className="relative group">
                 <input
@@ -62,7 +62,7 @@ const HeroSearch = () => {
                     readOnly
                     aria-label="Buscar talento por especialidad o rol"
                     placeholder={`Ej: ${placeholder}|`}
-                    className="w-full h-14 md:h-16 pl-6 pr-14 bg-[#0a0a0a] rounded-2xl border-2 border-emerald-500/50 hover:border-emerald-500 focus:border-emerald-400 text-white placeholder:text-zinc-500 text-lg outline-none transition-all shadow-[0_0_20px_rgba(16,185,129,0.1)] hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] focus:shadow-[0_0_40px_rgba(16,185,129,0.25)] cursor-pointer"
+                    className="w-full h-14 md:h-16 pl-6 pr-14 bg-[#0a0a0a] rounded-2xl border-2 border-emerald-500/50 hover:border-emerald-500 focus:border-emerald-400 text-white placeholder:text-zinc-400 text-lg outline-none transition-all shadow-[0_0_20px_rgba(16,185,129,0.1)] hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] focus:shadow-[0_0_40px_rgba(16,185,129,0.25)] cursor-pointer"
                 />
 
                 <button

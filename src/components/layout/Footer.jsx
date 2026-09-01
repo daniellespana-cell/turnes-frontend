@@ -4,13 +4,11 @@ import { Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import CookieSettingsModal from '../common/cookies/CookieSettingsModal';
 
 
-import logoFromAssets from '../../assets/logo-turnes.png';
+import logoFromAssets from '../../assets/logo-turnes.webp';
 
 const LandingFooter = () => {
   const currentYear = new Date().getFullYear();
   const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
-
-
 
   return (
     <footer className="bg-[#09090b] border-t border-zinc-800/50 text-white pt-12 pb-6 relative overflow-hidden">
@@ -25,6 +23,8 @@ const LandingFooter = () => {
             <img
               src={logoFromAssets}
               alt="Turnes Logo"
+              width="140"
+              height="40"
               className="h-10 w-auto object-contain select-none mb-6 hover:scale-105 transition-transform duration-300"
             />
 
@@ -97,7 +97,7 @@ const LandingFooter = () => {
         </div>
 
         {/* BOTTOM BAR */}
-        <div className="border-t border-zinc-800/50 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center text-zinc-500 text-xs font-medium">
+        <div className="border-t border-zinc-800/50 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center text-zinc-400 text-xs font-medium">
           <p>&copy; {currentYear} Turnes. Todos los derechos reservados.</p>
           <div className="flex gap-6">
             <span className="hover:text-emerald-400 cursor-pointer transition-colors">Hecho con ❤️ en Colombia</span>

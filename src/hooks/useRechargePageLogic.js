@@ -4,8 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import financeService, { formatCurrency } from '../services/financeService';
 import paymentService from '../services/paymentService';
 import { validateRechargeAmount } from '../utils/validationUtils';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { logger } from '../utils/logger';
 
 export const useRechargePageLogic = () => {
@@ -102,7 +100,12 @@ export const useRechargePageLogic = () => {
     }, []);
 
     // 5. GENERAR RECIBO PDF
-    const handleDownloadReceipt = useCallback(() => {
+    const handleDownloadReceipt = useCallback(async () => {
+        const [{ jsPDF }, { default: autoTable }] = await Promise.all([
+            import('jspdf'),
+            import('jspdf-autotable')
+        ]);
+
         const doc = new jsPDF();
         const companyName = user?.name || "Cliente Turnes";
 
