@@ -1,6 +1,5 @@
 import React from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
@@ -16,6 +15,10 @@ import { MapMarkerFactory } from '../../../utils/mapMarkerFactory';
  */
 const MapController = ({ center }) => {
     const map = useMap();
+
+    useEffect(() => {
+        import('leaflet/dist/leaflet.css');
+    }, []);
 
     // Centrado suave al cambiar ciudad
     useEffect(() => {

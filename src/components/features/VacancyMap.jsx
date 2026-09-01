@@ -1,9 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
-import 'leaflet/dist/leaflet.css';
-
-import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import { MapMarkerFactory } from '../../utils/mapMarkerFactory';
 
@@ -57,6 +54,10 @@ const VacancyMap = ({
 }) => {
     const initialCenter = centerPoint || [4.5709, -74.2973];
     const initialZoom = ZOOM_BY_RADIUS[radius] || 13;
+
+    useEffect(() => {
+        import('leaflet/dist/leaflet.css');
+    }, []);
 
     // FIX: fallback no-op si onSelectVacancy no se pasa
     const handleVacancyClick = onSelectVacancy ?? (() => {});

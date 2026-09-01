@@ -92,10 +92,22 @@ export default defineConfig({
     }
   },
   
-  // 🟢 Optimización de build y Arquitectura de Chunks (Anti-TBT)
+  // 🟢 Optimización de build y Arquitectura de Chunks (Anti-TBT & Render-Blocking)
   build: {
     outDir: 'dist',
     sourcemap: false, // 🔒 SECURIDAD: Evita filtrar código fuente y falsos "secrets" al cliente final
+    cssCodeSplit: true,
+    modulePreload: {
+      polyfill: false,
+      // 🚀 Desbloquea la ruta crítica de render: Evita precargar mapas o PDFs en la Landing inicial
+      resolveDependencies: (filename, deps) => {
+        return deps.filter(dep => 
+          !dep.includes('vendor-maps') && 
+          !dep.includes('vendor-pdf') && 
+          !dep.includes('vendor-rtc')
+        );
+      }
+    },
     // ⚡ Senior Move: Forzar la división del AST (Abstract Syntax Tree) para paralelizar descarga y reducir Script Evaluation en móviles
     rollupOptions: {
       output: {
@@ -103,7 +115,7 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) return 'vendor-react';
             if (id.includes('@supabase')) return 'vendor-supabase';
-            if (id.includes('leaflet') || id.includes('react-leaflet')) return 'vendor-maps';
+            if (id.includes('leaflet') || id.includes('react-leaflet')) return undefined; // 🚀 Aislado en chunk dinámico (Cero CSS en Landing)
             if (id.includes('jspdf') || id.includes('html2canvas')) return 'vendor-pdf';
             if (id.includes('@daily-co')) return 'vendor-rtc';
             if (id.includes('framer-motion') || id.includes('lucide-react') || id.includes('sonner')) return 'vendor-ui';

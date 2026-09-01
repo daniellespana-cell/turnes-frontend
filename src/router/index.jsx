@@ -17,19 +17,23 @@ import PWAInstallPrompt from '../components/pwa/PWAInstallPrompt';
 
 // Layouts & Security
 import MainLayout from '../components/layout/MainLayout';
-import BusinessLayout from '../components/layout/BusinessLayout';
-import WorkerLayout from '../components/layout/WorkerLayout';
+const BusinessLayout = lazyWithRetry(() => import('../components/layout/BusinessLayout'));
+const WorkerLayout = lazyWithRetry(() => import('../components/layout/WorkerLayout'));
 
 /* =========================================================================
    PAGES (STATIC - CRITICAL PATH)
    ========================================================================= */
 import LandingPage from '../pages/public/LandingPage';
-import LoginPage from '../pages/auth/LoginPage';
-import RegisterPage from '../pages/auth/RegisterPage';
-import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
-import UpdatePasswordPage from '../pages/auth/UpdatePasswordPage';
-import AuthCallback from '../pages/auth/AuthCallback';
-import NotFound from '../pages/common/NotFound';
+
+/* =========================================================================
+   AUTH PAGES & PRIVATE LAYOUTS (LAZY LOADED)
+   ========================================================================= */
+const LoginPage = lazyWithRetry(() => import('../pages/auth/LoginPage'));
+const RegisterPage = lazyWithRetry(() => import('../pages/auth/RegisterPage'));
+const ForgotPasswordPage = lazyWithRetry(() => import('../pages/auth/ForgotPasswordPage'));
+const UpdatePasswordPage = lazyWithRetry(() => import('../pages/auth/UpdatePasswordPage'));
+const AuthCallback = lazyWithRetry(() => import('../pages/auth/AuthCallback'));
+const NotFound = lazyWithRetry(() => import('../pages/common/NotFound'));
 
 // Layout components
 import ProtectedRoute from '../components/auth/ProtectedRoute';
