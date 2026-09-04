@@ -143,8 +143,9 @@ export const FinanceService = {
     },
 
     /**
-     * Realiza un polling inteligente a la base de datos verificando si el Webhook de Wompi
-     * ya insertó el movimiento o evento en la base de datos (Single Source of Truth).
+     * 🛰️ CONFIRMACIÓN HÍBRIDA DE PAGO (Realtime-First + Respaldo Resiliente)
+     * Resuelve instantáneamente vía WebSocket en cuanto el Webhook impacta la base de datos,
+     * con verificación inmediata en 0ms y un pulso de seguridad para redes móviles inestables.
      * @param {string} idOrReference ID de Wompi o Referencia de Turnes
      * @param {number} maxWaitMs Tiempo máximo de espera
      * @param {Function} [onTick] Callback opcional en cada intento
@@ -152,29 +153,100 @@ export const FinanceService = {
     async waitForTransaction(idOrReference, maxWaitMs = 60000, onTick = null) {
         if (!idOrReference) throw new Error("Identificador o referencia de transacción no proporcionado.");
 
-        const checkInterval = 2500;
-        let elapsed = 0;
-
-        while (elapsed < maxWaitMs) {
-            const result = await this.verifyTransactionStatus(idOrReference);
-
-            if (result.found && result.status === 'APPROVED') {
-                return { found: true, status: 'APPROVED', isEventOnly: result.isEventOnly };
+        // 1. ⚡ VERIFICACIÓN INMEDIATA (0ms): Si el Webhook llegó antes de la redirección
+        const initialCheck = await this.verifyTransactionStatus(idOrReference);
+        if (initialCheck.found) {
+            if (initialCheck.status === 'APPROVED') {
+                return { found: true, status: 'APPROVED', isEventOnly: initialCheck.isEventOnly };
             }
-
-            if (result.found && result.status === 'DECLINED') {
+            if (initialCheck.status === 'DECLINED') {
                 throw new Error("Transacción rechazada por la entidad bancaria.");
             }
-
-            if (typeof onTick === 'function') {
-                onTick(elapsed, maxWaitMs);
-            }
-
-            await new Promise(resolve => setTimeout(resolve, checkInterval));
-            elapsed += checkInterval;
         }
 
-        throw new Error("Transacción no confirmada en el tiempo esperado.");
+        // 2. 🛡️ PATRÓN HÍBRIDO (WebSocket Realtime + Heartbeat de Seguridad)
+        return new Promise((resolve, reject) => {
+            let isSettled = false;
+            let channel = null;
+            let pollTimer = null;
+            let timeoutTimer = null;
+            let elapsed = 0;
+            const checkInterval = 6000; // 6s: Relajado y no drena batería en móviles
+
+            const cleanup = () => {
+                isSettled = true;
+                if (pollTimer) clearInterval(pollTimer);
+                if (timeoutTimer) clearTimeout(timeoutTimer);
+                if (channel) {
+                    channel.unsubscribe();
+                    supabase.removeChannel(channel);
+                }
+            };
+
+            const evaluateStatus = async () => {
+                if (isSettled) return;
+                try {
+                    const result = await this.verifyTransactionStatus(idOrReference);
+                    if (isSettled) return;
+
+                    if (result.found && result.status === 'APPROVED') {
+                        cleanup();
+                        resolve({ found: true, status: 'APPROVED', isEventOnly: result.isEventOnly });
+                        return;
+                    }
+
+                    if (result.found && result.status === 'DECLINED') {
+                        cleanup();
+                        reject(new Error("Transacción rechazada por la entidad bancaria."));
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("⚠️ [FinanceService] Error en evaluación de transacción:", err);
+                }
+            };
+
+            // A. Canal Realtime: Escucha en vivo cambios en la base de datos
+            try {
+                const safeId = String(idOrReference).replace(/[^a-zA-Z0-9_-]/g, '');
+                const channelId = `tx_confirm_${safeId}_${Date.now()}`;
+                channel = supabase
+                    .channel(channelId)
+                    .on('postgres_changes', {
+                        event: '*',
+                        schema: 'public',
+                        table: 'movimientos'
+                    }, () => {
+                        evaluateStatus();
+                    })
+                    .on('postgres_changes', {
+                        event: '*',
+                        schema: 'public',
+                        table: 'wompi_events'
+                    }, () => {
+                        evaluateStatus();
+                    })
+                    .subscribe();
+            } catch (socketErr) {
+                console.warn("⚠️ [FinanceService] No se pudo abrir canal Realtime, usando fallback:", socketErr);
+            }
+
+            // B. Pulso de Respaldo Relajado (Heartbeat para reconexión móvil)
+            pollTimer = setInterval(async () => {
+                elapsed += checkInterval;
+                if (typeof onTick === 'function') {
+                    onTick(elapsed, maxWaitMs);
+                }
+                await evaluateStatus();
+            }, checkInterval);
+
+            // C. Timeout de Seguridad
+            timeoutTimer = setTimeout(() => {
+                if (!isSettled) {
+                    cleanup();
+                    reject(new Error("Transacción no confirmada en el tiempo esperado."));
+                }
+            }, maxWaitMs);
+        });
     },
 
     /**
