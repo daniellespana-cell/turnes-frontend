@@ -49,10 +49,8 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: 🔧 Setup Supabase CLI
-        uses: supabase/setup-cli@v1
-        with:
-          version: latest
+      - name: 🔧 Install Supabase CLI
+        run: npm install -g supabase@2.116.0
 
       - name: 🔍 Detect Changed Functions
         id: changed
