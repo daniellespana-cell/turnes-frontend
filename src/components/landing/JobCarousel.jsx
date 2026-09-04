@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-import { useState, useEffect } from 'react';
 import { useAnimation, m as motion } from 'framer-motion';
 
 import repImg from '../../assets/roles/rep.webp';
@@ -52,11 +50,8 @@ const JobCarousel = () => {
             </div>
 
             <div className="max-w-7xl mx-auto px-6 mb-16 text-center relative z-10">
-                <span className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold border border-emerald-500/20 px-3 py-1 rounded-full bg-emerald-500/5 mb-4 inline-block">
-                    Oportunidades Reales
-                </span>
-                <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
-                    Roles <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Más Buscados</span>
+                <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+                    Roles Más Buscados
                 </h2>
             </div>
 

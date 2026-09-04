@@ -41,8 +41,8 @@
 /* 4. RESET GLOBAL + FUENTE DE TU LANDING */
 html,
 body {
-  /* 📐 Jerarquía Radical: Fuente base de 16px para legibilidad nativa */
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif, system-ui;
+  /* 📐 Tipografía Sutil y Nítida de la Referencia */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, system-ui;
   font-size: 16px; 
   background-color: #07080a; /* Fondo base un tono más oscuro */
   color: #e4e4e7; /* Zinc-200 para mejor contraste sobre negro */

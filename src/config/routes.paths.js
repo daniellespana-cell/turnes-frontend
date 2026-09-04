@@ -17,6 +17,7 @@ export const PATHS = {
         SEARCH: '/search',
         EXPLORE: '/explorar',
         PRICING: '/precios',
+        HOW_IT_WORKS: '/como-funciona',
         ABOUT: '/about',
         CONTACT: '/contacto',
         LEGAL: {

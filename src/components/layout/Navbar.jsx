@@ -1,9 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import HowItWorksModal from '../landing/HowItWorksModal';
-
-import { useState } from "react";
+import { PATHS } from '../../config/routes.paths';
 
 import turnesLogo from "../../assets/logo-turnes.webp";
 
@@ -66,12 +64,12 @@ const AnimatedButton = ({ to, label, isMobile = false, isHeaderMobile = false, o
 // --------------------- NAVBAR ---------------------
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isHowItWorksOpen, setIsHowItWorksOpen] = useState(false); // State for Modal
+  const { pathname } = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  const navbarClasses =
-    "fixed top-0 left-0 w-full z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-zinc-800 transition-all duration-300";
+  const isComoFunciona = pathname === '/como-funciona';
+  const navbarClasses = `fixed top-0 left-0 w-full z-50 ${isComoFunciona ? 'bg-black/95 border-b border-zinc-900' : 'bg-[#0a0a0a]/90 border-b border-zinc-800'} backdrop-blur-md transition-all duration-300`;
 
   return (
     <>
@@ -96,15 +94,7 @@ const Navbar = () => {
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
               <NavItem to="/" label="Inicio" />
-              <NavItem
-                to="#"
-                label="Cómo funciona"
-                isButton={true}
-                // Open Modal
-                onClick={() => setIsHowItWorksOpen(true)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={() => setIsHowItWorksOpen(true)} />
+              <NavItem to={PATHS.PUBLIC.HOW_IT_WORKS} label="Para Empresas" />
               <NavItem to="/explorar" label="Características" />
               <NavItem to="/precios" label="Precios" />
               <NavItem to="/contacto" label="Contacto" />
@@ -115,13 +105,13 @@ const Navbar = () => {
               {/* Mobile: Compact Buttons */}
               <div className="flex md:hidden items-center mr-1 gap-1">
                 <AnimatedButton to="/login" label="Ingresar" variant="ghost" isHeaderMobile={true} />
-                <AnimatedButton to="/register" label="Regístrate" variant="primary" isHeaderMobile={true} />
+                <AnimatedButton to="/register" label="Regístrate Gratis" variant="primary" isHeaderMobile={true} />
               </div>
 
               {/* Desktop: Full Buttons (Hidden on Mobile to use custom layout above) */}
               <div className="hidden md:flex items-center space-x-3">
                 <AnimatedButton to="/login" label="Ingresar" variant="ghost" />
-                <AnimatedButton to="/register" label="Regístrate" variant="primary" />
+                <AnimatedButton to="/register" label="Regístrate Gratis" variant="primary" />
               </div>
 
               {/* Mobile Menu Button */}
@@ -150,14 +140,13 @@ const Navbar = () => {
                 tabIndex={0}
                 onKeyDown={toggleMenu} />
               <NavItem
-                to="#"
-                label="Cómo funciona"
+                to={PATHS.PUBLIC.HOW_IT_WORKS}
+                label="Para Empresas"
                 isMobile={true}
-                isButton={true}
-                onClick={() => { setIsHowItWorksOpen(true); toggleMenu(); }}
+                onClick={toggleMenu}
                 role="button"
                 tabIndex={0}
-                onKeyDown={() => { setIsHowItWorksOpen(true); toggleMenu(); }} />
+                onKeyDown={toggleMenu} />
               <NavItem
                 to="/explorar"
                 label="Características"
@@ -186,8 +175,6 @@ const Navbar = () => {
           </div>
         )}
       </nav>
-      {/* MODAL "CÓMO FUNCIONA" */}
-      <HowItWorksModal isOpen={isHowItWorksOpen} onClose={() => setIsHowItWorksOpen(false)} />
     </>
   );
 };

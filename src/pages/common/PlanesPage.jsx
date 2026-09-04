@@ -45,8 +45,8 @@ const PlanesPage = () => {
                         <span className="inline-block py-1 px-3 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6">
                             No pagues de más
                         </span>
-                        <h1 className="text-4xl md:text-7xl font-black text-white mb-6 tracking-tight leading-tight">
-                            Invierte en <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Velocidad</span>
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-4 leading-tight">
+                            Invierte en Velocidad
                         </h1>
                         <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light leading-relaxed">
                             Planes flexibles diseñados para escalar. Desde cubrir una vacante urgente hasta gestionar cientos de turnos al mes.

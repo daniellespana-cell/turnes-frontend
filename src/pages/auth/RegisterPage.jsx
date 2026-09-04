@@ -18,6 +18,58 @@ const FORM_COMPONENTS = {
     company: CompanyForm
 };
 
+// 🟢 Stepper de Registro Reutilizable (Empresas y Postulantes)
+const RegistrationStepsHeader = ({ title, steps }) => (
+    <div className="w-full text-center mb-6 pt-1 animate-fade-in select-none">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-5">
+            {title}
+        </h1>
+
+        <div className="flex items-center justify-between max-w-sm mx-auto px-1">
+            {/* Paso 1: Activo */}
+            <div className="flex flex-col items-center shrink-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-emerald-400 bg-emerald-500/10 text-emerald-400 font-bold text-xs sm:text-sm flex items-center justify-center shadow-[0_0_12px_rgba(52,211,153,0.35)]">
+                    1
+                </div>
+                <span className="text-[11px] sm:text-xs font-bold text-emerald-400 mt-2 text-center">
+                    {steps[0]}
+                </span>
+            </div>
+
+            {/* Línea conectora 1 a 2: mitad verde continuo, mitad punteado */}
+            <div className="flex-1 flex items-center mx-2 -mt-5">
+                <div className="h-[2px] w-1/2 bg-emerald-400" />
+                <div className="h-[2px] w-1/2 border-t-2 border-dashed border-zinc-600" />
+            </div>
+
+            {/* Paso 2 */}
+            <div className="flex flex-col items-center shrink-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-zinc-600 bg-zinc-900 text-zinc-300 font-bold text-xs sm:text-sm flex items-center justify-center">
+                    2
+                </div>
+                <span className="text-[11px] sm:text-xs font-medium text-zinc-300 mt-2 text-center whitespace-nowrap">
+                    {steps[1]}
+                </span>
+            </div>
+
+            {/* Línea conectora 2 a 3: totalmente punteado */}
+            <div className="flex-1 flex items-center mx-2 -mt-5">
+                <div className="h-[2px] w-full border-t-2 border-dashed border-zinc-600" />
+            </div>
+
+            {/* Paso 3 */}
+            <div className="flex flex-col items-center shrink-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-zinc-600 bg-zinc-900 text-zinc-300 font-bold text-xs sm:text-sm flex items-center justify-center">
+                    3
+                </div>
+                <span className="text-[11px] sm:text-xs font-medium text-zinc-300 mt-2 text-center whitespace-nowrap">
+                    {steps[2]}
+                </span>
+            </div>
+        </div>
+    </div>
+);
+
 const RegisterPageContent = () => {
     const { role, setRole } = useRegister();
     const { isOnboardingTrapped, confirmGoogleRole, isRoleLoading, emergencyLogout } = useOnboarding();
@@ -26,11 +78,19 @@ const RegisterPageContent = () => {
     const renderForm = () => {
         if (!role) return null;
         const FormComponent = FORM_COMPONENTS[role];
-        const title = role === 'company' ? "Cuenta de Empresa" : "Cuenta de Candidato";
-        const subtitle = role === 'company' ? "Publica ofertas y gestiona talento." : "Encuentra tu próximo empleo.";
         
+        const isCompany = role === 'company';
+        const headerTitle = isCompany ? "Contrata personal en pocos clics" : "Trabaja en pocos clics";
+        const steps = isCompany
+            ? ["Regístrate", "Publica una oferta", "Contrata personal"]
+            : ["Regístrate", "Completa perfil", "Postúlate a una oferta"];
+
         return (
-            <FormContainer onBack={() => setRole(null)} title={title} subtitle={subtitle}>
+            <FormContainer 
+                onBack={() => setRole(null)} 
+                headerSlot={<RegistrationStepsHeader title={headerTitle} steps={steps} />}
+                maxWidth="max-w-md"
+            >
                 <FormComponent />
             </FormContainer>
         );

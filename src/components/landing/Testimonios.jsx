@@ -39,8 +39,8 @@ const Testimonios = () => {
       <div className="container mx-auto px-6">
 
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
-            Voces de la <span className="text-emerald-400">Comunidad</span>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+            Voces de la Comunidad
           </h2>
         </div>
 

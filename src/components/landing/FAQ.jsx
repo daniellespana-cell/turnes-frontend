@@ -15,7 +15,7 @@ const faqData = [
   },
   {
     question: "¿Cómo funcionan los pagos y comisiones?",
-    answer: "Para empresas, el registro es gratuito. Solo cobramos una pequeña tarifa de servicio por turno completado con éxito. Para trabajadores, la plataforma es 100% gratuita y reciben sus pagos directamente."
+    answer: "Para empresas, el registro es gratuito y solo pagan una tarifa de conexión tecnológica por turno confirmado (del 0% al 6% según su plan). Para trabajadores, Turnes es 100% gratuito (0% de comisión): la empresa te paga el 100% del valor del turno directamente al finalizar (en efectivo, Nequi, DaviPlata o transferencia). Turnes jamás retiene ni descuenta salarios."
   },
   {
     question: "¿Puedo contratar personal fijo o solo por turnos?",

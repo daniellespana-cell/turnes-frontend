@@ -31,11 +31,8 @@ const PublicWelcomeBonusBanner = () => {
                         </span>
                     </div>
                     
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.15] tracking-tight">
-                        Tu Primer Turno Temporal es{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300">
-                            100% Libre de Comisión
-                        </span>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-[1.15] tracking-tight">
+                        Tu Primer Turno Temporal es 100% Libre de Comisión
                     </h2>
                     
                     <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-xl font-normal">

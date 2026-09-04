@@ -20,17 +20,18 @@ const MainLayout = () => {
   // Lógica Senior: Determinar si estamos en el Dashboard o área privada
   // Si la ruta empieza por /dashboard o /buscar, ocultamos el Footer de marketing
   const isPrivateArea = pathname.startsWith('/dashboard') || pathname.startsWith('/buscar') || pathname.startsWith('/plan-action');
+  const isComoFunciona = pathname === '/como-funciona';
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className={`min-h-screen ${isComoFunciona ? 'bg-black' : 'bg-[#0a0a0a]'} flex items-center justify-center`}>
         <Spinner size="md" variant="emerald" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col relative overflow-x-hidden">
+    <div className={`min-h-screen ${isComoFunciona ? 'bg-black' : 'bg-[#0a0a0a]'} flex flex-col relative overflow-x-hidden`}>
 
       {/* 1. SWITCH DE NAVBAR ATÓMICO */}
       <div className="relative z-[100]">
@@ -42,7 +43,7 @@ const MainLayout = () => {
       </div>
 
       {/* 2. CONTENEDOR PRINCIPAL */}
-      <main className="flex-grow pt-24 pb-12 bg-[#0a0a0a] relative z-10">
+      <main className={`flex-grow ${isComoFunciona ? 'pt-20 sm:pt-24 pb-16 bg-black' : 'pt-24 pb-12 bg-[#0a0a0a]'} relative z-10`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div key={pathname}>
             {/* Pasamos el usuario a través del context de Outlet para que esté disponible en las páginas */}

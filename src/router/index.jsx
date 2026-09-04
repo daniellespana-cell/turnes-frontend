@@ -66,6 +66,7 @@ const ExplorePage = lazyWithRetry(() => import('../pages/public/ExplorePage'));
 const SearchPage = lazyWithRetry(() => import('../pages/public/SearchPage'));
 const DetalleRolPage = lazyWithRetry(() => import('../pages/public/DetalleRolPage'));
 const PlanesPage = lazyWithRetry(() => import('../pages/common/PlanesPage'));
+const ComoFuncionaPage = lazyWithRetry(() => import('../pages/public/ComoFuncionaPage'));
 const AcercaDe = lazyWithRetry(() => import('../pages/public/AcercaDe'));
 const ContactPage = lazyWithRetry(() => import('../pages/public/ContactPage'));
 const Pagos = lazyWithRetry(() => import('../pages/legal/Pagos'));
@@ -266,6 +267,7 @@ export const router = createBrowserRouter([
                             { path: PATHS.PUBLIC.EXPLORE, element: <ExplorePage /> },
                             { path: PATHS.SHARED.ROLE_DETAIL(':rolSlug'), element: <DetalleRolPage /> },
                             { path: PATHS.PUBLIC.PRICING, element: <PlanesPage /> },
+                            { path: PATHS.PUBLIC.HOW_IT_WORKS, element: <ComoFuncionaPage /> },
                             { path: PATHS.PUBLIC.ABOUT, element: <AcercaDe /> },
                             { path: PATHS.PUBLIC.CONTACT, element: <ContactPage /> },
                             { path: PATHS.PUBLIC.LEGAL.PAYMENTS, element: <Pagos /> },
