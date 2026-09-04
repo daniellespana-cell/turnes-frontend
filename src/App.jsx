@@ -19,12 +19,14 @@ import { router } from './router';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-// Create a client
+// Create a client with intelligent caching & resilience (Anti-Spam & Zero-Spinner UX)
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false, // Prevent refetching jitter on tab switch
-      retry: 1, // Only retry once to avoid spamming the DB
+      staleTime: 1000 * 60 * 2, // ⚡ 2 min: navigation feels instant, no re-fetching on tab back
+      gcTime: 1000 * 60 * 10,   // 🧹 10 min: keep unmounted cache in memory
+      retry: 2,                 // 🔄 2 retries with exponential backoff on flaky mobile networks
+      refetchOnWindowFocus: false, // Prevent jitter on tab switch
     },
   },
 });

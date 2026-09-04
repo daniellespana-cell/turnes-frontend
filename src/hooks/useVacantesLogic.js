@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { UI_STRINGS } from '../domain/uiTranslations';
@@ -7,9 +8,8 @@ import { VacancyService } from '../services/vacancyService';
 export const useVacantesLogic = () => {
   const { user, loading: authLoading } = useAuth();
   const { showToast } = useToast();
-  const [vacantes, setVacantes] = useState([]);
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('Activa');
-  const [isLoading, setIsLoading] = useState(true);
 
   // Helper para calcular costo visual dinámicamente
   const getDisplayCost = useCallback((type, billingConfig) => {
@@ -26,90 +26,81 @@ export const useVacantesLogic = () => {
     return rates[plan] || '6%';
   }, [user]);
 
-  // 🔄 CARGA DE DATOS CENTRALIZADA (Supabase)
-  const cargarDatos = useCallback(async () => {
+  // 🔄 CARGA DE DATOS CENTRALIZADA CON REACT QUERY (SSOT & Cero Spinners Innecesarios)
+  const queryKey = useMemo(() => ['mis-vacantes', user?.id], [user?.id]);
+
+  const {
+    data: vacantes = [],
+    isLoading,
+    refetch
+  } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const { data, error } = await VacancyService.getMyVacancies(user.id);
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user?.id && !authLoading,
+    select: useCallback((rawData) => {
+      return (rawData || [])
+        .map(v => ({
+          id: v.id,
+          title: v.titulo,
+          type: v.tipo_turno || 'temporal',
+          status: v.status === 'activa' ? 'Activa' 
+            : (v.status === 'cerrada' ? 'Completada' 
+            : (v.status === 'pendiente' ? 'Activa' : 'Oculta')), // 🛡️ Cancelada -> Oculta
+          date: new Date(v.created_at).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }),
+          applicants: Array.isArray(v.postulaciones) ? (v.postulaciones[0]?.count ?? v.postulaciones.length) : 0,
+          esUrgente: v.es_urgente,
+          urgenteExpiracion: v.urgente_expiracion,
+          cost: getDisplayCost(v.tipo_turno, null),
+          lat: v.lat,
+          lng: v.lng,
+          direccion_formateada: v.direccion_formateada
+        }))
+        .filter(v => v.status !== 'Oculta');
+    }, [getDisplayCost])
+  });
+
+  // Listeners del sistema para invalidación reactiva
+  useEffect(() => {
     if (!user?.id) return;
 
-    setIsLoading(true);
+    const handleInvalidate = () => {
+      queryClient.invalidateQueries({ queryKey });
+    };
 
-    try {
-      const { data, error } = await VacancyService.getMyVacancies(user.id);
-
-      if (error) throw error;
-
-      if (data) {
-        // Normalizar datos DB -> UI
-        const normalized = data
-          .map(v => ({
-            id: v.id,
-            title: v.titulo,
-            type: v.tipo_turno || 'temporal',
-            status: v.status === 'activa' ? 'Activa' 
-              : (v.status === 'cerrada' ? 'Completada' 
-              : (v.status === 'pendiente' ? 'Activa' : 'Oculta')), // 🛡️ Cancelada -> Oculta
-            date: new Date(v.created_at).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }),
-            applicants: Array.isArray(v.postulaciones) ? (v.postulaciones[0]?.count ?? v.postulaciones.length) : 0,
-            esUrgente: v.es_urgente,
-            urgenteExpiracion: v.urgente_expiracion,
-            cost: getDisplayCost(v.tipo_turno, null),
-            lat: v.lat,
-            lng: v.lng,
-            direccion_formateada: v.direccion_formateada
-          }))
-          .filter(v => v.status !== 'Oculta'); // 🛡️ Filtro raíz: No mostrar canceladas
-
-        setVacantes(normalized);
-      }
-    } catch (err) {
-      console.error("Error loading vacancies:", err);
-      setVacantes([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user?.id, getDisplayCost]);
-
-  useEffect(() => {
-    // Si Auth está cargando, esperamos.
-    if (authLoading) return;
-
-    // Si ya cargó Auth pero no hay usuario, no cargamos nada
-    if (!user?.id) {
-      setIsLoading(false);
-      return;
-    }
-
-    // Si tenemos usuario, cargamos datos
-    cargarDatos();
-
-    // Listeners opcionales (Solo eventos críticos del negocio, no pausas de UI)
-    const handleFocus = () => { if (user?.id) cargarDatos(); };
-    window.addEventListener('vacanteFinalizada', handleFocus);
-    window.addEventListener('turnes_vacancy_update', handleFocus);
+    window.addEventListener('vacanteFinalizada', handleInvalidate);
+    window.addEventListener('turnes_vacancy_update', handleInvalidate);
 
     return () => {
-      window.removeEventListener('vacanteFinalizada', handleFocus);
-      window.removeEventListener('turnes_vacancy_update', handleFocus);
+      window.removeEventListener('vacanteFinalizada', handleInvalidate);
+      window.removeEventListener('turnes_vacancy_update', handleInvalidate);
     };
-  }, [user?.id, authLoading, cargarDatos]);
+  }, [user?.id, queryKey, queryClient]);
 
   // --- LÓGICA DE FILTRADO Y CONTEO ---
   const counts = useMemo(() => {
     return vacantes.reduce((acc, v) => {
       acc[v.status] = (acc[v.status] || 0) + 1;
       return acc;
-    }, { Activa: 0, Completada: 0 }); // 🛡️ Eliminado Cancelada del conteo
+    }, { Activa: 0, Completada: 0 });
   }, [vacantes]);
 
   const vacantesFiltradas = useMemo(() => {
     return vacantes.filter(v => v.status === activeTab);
   }, [vacantes, activeTab]);
 
-  // --- ACCIONES CENTRALIZADAS ---
-  const moverACompletada = async (id) => {
-    // Optimistic UI Update
-    setVacantes(prev => prev.map(v =>
-      String(v.id) === String(id) ? { ...v, status: 'Completada' } : v
-    ));
+  // --- ACCIONES CON ACTUALIZACIÓN OPTIMISTA Y ROLLBACK SEGURO ---
+  const moverACompletada = useCallback(async (id) => {
+    const previous = queryClient.getQueryData(queryKey);
+
+    // Optimistic Update en caché de React Query
+    queryClient.setQueryData(queryKey, (old = []) =>
+      old.map(v => String(v.id) === String(id) ? { ...v, status: 'cerrada' } : v)
+    );
 
     try {
       await VacancyService.close(id);
@@ -117,27 +108,34 @@ export const useVacantesLogic = () => {
     } catch (err) {
       console.error("Error closing vacancy:", err);
       showToast(UI_STRINGS.TOASTS.VACANCY_CLOSE_ERROR, 'error');
-      cargarDatos(); // Revert
+      if (previous) queryClient.setQueryData(queryKey, previous);
+    } finally {
+      queryClient.invalidateQueries({ queryKey });
     }
-  };
+  }, [queryClient, queryKey, showToast]);
 
-  const handleAction = async (id, type) => {
+  const handleAction = useCallback(async (id, type) => {
     if (type === 'delete') {
-      const vacante = vacantes.find(v => String(v.id) === String(id));
+      const vacanteTarget = vacantes.find(v => String(v.id) === String(id));
+      const previous = queryClient.getQueryData(queryKey);
 
-      // Optimistic UI
-      setVacantes(prev => prev.filter(v => String(v.id) !== String(id)));
+      // Optimistic Update en caché de React Query
+      queryClient.setQueryData(queryKey, (old = []) =>
+        old.filter(v => String(v.id) !== String(id))
+      );
 
       try {
         await VacancyService.delete(id);
-        showToast(`Vacante Eliminada: Has eliminado "${vacante?.title || 'la vacante'}".`, 'success');
+        showToast(`Vacante Eliminada: Has eliminado "${vacanteTarget?.title || 'la vacante'}".`, 'success');
       } catch (err) {
         console.error("Error deleting vacancy:", err);
         showToast(UI_STRINGS.TOASTS.VACANCY_DELETE_ERROR, 'error');
-        cargarDatos(); // Revert
+        if (previous) queryClient.setQueryData(queryKey, previous);
+      } finally {
+        queryClient.invalidateQueries({ queryKey });
       }
     }
-  };
+  }, [queryClient, queryKey, showToast, vacantes]);
 
   return {
     vacantes: vacantesFiltradas,
@@ -146,7 +144,7 @@ export const useVacantesLogic = () => {
     counts,
     moverACompletada,
     handleAction,
-    cargarDatos,
-    isLoading
+    cargarDatos: refetch,
+    isLoading: authLoading || isLoading
   };
 };
