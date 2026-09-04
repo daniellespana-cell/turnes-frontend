@@ -1,0 +1,113 @@
+name: Deploy Edge Functions
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'supabase/functions/**'
+      - 'supabase/config.toml'
+
+jobs:
+  # ── Primero: Correr las mismas validaciones del CI ──────────────────
+  verify:
+    name: 🛡️ Verify Before Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🛡️ Static Type Analysis (tsc)
+        run: npm run typecheck
+
+      - name: 🔍 Code Quality & Linter (ESLint)
+        run: npm run lint
+
+      - name: 🧪 Unit Tests (Vitest)
+        run: npm run test
+        env:
+          VITE_SUPABASE_URL: 'https://placeholder.supabase.co'
+          VITE_SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder'
+
+  # ── Luego: Detectar qué funciones cambiaron y deployarlas ───────────
+  deploy:
+    name: 🚀 Deploy Changed Functions
+    runs-on: ubuntu-latest
+    needs: verify
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: 🔧 Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: 🔍 Detect Changed Functions
+        id: changed
+        run: |
+          # Obtener la lista de funciones que cambiaron en este push
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD -- supabase/functions/ supabase/config.toml)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          
+          # Si cambió config.toml, deployar TODAS las funciones
+          if echo "$CHANGED_FILES" | grep -q "config.toml"; then
+            echo "config_changed=true" >> $GITHUB_OUTPUT
+            echo "⚠️ config.toml changed — will deploy ALL functions"
+          else
+            echo "config_changed=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Extraer los nombres únicos de las funciones que cambiaron
+          FUNCTIONS=$(echo "$CHANGED_FILES" | grep "^supabase/functions/" | cut -d'/' -f3 | sort -u | tr '\n' ' ')
+          echo "functions=$FUNCTIONS" >> $GITHUB_OUTPUT
+          echo "🎯 Functions to deploy: $FUNCTIONS"
+
+      - name: 🚀 Deploy All Functions (config changed)
+        if: steps.changed.outputs.config_changed == 'true'
+        run: |
+          echo "🔄 Deploying ALL Edge Functions..."
+          for dir in supabase/functions/*/; do
+            FUNC_NAME=$(basename "$dir")
+            echo "🚀 Deploying: $FUNC_NAME"
+            supabase functions deploy "$FUNC_NAME" --project-ref "$SUPABASE_PROJECT_REF"
+            echo "✅ $FUNC_NAME deployed successfully"
+          done
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+
+      - name: 🚀 Deploy Changed Functions Only
+        if: steps.changed.outputs.config_changed == 'false' && steps.changed.outputs.functions != ''
+        run: |
+          echo "🎯 Deploying only changed functions..."
+          for FUNC_NAME in ${{ steps.changed.outputs.functions }}; do
+            echo "🚀 Deploying: $FUNC_NAME"
+            supabase functions deploy "$FUNC_NAME" --project-ref "$SUPABASE_PROJECT_REF"
+            echo "✅ $FUNC_NAME deployed successfully"
+          done
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+
+      - name: 📊 Deploy Summary
+        if: always()
+        run: |
+          echo "## 📊 Edge Functions Deploy Summary" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.changed.outputs.config_changed }}" == "true" ]; then
+            echo "⚠️ **config.toml changed** — All functions were deployed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🎯 **Functions deployed:** ${{ steps.changed.outputs.functions }}" >> $GITHUB_STEP_SUMMARY
+          fi
