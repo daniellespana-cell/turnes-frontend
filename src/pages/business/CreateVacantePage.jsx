@@ -6,7 +6,7 @@ import ResumenLiquidacion from '../../components/CreateVacante/ResumenLiquidacio
 import LocationPickerModal from '../../components/CreateVacante/LocationPickerModal';
 
 import React from "react";
-import { useOutletContext, useNavigate } from "react-router-dom";
+import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { formatCurrency } from "../../services/financeService";
 import { useCreateVacante } from "../../hooks/useCreateVacante";
 
@@ -15,6 +15,7 @@ import { useCreateVacante } from "../../hooks/useCreateVacante";
 const CreateVacantePage = () => {
   const { user } = useOutletContext();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMapOpen, setIsMapOpen] = React.useState(false);
 
   const {
@@ -24,7 +25,7 @@ const CreateVacantePage = () => {
     isSubmitting,
     handlers, // All handlers provided by hook
     ui        // All UI states/memos provided by hook
-  } = useCreateVacante(user);
+  } = useCreateVacante(user, location.state?.relistFrom);
 
   return (
     <div className="max-w-6xl mx-auto pb-20 pt-4 md:pt-8 px-4 md:px-6 min-h-screen text-zinc-300 antialiased font-manrope">

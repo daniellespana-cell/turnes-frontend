@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { UI_STRINGS } from '../domain/uiTranslations';
 import { VacancyService } from '../services/vacancyService';
+import { isShiftExpired } from '../domain/vacancy.mapper';
 
 export const useVacantesLogic = () => {
   const { user, loading: authLoading } = useAuth();
@@ -44,22 +45,40 @@ export const useVacantesLogic = () => {
     enabled: !!user?.id && !authLoading,
     select: useCallback((rawData) => {
       return (rawData || [])
-        .map(v => ({
-          id: v.id,
-          title: v.titulo,
-          type: v.tipo_turno || 'temporal',
-          status: v.status === 'activa' ? 'Activa' 
-            : (v.status === 'cerrada' ? 'Completada' 
-            : (v.status === 'pendiente' ? 'Activa' : 'Oculta')), // 🛡️ Cancelada -> Oculta
-          date: new Date(v.created_at).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }),
-          applicants: Array.isArray(v.postulaciones) ? (v.postulaciones[0]?.count ?? v.postulaciones.length) : 0,
-          esUrgente: v.es_urgente,
-          urgenteExpiracion: v.urgente_expiracion,
-          cost: getDisplayCost(v.tipo_turno, null),
-          lat: v.lat,
-          lng: v.lng,
-          direccion_formateada: v.direccion_formateada
-        }))
+        .map(v => {
+          const applicants = Array.isArray(v.postulaciones) 
+            ? (v.postulaciones[0]?.count ?? v.postulaciones.length) 
+            : 0;
+
+          // ⏰ Opción 2: Expiración automática a medianoche si fecha_turno < HOY y CERO postulantes
+          const expiredByDate = isShiftExpired(v.fecha_turno, applicants);
+
+          let status = 'Oculta';
+          if (v.status === 'cerrada') {
+            status = 'Completada';
+          } else if (v.status === 'expirada' || expiredByDate) {
+            status = 'Expirada';
+          } else if (v.status === 'activa' || v.status === 'pendiente') {
+            status = 'Activa';
+          }
+
+          return {
+            id: v.id,
+            title: v.titulo,
+            type: v.tipo_turno || 'temporal',
+            status,
+            date: new Date(v.created_at).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }),
+            fecha_turno: v.fecha_turno,
+            applicants,
+            esUrgente: v.es_urgente,
+            urgenteExpiracion: v.urgente_expiracion,
+            cost: getDisplayCost(v.tipo_turno, null),
+            lat: v.lat,
+            lng: v.lng,
+            direccion_formateada: v.direccion_formateada,
+            raw: v
+          };
+        })
         .filter(v => v.status !== 'Oculta');
     }, [getDisplayCost])
   });
@@ -86,7 +105,7 @@ export const useVacantesLogic = () => {
     return vacantes.reduce((acc, v) => {
       acc[v.status] = (acc[v.status] || 0) + 1;
       return acc;
-    }, { Activa: 0, Completada: 0 });
+    }, { Activa: 0, Completada: 0, Expirada: 0 });
   }, [vacantes]);
 
   const vacantesFiltradas = useMemo(() => {

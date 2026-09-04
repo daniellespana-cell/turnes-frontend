@@ -25,14 +25,14 @@ let _vacancySubmitLock = false;
  * Delega estado, seguridad y cotización a micro-hooks (K.I.S.S).
  * Maneja la transacción de publicación con feedback explícito y cerrojo anti-doble-tap.
  */
-export const useCreateVacante = (user) => {
+export const useCreateVacante = (user, prefillData = null) => {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 1. Estado del Formulario
-  const { formData, setFormData, handlers: formHandlers } = useVacancyForm();
+  const { formData, setFormData, handlers: formHandlers } = useVacancyForm(prefillData);
 
   // 2. Seguridad (DLP)
   const { hasSensitiveData } = useVacancySecurity(formData.description);

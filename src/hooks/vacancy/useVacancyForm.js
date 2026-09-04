@@ -20,8 +20,26 @@ export const INITIAL_VACANCY_STATE = {
  * useVacancyForm (Micro-Hook K.I.S.S)
  * Responsabilidad Única: Manejar el estado del formulario de creación y derivar latitud/longitud.
  */
-export const useVacancyForm = () => {
-    const [formData, setFormData] = useState(INITIAL_VACANCY_STATE);
+export const useVacancyForm = (prefillData = null) => {
+    const [formData, setFormData] = useState(() => {
+        if (prefillData && typeof prefillData === 'object') {
+            return {
+                ...INITIAL_VACANCY_STATE,
+                ...prefillData,
+            };
+        }
+        return INITIAL_VACANCY_STATE;
+    });
+
+    // Reaccionar a cambios en prefillData (ej: relanzar turno / duplicar)
+    useEffect(() => {
+        if (prefillData && typeof prefillData === 'object') {
+            setFormData(prev => ({
+                ...prev,
+                ...prefillData,
+            }));
+        }
+    }, [prefillData]);
 
     // --- AUTO-DETECT LAT/LNG ---
     // Solo actúa si la ubicación no ha sido confirmada quirúrgicamente en el mapa

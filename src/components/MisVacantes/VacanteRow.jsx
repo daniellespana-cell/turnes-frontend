@@ -1,5 +1,5 @@
 import React from 'react';
-import { MoreHorizontal, Trash2, Edit3, Copy, Users, Rocket } from 'lucide-react';
+import { MoreHorizontal, Trash2, Edit3, Copy, Users, Rocket, RotateCcw } from 'lucide-react';
 
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -49,9 +49,10 @@ const VacanteRow = ({ data, onAction }) => {
         <div className="col-span-2 flex justify-center">
           <span className={`text-[9px] font-bold uppercase tracking-widest py-1 px-3 rounded-full ${data.status === 'Activa' ? 'text-emerald-500 bg-emerald-500/5' :
             data.status === 'Completada' ? 'text-blue-500 bg-blue-500/5' :
+            data.status === 'Expirada' ? 'text-amber-500 bg-amber-500/5' :
               'text-zinc-600 bg-zinc-800/20'
             }`}>
-            {data.status}
+            {data.status === 'Expirada' ? '⏰ Expirada' : data.status}
           </span>
         </div>
 
@@ -71,6 +72,15 @@ const VacanteRow = ({ data, onAction }) => {
         <div className="col-span-3 flex justify-end items-center gap-4">
           {data.status === 'Completada' ? (
             <span className="text-[10px] text-zinc-600 font-medium italic px-4">Ciclo Cerrado</span>
+          ) : data.status === 'Expirada' ? (
+            <button
+              onClick={() => onAction(data.id, 'relist')}
+              className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 hover:text-amber-300 transition-all group/btn shadow-[0_0_12px_rgba(245,158,11,0.1)]"
+              type="button"
+              aria-label="Relanzar Turno">
+              <RotateCcw size={12} className="transition-transform group-hover/btn:-rotate-45" />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Relanzar Turno</span>
+            </button>
           ) : data.applicants > 0 ? (
             <button
               onClick={() => navigate(`/dashboard/vacantes/${data.id}`)}
@@ -131,8 +141,8 @@ const VacanteRow = ({ data, onAction }) => {
           <div className="flex flex-col gap-1 p-2.5 rounded-xl bg-black/40 border border-transparent">
             <span className="text-[9px] text-zinc-500 uppercase tracking-widest">Estado</span>
             <div className="flex items-center gap-2">
-              <div className={`w-1.5 h-1.5 rounded-full ${data.status === 'Activa' ? 'bg-emerald-500 shadow-[0_0_5px_#10B981]' : 'bg-zinc-600'}`} />
-              <span className={`text-xs font-bold ${data.status === 'Activa' ? 'text-emerald-400' : 'text-zinc-400'}`}>{data.status}</span>
+              <div className={`w-1.5 h-1.5 rounded-full ${data.status === 'Activa' ? 'bg-emerald-500 shadow-[0_0_5px_#10B981]' : data.status === 'Expirada' ? 'bg-amber-500 shadow-[0_0_5px_#F59E0B]' : 'bg-zinc-600'}`} />
+              <span className={`text-xs font-bold ${data.status === 'Activa' ? 'text-emerald-400' : data.status === 'Expirada' ? 'text-amber-400' : 'text-zinc-400'}`}>{data.status === 'Expirada' ? '⏰ Expirada' : data.status}</span>
             </div>
           </div>
 
@@ -153,6 +163,15 @@ const VacanteRow = ({ data, onAction }) => {
           <div className="w-full py-2.5 text-center border border-dashed border-white/5 rounded-xl bg-white/[0.01]">
             <span className="text-[10px] text-zinc-600 font-medium italic">Ciclo Cerrado</span>
           </div>
+        ) : data.status === 'Expirada' ? (
+          <button
+            onClick={() => onAction(data.id, 'relist')}
+            className="w-full relative group overflow-hidden flex justify-center items-center gap-2 py-3 rounded-xl bg-gradient-to-r from-amber-600/15 to-amber-500/10 border border-amber-500/30 text-amber-400 active:scale-[0.98] transition-all shadow-[0_0_15px_rgba(245,158,11,0.1)]"
+            type="button"
+            aria-label="Relanzar Turno">
+            <RotateCcw size={14} className="transition-transform group-hover:-rotate-45" />
+            <span className="relative z-10 text-[11px] font-black uppercase tracking-widest">Relanzar Turno</span>
+          </button>
         ) : data.applicants > 0 ? (
           <button
             onClick={() => navigate(`/dashboard/vacantes/${data.id}`)}
@@ -186,7 +205,19 @@ const MenuBtn = ({ icon, label, onClick, danger }) => (
 
 const DropdownMenu = ({ data, onAction, setShowMenu }) => (
   <div className="absolute right-0 top-full mt-2 w-48 bg-[#09090b] border border-transparent rounded-xl z-50 overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
-    {data.status !== 'Completada' && (
+    {data.status === 'Expirada' && (
+      <>
+        <MenuBtn
+          icon={<RotateCcw size={14} />}
+          label="Relanzar Turno"
+          onClick={() => { onAction?.(data.id, 'relist'); setShowMenu(false); }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={() => { onAction?.(data.id, 'relist'); setShowMenu(false); }} />
+        <div className="h-px bg-white/5 my-1 mx-2" />
+      </>
+    )}
+    {data.status !== 'Completada' && data.status !== 'Expirada' && (
       <>
         <MenuBtn
           icon={<Edit3 size={14} />}

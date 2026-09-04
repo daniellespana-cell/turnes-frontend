@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { GeoService } from '../services/geoService';
 import { VacancyService } from '../services/vacancyService';
-import { normalizeVacancy } from '../domain/vacancy.mapper';
+import { normalizeVacancy, isPastDate } from '../domain/vacancy.mapper';
 
 const PAGE_SIZE = 15;
 const RPC_BUFFER_KM = 3;
@@ -55,7 +55,9 @@ export const useVacancyFetch = (explorationCenter, radius, userId = null) => {
             if (fetchError) throw fetchError;
 
             const coordCounts = new Map();
-            const normalized = (rawData || []).map(v => normalizeVacancy(v, coordCounts, false));
+            // 🛡️ Filtro de seguridad: excluir turnos cuya fecha ya pasó (candidatos solo ven turnos vigentes)
+            const activeShifts = (rawData || []).filter(v => !isPastDate(v.fecha_turno));
+            const normalized = activeShifts.map(v => normalizeVacancy(v, coordCounts, false));
             
             let nextCursor = undefined;
             if (rawData && rawData.length === PAGE_SIZE) {

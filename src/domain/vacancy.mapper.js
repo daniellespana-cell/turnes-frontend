@@ -53,6 +53,43 @@ export const sanitize = (str) => {
 };
 
 /**
+ * Checks if a shift date string (YYYY-MM-DD or ISO timestamp) represents a calendar day before today.
+ * Shifts in Turnes do not have hours, so comparison is strictly day-based at midnight (00:00:00).
+ *
+ * @param {string|null|undefined} dateStr 
+ * @returns {boolean} true if the date is strictly before today in local calendar
+ */
+export const isPastDate = (dateStr) => {
+    if (!dateStr) return false;
+    const datePart = String(dateStr).split(/[T ]/)[0];
+    const parts = datePart.split('-');
+    if (parts.length !== 3) return false;
+
+    const [year, month, day] = parts.map(Number);
+    if (!year || !month || !day || isNaN(year) || isNaN(month) || isNaN(day)) return false;
+
+    const shiftDate = new Date(year, month - 1, day);
+    shiftDate.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return shiftDate < today;
+};
+
+/**
+ * Determines if a vacancy has expired under Option 2 business rules:
+ * The date is strictly in the past (midnight has passed) AND 0 applicants applied.
+ *
+ * @param {string|null|undefined} dateStr 
+ * @param {number} applicantsCount 
+ * @returns {boolean}
+ */
+export const isShiftExpired = (dateStr, applicantsCount = 0) => {
+    return isPastDate(dateStr) && Number(applicantsCount || 0) === 0;
+};
+
+/**
  * Normalizes a raw vacancy object from the database into a clean UI-ready DTO.
  */
 export const normalizeVacancy = (v, coordCounts, isFallback = false) => {
@@ -125,6 +162,8 @@ export const normalizeVacancy = (v, coordCounts, isFallback = false) => {
         lng:    hasCoords ? jLng   : null,
         rawLat: hasCoords ? rawLat : null,
         rawLng: hasCoords ? rawLng : null,
+        rawDate: v.fecha_turno || null,
+        isPast: isPastDate(v.fecha_turno),
     };
 };
 

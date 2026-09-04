@@ -44,8 +44,39 @@ const MisVacantesPage = () => {
       return;
     }
 
+    if (action === 'relist' || action === 'duplicate') {
+      const target = vacantes.find(v => String(v.id) === String(id));
+      if (target) {
+        const raw = target.raw || {};
+        navigate('/publicar', {
+          state: {
+            relistFrom: {
+              tags: Array.isArray(raw.etiquetas) && raw.etiquetas.length > 0 
+                ? raw.etiquetas 
+                : (target.title ? [target.title] : []),
+              location: raw.direccion_formateada || target.direccion_formateada || '',
+              lat: raw.lat ?? target.lat ?? null,
+              lng: raw.lng ?? target.lng ?? null,
+              description: raw.descripcion || '',
+              schedule: raw.tipo_turno_id || '',
+              payment: Number(raw.pago_monto || 0),
+              type: raw.tipo_turno || target.type || 'temporal',
+              quantity: 1,
+              isUrgent: false,
+              isLocationConfirmed: Boolean((raw.lat ?? target.lat) && (raw.lng ?? target.lng)),
+              date: '' // Lista para recibir la nueva fecha seleccionada por la empresa
+            }
+          }
+        });
+        const toastMsg = action === 'relist'
+          ? "Selecciona la nueva fecha para relanzar tu turno"
+          : "Copia lista: Elige la fecha para el nuevo turno";
+        showToast(toastMsg, "info");
+      }
+      return;
+    }
+
     handleAction(id, action);
-    if (action === 'duplicate') showToast("Copia creada con éxito", "success");
   };
 
   const handleConfirmAction = () => {

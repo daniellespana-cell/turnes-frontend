@@ -5,6 +5,7 @@ import { talentService } from '../services/talentService';
 import { GeoService } from '../services/geoService';
 import { AssetResolver } from '../utils/assetHelper';
 import { getCiudadCoords } from '../domain/geography.config';
+import { isPastDate } from '../domain/vacancy.mapper';
 
 // ─── Fallback Geo ─────────────────────────────────────────────────────────────
 /** Centro geográfico por defecto (Girón, Santander) cuando no hay geo disponible */
@@ -124,7 +125,7 @@ export const useInternalSearch = () => {
                 );
                 if (rpcError) throw rpcError;
 
-                const filtered = filterByQuery(data || [], query);
+                const filtered = filterByQuery(data || [], query).filter(v => !isPastDate(v.fecha_turno));
                 setResults(filtered.map(v => normalizeVacancyResult(v, locationStr)));
             }
 

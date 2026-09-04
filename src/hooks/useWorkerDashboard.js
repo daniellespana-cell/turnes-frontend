@@ -5,7 +5,7 @@ import { useAppliedVacancies } from './useAppliedVacancies';
 import { GeoService } from '../services/geoService';
 import { MatchService } from '../services/matchService';
 import { VacancyService } from '../services/vacancyService';
-import { normalizeVacancy } from '../domain/vacancy.mapper';
+import { normalizeVacancy, isPastDate } from '../domain/vacancy.mapper';
 
 export const useWorkerDashboard = () => {
     const { user, isAuthenticated } = useAuth();
@@ -48,8 +48,9 @@ export const useWorkerDashboard = () => {
 
                 if (!error && data && !isCancelled) {
                     lastFetchedCoord.current = { lat, lng };
-                    // 2. Normalize and inject distance for UI
-                    const normalized = data.map(v => {
+                    // 2. Filter out past shifts and normalize for UI
+                    const activeShifts = (data || []).filter(v => !isPastDate(v.fecha_turno));
+                    const normalized = activeShifts.map(v => {
                         const norm = normalizeVacancy(v, new Map(), false);
                         return {
                             ...norm,

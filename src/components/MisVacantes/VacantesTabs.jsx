@@ -1,6 +1,6 @@
 import React from 'react';
 
-const tabs = ['Activa', 'Completada'];
+const tabs = ['Activa', 'Completada', 'Expirada'];
 
 const VacantesTabs = ({ activeTab, setActiveTab, counts }) => {
 
