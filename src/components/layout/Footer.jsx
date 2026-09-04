@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Mail, Facebook, Instagram, Linkedin } from 'lucide-react';
 import CookieSettingsModal from '../common/cookies/CookieSettingsModal';
 
 import logoFromAssets from '../../assets/logo-turnes.webp';
