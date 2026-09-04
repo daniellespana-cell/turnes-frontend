@@ -97,8 +97,6 @@ enabled = true
 port = 54323
 # External URL of the API server that frontend connects to.
 api_url = "http://127.0.0.1"
-# OpenAI API Key to use for Supabase AI in the Supabase Studio.
-openai_api_key = "env(OPENAI_API_KEY)"
 
 # Email testing server. Emails sent with the local dev setup are not actually sent - rather, they
 # are monitored, and you can view the emails that would have been sent from the web interface.
@@ -412,3 +410,38 @@ enabled = true
 # declarative_schema_path = "./database"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+# ============================================================================
+# ⚡ SUPABASE EDGE FUNCTIONS CONFIGURATION (PRODUCTION ZERO-TRUST)
+# ============================================================================
+
+[functions.wompi-webhook]
+enabled = true
+verify_jwt = false # Wompi invoca externamente; validación por firma HMAC SHA256 en SQL
+entrypoint = "./functions/wompi-webhook/index.ts"
+
+[functions.subscribe-push]
+enabled = true
+verify_jwt = true # Exige usuario autenticado para asociar credenciales Push
+entrypoint = "./functions/subscribe-push/index.ts"
+
+[functions.send-push]
+enabled = true
+verify_jwt = true # Servicios autorizados para despachar notificaciones Push
+entrypoint = "./functions/send-push/index.ts"
+
+[functions.seo-injector]
+enabled = true
+verify_jwt = false # Crawlers (Googlebot, WhatsApp, Facebook, etc.) no tienen JWT
+entrypoint = "./functions/seo-injector/index.ts"
+
+[functions.sitemap]
+enabled = true
+verify_jwt = false # Sitemap XML público para motores de búsqueda
+entrypoint = "./functions/sitemap/index.ts"
+
+[functions.vacancy-match-notifier]
+enabled = true
+verify_jwt = false # Database Webhook en vacantes INSERT para alertas batch anti-spam
+entrypoint = "./functions/vacancy-match-notifier/index.ts"
+

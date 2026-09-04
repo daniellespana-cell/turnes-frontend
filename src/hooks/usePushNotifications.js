@@ -3,6 +3,11 @@ import { supabase } from '../services/supabaseClient';
 import { notificationObserver } from '../services/notificationObserver';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import {
+    isNotificationSupported,
+    getNotificationPermission,
+    safeRequestNotificationPermission
+} from '../utils/notificationHelpers';
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
@@ -37,9 +42,15 @@ export const usePushNotifications = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if ('serviceWorker' in navigator && 'PushManager' in window) {
-            setIsSupported(true);
-            setPermission(Notification.permission);
+        const supported =
+            typeof window !== 'undefined' &&
+            'serviceWorker' in navigator &&
+            'PushManager' in window &&
+            isNotificationSupported();
+
+        setIsSupported(supported);
+        if (supported) {
+            setPermission(getNotificationPermission());
             checkSubscription();
         }
     }, []);
@@ -59,11 +70,11 @@ export const usePushNotifications = () => {
         setLoading(true);
 
         try {
-            // 1. Pedir permiso al sistema operativo
-            const perm = await Notification.requestPermission();
+            // 1. Pedir permiso al sistema operativo de forma ultra-segura
+            const perm = await safeRequestNotificationPermission();
             setPermission(perm);
             if (perm !== 'granted') {
-                showToast('Permiso de notificaciones denegado por el sistema operativo.', 'error');
+                showToast('Permiso de notificaciones denegado o no disponible en este navegador.', 'error');
                 return;
             }
 

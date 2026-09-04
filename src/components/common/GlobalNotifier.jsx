@@ -2,12 +2,10 @@ import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { ChatStorage } from '../../services/chat';
 import { useNotificationsContext } from '../../context/NotificationsContext';
 import { useToast } from '../../context/ToastContext';
+import { safeNotifyNative } from '../../utils/notificationHelpers';
 
 const notifyNative = (title, body) => {
-    // Alerta Nativa (Windows/Mac/Android) si está en OTRA pestaña
-    if (document.visibilityState === 'hidden' && 'Notification' in window && Notification.permission === 'granted') {
-        new Notification(title, { body, icon: '/pwa-192x192.png' });
-    }
+    safeNotifyNative(title, { body, icon: '/pwa-192x192.png' });
 };
 
 const GlobalNotifier = () => {
@@ -22,12 +20,6 @@ const GlobalNotifier = () => {
     // Refs para rastrear incrementos sin causar re-renders innecesarios
     const prevUnreadChats = useRef(unreadChatsTotal);
     const prevUnreadNotes = useRef(unreadCount);
-
-    useEffect(() => {
-        if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission().catch(() => {});
-        }
-    }, []);
 
     // ── LISTENER DE MENSAJES DE CHAT ──
     useEffect(() => {
