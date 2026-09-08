@@ -39,6 +39,27 @@ class TelemetryService {
                 environment: import.meta.env.MODE || 'production',
                 release: 'turnes-vite@0.1.0',
 
+                // 🔇 Ignorar ruidos del ciclo de vida del WebView o extensiones
+                ignoreErrors: [
+                    // 1. Meta / Android WebView: Java bridge destruido al cerrar el navegador in-app
+                    'Error invoking postMessage: Java object is gone',
+                    'Java object is gone',
+                    /postMessage: Java object is gone/i,
+                    /Java object is gone/i,
+
+                    // 2. Errores benignos de resize de observadores
+                    'ResizeObserver loop completed with undelivered notifications.',
+                    'ResizeObserver loop limit exceeded',
+
+                    // 3. Cortes de conexión transitorios
+                    'Failed to fetch',
+                    'NetworkError when attempting to fetch resource.',
+                    'Load failed',
+
+                    // 4. Cancelaciones voluntarias
+                    'AbortError',
+                ],
+
                 // 🛡️ Filtro y Sanitización de Errores Ruidosos
                 beforeSend(event, hint) {
                     const error = hint.originalException;
@@ -50,11 +71,20 @@ class TelemetryService {
                             return null;
                         }
                         // 2. Ignorar cortes transitorios de red del usuario
-                        if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError')) {
+                        if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError') || errorMessage.includes('Load failed')) {
                             return null;
                         }
-                        // 3. Ignorar errores de extensiones de navegador
-                        if (event.exception?.values?.[0]?.stacktrace?.frames?.some(frame => frame.filename?.includes('chrome-extension://'))) {
+                        // 3. Ignorar cierres del WebView de Facebook / Instagram / Android (Java bridge teardown)
+                        if (errorMessage.includes('Java object is gone') || errorMessage.includes('Error invoking postMessage')) {
+                            return null;
+                        }
+                        // 4. Ignorar errores de extensiones de navegador (Chrome, Firefox, Safari)
+                        const frames = event.exception?.values?.[0]?.stacktrace?.frames || [];
+                        if (frames.some(frame => 
+                            frame.filename?.includes('chrome-extension://') ||
+                            frame.filename?.includes('moz-extension://') ||
+                            frame.filename?.includes('safari-extension://')
+                        )) {
                             return null;
                         }
                     }

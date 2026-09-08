@@ -1,5 +1,8 @@
 name: Deploy Edge Functions
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true
+
 on:
   push:
     branches: [ main ]
@@ -50,7 +53,7 @@ jobs:
           fetch-depth: 2
 
       - name: 🔧 Install Supabase CLI
-        run: npm install -g supabase@2.116.0
+        run: npm install -g supabase@2.117.0
 
       - name: 🔍 Detect Changed Functions
         id: changed
@@ -76,13 +79,10 @@ jobs:
       - name: 🚀 Deploy All Functions (config changed)
         if: steps.changed.outputs.config_changed == 'true'
         run: |
-          echo "🔄 Deploying ALL Edge Functions..."
-          for dir in supabase/functions/*/; do
-            FUNC_NAME=$(basename "$dir")
-            echo "🚀 Deploying: $FUNC_NAME"
-            supabase functions deploy "$FUNC_NAME" --project-ref "$SUPABASE_PROJECT_REF"
-            echo "✅ $FUNC_NAME deployed successfully"
-          done
+          echo "🔄 Deploying ALL Edge Functions via Supabase Cloud API..."
+          PROJECT_REF="${SUPABASE_PROJECT_REF:-llrveqigkgyafgzofoqh}"
+          supabase functions deploy --project-ref "$PROJECT_REF" --use-api
+          echo "✅ All Edge Functions deployed successfully"
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
@@ -90,12 +90,10 @@ jobs:
       - name: 🚀 Deploy Changed Functions Only
         if: steps.changed.outputs.config_changed == 'false' && steps.changed.outputs.functions != ''
         run: |
-          echo "🎯 Deploying only changed functions..."
-          for FUNC_NAME in ${{ steps.changed.outputs.functions }}; do
-            echo "🚀 Deploying: $FUNC_NAME"
-            supabase functions deploy "$FUNC_NAME" --project-ref "$SUPABASE_PROJECT_REF"
-            echo "✅ $FUNC_NAME deployed successfully"
-          done
+          echo "🎯 Deploying only changed functions: ${{ steps.changed.outputs.functions }}"
+          PROJECT_REF="${SUPABASE_PROJECT_REF:-llrveqigkgyafgzofoqh}"
+          supabase functions deploy ${{ steps.changed.outputs.functions }} --project-ref "$PROJECT_REF" --use-api
+          echo "✅ Changed functions deployed successfully"
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
