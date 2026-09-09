@@ -68,7 +68,7 @@ describe('AccountingExportService (The Stripe Model - Contabilidad)', () => {
             const lines = csv.split('\r\n');
             const header = lines[0].replace('\uFEFF', '');
             
-            expect(header).toContain('Fecha;Hora;Comprobante_ID;NIT_Empresa');
+            expect(header).toContain('"Fecha";"Hora";"No. Comprobante";"NIT Empresa"');
             expect(lines.length).toBe(2); // Cabecera + 1 registro
         });
 

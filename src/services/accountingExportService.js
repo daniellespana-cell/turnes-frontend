@@ -104,16 +104,16 @@ export const AccountingExportService = {
         const headers = [
             'Fecha',
             'Hora',
-            'Comprobante_ID',
-            'NIT_Empresa',
-            'Empresa_Razon_Social',
-            'Tipo_Operacion',
-            'Tercero_Prestador',
-            'Concepto_Detalle',
-            'Tarifa_Operativa_COP',
-            'Comision_Turnes_COP',
-            'Total_Debitado_COP',
-            'Referencia_Operativa',
+            'No. Comprobante',
+            'NIT Empresa',
+            'Razón Social Empresa',
+            'Tipo de Movimiento',
+            'Trabajador / Beneficiario',
+            'Detalle del Turno o Concepto',
+            'Valor del Turno (COP)',
+            'Comisión Turnes (COP)',
+            'Total Debitado (COP)',
+            'Referencia de Pago',
             'Estado'
         ];
 
@@ -125,13 +125,22 @@ export const AccountingExportService = {
             const compId = item.referencia || item.movimiento_id || 'N/A';
             const nitEmpresa = item.empresa_nit || empresaInfo.nit_rut || 'N/A';
             const nombreEmpresa = item.empresa_nombre || empresaInfo.nombre_comercial || 'Empresa Turnes';
-            const tipo = item.tipo_movimiento || (compId.startsWith('STEP1_PAY') ? 'PAGO_TURNO' : 'MOVIMIENTO');
+            
+            // Descripción amigable del tipo de movimiento
+            let tipo = 'Pago de Turno';
+            if (item.tipo_movimiento === 'RECARGA' || compId.startsWith('REC_') || item.tipo_movimiento === 'INGRESO') {
+                tipo = 'Recarga de Saldo';
+            } else if (item.tipo_movimiento === 'PAGO_SERVICIO') {
+                tipo = 'Suscripción o Servicio';
+            }
+
             const tercero = item.trabajador_nombre || 'Turnes S.A.S.';
             const concepto = item.concepto || item.vacante_titulo || 'Servicio de Talento';
 
-            const tarifaOperativa = Number(item.tarifa_operativa || 0);
-            const comision = Number(item.comision_turnes || 0);
-            const total = Number(item.monto_total || 0);
+            // Valores numéricos limpios para que Excel permita sumas y fórmulas
+            const tarifaOperativa = Math.round(Number(item.tarifa_operativa || 0));
+            const comision = Math.round(Number(item.comision_turnes || 0));
+            const total = Math.round(Number(item.monto_total || 0));
 
             return [
                 sanitizeCSVCell(dateStr),
@@ -142,16 +151,16 @@ export const AccountingExportService = {
                 sanitizeCSVCell(tipo),
                 sanitizeCSVCell(tercero),
                 sanitizeCSVCell(concepto),
-                sanitizeCSVCell(tarifaOperativa),
-                sanitizeCSVCell(comision),
-                sanitizeCSVCell(total),
+                tarifaOperativa,
+                comision,
+                total,
                 sanitizeCSVCell(compId),
-                sanitizeCSVCell('COMPLETADO')
+                sanitizeCSVCell('Aprobado')
             ].join(';');
         });
 
         // Delimitador ';' estándar para software contable colombiano y Excel hispano
-        const csvBody = [headers.join(';'), ...rows].join('\r\n');
+        const csvBody = [headers.map(h => `"${h}"`).join(';'), ...rows].join('\r\n');
 
         // \uFEFF es el Byte Order Mark (BOM) que fuerza a Microsoft Excel a interpretar UTF-8
         return `\uFEFF${csvBody}`;
