@@ -1,12 +1,14 @@
-import React from 'react';
-import { ArrowUpRight, ArrowDownLeft, Download } from 'lucide-react';
-
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { ArrowUpRight, ArrowDownLeft, Download, FileSpreadsheet, ReceiptText } from 'lucide-react';
 import { formatCurrency } from '../../services/financeService';
+import ShiftSettlementReceiptModal from './ShiftSettlementReceiptModal';
+import { AccountingExportService } from '../../services/accountingExportService';
 
-const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoading }) => {
+const TransactionTable = ({ transactions = [], businessName = "Empresa Turnes", isLoading, empresa = {} }) => {
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedTxForReceipt, setSelectedTxForReceipt] = useState(null);
+  const [isExportingCSV, setIsExportingCSV] = useState(false);
   const itemsPerPage = 5;
 
   const filteredTransactions = transactions.filter(tx =>
@@ -23,6 +25,32 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
     setCurrentPage(1);
+  };
+
+  const handleExportCSV = () => {
+    try {
+      setIsExportingCSV(true);
+      const recordsToExport = filteredTransactions.map(t => ({
+        fecha: t.dateFull || t.date,
+        referencia: t.reference || t.id,
+        tipo_movimiento: t.type === 'deposit' ? 'RECARGA' : 'PAGO_TURNO',
+        concepto: t.business || t.title || 'Movimiento',
+        monto_total: t.amount,
+        tarifa_operativa: t.amount,
+        comision_turnes: 0,
+        empresa_nombre: businessName,
+        empresa_nit: empresa.nit_rut || 'N/A',
+        trabajador_nombre: t.counterpart || 'N/A'
+      }));
+      AccountingExportService.downloadCSV(recordsToExport, {
+        nombre_comercial: businessName,
+        nit_rut: empresa.nit_rut
+      });
+    } catch (err) {
+      console.error('Error exportando contabilidad CSV:', err);
+    } finally {
+      setIsExportingCSV(false);
+    }
   };
 
   const downloadInvoice = async () => {
@@ -42,7 +70,7 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
     const tableColumn = ["ID", "Detalle", "Tipo", "Fecha", "Monto"];
     const tableRows = filteredTransactions.map(tx => [
       tx.id.slice(0, 8),
-      tx.title,
+      tx.business || tx.title || 'Movimiento',
       tx.type === 'recharge' ? 'Recarga' : 'Pago',
       tx.date,
       formatCurrency(tx.amount)
@@ -65,24 +93,39 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
       <div className="px-5 py-4 border-b border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-zinc-400 text-xs font-bold uppercase tracking-widest">Movimientos</h2>
 
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           <select
             value={filter}
             onChange={handleFilterChange}
-            className="bg-transparent text-zinc-500 text-[10px] font-bold px-2 py-1 outline-none hover:text-zinc-300 transition-colors cursor-pointer uppercase tracking-wider"
+            className="bg-zinc-900 border border-white/5 text-zinc-400 text-[10px] font-bold px-2.5 py-1.5 rounded-lg outline-none hover:text-zinc-200 transition-colors cursor-pointer uppercase tracking-wider"
           >
             <option value="all" className="bg-[#0f0f10]">Todos</option>
             <option value="deposit" className="bg-[#0f0f10]">Recargas</option>
             <option value="payment" className="bg-[#0f0f10]">Pagos</option>
           </select>
 
+          {/* Exportar a Siigo / Alegra / Excel (CSV con UTF-8 BOM) */}
+          <button
+            onClick={handleExportCSV}
+            disabled={isExportingCSV || filteredTransactions.length === 0}
+            className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 py-1.5 px-3 rounded-lg transition-all text-[10px] font-bold uppercase tracking-wider cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            type="button"
+            title="Exportar archivo contable delimitado por ';' con UTF-8 BOM para Siigo, Alegra o Excel"
+          >
+            <FileSpreadsheet size={13} className="text-emerald-400" />
+            <span>{isExportingCSV ? 'Exportando...' : 'Excel / Siigo'}</span>
+          </button>
+
+          {/* Exportar Resumen PDF */}
           <button
             onClick={downloadInvoice}
-            className="flex items-center gap-1.5 text-zinc-500 hover:text-white py-1.5 px-2.5 rounded-lg hover:bg-white/5 transition-all group"
+            disabled={filteredTransactions.length === 0}
+            className="flex items-center gap-1.5 text-zinc-400 hover:text-white py-1.5 px-2.5 rounded-lg hover:bg-white/5 transition-all text-[10px] font-bold uppercase tracking-wider cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
             type="button"
-            aria-label="Acción">
-            <Download size={13} className="text-zinc-600 group-hover:text-zinc-300 transition-colors" strokeWidth={2} />
-            <span className="text-[10px] font-bold uppercase tracking-widest">Exportar</span>
+            aria-label="Descargar PDF de movimientos"
+          >
+            <Download size={13} className="text-zinc-500" strokeWidth={2} />
+            <span>PDF</span>
           </button>
         </div>
       </div>
@@ -93,6 +136,7 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
               <th className="px-5 py-3 text-zinc-600 text-[9px] font-bold uppercase tracking-widest">Detalle</th>
               <th className="px-5 py-3 text-zinc-600 text-[9px] font-bold uppercase tracking-widest">Fecha</th>
               <th className="px-5 py-3 text-right text-zinc-600 text-[9px] font-bold uppercase tracking-widest">Monto</th>
+              <th className="px-5 py-3 text-right text-zinc-600 text-[9px] font-bold uppercase tracking-widest">Soporte</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/[0.02]">
@@ -103,6 +147,7 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
                   <td className="px-5 py-3.5"><div className="h-4 w-32 bg-zinc-800 rounded"></div></td>
                   <td className="px-5 py-3.5"><div className="h-4 w-20 bg-zinc-800 rounded"></div></td>
                   <td className="px-5 py-3.5 text-right"><div className="h-4 w-16 bg-zinc-800 rounded ml-auto"></div></td>
+                  <td className="px-5 py-3.5 text-right"><div className="h-4 w-12 bg-zinc-800 rounded ml-auto"></div></td>
                 </tr>
               )))
             ) : (
@@ -128,6 +173,17 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
                       isIncome ? 'text-emerald-400' : 'text-amber-400'
                     }`}>
                       {isIncome ? '+' : '-'} {formatCurrency(tx.amount)}
+                    </td>
+                    <td className="px-5 py-3.5 text-right">
+                      <button
+                        onClick={() => setSelectedTxForReceipt(tx)}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-white/5 transition-all cursor-pointer group"
+                        type="button"
+                        title="Ver comprobante oficial de liquidación"
+                      >
+                        <ReceiptText size={12} className="text-emerald-500 group-hover:text-emerald-400 transition-colors" />
+                        <span>Recibo</span>
+                      </button>
                     </td>
                   </tr>
                 );
@@ -162,6 +218,14 @@ const TransactionTable = ({ transactions, businessName = "Empresa Turnes", isLoa
           </div>
         </div>
       )}
+
+      {/* 🧾 COMPROBANTE CANÓNICO WEB IMPRIMIBLE (The Stripe Model) */}
+      <ShiftSettlementReceiptModal
+        isOpen={!!selectedTxForReceipt}
+        onClose={() => setSelectedTxForReceipt(null)}
+        transaction={selectedTxForReceipt}
+        empresa={{ nombre_comercial: businessName, nit_rut: empresa?.nit_rut }}
+      />
     </div>
   );
 };

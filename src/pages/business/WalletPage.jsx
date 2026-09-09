@@ -91,7 +91,12 @@ const WalletPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-8">
           {hasTransactions || isLoading ? (
-            <TransactionTable transactions={transactions} isLoading={isLoading} />
+            <TransactionTable 
+              transactions={transactions} 
+              isLoading={isLoading} 
+              businessName={user?.nombre_comercial || user?.name || 'Empresa Turnes'}
+              empresa={user}
+            />
           ) : (
             <EmptyWalletState />
           )}
