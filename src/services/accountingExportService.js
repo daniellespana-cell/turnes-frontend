@@ -109,10 +109,11 @@ export const AccountingExportService = {
             'Razón Social Empresa',
             'Tipo de Movimiento',
             'Trabajador / Beneficiario',
-            'Detalle del Turno o Concepto',
-            'Valor del Turno (COP)',
-            'Comisión Turnes (COP)',
-            'Total Debitado (COP)',
+            'Detalle del Turno',
+            'Valor del Turno',
+            'Comisión Turnes',
+            'Total Debitado',
+            'Moneda',
             'Referencia de Pago',
             'Estado'
         ];
@@ -154,6 +155,7 @@ export const AccountingExportService = {
                 tarifaOperativa,
                 comision,
                 total,
+                sanitizeCSVCell('COP'),
                 sanitizeCSVCell(compId),
                 sanitizeCSVCell('Aprobado')
             ].join(';');

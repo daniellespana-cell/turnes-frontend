@@ -69,15 +69,23 @@ describe('AccountingExportService (The Stripe Model - Contabilidad)', () => {
             const header = lines[0].replace('\uFEFF', '');
             
             expect(header).toContain('"Fecha";"Hora";"No. Comprobante";"NIT Empresa"');
+            expect(header).toContain('"Valor del Turno";"Comisión Turnes";"Total Debitado";"Moneda"');
+            expect(header).not.toContain('(');
+            expect(header).not.toContain(')');
+            expect(header).not.toContain('[');
+            expect(header).not.toContain(']');
             expect(lines.length).toBe(2); // Cabecera + 1 registro
         });
 
-        it('debe preservar caracteres especiales en español (ñ, tildes) y desglosar tarifas', () => {
+        it('debe preservar caracteres especiales en español (ñ, tildes) y desglosar tarifas con moneda COP', () => {
             const csv = AccountingExportService.buildCSVContent(mockRecords);
             expect(csv).toContain('Juan Pérez Niño');
             expect(csv).toContain('100000');
             expect(csv).toContain('6000');
             expect(csv).toContain('106000');
+            expect(csv).toContain('"COP"');
+            expect(csv).not.toContain('[');
+            expect(csv).not.toContain(']');
         });
     });
 
