@@ -180,7 +180,7 @@ const CityAutocomplete = ({
                 {label}
             </label>
 
-            <div className="relative">
+            <div className={`relative ${isOpen ? 'z-50' : 'z-10'}`}>
                 <input
                     ref={inputRef}
                     id={id}

@@ -15,7 +15,7 @@ import { logger } from '../utils/logger';
 // Solo id + label para que el autocomplete y las categorías funcionen sin DB.
 // Los detalles (skills, marketing, slugs) vienen siempre del sync con Supabase.
 const FALLBACK_TAXONOMY = {
-  GASTRO: { id: 'GASTRO', label: 'Gastronomía y Bares 🍔', ui: { icon: 'Utensils', color: 'text-orange-500', hex: '#f97316' }, roles: [{ id: 'MESERO', label: 'Mesero / Camarero' }, { id: 'BARTENDER', label: 'Bartender / Barman' }, { id: 'BARISTA', label: 'Barista Profesional' }, { id: 'COCINERO', label: 'Cocinero (General)' }, { id: 'AYU_COCINA', label: 'Ayudante de Cocina' }, { id: 'PARRILLERO', label: 'Parrillero / Asador' }, { id: 'PLANCHERO', label: 'Planchero / Comida Rápida' }, { id: 'LAVAPLATOS', label: 'Lavaplatos / Steward' }, { id: 'DOMICILIARIO', label: 'Domiciliario (Moto/Bici)' }, { id: 'REPOSTERO', label: 'Repostero / Pastelero' }, { id: 'PANADERO', label: 'Panadero' }, { id: 'COMIDA_RAPIDA', label: 'Operario de Comida Rápida' }], skills: [{ id: 'MANIPULACION', label: 'Curso Manipulación Alimentos' }, { id: 'COCTELERIA', label: 'Coctelería' }, { id: 'BARISMO', label: 'Máquina de Café' }, { id: 'PARRILLA', label: 'Parrillero / Asados' }, { id: 'PLANCHA', label: 'Planchero / Manejo de Plancha' }] },
+  GASTRO: { id: 'GASTRO', label: 'Gastronomía y Bares 🍔', ui: { icon: 'Utensils', color: 'text-orange-500', hex: '#f97316' }, roles: [{ id: 'MESERO', label: 'Mesero / Camarero' }, { id: 'BARTENDER', label: 'Bartender / Barman' }, { id: 'BARISTA', label: 'Barista Profesional' }, { id: 'COCINERO', label: 'Cocinero (General)' }, { id: 'AYU_COCINA', label: 'Ayudante de Cocina' }, { id: 'PARRILLERO', label: 'Parrillero / Asador' }, { id: 'PLANCHERO', label: 'Planchero / Comida Rápida' }, { id: 'LAVAPLATOS', label: 'Lavaplatos / Steward' }, { id: 'DOMICILIARIO', label: 'Domiciliario (Moto/Bici)' }, { id: 'REPOSTERO', label: 'Repostero / Pastelero' }, { id: 'PANADERO', label: 'Panadero' }, { id: 'COMIDA_RAPIDA', label: 'Operario de Comida Rápida' }], skills: [{ id: 'MANIPULACION', label: 'Curso Manipulación Alimentos' }, { id: 'COCTELERIA', label: 'Coctelería' }, { id: 'BARISMO', label: 'Máquina de Café' }, { id: 'PARRILLA', label: 'Parrilla / Parrillero / Asados' }, { id: 'PLANCHA', label: 'Plancha / Planchero / Manejo de Plancha' }] },
   COMERCIAL: { id: 'COMERCIAL', label: 'Ventas y Comercial 💼', ui: { icon: 'TrendingUp', color: 'text-green-500', hex: '#22c55e' }, roles: [{ id: 'VENDEDOR_TAT', label: 'Vendedor TAT / Canal Tradicional' }, { id: 'IMPULSOR', label: 'Impulsor / Promotor de Marca' }, { id: 'CAJERO', label: 'Cajero / Operador de Caja' }, { id: 'ASESOR_VENTAS', label: 'Asesor Comercial' }, { id: 'MERCADERISTA', label: 'Mercaderista' }], skills: [{ id: 'EXP_VENTAS', label: 'Experiencia en Ventas' }, { id: 'MOTO_COM', label: 'Moto Propia + SOAT' }] },
   LOGISTICA: { id: 'LOGISTICA', label: 'Logística y Carga 📦', ui: { icon: 'Truck', color: 'text-blue-500', hex: '#3b82f6' }, roles: [{ id: 'COTERO', label: 'Cotero / Cargue y Descargue' }, { id: 'BODEGUERO', label: 'Auxiliar de Bodega' }, { id: 'EMPACADOR', label: 'Empacador / Picking' }, { id: 'MENSAJERO', label: 'Mensajero en Moto' }, { id: 'AUX_CAMION', label: 'Auxiliar de Ruta / Camión' }], skills: [{ id: 'FUERZA', label: 'Carga Pesada' }, { id: 'INV_BASICO', label: 'Inventarios' }] },
   CONSTRUCCION: { id: 'CONSTRUCCION', label: 'Construcción y Mantenimiento 🏗️', ui: { icon: 'Hammer', color: 'text-amber-500', hex: '#f59e0b' }, roles: [{ id: 'AYU_OBRA', label: 'Ayudante de Obra' }, { id: 'OFICIAL', label: 'Oficial de Obra' }, { id: 'PINTOR', label: 'Pintor / Estucador' }, { id: 'ELECTRICISTA', label: 'Electricista Básico' }, { id: 'PLOMERO', label: 'Plomero / Fontanero' }, { id: 'TODERO', label: 'Todero' }, { id: 'SOLDADOR', label: 'Soldador' }], skills: [{ id: 'ALTURAS', label: 'Curso de Alturas' }, { id: 'HERRAMIENTA', label: 'Herramienta Propia' }] },
@@ -75,28 +75,85 @@ export const syncTaxonomyWithDB = async () => {
       return;
     }
 
-    const dynamic = {};
-    sectorsRes.data.forEach(s => {
-      dynamic[s.id] = { ...s, roles: [], skills: [] };
-    });
-    rolesRes.data?.forEach(r => {
-      if (dynamic[r.sector_id]) dynamic[r.sector_id].roles.push({
-        id: r.id, label: r.label, slug: r.slug,
-        ...(r.marketing_title && {
-          marketing: {
-            title: r.marketing_title, accentColor: r.marketing_accent_color,
-            description: r.marketing_description,
-            job: { title: r.job_demo_title, salary: r.job_demo_salary, location: r.job_demo_location, hours: r.job_demo_hours, reqs: r.job_demo_reqs }
-          }
-        })
-      });
-    });
-    skillsRes.data?.forEach(s => {
-      if (dynamic[s.sector_id]) dynamic[s.sector_id].skills.push({ id: s.id, label: s.label });
+    // 🛡️ DEEP MERGE DEFENSIVO (Staff Engineer Standard):
+    // Iniciar clonando el FALLBACK_TAXONOMY para que roles o skills locales
+    // (como PARRILLA o PLANCHA) nunca se destruyan si la DB aún no los ha sincronizado.
+    const merged = {};
+    Object.entries(FALLBACK_TAXONOMY).forEach(([secKey, secVal]) => {
+      merged[secKey] = {
+        ...secVal,
+        roles: [...(secVal.roles || [])],
+        skills: [...(secVal.skills || [])],
+      };
     });
 
-    buildTaxonomyCache(dynamic);
-    logger.info('[Taxonomy] ✅ Sincronizado desde DB.');
+    // 1. Integrar sectores de DB
+    sectorsRes.data.forEach(s => {
+      if (!merged[s.id]) {
+        merged[s.id] = { ...s, roles: [], skills: [] };
+      } else {
+        merged[s.id] = {
+          ...merged[s.id],
+          ...s,
+          ui: {
+            ...merged[s.id].ui,
+            ...(s.icon && { icon: s.icon }),
+            ...(s.color && { color: s.color }),
+            ...(s.hex && { hex: s.hex }),
+          }
+        };
+      }
+    });
+
+    // 2. Fusionar roles (actualizar por id o agregar nuevos, sin borrar los de fallback)
+    rolesRes.data?.forEach(r => {
+      const sec = merged[r.sector_id];
+      if (!sec) return;
+
+      const roleObj = {
+        id: r.id,
+        label: r.label,
+        slug: r.slug,
+        ...(r.marketing_title && {
+          marketing: {
+            title: r.marketing_title,
+            accentColor: r.marketing_accent_color,
+            description: r.marketing_description,
+            job: {
+              title: r.job_demo_title,
+              salary: r.job_demo_salary,
+              location: r.job_demo_location,
+              hours: r.job_demo_hours,
+              reqs: r.job_demo_reqs,
+            }
+          }
+        })
+      };
+
+      const existingRoleIdx = (sec.roles || []).findIndex(item => item.id === r.id);
+      if (existingRoleIdx >= 0) {
+        sec.roles[existingRoleIdx] = { ...sec.roles[existingRoleIdx], ...roleObj };
+      } else {
+        sec.roles.push(roleObj);
+      }
+    });
+
+    // 3. Fusionar skills (actualizar por id o agregar nuevas, sin borrar las de fallback)
+    skillsRes.data?.forEach(s => {
+      const sec = merged[s.sector_id];
+      if (!sec) return;
+
+      const skillObj = { id: s.id, label: s.label };
+      const existingSkillIdx = (sec.skills || []).findIndex(item => item.id === s.id);
+      if (existingSkillIdx >= 0) {
+        sec.skills[existingSkillIdx] = { ...sec.skills[existingSkillIdx], ...skillObj };
+      } else {
+        sec.skills.push(skillObj);
+      }
+    });
+
+    buildTaxonomyCache(merged);
+    logger.info('[Taxonomy] ✅ Sincronizado y fusionado desde DB.');
   } catch (e) {
     if (e.name !== 'AbortError') console.warn('[Taxonomy] Sync fallido — operando offline.', e);
   }
@@ -124,14 +181,22 @@ export const getCategoryUIConfig = (catId) => {
   return { ...(s?.ui || { icon: 'Grid', color: 'text-zinc-500', hex: '#71717a' }), label: s?.label || 'Otros' };
 };
 
-// FIX: case-insensitive + fuzzy match en sector, roles y skills
+// FIX: case-insensitive + fuzzy match en sector, roles y skills + sanitización de hashtags
 export const getSectorByTag = (tagLabel) => {
   if (!tagLabel) return 'VARIOS';
-  const q = tagLabel.toLowerCase().trim();
+  const q = String(tagLabel).replace(/^#/, '').toLowerCase().trim();
+  if (!q) return 'VARIOS';
+
   for (const [sectorId, sector] of SECTOR_MAP.entries()) {
     if (sector.id.toLowerCase() === q || sector.label.toLowerCase().includes(q) || q.includes(sector.label.toLowerCase())) return sectorId;
-    if ((sector.roles || []).some(r => r.label.toLowerCase().includes(q) || q.includes(r.label.toLowerCase()))) return sectorId;
-    if ((sector.skills || []).some(s => s.label.toLowerCase().includes(q) || q.includes(s.label.toLowerCase()))) return sectorId;
+    if ((sector.roles || []).some(r => r.id.toLowerCase() === q || r.label.toLowerCase().includes(q) || q.includes(r.label.toLowerCase()) || (r.slug && (r.slug.toLowerCase() === q || r.slug.toLowerCase().includes(q))))) return sectorId;
+    if ((sector.skills || []).some(s => s.id.toLowerCase() === q || s.label.toLowerCase().includes(q) || q.includes(s.label.toLowerCase()))) return sectorId;
   }
+
+  // Raíces semánticas defensivas (Parrilla, Asador, Plancha pertenecen incondicionalmente a GASTRO)
+  if (/parrill|asado|planch/i.test(q) && SECTOR_MAP.has('GASTRO')) {
+    return 'GASTRO';
+  }
+
   return 'VARIOS';
 };

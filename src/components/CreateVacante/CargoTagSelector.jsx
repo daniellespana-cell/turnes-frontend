@@ -2,7 +2,7 @@ import React from 'react';
 import { Search, Briefcase, Sparkles, X } from 'lucide-react';
 import { m as motion, AnimatePresence } from 'framer-motion';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getAllSearchTags } from '../../domain/vacantes.taxonomy';
 
 const CargoTagSelector = ({
@@ -10,9 +10,6 @@ const CargoTagSelector = ({
     onChange,
     maxTags = 2
 }) => {
-    // 🧠 Sugerencias dinámicas (Reacciona al sync de la DB)
-    const SUGGESTIONS_DB = useMemo(() => getAllSearchTags(), []);
-    
     const [inputValue, setInputValue] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [filteredSpecs, setFilteredSpecs] = useState([]);
@@ -33,7 +30,8 @@ const CargoTagSelector = ({
         setInputValue(newVal);
 
         if (newVal.length > 0) {
-            const matches = SUGGESTIONS_DB.filter(item =>
+            const currentTags = getAllSearchTags();
+            const matches = currentTags.filter(item =>
                 item.toLowerCase().includes(newVal.toLowerCase()) &&
                 !selectedTags.includes(item) // Evitar duplicados
             ).slice(0, 5);

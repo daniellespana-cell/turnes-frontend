@@ -21,7 +21,7 @@ const CustomSelect = ({ label, value, options, onChange, disabled, placeholder, 
     }, []);
 
     return (
-        <div className="flex flex-col gap-1.5 relative" ref={dropdownRef}>
+        <div className={`flex flex-col gap-1.5 relative ${isOpen ? 'z-50' : 'z-10'}`} ref={dropdownRef}>
             <label className="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-widest pl-1 flex items-center gap-2">
                 {label}
             </label>

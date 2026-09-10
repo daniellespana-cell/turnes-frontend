@@ -21,7 +21,7 @@ const IndustrialProfileSection = ({
     }));
 
     return (
-        <SectionCard title="Especialidad y Habilidades" icon={<Briefcase size={14} />}>
+        <SectionCard title="Especialidad y Habilidades" icon={<Briefcase size={14} />} className="relative z-30">
             <div className="space-y-4">
                 {/* Selector de Sector (Premium Custom Select) */}
                 <CustomSelect
@@ -42,7 +42,7 @@ const IndustrialProfileSection = ({
 
                 {/* Chips Interactivos (Emerald Theme for Workers) */}
                 {currentSectorData && (
-                    <div className="bg-zinc-950 rounded-xl p-3 border border-transparent shadow-inner">
+                    <div className="bg-zinc-950 rounded-xl p-3 border border-transparent shadow-inner relative z-0">
                         <label className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider mb-3 block flex items-center gap-1">
                             <Sparkles size={10} /> Selecciona tus Roles y Habilidades
                         </label>

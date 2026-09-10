@@ -55,7 +55,7 @@ const SmartPredictiveSearch = ({
 
         if (newVal.length > 0) {
             const searchVal = normalize(newVal);
-            const source = SUGGESTIONS_DB[mode] || [];
+            const source = mode === 'cargo' ? getAllSearchTags() : (SUGGESTIONS_DB[mode] || []);
             
             // 🧠 Senior Matching Algorithm: Prioritiza si EMPIEZA con la letra, luego si la CONTIENE
             const exactMatches = source.filter(item => normalize(item) === searchVal);
