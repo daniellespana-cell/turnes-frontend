@@ -85,10 +85,12 @@ const LandingPage = () => {
       <Navbar />
       <main className="lp-main-content flex-grow">
         <Hero />
+        <Suspense fallback={<div className="min-h-[280px] bg-zinc-950" />}>
+          <JobCarousel />
+        </Suspense>
         <ValueProps />
         <Suspense fallback={<LoadingSpinner />}>
           <PublicWelcomeBonusBanner />
-          <JobCarousel />
           <Beneficios />
           <TestimoniosSection />
           <FAQSection />
