@@ -45,15 +45,15 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#06090e]/70 via-transparent to-[#06090e]/90" />
       </div>
 
-      {/* 2. CONTENEDOR PRINCIPAL: COMPOSICIÓN 2 COLUMNAS */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      {/* 2. CONTENEDOR PRINCIPAL: COMPOSICIÓN RESPONSIVA Y ARMÓNICA */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 md:py-14 lg:py-16 relative z-10 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-8 lg:gap-12 items-center">
 
-          {/* COLUMNA IZQUIERDA: Texto Formal + Kicker Enterprise + Botón Sólido */}
-          <div className="lg:col-span-6 xl:col-span-7 text-left space-y-5 sm:space-y-6">
+          {/* COLUMNA PRINCIPAL / TEXTO: Centrado en móvil, alineado a la izquierda en desktop */}
+          <div className="md:col-span-7 text-center md:text-left flex flex-col items-center md:items-start space-y-4 sm:space-y-5 md:space-y-6">
 
             {/* Kicker Enterprise con indicador sobrio */}
-            <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-[#064e3b]/35 border border-[#047857]/40 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-[#064e3b]/35 border border-[#047857]/40 backdrop-blur-md self-center md:self-start">
               <span className="flex h-2 w-2 relative shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-60" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -63,10 +63,10 @@ const Hero = () => {
               </span>
             </div>
 
-            {/* Titular Formal y Nítido con resalte verde enterprise sólido sin desbordes */}
+            {/* Titular Formal y Nítido: Impactante en móvil y expansivo en desktop */}
             <h1
               id="hero-heading"
-              className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-extrabold text-white tracking-tight leading-[1.18] sm:leading-[1.12]"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white tracking-tight leading-[1.18] sm:leading-[1.14] md:leading-[1.1] max-w-xl md:max-w-none"
             >
               La app que cubre tus turnos{' '}
               <span className="block sm:inline mt-1 sm:mt-0">
@@ -81,16 +81,16 @@ const Hero = () => {
             </h1>
 
             {/* Párrafo Formal y Claro */}
-            <p className="text-sm sm:text-base md:text-lg text-slate-200/90 font-normal leading-relaxed max-w-xl">
+            <p className="text-xs sm:text-sm md:text-base text-slate-300 font-normal leading-relaxed max-w-lg md:max-w-xl">
               Conecta con personas disponibles y verificadas cerca de ti.<br className="hidden sm:block" />
               Sin burocracia. Sin bolsa de empleo.
             </p>
 
-            {/* Botón Principal y Enlace Secundario (Touch friendly y alineado) */}
-            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+            {/* Botón Principal y Enlace Secundario (Centrado en móvil, ergonómico) */}
+            <div className="pt-1 sm:pt-2 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 sm:gap-4 w-full sm:w-auto">
               <Link
                 to={PATHS.PUBLIC.REGISTER_COMPANY}
-                className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full bg-[#047857] hover:bg-[#065f46] text-white font-bold text-base transition-all border border-[#059669]/40 shadow-sm hover:scale-[1.02] active:scale-95 cursor-pointer w-full sm:w-auto text-center"
+                className="inline-flex items-center justify-center gap-2.5 px-7 sm:px-8 py-3 sm:py-3.5 rounded-full bg-[#047857] hover:bg-[#065f46] text-white font-bold text-sm sm:text-base transition-all border border-[#059669]/40 shadow-sm hover:scale-[1.02] active:scale-95 cursor-pointer w-full sm:w-auto text-center"
               >
                 <span>Publicar un turno</span>
                 <ArrowRight size={18} className="text-white stroke-[2.5]" />
@@ -98,15 +98,15 @@ const Hero = () => {
 
               <Link
                 to={PATHS.PUBLIC.REGISTER_TALENT}
-                className="text-xs sm:text-sm text-slate-300 hover:text-white font-medium transition-colors flex items-center justify-center sm:justify-start gap-1.5 py-1 group text-center"
+                className="text-xs sm:text-sm text-slate-300 hover:text-white font-medium transition-colors flex items-center justify-center gap-1.5 py-1 group text-center"
               >
                 <span>¿Buscas turnos? Regístrate como talento</span>
                 <span className="text-emerald-400 group-hover:translate-x-1 transition-transform">&rarr;</span>
               </Link>
             </div>
 
-            {/* Indicadores de Confianza Reales (Grid ordenado en móvil, flex en desktop) */}
-            <div className="pt-5 sm:pt-6 border-t border-zinc-800/80 grid grid-cols-1 sm:flex sm:flex-wrap items-start sm:items-center gap-2.5 sm:gap-6 text-xs sm:text-sm text-slate-300">
+            {/* Indicadores de Confianza para Desktop / Tablet (Dentro de columna izquierda) */}
+            <div className="hidden md:flex pt-5 lg:pt-6 border-t border-zinc-800/80 flex-wrap items-center gap-5 lg:gap-6 text-xs lg:text-sm text-slate-300 w-full">
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-[#064e3b]/60 text-emerald-300 flex items-center justify-center shrink-0">
                   <Check size={11} className="stroke-[3]" />
@@ -131,12 +131,12 @@ const Hero = () => {
 
           </div>
 
-          {/* COLUMNA DERECHA: MOCKUP FOTOGRÁFICO REAL DE IPHONE 16 PRO EN ALTA DEFINICIÓN */}
-          <div className="lg:col-span-6 xl:col-span-5 flex justify-center lg:justify-end relative py-2 sm:py-4 lg:py-0 mt-4 lg:mt-0">
+          {/* COLUMNA VISUAL: MOCKUP FOTOGRÁFICO DE IPHONE 16 PRO CON MICRO-BADGES FLOTANTES */}
+          <div className="md:col-span-5 flex flex-col items-center justify-center md:justify-end relative py-2 md:py-0 mt-2 sm:mt-4 md:mt-0 w-full">
             {/* Resplandor ambiental sobrio y mate detrás del iPhone */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[380px] h-[380px] sm:h-[460px] bg-[#064e3b]/20 blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[320px] md:w-[360px] lg:w-[400px] h-[320px] sm:h-[400px] md:h-[460px] bg-[#064e3b]/25 blur-[90px] sm:blur-[110px] rounded-full pointer-events-none" />
 
-            {/* Contenedor del Mockup con Levitación Suave y Orgánica */}
+            {/* Contenedor del Mockup con Levitación Suave y Micro-Badges */}
             <motion.div
               animate={{
                 y: [-6, 6, -6],
@@ -148,9 +148,16 @@ const Hero = () => {
                 ease: 'easeInOut',
               }}
               onClick={handlePublishClick}
-              className="relative w-full max-w-[240px] xs:max-w-[270px] sm:max-w-[320px] lg:max-w-[390px] filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.85)] cursor-pointer select-none"
+              className="relative w-full max-w-[210px] xs:max-w-[240px] sm:max-w-[280px] md:max-w-[340px] lg:max-w-[390px] filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.85)] cursor-pointer select-none"
               title="Haz clic para publicar un turno"
             >
+              {/* Micro-Badge Flotante Superior: Calificación y Confianza */}
+              <div className="absolute -top-2.5 sm:-top-3 -right-2 sm:-right-4 z-20 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-[#06090e]/95 border border-emerald-500/40 shadow-xl backdrop-blur-md flex items-center gap-1.5 pointer-events-none">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <span className="text-[10px] sm:text-xs font-bold text-white tracking-tight">★ 4.9 · Verificado</span>
+              </div>
+
+              {/* Imagen del iPhone Mockup */}
               <img
                 src={heroPhoneMockup}
                 alt="Mockup iPhone 16 Pro con la App Turnes"
@@ -159,7 +166,38 @@ const Hero = () => {
                 height="1200"
                 loading="eager"
               />
+
+              {/* Micro-Badge Flotante Inferior: Tiempo de Cobertura */}
+              <div className="absolute -bottom-2 sm:-bottom-3 -left-2 sm:-left-4 z-20 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-[#06090e]/95 border border-zinc-700/80 shadow-xl backdrop-blur-md flex items-center gap-1.5 pointer-events-none">
+                <span className="text-emerald-400 font-bold text-xs">⚡</span>
+                <span className="text-[10px] sm:text-xs font-semibold text-slate-200 tracking-tight">Turno cubierto hoy</span>
+              </div>
             </motion.div>
+
+            {/* Indicadores de Confianza en Móvil (Ubicados armónicamente al pie de la composición visual) */}
+            <div className="md:hidden w-full pt-5 mt-5 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 text-xs text-slate-300">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-full bg-[#064e3b]/60 text-emerald-300 flex items-center justify-center shrink-0">
+                  <Check size={11} className="stroke-[3]" />
+                </div>
+                <span className="font-medium">Sin burocracia</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-full bg-[#064e3b]/60 text-emerald-300 flex items-center justify-center shrink-0">
+                  <Check size={11} className="stroke-[3]" />
+                </div>
+                <span className="font-medium">Cero suscripciones fijas</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-full bg-[#064e3b]/60 text-emerald-300 flex items-center justify-center shrink-0">
+                  <Check size={11} className="stroke-[3]" />
+                </div>
+                <span className="font-medium">Pago al finalizar el turno</span>
+              </div>
+            </div>
+
           </div>
 
         </div>
