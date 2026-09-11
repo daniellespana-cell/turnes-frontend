@@ -74,9 +74,10 @@ const LandingFooter = () => {
               Para Negocios
             </h3>
             <ul className="space-y-2.5 list-none p-0">
-              <FooterLink to="/publicar" label="Publicar Turno Urgente" isHighlight />
+              <FooterLink to="/register/empresa" label="Publicar Turno Urgente" isHighlight />
               <FooterLink to="/como-funciona" label="Cómo Funciona" />
               <FooterLink to="/precios" label="Planes y Tarifas" />
+              <FooterLink to="/blog" label="Blog & Guías Operativas" />
               <FooterLink to="/politica-pagos" label="Modelo de Conexión" />
               <FooterLink to="/contacto" label="Atención para Empresas" />
             </ul>
@@ -90,6 +91,7 @@ const LandingFooter = () => {
             </h3>
             <ul className="space-y-2.5 list-none p-0">
               <FooterLink to="/register/talento" label="Registrarte Gratis (0% Comisión)" isHighlight />
+              <FooterLink to="/blog" label="Guías y Consejos para Extras" />
               <FooterLink to="/politica-pagos" label="Pago Directo: Día Trabajado, Pagado" />
               <FooterLink to="/politicas" label="Reglas de Confiabilidad" />
               <FooterLink to="/login" label="Ingresar a mi Perfil" />

@@ -24,14 +24,14 @@ const MainLayout = () => {
 
   if (loading) {
     return (
-      <div className={`min-h-screen ${isComoFunciona ? 'bg-black' : 'bg-[#0a0a0a]'} flex items-center justify-center`}>
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <Spinner size="md" variant="emerald" />
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen ${isComoFunciona ? 'bg-black' : 'bg-[#0a0a0a]'} flex flex-col relative overflow-x-hidden`}>
+    <div className="min-h-screen bg-black text-white flex flex-col relative overflow-x-hidden">
 
       {/* 1. SWITCH DE NAVBAR ATÓMICO */}
       <div className="relative z-[100]">
@@ -42,20 +42,15 @@ const MainLayout = () => {
         )}
       </div>
 
-      {/* 2. CONTENEDOR PRINCIPAL */}
-      <main className={`flex-grow ${isComoFunciona ? 'pt-20 sm:pt-24 pb-16 bg-black' : 'pt-24 pb-12 bg-[#0a0a0a]'} relative z-10`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div key={pathname}>
-            {/* Pasamos el usuario a través del context de Outlet para que esté disponible en las páginas */}
-            <Outlet context={{ user }} />
-          </div>
+      {/* 2. CONTENEDOR PRINCIPAL FLUIDO (FULL-WIDTH NATIVO) */}
+      <main className="flex-grow pt-16 bg-black relative z-10 w-full flex flex-col">
+        <div key={pathname} className="w-full flex-grow flex flex-col">
+          {/* Pasamos el usuario a través del context de Outlet para que esté disponible en las páginas */}
+          <Outlet context={{ user }} />
         </div>
       </main>
 
-      {/* 3. FOOTER CONDICIONAL 
-          Solo se muestra en la Landing, Precios públicos, etc. 
-          Se oculta automáticamente en el Dashboard y Upgrade Page.
-      */}
+      {/* 3. FOOTER CONDICIONAL */}
       {!isPrivateArea && <Footer />}
     </div>
   );

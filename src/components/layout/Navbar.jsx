@@ -92,11 +92,11 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-7">
               <NavItem to="/" label="Inicio" />
               <NavItem to={PATHS.PUBLIC.HOW_IT_WORKS} label="Para Empresas" />
-              <NavItem to="/explorar" label="Características" />
               <NavItem to="/precios" label="Precios" />
+              <NavItem to={PATHS.PUBLIC.BLOG} label="Blog" />
               <NavItem to="/contacto" label="Contacto" />
             </div>
 
@@ -148,16 +148,16 @@ const Navbar = () => {
                 tabIndex={0}
                 onKeyDown={toggleMenu} />
               <NavItem
-                to="/explorar"
-                label="Características"
+                to="/precios"
+                label="Precios"
                 isMobile={true}
                 onClick={toggleMenu}
                 role="button"
                 tabIndex={0}
                 onKeyDown={toggleMenu} />
               <NavItem
-                to="/precios"
-                label="Precios"
+                to={PATHS.PUBLIC.BLOG}
+                label="Blog & Guías"
                 isMobile={true}
                 onClick={toggleMenu}
                 role="button"

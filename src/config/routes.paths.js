@@ -20,6 +20,8 @@ export const PATHS = {
         HOW_IT_WORKS: '/como-funciona',
         ABOUT: '/about',
         CONTACT: '/contacto',
+        BLOG: '/blog',
+        BLOG_POST: (slug) => `/blog/${slug}`,
         LEGAL: {
             PAYMENTS: '/politica-pagos',
             PRIVACY: '/privacidad',

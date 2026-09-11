@@ -9,22 +9,22 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
     // Vista de Éxito
     if (status === 'success') {
         return (
-            <div className="lg:col-span-2 p-8 bg-white/5 backdrop-blur-md border border-transparent rounded-2xl  relative overflow-hidden h-full flex flex-col justify-center">
+            <div className="lg:col-span-2 p-8 bg-[#090b0e] border border-zinc-800 rounded-3xl relative overflow-hidden h-full flex flex-col justify-center shadow-xl">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="flex flex-col items-center justify-center py-12 text-center"
                 >
-                    <div className="w-24 h-24 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 rounded-full flex items-center justify-center mb-8 ring-1 ring-white/10">
+                    <div className="w-24 h-24 bg-emerald-950/40 border border-emerald-500/30 rounded-full flex items-center justify-center mb-8">
                         <CheckCircle className="w-12 h-12 text-emerald-400" />
                     </div>
                     <h3 className="text-3xl font-black text-white mb-4 tracking-tight">¡Mensaje Recibido!</h3>
-                    <p className="text-zinc-400 max-w-md text-lg leading-relaxed">
+                    <p className="text-zinc-300 max-w-md text-base leading-relaxed">
                         Nuestro equipo ya tiene tu solicitud en radar. Te responderemos en breve (menos de 24h).
                     </p>
                     <button
                         onClick={resetForm}
-                        className="mt-8 px-6 py-2 bg-white/5 hover:bg-white/10 border border-transparent  rounded-lg text-white text-sm font-medium transition-all duration-300"
+                        className="mt-8 px-6 py-2.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm font-semibold transition-all duration-200"
                         type="button"
                         aria-label="Acción">
                         Enviar otro mensaje
@@ -36,7 +36,7 @@ const ContactForm = ({ formData, status, handleChange, handleSubmit, resetForm }
 
     // Vista del Formulario
     return (
-        <div className="lg:col-span-2 p-8 md:p-10 bg-white/5 backdrop-blur-md border border-transparent rounded-2xl  relative overflow-hidden">
+        <div className="lg:col-span-2 p-8 md:p-10 bg-[#090b0e] border border-zinc-800 rounded-3xl relative overflow-hidden shadow-xl">
             <h2 className="text-3xl font-black text-white mb-8 tracking-tight">Envíanos un Mensaje</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
 

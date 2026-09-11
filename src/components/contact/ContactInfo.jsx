@@ -89,8 +89,8 @@ const ContactInfo = () => {
     }
 
     return (
-        <div className="space-y-8 p-8 bg-white/5 backdrop-blur-md border border-transparent rounded-2xl  h-full">
-            <h2 className="text-2xl font-bold text-emerald-400 border-b border-white/10 pb-4">
+        <div className="space-y-8 p-8 bg-[#090b0e] border border-zinc-800 rounded-3xl h-full shadow-xl">
+            <h2 className="text-2xl font-bold text-white border-b border-zinc-800/80 pb-4">
                 Información de Soporte
             </h2>
             {contactData.map((item, index) => {

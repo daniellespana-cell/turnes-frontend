@@ -32,6 +32,7 @@ temp_download/
 *.test.manual.js
 *.scratch.js
 test-*.js
+src/router/ultimatejs/
 
 # Editor directories and files
 .vscode/*

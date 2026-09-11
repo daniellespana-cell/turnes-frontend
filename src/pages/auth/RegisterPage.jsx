@@ -151,8 +151,14 @@ const RegisterPage = () => {
     let initialRole = null;
     const normalizedRole = roleUrl?.toLowerCase();
     
-    if (normalizedRole === 'empresa' || normalizedRole === 'company') initialRole = 'company';
-    if (normalizedRole === 'talento' || normalizedRole === 'jobseeker' || normalizedRole === 'postulante') initialRole = 'jobseeker';
+    // Alias para empresas / negocios / empleadores
+    if (['empresa', 'company', 'empresas', 'negocio', 'negocios', 'empleador', 'empleadores'].includes(normalizedRole)) {
+        initialRole = 'company';
+    }
+    // Alias para talento / trabajadores / empleados / extras
+    if (['talento', 'jobseeker', 'postulante', 'postulantes', 'empleado', 'empleados', 'trabajador', 'trabajadores', 'extra', 'extras'].includes(normalizedRole)) {
+        initialRole = 'jobseeker';
+    }
 
     // Handle internal navigation for "onBack" clean URL
     const handleReset = () => {

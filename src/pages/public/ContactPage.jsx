@@ -17,14 +17,14 @@ const ContactPage = () => {
     const { formData, status, handleChange, handleSubmit, resetForm } = useContactForm();
 
     return (
-        <div className="min-h-screen bg-zinc-950 selection:bg-emerald-500/30 selection:text-emerald-200">
+        <div className="w-full bg-black text-white min-h-screen selection:bg-emerald-500/30 selection:text-emerald-200">
             <SEO 
                 title="Contacto | Turnes - Soporte y Ayuda" 
                 description="¿Tienes preguntas sobre Turnes? Nuestro equipo de soporte está listo para ayudarte a llenar tu vacante o resolver tus dudas. Contáctanos hoy." 
             />
-            <main className="pt-28 md:pt-36 pb-16 text-white relative overflow-hidden">
-                {/* Background Decor (Similar to Landing) */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+            <section className="pt-10 sm:pt-14 pb-20 text-white relative overflow-hidden" aria-label="Sección de Contacto">
+                {/* Background Decor Suave */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] bg-emerald-950/15 blur-[100px] rounded-full pointer-events-none" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -35,14 +35,14 @@ const ContactPage = () => {
                         initial="hidden"
                         animate="visible"
                     >
-                        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-4">
+                        <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
                             Hablemos de tu <br className="md:hidden" />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+                            <span className="text-emerald-400">
                                 Próximo Turno
                             </span>
                         </h1>
-                        <p className="text-lg text-zinc-400 max-w-2xl mx-auto font-light leading-relaxed">
-                            Estamos aquí para ayudarte a llenar tu vacante en tiempo récord.
+                        <p className="text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto font-normal leading-relaxed">
+                            Estamos aquí para ayudarte a cubrir tu vacante o responder cualquier duda en tiempo récord.
                         </p>
                     </motion.header>
 
@@ -78,7 +78,7 @@ const ContactPage = () => {
 
                     </div>
                 </div>
-            </main>
+            </section>
 
         </div>
     );

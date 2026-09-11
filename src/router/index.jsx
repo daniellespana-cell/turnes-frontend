@@ -69,6 +69,8 @@ const PlanesPage = lazyWithRetry(() => import('../pages/common/PlanesPage'));
 const ComoFuncionaPage = lazyWithRetry(() => import('../pages/public/ComoFuncionaPage'));
 const AcercaDe = lazyWithRetry(() => import('../pages/public/AcercaDe'));
 const ContactPage = lazyWithRetry(() => import('../pages/public/ContactPage'));
+const BlogPage = lazyWithRetry(() => import('../pages/public/BlogPage'));
+const BlogPostPage = lazyWithRetry(() => import('../pages/public/BlogPostPage'));
 const Pagos = lazyWithRetry(() => import('../pages/legal/Pagos'));
 const Privacidad = lazyWithRetry(() => import('../pages/legal/Privacidad'));
 const Terminos = lazyWithRetry(() => import('../pages/legal/Terminos'));
@@ -270,6 +272,8 @@ export const router = createBrowserRouter([
                             { path: PATHS.PUBLIC.HOW_IT_WORKS, element: <ComoFuncionaPage /> },
                             { path: PATHS.PUBLIC.ABOUT, element: <AcercaDe /> },
                             { path: PATHS.PUBLIC.CONTACT, element: <ContactPage /> },
+                            { path: PATHS.PUBLIC.BLOG, element: <BlogPage /> },
+                            { path: `${PATHS.PUBLIC.BLOG}/:slug`, element: <BlogPostPage /> },
                             { path: PATHS.PUBLIC.LEGAL.PAYMENTS, element: <Pagos /> },
                             { path: PATHS.PUBLIC.LEGAL.PRIVACY, element: <Privacidad /> },
                             { path: PATHS.PUBLIC.LEGAL.TERMS, element: <Terminos /> },
