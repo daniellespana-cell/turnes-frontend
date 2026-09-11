@@ -3,6 +3,9 @@
 
 /* 2. CONFIGURACIÓN DEL TEMA (Aquí definimos los valores directamente para eliminar el warning) */
 @theme {
+  /* Tipografía de Alta Gama */
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
   /* Colores de Fondo */
   --color-app: #080a0f;
   --color-surface: #12161d;
@@ -41,8 +44,8 @@
 /* 4. RESET GLOBAL + FUENTE DE TU LANDING */
 html,
 body {
-  /* 📐 Tipografía Sutil y Nítida de la Referencia */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, system-ui;
+  /* 📐 Tipografía Sutil y Nítida de Alta Gama (Plus Jakarta Sans + Inter) */
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, system-ui;
   font-size: 16px; 
   background-color: #07080a; /* Fondo base un tono más oscuro */
   color: #e4e4e7; /* Zinc-200 para mejor contraste sobre negro */
