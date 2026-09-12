@@ -7,7 +7,7 @@ const HeroHeader = () => {
         id="hero-heading"
         className="font-sans text-[28px] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.2] lg:leading-[1.14] max-w-xl lg:max-w-none text-balance"
       >
-        La app que cubre tus turnos{' '}
+        La app de empleo en Colombia que cubre tus turnos{' '}
         <span className="block sm:inline text-emerald-400 font-semibold">
           en tiempo récord.
         </span>

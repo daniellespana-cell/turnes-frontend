@@ -23,7 +23,7 @@ export const BLOG_POSTS = [
     author: {
       name: 'Equipo Editorial Turnes',
       role: 'Especialistas en Operaciones & Talento Bajo Demanda',
-      avatar: '/avatar-carlos.jpg'
+      avatar: '/avatar-carlos.webp'
     },
     featured: true,
     tags: ['Contratación Gastronómica', 'Turnos Urgentes', 'Restaurantes y Bares', 'Bucaramanga', 'Tarifas 2026'],
@@ -388,7 +388,7 @@ Requisitos:
     author: {
       name: 'Carlos Gómez',
       role: 'Jefe de Operaciones & Formación de Talento Turnes',
-      avatar: '/avatar-carlos.jpg'
+      avatar: '/avatar-carlos.webp'
     },
     featured: false,
     tags: ['Entrevistas Operativas', 'Habilidades de Servicio', 'Meseros y Bartenders', 'Gastronomía Colombia', 'Trabajo Extra'],
@@ -541,7 +541,7 @@ Domino coctelería clásica, despacho veloz de cervezas y licores, manejo de jig
     author: {
       name: 'Equipo Editorial Turnes',
       role: 'Investigación Laboral & Operaciones HORECA',
-      avatar: '/avatar-talento.jpg'
+      avatar: '/avatar-talento.webp'
     },
     featured: false,
     tags: ['Tarifas 2026', 'Costos Operativos', 'Sueldos Hostelería', 'Bucaramanga', 'Normativa Laboral'],
@@ -665,7 +665,7 @@ Domino coctelería clásica, despacho veloz de cervezas y licores, manejo de jig
     author: {
       name: 'Equipo Editorial Turnes',
       role: 'Operaciones & Logística',
-      avatar: '/avatar-valentina.jpg'
+      avatar: '/avatar-valentina.webp'
     },
     featured: false,
     tags: ['Operación Restaurantes', 'Productividad', 'Bajas de Personal', 'Turnes Pro'],

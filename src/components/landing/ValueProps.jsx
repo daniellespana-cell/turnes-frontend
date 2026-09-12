@@ -45,7 +45,7 @@ const TALENT_PROFILES = [
   {
     id: 'laura',
     name: 'Laura M.',
-    avatar: '/avatar-talento.jpg',
+    avatar: '/avatar-talento.webp',
     role: 'Camarera & Barista',
     experience: '3 años de experiencia',
     status: '● En línea hoy',
@@ -55,7 +55,7 @@ const TALENT_PROFILES = [
   {
     id: 'carlos',
     name: 'Carlos R.',
-    avatar: '/avatar-carlos.jpg',
+    avatar: '/avatar-carlos.webp',
     role: 'Parrillero & Cocinero',
     experience: '5 años de experiencia',
     status: '● Disponible hoy',
@@ -65,7 +65,7 @@ const TALENT_PROFILES = [
   {
     id: 'valentina',
     name: 'Valentina S.',
-    avatar: '/avatar-valentina.jpg',
+    avatar: '/avatar-valentina.webp',
     role: 'Bartender & Mixóloga',
     experience: '4 años de experiencia',
     status: '● En línea hoy',

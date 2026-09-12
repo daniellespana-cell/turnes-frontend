@@ -1,19 +1,25 @@
 import React from 'react';
 
-const heroBackgroundImage = '/hero-bg-kitchen.jpg';
+const heroBackgroundWebp = '/hero-bg-kitchen.webp';
+const heroBackgroundMobileWebp = '/hero-bg-kitchen-mobile.webp';
 
 const HeroBackground = () => {
   return (
     <div className="absolute inset-0 z-0 select-none overflow-hidden">
-      <img
-        src={heroBackgroundImage}
-        alt="Personal de cocina gourmet y servicio en restaurante"
-        className="w-full h-full object-cover object-center brightness-100 contrast-[1.02]"
-        width="1920"
-        height="1080"
-        fetchPriority="high"
-        loading="eager"
-      />
+      <picture className="w-full h-full">
+        <source media="(max-width: 640px)" srcSet={heroBackgroundMobileWebp} type="image/webp" />
+        <source srcSet={heroBackgroundWebp} type="image/webp" />
+        <img
+          src={heroBackgroundWebp}
+          alt="Personal de cocina gourmet y servicio en restaurante"
+          className="w-full h-full object-cover object-center brightness-100 contrast-[1.02]"
+          width="1376"
+          height="768"
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+        />
+      </picture>
       {/* Capa de contraste optimizada para móvil y escritorio */}
       <div className="absolute inset-0 bg-[#06090e]/85 sm:bg-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#06090e]/95 via-[#06090e]/85 to-[#06090e]/40 sm:to-[#06090e]/30" />
