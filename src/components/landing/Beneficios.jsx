@@ -127,17 +127,17 @@ const Beneficios = () => {
             {/* Acciones */}
             <div className="pt-5 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
               <Link
-                to={PATHS.PUBLIC.EXPLORE}
+                to={PATHS.PUBLIC.REGISTER_TALENT}
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-100 hover:text-white font-bold text-xs uppercase tracking-wider transition-all border border-zinc-700/80 text-center shadow-sm"
               >
-                <span>Ver turnos disponibles</span>
+                <span>Registrarme como Talento</span>
                 <ArrowRight size={15} />
               </Link>
               <Link
-                to={PATHS.PUBLIC.REGISTER_TALENT}
+                to={PATHS.PUBLIC.REGISTER_COMPANY}
                 className="text-xs text-zinc-400 hover:text-white font-semibold text-center sm:text-right py-1 transition-colors"
               >
-                Regístrate Gratis &rarr;
+                Publicar un turno &rarr;
               </Link>
             </div>
           </div>

@@ -14,7 +14,6 @@ export const PATHS = {
         REGISTER_TALENT: '/register/talento',
         FORGOT_PASSWORD: '/forgot-password',
         UPDATE_PASSWORD: '/update-password',
-        SEARCH: '/search',
         EXPLORE: '/explorar',
         PRICING: '/precios',
         HOW_IT_WORKS: '/como-funciona',

@@ -77,7 +77,7 @@ const Navbar = () => {
         className={navbarClasses} 
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-2.5 sm:px-5 lg:px-8">
           <div className="flex justify-between items-center h-16">
 
             {/* Logo */}

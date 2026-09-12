@@ -63,7 +63,6 @@ const WorkerChatsPage = lazyWithRetry(() => import('../pages/worker/WorkerChatsP
 const NotificationsPage = lazyWithRetry(() => import('../pages/common/NotificationsPage'));
 const ConfiguracionPage = lazyWithRetry(() => import('../pages/common/ConfiguracionPage'));
 const ExplorePage = lazyWithRetry(() => import('../pages/public/ExplorePage'));
-const SearchPage = lazyWithRetry(() => import('../pages/public/SearchPage'));
 const DetalleRolPage = lazyWithRetry(() => import('../pages/public/DetalleRolPage'));
 const PlanesPage = lazyWithRetry(() => import('../pages/common/PlanesPage'));
 const ComoFuncionaPage = lazyWithRetry(() => import('../pages/public/ComoFuncionaPage'));
@@ -265,7 +264,6 @@ export const router = createBrowserRouter([
                             </GuestRoute>
                         ),
                         children: [
-                            { path: PATHS.PUBLIC.SEARCH, element: <SearchPage /> },
                             { path: PATHS.PUBLIC.EXPLORE, element: <ExplorePage /> },
                             { path: PATHS.SHARED.ROLE_DETAIL(':rolSlug'), element: <DetalleRolPage /> },
                             { path: PATHS.PUBLIC.PRICING, element: <PlanesPage /> },

@@ -18,9 +18,7 @@ const MainLayout = () => {
   }, [pathname]);
 
   // Lógica Senior: Determinar si estamos en el Dashboard o área privada
-  // Si la ruta empieza por /dashboard o /buscar, ocultamos el Footer de marketing
   const isPrivateArea = pathname.startsWith('/dashboard') || pathname.startsWith('/buscar') || pathname.startsWith('/plan-action');
-  const isComoFunciona = pathname === '/como-funciona';
 
   if (loading) {
     return (

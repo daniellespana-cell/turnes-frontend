@@ -522,7 +522,7 @@ Domino coctelería clásica, despacho veloz de cervezas y licores, manejo de jig
     footerCta: {
       title: 'Toma el control de tus ingresos con Turnes',
       subtitle: 'Elige los turnos que mejor se adapten a tu horario, trabaja en los mejores restaurantes de Santander y cobra el 100% de tu dinero con 0% comisión.',
-      companyButton: { text: 'Ver Turnos Disponibles Hoy', link: '/search' },
+      companyButton: { text: 'Publicar Turno en Turnes', link: '/register/empresa' },
       workerButton: { text: 'Crear Perfil de Talento Gratis', link: '/register/talento' }
     }
   },
@@ -647,7 +647,7 @@ Domino coctelería clásica, despacho veloz de cervezas y licores, manejo de jig
       title: 'Publica tu turno con tarifas justas y transparentes',
       subtitle: 'Accede a talento verificado en minutos y garantiza la continuidad de tu servicio este fin de semana.',
       companyButton: { text: 'Publicar Turno en Turnes', link: '/register/empresa' },
-      workerButton: { text: 'Ver Turnos Disponibles', link: '/search' }
+      workerButton: { text: 'Crear Perfil de Talento Gratis', link: '/register/talento' }
     }
   },
 
