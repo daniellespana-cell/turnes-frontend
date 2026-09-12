@@ -13,11 +13,33 @@ import { LazyMotion, domAnimation } from 'framer-motion';
 import { registerSW } from 'virtual:pwa-register';
 import { versionService } from './services/versionService';
 
-// 🚀 Inicializar Sentinel Error Tracking (Sentry)
-initSentry();
+// 🚀 Inicializar Sentinel Error Tracking (Sentry) diferido para liberar CPU y red inicial (LCP/FCP)
+if (typeof window !== 'undefined') {
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => initSentry());
+  } else {
+    setTimeout(() => initSentry(), 1000);
+  }
+} else {
+  initSentry();
+}
 
-// 🚀 Inicializar Sentinel de Versionado y PWA Updates
-versionService.init(registerSW);
+// 🚀 Inicializar Sentinel de Versionado y PWA Updates tras completar la carga (Recomendación oficial Google Chrome PWA)
+if (typeof window !== 'undefined') {
+  const initPWA = () => {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => versionService.init(registerSW));
+    } else {
+      setTimeout(() => versionService.init(registerSW), 1500);
+    }
+  };
+
+  if (document.readyState === 'complete') {
+    initPWA();
+  } else {
+    window.addEventListener('load', initPWA, { once: true });
+  }
+}
 
 // 🛡️ RECOVERY SENTINEL (Vite Preload / Chunk Mismatch tras despliegue)
 if (typeof window !== 'undefined') {

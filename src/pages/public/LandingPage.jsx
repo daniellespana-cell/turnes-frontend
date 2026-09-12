@@ -85,16 +85,20 @@ const LandingPage = () => {
       <Navbar />
       <main className="lp-main-content flex-grow">
         <Hero />
-        <Suspense fallback={<div className="min-h-[280px] bg-zinc-950" />}>
-          <JobCarousel />
-        </Suspense>
+        <div className="content-visibility-auto">
+          <Suspense fallback={<div className="min-h-[280px] bg-zinc-950" />}>
+            <JobCarousel />
+          </Suspense>
+        </div>
         <ValueProps />
-        <Suspense fallback={<LoadingSpinner />}>
-          <PublicWelcomeBonusBanner />
-          <Beneficios />
-          <TestimoniosSection />
-          <FAQSection />
-        </Suspense>
+        <div className="content-visibility-auto">
+          <Suspense fallback={<LoadingSpinner />}>
+            <PublicWelcomeBonusBanner />
+            <Beneficios />
+            <TestimoniosSection />
+            <FAQSection />
+          </Suspense>
+        </div>
       </main>
       <Footer />
     </div>

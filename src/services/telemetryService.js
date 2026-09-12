@@ -132,6 +132,10 @@ class TelemetryService {
     captureException(error, context = {}) {
         logger.error('[TelemetryService] Excepción capturada:', error, context);
 
+        if (!this.isInitialized) {
+            this.init();
+        }
+
         try {
             return Sentry.captureException(error, {
                 extra: context.extra || context,
@@ -154,6 +158,10 @@ class TelemetryService {
      */
     captureMessage(message, level = 'info', context = {}) {
         logger.warn(`[TelemetryService] [${level.toUpperCase()}] ${message}`, context);
+
+        if (!this.isInitialized) {
+            this.init();
+        }
 
         try {
             Sentry.captureMessage(message, {

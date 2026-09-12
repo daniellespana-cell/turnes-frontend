@@ -23,10 +23,15 @@
   <meta name="author" content="Turnes" />
   <link rel="canonical" href="https://turnes.co/" />
 
-  <!-- Fuentes de Alta Gama: Plus Jakarta Sans & Inter (Tipografía de App de Alto Nivel) -->
+  <!-- Fuentes de Alta Gama: Plus Jakarta Sans & Inter (Carga Asíncrona sin Bloquear Render) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://o4511912524447744.ingest.us.sentry.io" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+  </noscript>
 
   <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
   <meta property="og:type" content="website" />

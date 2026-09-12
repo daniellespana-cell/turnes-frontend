@@ -22,7 +22,18 @@ export default defineConfig({
       registerType: 'prompt',
       includeAssets: ['pwa-192x192.png', 'pwa-512x512.png', 'pwa-maskable-512x512.png'],
       injectManifest: {
-        globPatterns: ['**/*.{html,ico,png,svg,webp,css}', 'assets/index-*.js', 'assets/vendor-*.js']
+        globPatterns: [
+          '**/*.{html,ico,png,svg,webp,css}',
+          'assets/index-*.js',
+          'assets/vendor-core-*.js',
+          'assets/vendor-react-*.js',
+          'assets/vendor-ui-*.js'
+        ],
+        globIgnores: [
+          '**/vendor-pdf-*.js',
+          '**/vendor-rtc-*.js',
+          '**/vendor-maps-*.js'
+        ]
       },
       manifest: {
         name: 'Turnes',
@@ -94,6 +105,7 @@ export default defineConfig({
   
   // 🟢 Optimización de build y Arquitectura de Chunks (Anti-TBT & Render-Blocking)
   build: {
+    target: 'es2022',
     outDir: 'dist',
     sourcemap: false, // 🔒 SECURIDAD: Evita filtrar código fuente y falsos "secrets" al cliente final
     cssCodeSplit: true,
@@ -113,7 +125,10 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) return 'vendor-react';
+            // Aislar paquetes base de React con límite exacto para evitar dependencias circulares con vendor-core
+            if (/[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/.test(id)) {
+              return 'vendor-react';
+            }
             if (id.includes('@supabase')) return 'vendor-supabase';
             if (id.includes('leaflet') || id.includes('react-leaflet')) return undefined; // 🚀 Aislado en chunk dinámico (Cero CSS en Landing)
             if (id.includes('jspdf') || id.includes('html2canvas')) return 'vendor-pdf';

@@ -55,6 +55,12 @@ body {
   touch-action: manipulation;
 }
 
+/* 🚀 RENDERING PERFORMANCE: Defer below-the-fold content painting until near viewport */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto none auto 500px;
+}
+
 /* 🧊 SISTEMA DE CAPAS (Glassmorphism) */
 .glass-card {
   background: rgba(18, 22, 29, 0.4);
