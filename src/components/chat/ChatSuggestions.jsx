@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Zap } from 'lucide-react';
-
-import { useMemo } from 'react';
 
 /**
  * 🌠 CHAT SUGGESTIONS COMPONENT (Context-Aware)
@@ -9,6 +7,8 @@ import { useMemo } from 'react';
  * Evalúa dinámicamente la etapa del protocolo para ofrecer frases Relevantes.
  */
 export const ChatSuggestions = ({ onSend, isContracted, isRehire, userRole }) => {
+    const lastSentRef = useRef({ text: '', time: 0 });
+
     const suggestions = useMemo(() => {
         // 🟢 FASE OPERATIVA: Ya se firmó el contrato (Steps 3 y 4)
         if (isContracted) {
@@ -25,11 +25,23 @@ export const ChatSuggestions = ({ onSend, isContracted, isRehire, userRole }) =>
         }
 
         // 🌐 PUBLIC FEED UX: Negociación Standard (Antes de contratar - Steps 1 y 2)
-        // 🚨 REGRA DE NEGOCIO CRÍTICA: Priorizar "Validación Visual" para la empresa antes de contratar.
+        // 🚨 REGLA DE NEGOCIO CRÍTICA: Priorizar "Validación Visual" para la empresa antes de contratar.
         return userRole === 'trabajador'
             ? ["¡Hola! Estoy muy interesado en el turno", "¿Tienen flexibilidad de horario?", "Tengo experiencia en esto"]
             : ["Hagamos una validación visual rápida", "He visto tu perfil y me ha interesado", "¿Estás disponible hoy?"];
     }, [isContracted, isRehire, userRole]);
+
+    const handleSuggestionClick = (suggestionText) => {
+        const now = Date.now();
+        // 🛡️ ANTI-SPAM GUARD: Previene enviar la misma frase repetidamente en ráfaga (2 segundos de cooldown)
+        if (lastSentRef.current.text === suggestionText && (now - lastSentRef.current.time < 2000)) {
+            return;
+        }
+        lastSentRef.current = { text: suggestionText, time: now };
+        if (typeof onSend === 'function') {
+            onSend(suggestionText);
+        }
+    };
 
     if (!suggestions || suggestions.length === 0) return null;
 
@@ -39,9 +51,9 @@ export const ChatSuggestions = ({ onSend, isContracted, isRehire, userRole }) =>
                 <button
                     key={i}
                     type="button"
-                    onClick={() => onSend(s)}
-                    className="shrink-0 flex items-center gap-2 px-3.5 py-2 bg-zinc-900/60 border border-transparent rounded-full  hover:bg-emerald-500/10 transition-all duration-300 group shadow-md"
-                    aria-label="Acción">
+                    onClick={() => handleSuggestionClick(s)}
+                    className="shrink-0 flex items-center gap-2 px-3.5 py-2 bg-zinc-900/60 border border-transparent rounded-full hover:bg-emerald-500/10 transition-all duration-300 group shadow-md"
+                    aria-label="Sugerencia rápida">
                     <Zap size={10} className="text-zinc-600 group-hover:text-emerald-400 transition-colors" fill="currentColor" />
                     <span className="text-[11px] font-bold text-zinc-400 group-hover:text-zinc-200 tracking-wide">
                         {s}

@@ -53,6 +53,12 @@ class ChatServiceFacade {
                     if (this._currentUserId) {
                         chatConversations.loadConversations();
                     }
+                } else if (tipo === 'CHAT_MESSAGE') {
+                    if (this._currentUserId) {
+                        // 🛡️ Mobile Resilient Fallback: Si el websocket de mensajes en móvil estaba inactivo,
+                        // la notificación de la BD asegura que la bandeja de chats y contadores se sincronicen.
+                        chatConversations.loadConversations();
+                    }
                 }
             });
         }

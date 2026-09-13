@@ -53,6 +53,15 @@ const CandidatoRow = ({ can, onDismiss, onUpdate, onSellar }) => {
         <div className="flex-1 min-w-[120px]">
           <div className="flex items-center gap-2">
             <h3 className={`${typography.modalEntityName} text-sm group-hover:text-blue-400 transition-colors truncate`}>{can.name}</h3>
+            {can.calificacion && (
+              <div 
+                className="flex items-center gap-1 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded-md shrink-0" 
+                title={`Reputación global: ${can.calificacion} ⭐`}
+              >
+                <Star size={9} className="text-amber-400 fill-amber-400" />
+                <span className="text-[10px] font-bold text-amber-400 tabular-nums">{can.calificacion}</span>
+              </div>
+            )}
             {can.cicloCerrado && (
               <Sparkles size={10} className="text-blue-400/50" />
             )}
@@ -127,7 +136,7 @@ const CandidatoRow = ({ can, onDismiss, onUpdate, onSellar }) => {
 
             {can.ratingsUnlocked ? (
               <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/20">
-                <span className="text-sm text-emerald-500 font-black">{can.ratingRecibido}.0</span>
+                <span className="text-sm text-emerald-500 font-black">{Number(can.ratingRecibido || 5.0).toFixed(1)}</span>
                 <Star size={14} className="text-emerald-500 fill-emerald-500" />
               </div>
             ) : (
@@ -181,11 +190,29 @@ const CandidatoRow = ({ can, onDismiss, onUpdate, onSellar }) => {
         </div>
       )}
       {can.cicloCerrado && !can.justSent && (
-        <div className="mt-4 p-3 bg-blue-500/5 border border-blue-500/10 rounded-2xl flex items-center justify-center gap-3">
-          <CheckCircle2 size={16} className="text-blue-400" />
-          <p className="text-[10px] text-blue-400 font-black uppercase tracking-[0.2em]">
-            Contrato Finalizado y Calificado
-          </p>
+        <div className="mt-4 space-y-2">
+          {can.comentarioPublico && (
+            <div className="p-3 bg-zinc-950/40 border border-white/5 rounded-xl">
+              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block mb-1">
+                Tu reseña otorgada:
+              </span>
+              <p className="text-xs text-zinc-300 italic">"{can.comentarioPublico}"</p>
+            </div>
+          )}
+          {can.ratingsUnlocked && can.comentarioRecibido && (
+            <div className="p-3 bg-emerald-500/[0.03] border border-emerald-500/10 rounded-xl">
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500/80 block mb-1">
+                Reseña recibida del talento:
+              </span>
+              <p className="text-xs text-zinc-300 italic">"{can.comentarioRecibido}"</p>
+            </div>
+          )}
+          <div className="p-3 bg-blue-500/5 border border-blue-500/10 rounded-2xl flex items-center justify-center gap-3">
+            <CheckCircle2 size={16} className="text-blue-400" />
+            <p className="text-[10px] text-blue-400 font-black uppercase tracking-[0.2em]">
+              Contrato Finalizado y Calificado
+            </p>
+          </div>
         </div>
       )}
     </div>

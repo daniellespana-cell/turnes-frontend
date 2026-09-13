@@ -159,7 +159,7 @@ class ChatRealtimeService {
         const hasConversation = !!conv;
         
         const msg = chatState.formatMessage(row);
-        chatState.addMessageLocal(row.conversacion_id, msg);
+        chatState.addMessageLocal(row.conversacion_id, msg, this._userId);
         
         // 🛡️ Auto-Reactivación Enterprise: Si la conversación estaba eliminada o archivada por mí,
         // restaurarla inmediatamente a visible tanto en memoria (0ms) como en base de datos.

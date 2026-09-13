@@ -93,7 +93,9 @@ const WorkerFinance = () => {
                     history={history} 
                     hasMore={hasMore} 
                     loadMore={loadMore} 
-                    isLoadingMore={isLoadingMore} 
+                    isLoadingMore={isLoadingMore}
+                    totalShifts={stats?.totalShifts}
+                    isBusiness={isBusiness}
                 />
             </div>
         </div>

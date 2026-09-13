@@ -53,5 +53,48 @@ export const financeMapper = {
      */
     mapTransactions: (list) => {
         return (list || []).map(financeMapper.mapTransaction).filter(Boolean);
+    },
+
+    /**
+     * 🚀 SSOT: Normaliza una postulación finalizada (turno completado) al formato de transacción para la UI de Finanzas
+     * @param {Object} postulacion
+     */
+    mapShiftTransaction: (postulacion) => {
+        if (!postulacion) return null;
+
+        const vacante = postulacion.vacante || {};
+        const empresa = vacante.empresas || {};
+        const dateRaw = vacante.fecha_turno || postulacion.created_at;
+        const dateObj = new Date(dateRaw);
+        const amount = Number(vacante.pago_monto || vacante.salario || 0);
+
+        return {
+            id: postulacion.id,
+            business: empresa.nombre_comercial || vacante.titulo || 'Turno Finalizado',
+            counterpart: empresa.nombre_comercial || 'Empresa Contratante',
+            counterpartEmail: 'N/A',
+            date: !isNaN(dateObj.getTime())
+                ? dateObj.toLocaleDateString('es-CO', { day: '2-digit', month: 'short' })
+                : 'Reciente',
+            dateFull: dateRaw,
+            amount: Math.abs(amount),
+            monto: Math.abs(amount),
+            status: postulacion.status === 'finalizado' ? 'Finalizado' : 'Contratado',
+            type: 'deposit', // Ingreso visual (verde +)
+            rawType: 'SHIFT_EARNING',
+            reference: `TURNO-${String(postulacion.id || '').slice(0, 8)}`,
+            metadata: {
+                vacante_id: vacante.id,
+                titulo: vacante.titulo,
+                tipo_turno: vacante.tipo_turno
+            }
+        };
+    },
+
+    /**
+     * Mapea una lista completa de turnos finalizados
+     */
+    mapShiftTransactions: (list) => {
+        return (list || []).map(financeMapper.mapShiftTransaction).filter(Boolean);
     }
 };

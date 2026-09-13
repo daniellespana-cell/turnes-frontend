@@ -3,16 +3,29 @@ import Spinner from '../ui/Spinner';
 
 import { formatCurrency } from '../../services/financeService';
 
-const TransactionList = ({ history, hasMore, loadMore, isLoadingMore }) => {
+const TransactionList = ({ history, hasMore, loadMore, isLoadingMore, totalShifts, isBusiness = false }) => {
+    const displayCount = totalShifts !== undefined ? totalShifts : history.length;
+    const badgeLabel = isBusiness 
+        ? `${displayCount} TRANSACCIONES`
+        : `${displayCount} ${displayCount === 1 ? 'TURNO COMPLETADO' : 'TURNOS COMPLETADOS'}`;
+
     return (
         <section className="space-y-4 mt-8">
             <div className="flex items-center justify-between pb-3 border-b border-white/5 px-2">
-                <h2 className="text-xs font-black text-zinc-400 uppercase tracking-widest">Movimientos Recientes</h2>
-                <span className="text-[10px] font-bold text-emerald-500/60 bg-emerald-500/5 px-2 py-1 rounded-full">{history.length} TRANSACCIONES</span>
+                <h2 className="text-xs font-black text-zinc-400 uppercase tracking-widest">
+                    {isBusiness ? 'Movimientos Recientes' : 'Historial de Turnos'}
+                </h2>
+                <span className="text-[10px] font-bold text-emerald-500/60 bg-emerald-500/5 px-2 py-1 rounded-full">
+                    {badgeLabel}
+                </span>
             </div>
             {history.length === 0 ? (
                 <div className="py-16 text-center border border-dashed border-white/5 rounded-[2rem]">
-                    <p className="text-zinc-600 text-sm italic">Aún no hay movimientos registrados en tu historial.</p>
+                    <p className="text-zinc-600 text-sm italic">
+                        {isBusiness
+                            ? 'Aún no hay movimientos registrados en tu historial.'
+                            : 'Aún no tienes turnos completados registrados en tu historial.'}
+                    </p>
                 </div>
             ) : (
                 <div className="space-y-1">

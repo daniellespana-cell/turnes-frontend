@@ -77,9 +77,11 @@ class NotificationObserver {
         const from = page * limit;
         const to = from + limit - 1;
 
+        // 🛡️ Bounded Context: Excluir mensajes de chat del historial de notificaciones generales
         const query = supabase
             .from('notificaciones')
             .select('*')
+            .neq('tipo', 'CHAT_MESSAGE')
             .order('created_at', { ascending: false })
             .range(from, to);
             
@@ -96,7 +98,8 @@ class NotificationObserver {
     }
 
     async markAllAsRead(_subscriberId) {
-        const query = supabase.from('notificaciones').update({ leida: true }).eq('leida', false);
+        // 🛡️ Bounded Context: Solo marcar como leídas las alertas de sistema
+        const query = supabase.from('notificaciones').update({ leida: true }).eq('leida', false).neq('tipo', 'CHAT_MESSAGE');
         const { error } = await BaseService.handle(query);
         if (error) console.error('[Observer] markAllAsRead error:', error);
         return !error;

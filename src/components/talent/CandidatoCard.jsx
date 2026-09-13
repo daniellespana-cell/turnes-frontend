@@ -35,9 +35,20 @@ const CandidatoCard = ({ can, onUpdate, onSellar }) => {
             />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="text-lg font-black text-white truncate tracking-tight leading-none">
-              {can.name}
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-black text-white truncate tracking-tight leading-none">
+                {can.name}
+              </h3>
+              {can.calificacion && (
+                <div 
+                  className="flex items-center gap-1 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded-md shrink-0" 
+                  title={`Reputación global: ${can.calificacion} ⭐`}
+                >
+                  <Star size={10} className="text-amber-400 fill-amber-400" />
+                  <span className="text-[11px] font-bold text-amber-400 tabular-nums">{can.calificacion}</span>
+                </div>
+              )}
+            </div>
             <p className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em] mt-2">
                ID: {String(can.id).slice(-8)}
             </p>

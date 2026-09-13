@@ -22,8 +22,8 @@
   # Previene que otros sitios consuman recursos internos de Turnes de forma no autorizada
   Cross-Origin-Resource-Policy: same-origin
 
-  # Control de Privacidad y Sensores de Hardware (Zero-Trust): Restringe 28 APIs de navegador
-  Permissions-Policy: camera=(self "https://*.daily.co"), microphone=(self "https://*.daily.co"), display-capture=(self "https://*.daily.co"), geolocation=(self), payment=(self "https://checkout.wompi.co" "https://*.wompi.co"), screen-wake-lock=(self), accelerometer=(), ambient-light-sensor=(), autoplay=(self "https://*.daily.co"), battery=(), bluetooth=(), browsing-topics=(), clipboard-read=(), cross-origin-isolated=(), direct-sockets=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), gamepad=(), gyroscope=(), hid=(), identity-credentials-get=(), idle-detection=(), local-fonts=(), magnetometer=(), midi=(), otp-credentials=(), publickey-credentials-create=(), publickey-credentials-get=(), serial=(), storage-access=(), sync-xhr=(), usb=(), window-management=()
+  # Control de Privacidad y Sensores de Hardware (Zero-Trust): Restringe APIs sensibles de navegador
+  Permissions-Policy: camera=(self "https://*.daily.co"), microphone=(self "https://*.daily.co"), display-capture=(self "https://*.daily.co"), geolocation=(self), payment=(self "https://checkout.wompi.co" "https://*.wompi.co"), screen-wake-lock=(self), accelerometer=(), autoplay=(self "https://*.daily.co"), bluetooth=(), browsing-topics=(), clipboard-read=(), cross-origin-isolated=(), gamepad=(), gyroscope=(), hid=(), identity-credentials-get=(), idle-detection=(), local-fonts=(), magnetometer=(), midi=(), otp-credentials=(), publickey-credentials-create=(), publickey-credentials-get=(), serial=(), storage-access=(), sync-xhr=(), usb=(), window-management=()
 
   # Content Security Policy (Fintech Tier 1):
   # - Eliminado 'unsafe-eval' (Mitigación total contra evaluación de strings como JS)

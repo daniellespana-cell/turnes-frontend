@@ -325,6 +325,94 @@ export const FinanceService = {
             .subscribe();
     },
 
+    /**
+     * 🚀 SSOT: Obtiene el resumen financiero atómico del trabajador desde PostgreSQL.
+     * Invoca la función atómica CQRS rpc_get_worker_dashboard_stats.
+     * @param {string} userId
+     */
+    async getWorkerFinanceSummary(userId) {
+        if (!userId) return { data: { totalEarned: 0, totalShifts: 0 }, error: null };
+
+        const query = supabase.rpc('rpc_get_worker_dashboard_stats', {
+            p_user_id: userId
+        });
+
+        const { data, error } = await BaseService.handle(query);
+        if (error) {
+            console.error('[FinanceService.getWorkerFinanceSummary] Error:', error);
+            return { data: { totalEarned: 0, totalShifts: 0 }, error };
+        }
+
+        return {
+            data: {
+                totalEarned: Number(data?.totalEarned || 0),
+                totalShifts: Number(data?.totalShifts || 0),
+                activeApplications: Number(data?.activeApplications || 0),
+                avgRating: data?.avgRating || null
+            },
+            error: null
+        };
+    },
+
+    /**
+     * 🚀 SSOT: Obtiene el historial paginado de turnos finalizados o contratados del trabajador.
+     * @param {string} userId
+     * @param {number} limit
+     * @param {number} offset
+     */
+    async getWorkerShiftsHistory(userId, limit = 5, offset = 0) {
+        if (!userId) return { data: [], error: null };
+
+        const query = supabase
+            .from('postulaciones')
+            .select(`
+                id,
+                status,
+                created_at,
+                vacante:vacantes (
+                    id,
+                    titulo,
+                    pago_monto,
+                    salario,
+                    tipo_turno,
+                    fecha_turno,
+                    empresas (
+                        id,
+                        nombre_comercial,
+                        logo_url
+                    )
+                )
+            `)
+            .eq('user_id', userId)
+            .in('status', ['finalizado', 'contratado'])
+            .order('created_at', { ascending: false })
+            .range(offset, offset + limit - 1);
+
+        const { data, error } = await BaseService.handle(query);
+        if (error) {
+            console.error('[FinanceService.getWorkerShiftsHistory] Error:', error);
+            return { data: [], error };
+        }
+
+        return { data: financeMapper.mapShiftTransactions(data), error: null };
+    },
+
+    /**
+     * Suscribirse a cambios en vivo de las postulaciones/turnos del trabajador (Zero-F5)
+     */
+    subscribeToWorkerShifts(userId, callback) {
+        if (!userId) return;
+        return supabase
+            .channel(`public:postulaciones:finance:${userId}`)
+            .on('postgres_changes', {
+                event: '*',
+                schema: 'public',
+                table: 'postulaciones',
+                filter: `user_id=eq.${userId}`
+            }, callback)
+            .subscribe();
+    },
+
     unsubscribe(channel) {
         if (channel) supabase.removeChannel(channel);
     }

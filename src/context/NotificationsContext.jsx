@@ -55,13 +55,15 @@ export const NotificationsProvider = ({ children }) => {
         });
     }, []);
 
-    // Carga historial desde DB
+    // Carga historial desde DB (Solo alertas de sistema)
     useEffect(() => {
         if (!user?.id) { setNotifications([]); setLoading(false); return; }
         let cancelled = false;
         notificationObserver.fetchHistory(user.id).then(({ data: rows, error }) => {
             if (!cancelled && !error) { 
-                const normalized = rows.map(normalize);
+                // 🛡️ Bounded Context: Filtro defensivo para asegurar 0% contaminación de chat
+                const systemRows = (rows || []).filter(r => r.tipo !== 'CHAT_MESSAGE');
+                const normalized = systemRows.map(normalize);
                 const deduped = deduplicate(normalized);
                 // 🚀 Senior Fix: Sort explicitly to guarantee Newest First (Descending) order
                 const sorted = deduped.sort((a, b) => {
@@ -82,6 +84,9 @@ export const NotificationsProvider = ({ children }) => {
         notificationObserver.connect(user.id);
 
         const unsubInsert = notificationObserver.subscribe('INSERT', (row) => {
+            // 🛡️ Bounded Context Guard: Ignorar eventos de chat en el dominio de notificaciones
+            if (!row || row.tipo === 'CHAT_MESSAGE') return;
+
             const newNote = normalize(row);
 
             // 🚀 SSOT TOAST: Disparar la ventana emergente con el texto rico traducido de la campanita (Deduplicación estricta)
@@ -114,12 +119,16 @@ export const NotificationsProvider = ({ children }) => {
             });
         });
 
-        const unsubUpdate = notificationObserver.subscribe('UPDATE', (row) =>
-            setNotifications(prev => prev.map(n => n.id === row.id ? normalize(row) : n))
-        );
-        const unsubDelete = notificationObserver.subscribe('DELETE', (row) =>
-            setNotifications(prev => prev.filter(n => n.id !== row.id))
-        );
+        const unsubUpdate = notificationObserver.subscribe('UPDATE', (row) => {
+            if (!row || row.tipo === 'CHAT_MESSAGE') return;
+            setNotifications(prev => prev.map(n => n.id === row.id ? normalize(row) : n));
+        });
+
+        const unsubDelete = notificationObserver.subscribe('DELETE', (row) => {
+            if (!row || row.tipo === 'CHAT_MESSAGE') return;
+            setNotifications(prev => prev.filter(n => n.id !== row.id));
+        });
+
         return () => { unsubInsert(); unsubUpdate(); unsubDelete(); };
     }, [user?.id, normalize, deduplicate, showToast]);
 

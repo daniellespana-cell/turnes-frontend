@@ -177,16 +177,18 @@ class ChatStateService {
         };
     }
 
-    addMessageLocal(chatId, msg) {
+    addMessageLocal(chatId, msg, currentUserId = null) {
         if (!chatId || !msg?.id) return;
 
         const currentHistory = this.getHistory(chatId);
         const alreadyExists = currentHistory.some(m => m.id === msg.id);
         if (alreadyExists) return;
 
-        // 🔥 LOGICA SENIOR: Notificar no leído si es un mensaje entrante
-        // Nota: msg.sender es el UUID del que envía.
-        this.incrementUnread(chatId);
+        // 🔥 LOGICA SENIOR: Notificar no leído solo si es un mensaje entrante de otra persona
+        const isFromOtherUser = msg.sender && currentUserId ? msg.sender !== currentUserId : true;
+        if (isFromOtherUser) {
+            this.incrementUnread(chatId);
+        }
 
         let newConversations = this._snapshot.conversations;
         if (newConversations[chatId]) {

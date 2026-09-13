@@ -1,18 +1,17 @@
-import React, { useEffect, useRef } from 'react';
-import { Video, Check, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Video, Check, X, Lock } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import FinalizeActionBtn from './FinalizeActionBtn';
 
 import { useChatActionsContext } from '../../context/ChatActionContext';
 import { getBubbleStyleConfig, resolveBubbleText } from './bubbleConfig';
-// 🆕 Import K.I.S.S Component
 
 const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) => {
     // 🧠 CONSUMIENDO ACCIONES DESDE EL CONTEXTO (Anti-Prop Drilling)
     const actions = useChatActionsContext();
     const { 
         onAcceptVideo, 
-        aceptarInvitacionVideo, // 🆕 Protocol Action
+        aceptarInvitacionVideo,
         onDeclineVideo, 
         onInviteVideo, 
         onExecute, 
@@ -24,12 +23,45 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
     
     let { subtype, duration, txId, timestamp, roomUrl: msgRoomUrl } = message.metadata || {};
 
-    const onAccept = !isClosed ? () => {
-        if (onAcceptVideo) onAcceptVideo(msgRoomUrl);
-        if (aceptarInvitacionVideo) aceptarInvitacionVideo(msgRoomUrl);
-    } : undefined;
-    const onDecline = !isClosed ? onDeclineVideo : undefined;
-    const onInviteAction = !isClosed ? onInviteVideo : undefined;
+    const [isAccepting, setIsAccepting] = useState(false);
+    const [isAccepted, setIsAccepted] = useState(message.metadata?.status === 'accepted');
+    const [isDeclined, setIsDeclined] = useState(message.metadata?.status === 'declined');
+    const clickLockRef = useRef(false);
+
+    // 🛡️ ANTI-SPAM & IDEMPOTENCIA: Bloqueo en 0ms para evitar múltiples clics
+    const handleAcceptVideo = () => {
+        if (isClosed || hasValidatedVideo || isAccepting || isAccepted || clickLockRef.current) {
+            return;
+        }
+        clickLockRef.current = true;
+        setIsAccepting(true);
+
+        try {
+            if (onAcceptVideo) {
+                onAcceptVideo(msgRoomUrl);
+            } else if (aceptarInvitacionVideo) {
+                aceptarInvitacionVideo(msgRoomUrl);
+            }
+            setIsAccepted(true);
+        } catch (err) {
+            console.error("[SystemActionBubble] Error al aceptar videollamada:", err);
+            clickLockRef.current = false;
+            setIsAccepting(false);
+        }
+    };
+
+    const handleDeclineVideo = () => {
+        if (isClosed || hasValidatedVideo || isDeclined || clickLockRef.current) {
+            return;
+        }
+        clickLockRef.current = true;
+        setIsDeclined(true);
+        if (onDeclineVideo) {
+            onDeclineVideo();
+        }
+    };
+
+    const onInviteAction = (!isClosed && !hasValidatedVideo) ? onInviteVideo : undefined;
     const _onContractAction = !isClosed ? onExecute : undefined;
 
     const isVideoInvite = message.type === 'video_invitation' || subtype === 'video_invite';
@@ -138,32 +170,59 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
                         )}
 
                         {/* --- BOTONES MINIMALISTAS (Solo para Video y Solo para el Trabajador) --- */}
-                        {isVideoInvite && userRole === 'trabajador' && !hasValidatedVideo && (
-                            <div className="flex items-center gap-3 pt-3">
-                                <button
-                                    onClick={onAccept}
-                                    className="flex-1 py-2 bg-white text-black rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400 transition-all active:scale-95 flex items-center justify-center gap-2"
-                                    type="button"
-                                    aria-label="Acción">
-                                    <Check size={12} /> Aceptar
-                                </button>
-                                <button
-                                    onClick={onDecline}
-                                    className="flex-1 py-2 bg-zinc-900 border border-transparent text-zinc-400 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-zinc-800 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2"
-                                    type="button"
-                                    aria-label="Acción">
-                                    <X size={12} /> Declinar
-                                </button>
-                            </div>
-                        )}
-                        {isVideoInvite && userRole === 'trabajador' && hasValidatedVideo && (
-                            <div className="text-center pt-2 pb-1 text-[10px] text-emerald-500 font-black uppercase tracking-widest flex justify-center items-center gap-1 bg-emerald-500/10 rounded-lg mt-2">
-                                <Check size={12} /> Ya Validado
+                        {isVideoInvite && userRole === 'trabajador' && (
+                            <div className="pt-2">
+                                {/* Caso 1: Chat cerrado o expirado */}
+                                {isClosed && (
+                                    <div className="text-center py-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest flex justify-center items-center gap-1.5 bg-white/5 border border-white/5 rounded-lg">
+                                        <Lock size={12} className="text-zinc-500" /> Invitación Expirada
+                                    </div>
+                                )}
+
+                                {/* Caso 2: Validación ya completada o aceptada */}
+                                {!isClosed && (hasValidatedVideo || isAccepted) && (
+                                    <div className="text-center py-2 text-[10px] text-emerald-400 font-black uppercase tracking-widest flex justify-center items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                                        <Check size={12} className="text-emerald-400" /> Validación Completada
+                                    </div>
+                                )}
+
+                                {/* Caso 3: Declinada */}
+                                {!isClosed && !(hasValidatedVideo || isAccepted) && isDeclined && (
+                                    <div className="text-center py-2 text-[10px] text-zinc-400 font-bold uppercase tracking-widest flex justify-center items-center gap-1.5 bg-zinc-900 border border-white/5 rounded-lg">
+                                        <X size={12} className="text-zinc-500" /> Invitación Declinada
+                                    </div>
+                                )}
+
+                                {/* Caso 4: Activa y pendiente de respuesta */}
+                                {!isClosed && !hasValidatedVideo && !isAccepted && !isDeclined && (
+                                    <div className="flex items-center gap-3 pt-1">
+                                        <button
+                                            onClick={handleAcceptVideo}
+                                            disabled={isAccepting}
+                                            className={`flex-1 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
+                                                isAccepting 
+                                                    ? 'bg-emerald-500/50 text-white cursor-not-allowed opacity-80' 
+                                                    : 'bg-white text-black hover:bg-emerald-400 active:scale-95 cursor-pointer shadow-sm'
+                                            }`}
+                                            type="button"
+                                            aria-label="Aceptar invitación a videollamada">
+                                            <Check size={12} /> {isAccepting ? 'Conectando...' : 'Aceptar'}
+                                        </button>
+                                        <button
+                                            onClick={handleDeclineVideo}
+                                            disabled={isAccepting}
+                                            className="flex-1 py-2 bg-zinc-900 border border-white/10 text-zinc-400 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-zinc-800 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+                                            type="button"
+                                            aria-label="Declinar invitación a videollamada">
+                                            <X size={12} /> Declinar
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         )}
 
                         {/* --- BOTONES RECONTRATACION DIRECTA (FAST-TRACK) --- */}
-                        {isRehireOffer && userRole === 'trabajador' && message.metadata?.status === 'pending' && (
+                        {isRehireOffer && userRole === 'trabajador' && message.metadata?.status === 'pending' && !isClosed && (
                             <div className="flex items-center gap-3 pt-3">
                                 <button
                                     onClick={() => onAcceptRehire && onAcceptRehire(message)}
@@ -181,7 +240,7 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
                                 </button>
                             </div>
                         )}
-                        {isRehireOffer && message.metadata?.status === 'accepted' && (
+                        {isRehireOffer && (message.metadata?.status === 'accepted' || (userRole === 'trabajador' && isClosed && message.metadata?.status === 'pending')) && (
                             <div className="text-center pt-2 pb-1 text-[10px] text-emerald-500 font-black uppercase tracking-widest flex justify-center items-center gap-1 bg-emerald-500/10 rounded-lg mt-2">
                                 <Check size={12} /> Oferta Aceptada
                             </div>
@@ -195,14 +254,19 @@ const SystemActionBubble = ({ message, userRole, isClosed, hasValidatedVideo }) 
                         {/* --- BOTONES PROACTIVOS (Solo Empresa) --- */}
                         {isEmployerPrompt && userRole === 'empresa' && (
                             <div className="flex items-center gap-3 pt-3">
-                                {message.type === 'prompt_video_invite' && onInviteAction && (
+                                {message.type === 'prompt_video_invite' && !isClosed && !hasValidatedVideo && onInviteAction && (
                                     <button
                                         onClick={onInviteAction}
                                         className="w-full py-2 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2"
                                         type="button"
-                                        aria-label="Acción">
+                                        aria-label="Invitar a videollamada">
                                         <Video size={12} /> Invitar a Video
                                     </button>
+                                )}
+                                {message.type === 'prompt_video_invite' && (isClosed || hasValidatedVideo) && (
+                                    <div className="text-center w-full py-2 text-[10px] text-emerald-500 font-black uppercase tracking-widest flex justify-center items-center gap-1 bg-emerald-500/10 rounded-lg">
+                                        <Check size={12} /> Validación Completada
+                                    </div>
                                 )}
                             </div>
                         )}

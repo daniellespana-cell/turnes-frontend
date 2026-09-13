@@ -123,7 +123,7 @@ class ChatNetworkService {
             status: !navigator.onLine ? 'offline_pending' : 'sending'
         };
 
-        chatState.addMessageLocal(chatId, chatState.formatMessageFromObj(optimisticMsg));
+        chatState.addMessageLocal(chatId, chatState.formatMessageFromObj(optimisticMsg), senderId);
 
         if (!navigator.onLine) {
             chatOfflineStorage.save({ tempId, payload });
@@ -152,6 +152,15 @@ class ChatNetworkService {
                 .eq('conversacion_id', chatId);
 
             if (error) console.warn("[CHAT_NETWORK] No se pudo marcar leído:", error);
+
+            // 🛡️ Sincronizar lectura de notificaciones residuales en la BD sin bloquear
+            supabase
+                .from('notificaciones')
+                .update({ leida: true })
+                .eq('reference_id', chatId)
+                .eq('tipo', 'CHAT_MESSAGE')
+                .then(() => {})
+                .catch(() => {});
         } catch (e) {
             console.warn("[CHAT_NETWORK] Exception marking read:", e);
         }

@@ -39,23 +39,24 @@ export const useCandidatosLogic = () => {
      * Centralizado aquí para que cualquier cambio de shape sólo toque este punto.
      */
     const normalizeApplication = useCallback((app) => {
+        const candidate = app.candidato || {};
         const candidateProfile = {
-            lat:        app.candidato.lat,
-            lng:        app.candidato.lng,
-            categories: app.candidato.skills || []
+            lat:        candidate.lat,
+            lng:        candidate.lng,
+            categories: candidate.skills || []
         };
 
-        const pago = app.vacante.pago_monto || 0;
+        const pago = app.vacante?.pago_monto || 0;
 
         return {
             id:          app.id,
-            candidateId: app.candidato.id,
-            name:        app.candidato.nombre_display,
-            avatar:      app.candidato.avatar_url,
-            role:        app.candidato.rol,
-            bio:         app.candidato.bio,
-            skills:      app.candidato.skills || [],
-            match:       MatchService.calculateScore(app.vacante, candidateProfile),
+            candidateId: candidate.id,
+            name:        candidate.nombre_display,
+            avatar:      candidate.avatar_url,
+            role:        candidate.rol,
+            bio:         candidate.bio,
+            skills:      candidate.skills || [],
+            match:       MatchService.calculateScore(app.vacante || {}, candidateProfile),
             status:      app.status,
             step:        app.step || 0,
 
@@ -63,22 +64,45 @@ export const useCandidatosLogic = () => {
             // Este timestamp lo inyecta atómicamente `rpc_seal_chat_v2` en protocol_state.
             isChatSealed: !!app.protocol_state?.step4_sealed_at,
 
-            // Reputación — búsqueda polimórfica para cubrir versiones previas del protocol_state
-            rating:              app.protocol_state?.candidato_rated_stars
+            // 🌟 Reputación Global del Perfil del Postulante (SSOT desde perfiles)
+            calificacion: Number(candidate.calificacion ?? 5.0).toFixed(1),
+
+            // 🌟 Calificación otorgada al candidato por la empresa (DB: employer_rating_given)
+            rating:              app.protocol_state?.employer_rating_given
+                              ?? app.protocol_state?.rating_given
+                              ?? app.protocol_state?.candidato_rated_stars
                               ?? app.protocol_state?.trabajador_stars
                               ?? app.protocol_state?.rating
                               ?? 0,
-            ratingRecibido:      app.protocol_state?.empresa_rated_stars
+
+            // 🌟 Calificación recibida de parte del trabajador (DB: worker_rating_given)
+            ratingRecibido:      app.protocol_state?.worker_rating_given
+                              ?? app.protocol_state?.empresa_rated_stars
                               ?? app.protocol_state?.empresa_stars
                               ?? 0,
-            trabajadorYaCalifico: app.protocol_state?.empresa_rated === true
-                              || !!app.protocol_state?.empresa_stars,
-            ratingsUnlocked:     app.protocol_state?.ratings_unlocked === true,
+
+            // 🌟 Estado del Doble Ciego
+            empresaYaCalifico:    app.protocol_state?.empresa_rated === true
+                              || !!app.protocol_state?.employer_rating_given
+                              || !!app.protocol_state?.rating_given,
+            trabajadorYaCalifico: app.protocol_state?.candidato_rated === true
+                              || !!app.protocol_state?.worker_rating_given,
+            ratingsUnlocked:     app.protocol_state?.ratings_unlocked === true
+                              || (
+                                  (app.protocol_state?.empresa_rated === true || !!app.protocol_state?.employer_rating_given) &&
+                                  (app.protocol_state?.candidato_rated === true || !!app.protocol_state?.worker_rating_given)
+                              ),
             cicloCerrado:        app.status === 'finalizado',
 
+            // 🌟 Comentarios de Desempeño
+            comentarioPublico:   app.protocol_state?.employer_comment_given
+                              || app.protocol_state?.comment_given
+                              || '',
+            comentarioRecibido:  app.protocol_state?.worker_comment_given || '',
+
             // Metadata de la vacante
-            vacanteTitle: app.vacante.titulo,
-            vacanteTipo:  app.vacante.tipo_turno || 'Tiempo Completo',
+            vacanteTitle: app.vacante?.titulo,
+            vacanteTipo:  app.vacante?.tipo_turno || 'Tiempo Completo',
             appliedAt:    app.created_at,
             fechaCierre:  app.finalized_at || app.updated_at,
 
@@ -208,7 +232,8 @@ export const useCandidatosLogic = () => {
     const stats = useMemo(() => ({
         totalPendientes: candidatosFiltrados.pendientes.length,
         totalHistorial:  candidatosFiltrados.historial.length,
-    }), [candidatosFiltrados]);
+        score:           user?.calificacion || 5.0,
+    }), [candidatosFiltrados, user?.calificacion]);
 
     return {
         activeTab,

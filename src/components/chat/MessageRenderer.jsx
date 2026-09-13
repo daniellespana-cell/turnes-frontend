@@ -48,7 +48,14 @@ export const MessageRenderer = ({
     ].includes(msg.type);
 
     if (isSystemAction) {
-        const hasAnyVideoActivity = allMessages.some(m => m.type === 'video_accepted' || m.type === 'video_ended');
+        const hasAnyVideoActivity = allMessages.some(m => 
+            m.type === 'video_accepted' || 
+            m.type === 'video_ended' ||
+            m.type === 'contract_signed' ||
+            m.metadata?.subtype === 'call_summary' ||
+            m.metadata?.subtype === 'video_invite_accepted' ||
+            (m.type === 'system_info' && (m.text?.toLowerCase().includes('validaci') || m.metadata?.subtype === 'call_summary'))
+        );
         const effectiveHasValidatedVideo = state.hasValidatedVideo || hasAnyVideoActivity;
 
         return (
@@ -59,11 +66,6 @@ export const MessageRenderer = ({
                     isClosed={isClosed}
                     hasValidatedVideo={effectiveHasValidatedVideo}
                 />
-                {isClosed && msg.type === 'video_invitation' && (
-                    <div className="text-center pt-1 text-[9px] text-zinc-700 font-mono flex items-center justify-center gap-1">
-                        <Lock size={8} /> La invitación ha expirado
-                    </div>
-                )}
             </div>
         );
     }
