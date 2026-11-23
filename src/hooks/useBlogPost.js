@@ -1,11 +1,13 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { blogService } from '../services/blog.service';
+import { BLOG_POSTS } from '../data/blogPosts';
+import { normalizeBlogPost } from '../domain/blog.mapper';
 
 /**
  * 🪝 useBlogPost Hook
  * Encapsula la lógica de resolución de artículo, perspectiva de audiencia,
- * pestañas de plantillas, copiado seguro y scroll interactivo.
+ * pestañas de plantillas, copiado seguro y sincronización con Supabase.
  */
 export const useBlogPost = () => {
   const { slug } = useParams();
@@ -14,8 +16,37 @@ export const useBlogPost = () => {
   const [perspective, setPerspective] = useState('all'); // 'all' | 'empresas' | 'talento'
   const [selectedTemplateTab, setSelectedTemplateTab] = useState('mesero');
 
+  // Inicialización instantánea con fallback local (0ms TBT)
+  const [post, setPost] = useState(() => {
+    const local = BLOG_POSTS.find(p => p.slug === slug);
+    return local ? normalizeBlogPost(local) : null;
+  });
+  const [loading, setLoading] = useState(false);
+
   const linkTimeoutRef = useRef(null);
   const templateTimeoutRef = useRef(null);
+
+  // Sincronización con Supabase por si el artículo es nuevo o fue editado en admin
+  useEffect(() => {
+    let isMounted = true;
+    const fetchLivePost = async () => {
+      if (!slug) return;
+      try {
+        setLoading(true);
+        const resolved = await blogService.getPostBySlug(slug);
+        if (isMounted && resolved) {
+          setPost(resolved);
+        }
+      } catch (err) {
+        console.warn('[useBlogPost] Error cargando post de Supabase:', err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchLivePost();
+    return () => { isMounted = false; };
+  }, [slug]);
 
   // Limpieza de timeouts al desmontar para evitar fugas de memoria
   useEffect(() => {
@@ -24,10 +55,6 @@ export const useBlogPost = () => {
       if (templateTimeoutRef.current) clearTimeout(templateTimeoutRef.current);
     };
   }, []);
-
-  const post = useMemo(() => {
-    return blogService.getPostBySlug(slug) || blogService.getFeaturedPost();
-  }, [slug]);
 
   // Filtrado de secciones según perspectiva
   const visibleSections = useMemo(() => {
@@ -64,17 +91,11 @@ export const useBlogPost = () => {
 
   const handlePerspectiveChange = useCallback((newPerspective) => {
     setPerspective(newPerspective);
-    if (newPerspective === 'empresas') {
-      const el = document.getElementById('paso-a-paso') || document.getElementById('seccion-0');
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else if (newPerspective === 'talento') {
-      const el = document.getElementById('para-talento') || document.getElementById('seccion-0');
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
   }, []);
 
   return {
     post,
+    loading,
     visibleSections,
     perspective,
     handlePerspectiveChange,
