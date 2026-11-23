@@ -61,6 +61,15 @@ export const PATHS = {
         SETTINGS: '/configuracion'
     },
 
+    // 🛡️ ADMIN ROUTES
+    ADMIN: {
+        DASHBOARD: '/admin',
+        BLOG: '/admin/blog',
+        VERIFICATIONS: '/admin/verificaciones',
+        USERS: '/admin/usuarios',
+        FINANCE: '/admin/transacciones'
+    },
+
     // 🔄 SHARED / DYNAMIC
     SHARED: {
         CHAT: (id = ':id') => `/dashboard/chat/${id}`,

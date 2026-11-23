@@ -5,7 +5,7 @@ import { m as motion, AnimatePresence } from 'framer-motion';
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Users, TrendingUp, Verified, BarChart3 } from 'lucide-react';
+import { Users, TrendingUp, Verified, BarChart3, BookOpen } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const NAV_ITEMS = [
@@ -13,13 +13,19 @@ const NAV_ITEMS = [
     { label: 'Verificaciones', icon: Verified, path: '/admin/verificaciones' },
     { label: 'Usuarios', icon: Users, path: '/admin/usuarios' },
     { label: 'Transacciones', icon: TrendingUp, path: '/admin/transacciones' },
+    { label: 'Blog & Artículos', icon: BookOpen, path: '/admin/blog' },
 ];
 
 const AdminLayout = () => {
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const isEditor = user?.role === 'editor';
+    const visibleNavItems = isEditor
+        ? NAV_ITEMS.filter((item) => item.path === '/admin/blog')
+        : NAV_ITEMS;
 
     // Cierra el menú al navegar
     useEffect(() => {
@@ -57,7 +63,9 @@ const AdminLayout = () => {
                         </div>
                         <div>
                             <p className="text-sm font-black tracking-tight leading-tight">Turnes</p>
-                            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Admin Panel</p>
+                            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                                {isEditor ? 'Editor de Blog' : 'Admin Panel'}
+                            </p>
                         </div>
                     </div>
                     {/* Botón para cerrar en móvil */}
@@ -72,7 +80,7 @@ const AdminLayout = () => {
 
                 {/* Nav Links */}
                 <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
-                    {NAV_ITEMS.map((item) => {
+                    {visibleNavItems.map((item) => {
                         // Match index ('/admin') vs nested ('/admin/algo')
                         const isActive = item.path === '/admin' 
                             ? location.pathname === '/admin' 
@@ -120,7 +128,9 @@ const AdminLayout = () => {
                 <div className="md:hidden h-16 shrink-0 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md flex items-center justify-between px-4 z-30">
                     <div className="flex items-center gap-2">
                         <Shield size={18} className="text-blue-400" />
-                        <span className="font-black text-white text-sm tracking-tight">System Admin</span>
+                        <span className="font-black text-white text-sm tracking-tight">
+                            {isEditor ? 'Editor de Blog' : 'System Admin'}
+                        </span>
                     </div>
                     <button 
                         type="button"

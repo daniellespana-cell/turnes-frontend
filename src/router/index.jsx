@@ -89,6 +89,7 @@ const VerificationQueuePage = lazyWithRetry(() => import('../pages/admin/Verific
 const VerificationDetailPage = lazyWithRetry(() => import('../pages/admin/VerificationDetailPage'));
 const AdminUsersPage = lazyWithRetry(() => import('../pages/admin/AdminUsersPage'));
 const AdminFinancesPage = lazyWithRetry(() => import('../pages/admin/AdminFinancesPage'));
+const AdminBlogPage = lazyWithRetry(() => import('../pages/admin/AdminBlogPage'));
 const VerificationFlowPage = lazyWithRetry(() => import('../pages/verification/VerificationFlowPage'));
 const AdminLayout = lazyWithRetry(() => import('../components/layout/AdminLayout'));
 const BusinessRatings = lazyWithRetry(() => import('../pages/business/BusinessRatings'));
@@ -171,12 +172,26 @@ const RoleGuard = ({ allowedRole, children }) => {
 
 /**
  * ADMIN GUARD
- * Solo usuarios con role='admin' en perfiles tienen acceso.
+ * Permite acceso al panel de administración a roles 'admin' o 'editor'.
  */
 const AdminGuard = ({ children }) => {
     const { user, isReady } = useHydratedUser();
     if (!isReady) return <PageLoadingBar />;
     if (!user) return <Navigate to={PATHS.PUBLIC.LOGIN} replace />;
+    if (user.role !== 'admin' && user.role !== 'editor') return <Navigate to="/dashboard" replace />;
+    return children;
+};
+
+/**
+ * SUPER ADMIN GUARD
+ * Aísla y restringe secciones confidenciales (Métricas globales, Verificaciones,
+ * Usuarios, Transacciones financieras) para que usuarios con rol 'editor' no tengan acceso.
+ */
+const SuperAdminGuard = ({ children }) => {
+    const { user, isReady } = useHydratedUser();
+    if (!isReady) return <PageLoadingBar />;
+    if (!user) return <Navigate to={PATHS.PUBLIC.LOGIN} replace />;
+    if (user.role === 'editor') return <Navigate to="/admin/blog" replace />;
     if (user.role !== 'admin') return <Navigate to="/dashboard" replace />;
     return children;
 };
@@ -322,11 +337,12 @@ export const router = createBrowserRouter([
                         path: 'admin',
                         element: <AdminGuard><Suspense fallback={<PageLoadingBar />}><AdminLayout /></Suspense></AdminGuard>,
                         children: [
-                            { index: true, element: <Suspense fallback={<PageLoadingBar />}><AdminDashboard /></Suspense> },
-                            { path: 'verificaciones', element: <Suspense fallback={<PageLoadingBar />}><VerificationQueuePage /></Suspense> },
-                            { path: 'verificaciones/:id', element: <Suspense fallback={<PageLoadingBar />}><VerificationDetailPage /></Suspense> },
-                            { path: 'usuarios', element: <Suspense fallback={<PageLoadingBar />}><AdminUsersPage /></Suspense> },
-                            { path: 'transacciones', element: <Suspense fallback={<PageLoadingBar />}><AdminFinancesPage /></Suspense> },
+                            { index: true, element: <SuperAdminGuard><Suspense fallback={<PageLoadingBar />}><AdminDashboard /></Suspense></SuperAdminGuard> },
+                            { path: 'verificaciones', element: <SuperAdminGuard><Suspense fallback={<PageLoadingBar />}><VerificationQueuePage /></Suspense></SuperAdminGuard> },
+                            { path: 'verificaciones/:id', element: <SuperAdminGuard><Suspense fallback={<PageLoadingBar />}><VerificationDetailPage /></Suspense></SuperAdminGuard> },
+                            { path: 'usuarios', element: <SuperAdminGuard><Suspense fallback={<PageLoadingBar />}><AdminUsersPage /></Suspense></SuperAdminGuard> },
+                            { path: 'transacciones', element: <SuperAdminGuard><Suspense fallback={<PageLoadingBar />}><AdminFinancesPage /></Suspense></SuperAdminGuard> },
+                            { path: 'blog', element: <Suspense fallback={<PageLoadingBar />}><AdminBlogPage /></Suspense> },
                         ]
                     },
 

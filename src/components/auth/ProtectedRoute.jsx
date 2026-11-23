@@ -32,6 +32,12 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     return <Navigate to="/dashboard" replace />;
   }
 
+  // 2b. Editors belong to the blog panel, not the platform dashboard
+  // Redirect them before LayoutDispatcher mounts the wrong shell.
+  if (user.role === 'editor') {
+    return <Navigate to="/admin/blog" replace />;
+  }
+
   // 3. Identity Wall (Onboarding Gate)
   // Logic: Si el rol en BD es 'pendiente', están atrapados en el registro.
   const isAtOnboarding = location.pathname.includes('/register');
